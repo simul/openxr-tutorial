@@ -1,0 +1,5 @@
+Changelist 
+========= 
+| **Wed 29 Mar** : Fix CMakeLists.txt
+| **Wed 29 Mar** : Added initial Sphinx files.
+| **Wed 29 Mar** : Initial commit
