@@ -1,5 +1,6 @@
 Changelist 
 ========= 
+| **Thu 30 Mar** : Added initial rst files and images.
 | **Thu 30 Mar** : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.
 | **Thu 30 Mar** : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.
 | **Thu 30 Mar** : Added openxr binaries.
