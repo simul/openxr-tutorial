@@ -1,5 +1,15 @@
 Changelist 
 ========= 
+| **Thu 30 Mar** : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.
+| **Thu 30 Mar** : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.
+| **Thu 30 Mar** : Added openxr binaries.
+| **Thu 30 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+| **Thu 30 Mar** : Removed CMAKE_MSVC_RUNTIME_LIBRARY due to MSVC CXX errors. Updated OpenXR SDK.
+| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+| **Wed 29 Mar** : Added initial theme, logo.
+| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+| **Wed 29 Mar** : Added Chapter2.1 code WIP.
+| **Wed 29 Mar** : Added openxr libs and headers
 | **Wed 29 Mar** : Fix CMakeLists.txt
 | **Wed 29 Mar** : Added initial Sphinx files.
 | **Wed 29 Mar** : Initial commit
