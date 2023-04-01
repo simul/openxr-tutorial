@@ -1,5 +1,6 @@
 Changelist 
 ========= 
+| **Sat 01 Apr** : Replace svg logo with png: works better with older browsers.
 | **Sat 01 Apr** : Added favicon and Khronos copyright notice.
 | **Sat 01 Apr** : Using sphinxcontrib-jquery.
 | **Sat 01 Apr** : html correctness.
