@@ -1,5 +1,6 @@
 Changelist 
 ========= 
+| **Sat 01 Apr** : html correctness.
 | **Sat 01 Apr** : css contrast.
 | **Sat 01 Apr** : Fix some html tags.
 | **Sat 01 Apr** : Modified background image.
