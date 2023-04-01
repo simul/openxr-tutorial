@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2. Setup &mdash; OpenXR Tutorial  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -11,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,24 +84,174 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="setup">
-<h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+  <section id="setup">
+<h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
+<p class="rubric">Windows</p>
+<p>For your Windows OpenXR project, we’ll use CMake to create some project files for Visual Studio.
+Create a directory where your code will go, we’ll call this the <em>workspace</em> directory.</p>
+<p class="rubric">Linux</p>
+<p>For your Linux OpenXR project, we’ll use CMake alongside Visual Studio Code to build your project.
+Create a directory where your code will go, we’ll call this the <em>workspace</em> directory. Open VS Code and from
+the File menu, select “Open Folder…”</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="linux-vscode-open-folder.png"><img alt="The File menu of Visual Studio Code is shown, with the command &quot;Open Folder...&quot; selected." src="linux-vscode-open-folder.png" /></a>
+<figcaption>
+<p><span class="caption-text">The File menu of Visual Studio Code, with the command “Open Folder…” selected</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Select your <em>workspace</em> folder, which is now empty.
+Install the CMake extension for Visual Studio Code.</p>
+<p class="rubric">Windows and Linux</p>
+<p>Create a text file in the <em>workspace</em> folder called CMakeLists.txt.</p>
+<p>In it, put the following:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.15</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">openxr-tutorial</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CONFIGURATION_TYPES</span><span class="w"> </span><span class="s2">&quot;Debug;Release&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">OPENXR_DIR</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span><span class="w"> </span><span class="s2">&quot;Location of OpenXR-SDK repository.&quot;</span><span class="p">)</span>
+<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter_2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let’s create a folder called Chapter_2, and in it put another CMakeLists.txt file,
+this one containing:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">file</span><span class="p">(</span><span class="s">GLOB</span><span class="w"> </span><span class="s">SOURCES</span><span class="w"> </span><span class="s2">&quot;main.cpp&quot;</span><span class="w"> </span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">Chapter_2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="w"> </span><span class="s">Chapter_2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">OPENXR_DIR</span><span class="o">}</span><span class="s">/include</span><span class="w"> </span><span class="p">)</span>
+<span class="nb">target_link_directories</span><span class="p">(</span><span class="w"> </span><span class="s">Chapter_2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">OPENXR_DIR</span><span class="o">}</span><span class="s">/build/src/loader/Debug</span><span class="w"> </span><span class="o">${</span><span class="nv">OPENXR_DIR</span><span class="o">}</span><span class="s">/build/src/loader/Release</span><span class="w"> </span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="w"> </span><span class="s">Chapter_2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Debug</span><span class="o">&gt;</span><span class="s">:d&gt;</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That’s all we need for CMake. Now we’ll create our source file. Create a new text file called “main.cpp”
+and put it in the Chapter2 directory. In this file, place the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define NO_MINMAX</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#elif(__ANDROID__)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;android_native_app_glue.h&quot;</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// C++ Headers</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</pre></div>
+</div>
+<p>This is boilerplate for the various platforms. Now add the following:</p>
+<div class="highlight-cpp notranslate" id="xr-headers"><div class="highlight"><pre><span></span><span class="c1">// OpenXR Headers</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;openxr/openxr.h&quot;</span>
+
+<span class="c1">//#define XR_USE_GRAPHICS_API_D3D11</span>
+<span class="c1">//#define XR_USE_GRAPHICS_API_D3D12</span>
+<span class="c1">//#define XR_USE_GRAPHICS_API_OPENGL</span>
+<span class="c1">//#define XR_USE_GRAPHICS_API_OPENGL_ES</span>
+<span class="c1">//#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;openxr/openxr_platform.h&quot;</span>
+</span></pre></div>
+</div>
+<p>Here we include the main OpenXR header, openxr.h; and the platform header openxr_platform.h.
+What the latter does, depends on which of the preceding XR_USE_ macros we enable. We will enable
+one of these only, depending on your choice of graphics API.
+Now add the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//Debugbreak</span>
+<span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define DEBUG_BREAK __debugbreak()</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#define DEBUG_BREAK raise(SIGTRAP)</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>This defines the macro DEBUG_BREAK, according to what platform we’re building for. This macro will
+stop execution of your program when an error occurs, so you can see where it happened and fix it.</p>
+<p>Now we will define the main class of your application. It’s just a stub for now, with an empty Run() method:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Finally, let’s add the main function for your app. It looks slightly different, depending on your
+choice of platform, but in each case, we define an instance of our OpenXRTutorial class, and call the Run()
+method:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">WINAPI</span><span class="w"> </span><span class="nf">wWinMain</span><span class="p">(</span><span class="n">_In_</span><span class="w"> </span><span class="n">HINSTANCE</span><span class="w"> </span><span class="n">hInstance</span><span class="p">,</span>
+<span class="w">                                         </span><span class="n">_In_opt_</span><span class="w"> </span><span class="n">HINSTANCE</span><span class="w"> </span><span class="n">hPrevInstance</span><span class="p">,</span>
+<span class="w">                                         </span><span class="n">_In_</span><span class="w"> </span><span class="n">LPWSTR</span><span class="w">    </span><span class="n">lpCmdLine</span><span class="p">,</span>
+<span class="w">                                         </span><span class="n">_In_</span><span class="w"> </span><span class="kt">int</span><span class="w">       </span><span class="n">nCmdShow</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
+<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">#elif(__ANDROID__)</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">android_main</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">android_app</span><span class="o">*</span><span class="w"> </span><span class="n">app</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
+<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p class="rubric">Windows</p>
+<p>Now launch Cmake GUI, and point the “Where is the source code” box to your root solution (workspace) directory,
+where your original CMakeLists.txt is located. Point the “Where to build the binaries” box to a subdirectory called “build”,
+click Configure, “Yes” to create the build folder, and “OK” to accept the default Generator.</p>
+<img alt="Select" class="align-right" src="cmake-tutorial2-1.png" />
+<p>Now we must tell the tutorial project where to find the OpenXR-SDK, which we built in Section 1.
+Click on the variable OPENXR_DIR and type in or browse to the location of the OpenXR-SDK repository you downloaded
+previously, the click “Generate”. When the projects have been generated, open your new project, by clicking
+“Open Project”, or by finding the file Tutorial.sln in your build folder and double-clicking it.</p>
+<p class="rubric">Linux</p>
+<p>You now have three files, laid out as follow:</p>
+<img alt="Select" class="align-right" src="linux-vscode-initial-files.png" />
+<p>Having installed the CMake extension for VS Code, you can now right-click on the main CMakeLists.txt file (the one in the root <em>workspace</em> folder)
+and select “Configure All Projects”:</p>
+<img alt="Select" class="align-right" src="linux-vscode-cmake-configure.png" />
+<p>Now the CMake panel will be available by clicking its icon on the leftmost panel. Hover your mouse over the “Project Outline”
+and click the three dots at the right. An option to “Edit CMake Cache” will appear, click this and you’ll see the Cache Editor
+page.</p>
+<img alt="Select" class="align-right" src="linux-vscode-cmake-more-actions.png" />
+<img alt="Select" class="align-right" src="linux-vscode-cmake-cache.png" />
+<p>NOTE: It’s possible to use CMake GUI in Linux, but using VS Code’s integrated tools works better with VS Code.</p>
+<p>In the CMake Cache editor, find OPENXR_DIR and enter the directory where you downloaded OpenXR-SDK in Chapter 1.
+Now Configure and Build All.</p>
+<p class="rubric">Windows</p>
+<p>You can now build and run your program. It should compile and link with no errors or warnings.</p>
+<p class="rubric">Linux</p>
+<p>To enable debugging, select the Run/Debug panel in VS Code. You will now need to create a debugging configuration.
+Click the “Gear” icon to edit the file launch.json, and enter the following:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.2.0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;configurations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cppdbg&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;request&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;launch&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Chapter_2&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;program&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${workspaceFolder}/build/Chapter_2/Chapter_2&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;cwd&quot;</span><span class="p">:</span><span class="s2">&quot;${workspaceFolder}/Chapter_2&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;externalConsole&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <ol class="arabic simple" start="2">
 <li><p>SETUP (Basic structure ready)</p></li>
 </ol>
-<div class="section" id="creating-an-xrinstance">
-<h2><span class="section-number">2.1. </span>Creating an XrInstance<a class="headerlink" href="#creating-an-xrinstance" title="Permalink to this headline">¶</a></h2>
+<section id="creating-an-xrinstance">
+<h2><span class="section-number">2.1. </span>Creating an XrInstance<a class="headerlink" href="#creating-an-xrinstance" title="Permalink to this heading">¶</a></h2>
 <p>2.1. Creating an XrInstance / xrGetSystem (xrCreateInstance)</p>
-</div>
-<div class="section" id="creating-an-xrsession">
-<h2><span class="section-number">2.2. </span>Creating an XrSession<a class="headerlink" href="#creating-an-xrsession" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="creating-an-xrsession">
+<h2><span class="section-number">2.2. </span>Creating an XrSession<a class="headerlink" href="#creating-an-xrsession" title="Permalink to this heading">¶</a></h2>
 <p>2.2. Creating an XrSession (xrCreateSession, OpenGL based for code brevity)</p>
-</div>
-<div class="section" id="polling-the-event-loop">
-<h2><span class="section-number">2.3. </span>Polling the Event Loop<a class="headerlink" href="#polling-the-event-loop" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="polling-the-event-loop">
+<h2><span class="section-number">2.3. </span>Polling the Event Loop<a class="headerlink" href="#polling-the-event-loop" title="Permalink to this heading">¶</a></h2>
 <p>2.3. 2.3. Polling the Event Loop (xrPollEvent and Session States)</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

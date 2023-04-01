@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1. Introduction &mdash; OpenXR Tutorial  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -11,9 +12,8 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -51,7 +51,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1. Goal of OpenXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#overview">1.2. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3. Setting Up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3. Setting Up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcvr-windows">1.3.1. PCVR: Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcvr-linux">1.3.2. PCVR: Linux</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
@@ -84,26 +88,123 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+  <section id="introduction">
+<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple">
 <li><p>INTRO (understanding &amp; dev env)</p></li>
 </ol>
-<div class="section" id="goal-of-openxr">
-<h2><span class="section-number">1.1. </span>Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this headline">¶</a></h2>
+<section id="goal-of-openxr">
+<h2><span class="section-number">1.1. </span>Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
 <p>What is the goal of OpenXR?</p>
-</div>
-<div class="section" id="overview">
-<h2><span class="section-number">1.2. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="overview">
+<h2><span class="section-number">1.2. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>1.2. High Level overview of the components of OpenXR (Application - Loader - API
 layers - Runtime - Graphics - Input System)</p>
+</section>
+<section id="setting-up">
+<h2><span class="section-number">1.3. </span>Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this heading">¶</a></h2>
+<p>This section will help you set up a development environment.
+( Visual Studio &amp; Android Studio &amp; Monado for people without HMDs )</p>
+<section id="pcvr-windows">
+<h3><span class="section-number">1.3.1. </span>PCVR: Windows<a class="headerlink" href="#pcvr-windows" title="Permalink to this heading">¶</a></h3>
+<p class="rubric">Visual Studio</p>
+<p>If you’ll be building an OpenXR project for PC-based devices, we’ll assume you’ll be using Microsoft Visual Studio.
+The free Community edition of Visual Studio is available <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
+<p class="rubric">Direct3D</p>
+<p>Next you’ll want to choose which Graphics API you’ll be using. Direct3D 11 and 12 are built into the Windows SDK’s.
+If you’re using Direct3D, I recommend D3D12, because it supports indexed views: essentially, you can draw both eye views in one call. Vulkan also
+supports this.</p>
+<p>Whether D3D11 or 12, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
+<p class="rubric">Vulkan</p>
+<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Take a note of the installation location,
+as this will be needed later.</p>
+<p class="rubric">OpenXR SDK</p>
+<p>You’ll need a copy of the OpenXR SDK, which is distributed as a Git repository. If you’re familiar with Git, you can use your preferred command-line or GUI Git tool to get
+the SDK from <em>git&#64;github.com:KhronosGroup/OpenXR-SDK.git</em>.
+Alternatively, you can download it as a .zip file from <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK">github.com/KhronosGroup/OpenXR-SDK</a>.</p>
+<p class="rubric">CMake</p>
+<p>The OpenXR SDK is distributed as source code, and you’ll need to build it, using CMake.
+CMake is a program that generates project files, such as the .vcxproj and .sln files
+that Visual Studio needs.
+Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>.</p>
+<p>Once CMake is installed, click the Windows button, and type “cmake” to find the application Cmake GUI.</p>
+<img alt="Find CMake by clicking the Windows icon and typing &quot;cmake&quot;." class="align-right" src="_images/find_cmake.png" />
+<p>In the CMake Gui, enter the location of the OpenXR SDK in the top text box, marked “Where is the source code”. Below, in the box marked “Where to
+build the binaries”, enter a subdirectory of that folder, called “build”.</p>
+<img alt="an image of the CMake GUI, showing that the location of the OpenXR SDK has been entered as the source directory, and that a subdirectory of this, called &quot;build&quot; has been entered as the binary directory." class="align-right" src="_images/cmake-openxrsdk-1.png" />
+<p>Click the button below marked “Configure”. A popup will ask if CMake should create the “build” directory. Click “Yes”.
+Now a box will appear where you can select a “Generator”. This should default to the version of
+Visual Studio you’ve just installed. Click Finish.
+Cmake will now configure the project, and a list of variables will appear in red.</p>
+<img alt="alternate text" class="align-right" src="_images/cmake-openxrsdk-2.png" />
+<p>You shouldn’t have to change any of these variables, but you can if you want. CMake should have
+automatically found the installation of the Vulkan SDK that you created previously, and used it to fill in the variables
+Vulkan_INCLUDE_DIR, Vulkan_LIBRARY and so on. If not, you can modify these variables
+by clicking on the “Value” entries. The values should look like this:</p>
+<img alt="The Vulkan variables in CMake GUI should read:    Vulkan_GLSLANG_VALIDATOR_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslangValidator.exe    Vulkan_GLSLC_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslc.exe    Vulkan_INCLUDE_DIR C:/VulkanSDK/1.3.239.0/Include    Vulkan_LIBRARY    C:/VulkanSDK/1.3.239.0/Lib/vulkan-1.lib" class="align-right" src="_images/cmake-vulkan-vars.png" />
+<p>Obviously, the precise directory will depend on which version of the Vulkan SDK you installed.</p>
+<p>Now, we’re going to “Generate” the project files for the OpenXR SDK. Click “Generate”, and CMake GUI should
+now read “Generating done” in the output log at the bottom.</p>
+<img alt="The Vulkan variables in CMake GUI should read:    Vulkan_GLSLANG_VALIDATOR_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslangValidator.exe    Vulkan_GLSLC_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslc.exe    Vulkan_INCLUDE_DIR C:/VulkanSDK/1.3.239.0/Include    Vulkan_LIBRARY    C:/VulkanSDK/1.3.239.0/Lib/vulkan-1.lib" class="align-right" src="_images/cmake-openxrsdk-generate.png" />
+<p>Now we can build the SDK. Click “Open Project” in CMake GUI, or navigate to your “build” folder and double-click on
+the file “OPENXR.sln”, and Visual Studio will open the solution.</p>
+<p>Select “Debug” from the Visual Studio “Solution Configurations” dropdown.</p>
+<img alt="In Visual Studio, the Solution Configuration dropdown menu is shown, with &quot;Debug&quot; selected." class="align-right" src="_images/visual-studio-openxr-debug.png" />
+<p>Go to the Build menu and select “Build Solution”. The projects will be compiled, and the output
+from openxr_loader.vcxproj should be a library called openxr_loaderd.lib.</p>
+<img alt="In Visual Studio, the &quot;Build&quot; menu is shown, with the &quot;Build Solution&quot; option selected." class="align-right" src="_images/visual-studio-openxr-build.png" />
+<p>Now repeat the process for the Release build. Select “Release” from the Configurations dropdown,
+amd build the solution. This time, the library openxr_loader.lib will be built.</p>
+<p>You can now close this solution, you’re ready to start creating your first OpenXR project.</p>
+</section>
+<section id="pcvr-linux">
+<h3><span class="section-number">1.3.2. </span>PCVR: Linux<a class="headerlink" href="#pcvr-linux" title="Permalink to this heading">¶</a></h3>
+<p class="rubric">Visual Studio Code</p>
+<p>…</p>
+<p class="rubric">OpenXR SDK</p>
+<p>You’ll need a copy of the OpenXR SDK, which is distributed as a Git repository. If you’re familiar with Git, you can use your preferred command-line or GUI Git tool to get
+the SDK from <em>git&#64;github.com:KhronosGroup/OpenXR-SDK.git</em>.</p>
+<p>In the downloaded repo, you’ll find a file called README.md, which contains up-to-date instructions
+for building the libraries. So follow these instructions in the <em>Linux</em> section. In
+general, you will first want to install the required packages, which at the time of writing were:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>build-essential
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>cmake
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libgl1-mesa-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libvulkan-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libx11-xcb-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-dri2-0-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-glx0-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-icccm4-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-keysyms1-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-randr0-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxrandr-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxxf86vm-dev
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mesa-common-dev
+</pre></div>
 </div>
-<div class="section" id="setting-up">
-<h2><span class="section-number">1.3. </span>Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this headline">¶</a></h2>
-<p>1.3. Setting up a development environment ( Visual Studio &amp; Android Studio &amp;
-Monado for people without HMDs )</p>
+<p>From the OpenXR-SDK directory,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>build/linux_debug
+<span class="nb">cd</span><span class="w"> </span>build/linux_debug
+cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Debug<span class="w"> </span>../..
+make
+</pre></div>
 </div>
+<p>Now return to the OpenXR-SDK directory, and build the release library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>build/linux_release
+<span class="nb">cd</span><span class="w"> </span>build/linux_release
+cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span>../..
+make
+</pre></div>
 </div>
+<p>This builds libopenxr_loader.so, in Debug and Release flavours, in the directories:
+OpenXR-SDK/build/linux_debug/src/loader and OpenXR-SDK/build/linux_release/src/loader.
+Both files have the same name on Linux - the debug one is substantially larger however.
+And both are <em>dynamic</em> libraries by default, which will be loaded at runtime.</p>
+<p>Now you’re ready to start creating your first OpenXR project.</p>
+</section>
+</section>
+</section>
 
 
            </div>

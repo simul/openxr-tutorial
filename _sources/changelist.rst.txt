@@ -1,5 +1,7 @@
 Changelist 
 ========= 
+| **Sat 01 Apr** : Modified background image.
+| **Fri 31 Mar** : Added introduction images, initial example text for introduction.rst and setup.rst.
 | **Thu 30 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
 | **Thu 30 Mar** : Added android version still WIP.
 | **Thu 30 Mar** : Added initial rst files and images.
