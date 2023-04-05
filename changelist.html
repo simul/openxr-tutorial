@@ -45,6 +45,7 @@
 	$(".android").show();
 	$(".windows").hide();
 	}
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script type="module">
 	import Cookies from '/_static/js/js.cookie.min.mjs'
@@ -123,8 +124,8 @@
 	</div>
 </form>
 <script type ="module">
-	import Cookies from '/_static/js/js.cookie.min.mjs'
-	platform = Cookies.get('platform')
+	import Cookies from '/_static/js/js.cookie.min.mjs';
+	var platform = Cookies.get('platform')
 	radiobtn = document.getElementById(platform);
 	radiobtn.checked = true;
 	$('input:radio').on('change', function ()
@@ -139,6 +140,7 @@
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
