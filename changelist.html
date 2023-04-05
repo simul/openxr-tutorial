@@ -51,10 +51,10 @@
 	import Cookies from '/_static/js/js.cookie.min.mjs'
 	var platform = Cookies.get("platform")
 	if (platform==undefined) {
-	Cookies.set('platform', 'windows',{ expires: 365})
-	platform='windows';
+		Cookies.set('platform', 'windows',{ expires: 365})
+		platform='windows';
 	}
-	updatePlatform()
+	window.updatePlatform()
 	</script>
 </head>
 
@@ -126,12 +126,12 @@
 <script type ="module">
 	import Cookies from '/_static/js/js.cookie.min.mjs';
 	var platform = Cookies.get('platform')
-	radiobtn = document.getElementById(platform);
+	var radiobtn = document.getElementById(platform);
 	radiobtn.checked = true;
 	$('input:radio').on('change', function ()
 	{
-	Cookies.set('platform', $(this).val(), { expires: 365 })
-	updatePlatform();
+		Cookies.set('platform', $(this).val(), { expires: 365 })
+		window.updatePlatform();
 	});
 	</script>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -140,6 +140,7 @@
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
