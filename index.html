@@ -23,38 +23,38 @@
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
 	<link rel="next" title="1. Introduction" href="introduction.html" > 
-	<script type="module" src="_static/js/js.cookie.mjs"></script>
+	<script type="module" src="_static/js/js.cookie.min.mjs"></script>
 	<script nomodule defer src="_static/js/js.cookie.js"></script>
 	<script type="module">
-  import Cookies from '/_static/js/js.cookie.mjs'
+	import Cookies from '/_static/js/js.cookie.min.mjs'
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-		}
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (platform == "windows") {
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").show();
+	}
+	if (platform == "linux") {
+	$(".linux").show();
+	$(".android").hide();
+	$(".windows").hide();
+	}
+	if (platform == "android") {
+	$(".linux").hide();
+	$(".android").show();
+	$(".windows").hide();
+	}
 	}</script>
 	<script type="module">
-		import Cookies from '/_static/js/js.cookie.mjs'
-		var platform = Cookies.get("platform")
-		if (platform==undefined) {
-			Cookies.set('platform', 'windows',{ expires: 365})
-			platform='windows';
-		}
-		updatePlatform()
+	import Cookies from '/_static/js/js.cookie.min.mjs'
+	var platform = Cookies.get("platform")
+	if (platform==undefined) {
+	Cookies.set('platform', 'windows',{ expires: 365})
+	platform='windows';
+	}
+	updatePlatform()
 	</script>
 </head>
 
@@ -124,7 +124,7 @@
 	</div>
 </form>
 <script type ="module">
-	import Cookies from '/_static/js/js.cookie.mjs'
+	import Cookies from '/_static/js/js.cookie.min.mjs'
 	platform = Cookies.get('platform')
 	radiobtn = document.getElementById(platform);
 	radiobtn.checked = true;
