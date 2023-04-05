@@ -51,8 +51,6 @@
 		platform='windows';
 	}
 	updatePlatform()
-	radiobtn = document.getElementById(platform);
-	radiobtn.checked = true;
 	</script>
 </head>
 
@@ -122,6 +120,9 @@
 	</div>
 </form>
 <script>
+	platform = Cookies.get('platform')
+	radiobtn = document.getElementById(platform);
+	radiobtn.checked = true;
 	$('input:radio').on('change', function ()
 	{
 		Cookies.set('platform', $(this).val(), { expires: 365 })
@@ -134,6 +135,7 @@
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : Radio button selection automated.</div>
 <div class="line"><strong>Wed 05 Apr</strong> : selector</div>
 <div class="line"><strong>Wed 05 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
