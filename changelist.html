@@ -24,29 +24,29 @@
 	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
-	 function updatePlatform()
+	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-		$(".linux").hide();
-		$(".android").hide();
-		$(".windows").show();
-		$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-		$(".linux").show();
-		$(".android").hide();
-		$(".windows").hide();
-		$(".windows-linux").show();
-		}
-		if (platform == "android") {
-		$(".linux").hide();
-		$(".android").show();
-		$(".windows").hide();
-		$(".windows-linux").hide();
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (platform == "windows") {
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").show();
+	$(".windows-linux").show();
+	}
+	if (platform == "linux") {
+	$(".linux").show();
+	$(".android").hide();
+	$(".windows").hide();
+	$(".windows-linux").show();
+	}
+	if (platform == "android") {
+	$(".linux").hide();
+	$(".android").show();
+	$(".windows").hide();
+	$(".windows-linux").hide();
+	}
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -54,6 +54,9 @@
 	Cookies.set('platform', 'windows',{ expires: 365})
 	platform='windows';
 	}
+	</script>
+	<script defer>
+		updatePlatform();
 	</script>
 </head>
 
@@ -132,7 +135,6 @@
 		Cookies.set('platform', $(this).val(), { expires: 365 })
 		updatePlatform();
 	});
-	updatePlatform();
 	</script>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
@@ -140,6 +142,7 @@
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : .</div>
 <div class="line"><strong>Wed 05 Apr</strong> : Rid of js modules.</div>
