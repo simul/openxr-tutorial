@@ -128,6 +128,33 @@
   <section id="setup">
 <h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <p>Once again, in case you want to see instructions for a different platform, select it here:</p>
+<form>
+	<div id='selectplatform'>
+		<div id='selectwindows'>
+			<label for="windows">Windows</label>
+			<input type='radio' id='windows' name='type' value='windows' />
+		</div>
+		<div id='selectlinux'>
+			<label for="linux">Linux</label>
+			<input type='radio' id='linux' name='type' value='linux' />
+		</div>
+		<div id='selectandroid'>
+			<label for="android">Android</label>
+			<input type='radio' id='android' name='type' value='android' />
+		</div>
+	</div>
+</form>
+<script>
+	var platform = Cookies.get('platform')
+	var radiobtn = document.getElementById(platform);
+	if (radiobtn)
+		radiobtn.checked = true;
+	$('input:radio').on('change', function ()
+	{
+		Cookies.set('platform', $(this).val(), { expires: 365 })
+		updatePlatform();
+	});
+</script>
 <div class="windows docutils container" id="windows-intro-1">
 <blockquote>
 <div><p class="rubric">Windows</p>

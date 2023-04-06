@@ -1,5 +1,6 @@
 Changelist 
 ========= 
+| **Thu 06 Apr** : Adde platforms.html
 | **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
 | **Thu 06 Apr** : Platform selection radio box styling.
 | **Thu 06 Apr** : Fixed documentation errors.

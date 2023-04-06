@@ -149,6 +149,33 @@ layers - Runtime - Graphics - Input System)</p>
 <p>This section will help you set up a development environment.
 ( Visual Studio &amp; Android Studio &amp; Monado for people without HMDs )</p>
 <p>The exact procedure will depend on your target platform. So first, let’s choose this:</p>
+<form>
+	<div id='selectplatform'>
+		<div id='selectwindows'>
+			<label for="windows">Windows</label>
+			<input type='radio' id='windows' name='type' value='windows' />
+		</div>
+		<div id='selectlinux'>
+			<label for="linux">Linux</label>
+			<input type='radio' id='linux' name='type' value='linux' />
+		</div>
+		<div id='selectandroid'>
+			<label for="android">Android</label>
+			<input type='radio' id='android' name='type' value='android' />
+		</div>
+	</div>
+</form>
+<script>
+	var platform = Cookies.get('platform')
+	var radiobtn = document.getElementById(platform);
+	if (radiobtn)
+		radiobtn.checked = true;
+	$('input:radio').on('change', function ()
+	{
+		Cookies.set('platform', $(this).val(), { expires: 365 })
+		updatePlatform();
+	});
+</script>
 <p>Select which platform you want to develop for, and click the button to show the instructions for that platform.</p>
 <div class="windows docutils container" id="windows-intro-1">
 <blockquote>
