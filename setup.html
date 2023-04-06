@@ -122,32 +122,30 @@
   </ul>
   <hr>
 </div>
-          <form>
-	<div id='selectplatform'>
-		<label for="windows">Windows*</label>
-		<input type='radio' id='windows' name='type' value='windows' />
-		<label for="linux">Linux*</label>
-		<input type='radio' id='linux' name='type' value='linux' />
-		<label for="android">Android*</label>
-		<input type='radio' id='android' name='type' value='android' />
-	</div>
-</form>
-<script>
-	var platform = Cookies.get('platform')
-	var radiobtn = document.getElementById(platform);
-	if (radiobtn)
-		radiobtn.checked = true;
-	$('input:radio').on('change', function ()
-	{
-		Cookies.set('platform', $(this).val(), { expires: 365 })
-		updatePlatform();
-	});
-	</script>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
   <section id="setup">
 <h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
+<p>Once again, in case you want to see instructions for a different platform, select it here:</p>
+<div class="windows docutils container" id="windows-intro-1">
+<blockquote>
+<div><p class="rubric">Windows</p>
+<p>Showing instructions for Windows.</p>
+</div></blockquote>
+</div>
+<div class="linux docutils container" id="linux-intro-1">
+<blockquote>
+<div><p class="rubric">Linux</p>
+<p>Showing instructions for Linux.</p>
+</div></blockquote>
+</div>
+<div class="android docutils container" id="id1">
+<blockquote>
+<div><p class="rubric">Android</p>
+<p>Showing instructions for Android.</p>
+</div></blockquote>
+</div>
 <div class="windows docutils container" id="windows-id-1">
 <blockquote>
 <div><p class="rubric">Windows</p>

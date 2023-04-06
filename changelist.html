@@ -115,33 +115,14 @@
   </ul>
   <hr>
 </div>
-          <form>
-	<div id='selectplatform'>
-		<label for="windows">Windows*</label>
-		<input type='radio' id='windows' name='type' value='windows' />
-		<label for="linux">Linux*</label>
-		<input type='radio' id='linux' name='type' value='linux' />
-		<label for="android">Android*</label>
-		<input type='radio' id='android' name='type' value='android' />
-	</div>
-</form>
-<script>
-	var platform = Cookies.get('platform')
-	var radiobtn = document.getElementById(platform);
-	if (radiobtn)
-		radiobtn.checked = true;
-	$('input:radio').on('change', function ()
-	{
-		Cookies.set('platform', $(this).val(), { expires: 365 })
-		updatePlatform();
-	});
-	</script>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
+<div class="line"><strong>Thu 06 Apr</strong> : Platform selection radio box styling.</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Fixed documentation errors.</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Added documentation for Android Studio Project generation and Chapter2.1 WIP. Removed unneeded main/cpp/main.cpp. Tidied up CMakeLists.txt.</div>

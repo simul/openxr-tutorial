@@ -1,5 +1,7 @@
 Changelist 
 ========= 
+| **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+| **Thu 06 Apr** : Platform selection radio box styling.
 | **Thu 06 Apr** : Fixed documentation errors.
 | **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
 | **Thu 06 Apr** : Added documentation for Android Studio Project generation and Chapter2.1 WIP. Removed unneeded main/cpp/main.cpp. Tidied up CMakeLists.txt.
