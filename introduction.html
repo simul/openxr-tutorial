@@ -95,6 +95,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3. Setting Up</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pcvr-windows">1.3.1. PCVR: Windows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pcvr-linux">1.3.2. PCVR: Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#android-vr">1.3.3. Android VR</a></li>
 </ul>
 </li>
 </ul>
@@ -264,6 +265,189 @@ OpenXR-SDK/build/linux_debug/src/loader and OpenXR-SDK/build/linux_release/src/l
 Both files have the same name on Linux - the debug one is substantially larger however.
 And both are <em>dynamic</em> libraries by default, which will be loaded at runtime.</p>
 <p>Now you’re ready to start creating your first OpenXR project.</p>
+</section>
+<section id="android-vr">
+<h3><span class="section-number">1.3.3. </span>Android VR<a class="headerlink" href="#android-vr" title="Permalink to this heading">¶</a></h3>
+<p class="rubric">Android Studio</p>
+<p>Android Studio is available to download here: <a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>.</p>
+<p class="rubric">OpenXR SDK</p>
+<p>For Android, you can download the OpenXR loader libraries from here: <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27">https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27</a>.
+Using the .aar file and a program like 7-Zip, you can extract the header files and libraries. Under prefab/modules/openxr_loader/include/openxr, you’ll find the headers, and under prefab/modules/openxr_loader/libs/, you’ll find the libraries for arm64-v8a, armeabi-v7a, x86 and x86_64.</p>
+<img alt="7-Zip internal file structure showing the OpenXR headers. prefab/modules/openxr_loader/include/openxr" class="align-right" src="_images/android-7Zip-include.png" />
+<img alt="7-Zip internal file structure showing the OpenXR libraries. prefab/modules/openxr_loader/libs" class="align-right" src="_images/android-7Zip-libs.png" />
+<p class="rubric">Vulkan</p>
+<p>I recommend using Vulkan for Android VR for its modern, low-level API and extension support for multiview. Vulkan is included as part of the NDK provided Google and is supported on Android 7.0 (Nougat), API level 24 or higher. <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>. OpenGL ES is also option for Android, but we will only be exploring Vulkan.</p>
+<p class="rubric">Project Generation</p>
+<p>Here, I’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
+Open Android Studio, select New Project and choose an Empty Activity. Set the names and save location. The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat). Complete set up.</p>
+<img alt="Android Studio - New Project - Empty Activity." class="align-right" src="_images/android-studio-newproject.png" />
+<p class="rubric">CMake</p>
+<p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.
+Under the <cite>app</cite> folder, you can delete the <cite>libs</cite> folder, and under the <cite>app/src</cite> you can also delete the <cite>androidTest</cite> and <cite>test</cite> folders. Finally under <cite>app/src/main</cite>, delete the <cite>java</cite> folder and add a <cite>cpp</cite> folder. Under the <cite>app/src/main/res</cite>, delete the <cite>values-night</cite> and <cite>xml</cite> folders. Under the <cite>values</cite> modify colors.xml and theme.xml as shown.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- colors.xml --&gt;</span>
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimary&quot;</span><span class="nt">&gt;</span>#008577<span class="nt">&lt;/color&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimaryDark&quot;</span><span class="nt">&gt;</span>#00574B<span class="nt">&lt;/color&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorAccent&quot;</span><span class="nt">&gt;</span>#D81B60<span class="nt">&lt;/color&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+
+<span class="cm">&lt;!-- theme.xml --&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Base application theme. --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;style</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;AppTheme&quot;</span><span class="w"> </span><span class="na">parent=</span><span class="s">&quot;Theme.AppCompat.Light.DarkActionBar&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="cm">&lt;!-- Customize your theme here. --&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimary&quot;</span><span class="nt">&gt;</span>@color/colorPrimary<span class="nt">&lt;/item&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimaryDark&quot;</span><span class="nt">&gt;</span>@color/colorPrimaryDark<span class="nt">&lt;/item&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorAccent&quot;</span><span class="nt">&gt;</span>@color/colorAccent<span class="nt">&lt;/item&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;/resources&gt;</span>
+</pre></div>
+</div>
+<p>Within the <cite>app/src/main/cpp</cite> folder, create a CMakeLists.txt. We will use this file to specific how our Native C++ code will be built. This CMakeList will be invoked by Android Studio’s Gradle build system.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For more information about using CMake with Android Studio, read the</span>
+<span class="c"># documentation: https://d.android.com/studio/projects/add-native-code.html</span>
+
+<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;openxrtutorialch2_1&quot;</span><span class="p">)</span>
+
+<span class="c"># native_app_glue</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">native_app_glue</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/android/native_app_glue/android_native_app_glue.c</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">native_app_glue</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/android/native_app_glue</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">openxrtutorialch2_1</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="s">../../../../../Chapter2.1/main.cpp</span><span class="p">)</span>
+
+<span class="c"># import openxr_loader</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">openxr_loader</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="s">IMPORTED</span><span class="p">)</span>
+<span class="nb">set_target_properties</span><span class="p">(</span><span class="s">openxr_loader</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">IMPORTED_LOCATION</span><span class="w"> </span><span class="s2">&quot;../../../../../../thirdparty/openxr-sdk/android/libs/android.arm64-v8a/libopenxr_loader.so&quot;</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxrtutorialch2_1</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">../../../../../thirdparty/openxr-sdk/include</span><span class="p">)</span>
+
+<span class="c"># vulkan - Found in the NDK</span>
+<span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxrtutorialch2_1</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
+
+<span class="c"># log - Found in the NDK</span>
+<span class="nb">find_library</span><span class="p">(</span><span class="s">log-lib</span><span class="w"> </span><span class="s">log</span><span class="p">)</span>
+
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxrtutorialch2_1</span>
+<span class="w">        </span><span class="s">android</span>
+<span class="w">        </span><span class="s">native_app_glue</span>
+<span class="w">        </span><span class="s">openxr_loader</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">log-lib</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First, we set the minimum required cmake version, here we are using 3.22.1 and the project’s name. Next, we need to add a static library called native_app_glue. The native_app_glue library is compiled from a single source file android_native_app_glue.c. This interfaces between the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point. We also include that directory as we need access to the android_native_app_glue.h header file. Next, we need to set the <cite>CMAKE_SHARED_LINKER_FLAGS</cite> so that <cite>ANativeActivity_onCreate()</cite> is exported for the Java Virtual Machine to call. Next, we add our shared library openxrtutorialch2_1 that houses our code. Here, I have a relative path to our single C++ file.</p>
+<p>Now, we import the openxr_loader library. We need to do this, because it’s external to the NDK library, and won’t be automatically picked up. We call <cite>set_target_properties()</cite> to specific the location of libopenxr_loader.so. We also include the directory to the OpenXR headers. Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. At this time, we also find the log library. Finally we link the android, native_app_glue, openxr_loader, vulkan and log libraries to our openxrtutorialch2_1 library. Our libopenxrtutorialch2_1.so will packageed inside our apk along with any shared libraries that we have linked.</p>
+<p class="rubric">AndroidManifest.xml</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;manifest</span><span class="w"> </span><span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+<span class="w">    </span><span class="na">package=</span><span class="s">&quot;com.simul.openxrtutorialch2_1&quot;</span>
+<span class="w">    </span><span class="na">android:versionCode=</span><span class="s">&quot;1&quot;</span>
+<span class="w">    </span><span class="na">android:versionName=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;application</span>
+<span class="w">        </span><span class="na">android:allowBackup=</span><span class="s">&quot;false&quot;</span>
+<span class="w">        </span><span class="na">android:fullBackupContent=</span><span class="s">&quot;false&quot;</span>
+<span class="w">        </span><span class="na">android:icon=</span><span class="s">&quot;@mipmap/ic_launcher&quot;</span>
+<span class="w">        </span><span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span>
+<span class="w">        </span><span class="na">android:hasCode=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;activity</span>
+<span class="w">            </span><span class="na">android:name=</span><span class="s">&quot;android.app.NativeActivity&quot;</span>
+<span class="w">            </span><span class="na">android:configChanges=</span><span class="s">&quot;orientation|keyboardHidden&quot;</span>
+<span class="w">            </span><span class="na">android:debuggable=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;meta-data</span>
+<span class="w">                </span><span class="na">android:name=</span><span class="s">&quot;android.app.lib_name&quot;</span>
+<span class="w">                </span><span class="na">android:value=</span><span class="s">&quot;openxrtutorialch2_1&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;intent-filter&gt;</span>
+<span class="w">                </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/intent-filter&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/activity&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+</div>
+<p>We now need to modify our AndroidManifest.xml file to tell Android to run a Native Activity. We set <cite>android:name</cite> to “android.app.NativeActivity” and update <cite>android:configChanges</cite> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <cite>android:name</cite> to “android.app.lib_name” and <cite>android:value</cite> to “openxrtutorialch2_1”, where <cite>android:value</cite> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
+<p class="rubric">Gradle</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
+
+<span class="n">android</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">compileSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">    </span><span class="n">ndkVersion</span><span class="w"> </span><span class="s1">&#39;23.1.7779620&#39;</span>
+
+<span class="w">    </span><span class="n">defaultConfig</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">applicationId</span><span class="w"> </span><span class="s2">&quot;com.simul.openxrtutorialch2_1&quot;</span>
+<span class="w">        </span><span class="n">minSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">        </span><span class="n">targetSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">        </span><span class="n">versionCode</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="n">versionName</span><span class="w"> </span><span class="s2">&quot;1.0&quot;</span>
+<span class="w">        </span><span class="n">ndk</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">abiFilters</span><span class="w"> </span><span class="s1">&#39;arm64-v8a&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">buildFeatures</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">prefab</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">buildTypes</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">release</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">minifyEnabled</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">            </span><span class="n">proguardFiles</span><span class="w"> </span><span class="n">getDefaultProguardFile</span><span class="o">(</span><span class="s1">&#39;proguard-android-optimize.txt&#39;</span><span class="o">),</span><span class="w"> </span><span class="s1">&#39;proguard-rules.pro&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">debug</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">jniDebuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">debuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">renderscriptDebuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">minifyEnabled</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">externalNativeBuild</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">cmake</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">version</span><span class="w"> </span><span class="s1">&#39;3.22.1&#39;</span>
+<span class="w">            </span><span class="n">path</span><span class="w"> </span><span class="s1">&#39;src/main/cpp/CMakeLists.txt&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="n">fileTree</span><span class="o">(</span><span class="nl">dir:</span><span class="w"> </span><span class="s1">&#39;libs&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">include:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;*.jar&#39;</span><span class="o">])</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.appcompat:appcompat:1.0.2&#39;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.constraintlayout:constraintlayout:1.1.3&#39;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;org.khronos.openxr:openxr_loader_for_android:1.0.27&#39;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now, we can config our build.gradle file in the <cite>app</cite> folder. First remove any references to Java, Kotlin and to testing. Next add in the <cite>externalNativeBuild</cite> section specifying CMake, its version and the location of the CMakeLists.txt that we created earlier. Also specify under the <cite>ndk</cite> section the <cite>abiFilters</cite>. We will just be using arm64-v8a in this tutorial. <cite>ndkVersion</cite> should also be specified.</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="c1">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span>
+<span class="n">buildscript</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">       </span><span class="n">google</span><span class="o">()</span>
+<span class="w">       </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">classpath</span><span class="w"> </span><span class="s1">&#39;com.android.tools.build:gradle:4.2.2&#39;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">allprojects</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">google</span><span class="o">()</span>
+<span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">task</span><span class="w"> </span><span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span><span class="w"> </span><span class="n">Delete</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">delete</span><span class="w"> </span><span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now, we can config our build.gradle file in the root folder of the project. This is a complete replacement the default one provided by Android Studio. This file stipulates the repositories and gradle version to be used.
+The settings.gradle can be reduce to just: <cite>include ‘:app’</cite>, and in the gradle.properties we need to remove <cite>kotlin.code.style=official</cite> and <cite>android.nonTransitiveRClass=true</cite>.</p>
+<p>With that completed, we should now be able to sync the Gradle file and build the project.</p>
 </section>
 </section>
 </section>

@@ -311,9 +311,21 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <ol class="arabic simple" start="2">
 <li><p>SETUP (Basic structure ready)</p></li>
 </ol>
+<p>Now that we have a basic application up and running with the OpenXR header files and libraries, we can start to set the core aspects of OpenXR. As a modern Khronos API, the OpenXR is heavily influcencd by the Vulkan API. So those who are familiar with the style of the Vulkan API will find OpenXR easy to follow.</p>
 <section id="creating-an-xrinstance">
 <h2><span class="section-number">2.1. </span>Creating an XrInstance<a class="headerlink" href="#creating-an-xrinstance" title="Permalink to this heading">¶</a></h2>
 <p>2.1. Creating an XrInstance / xrGetSystem (xrCreateInstance)</p>
+<p>The <cite>XrInstance</cite> is the fundational object that we need to create first. The <cite>XrInstance</cite> encompasses the application setup state, OpenXR API version and any layers and extensions. First we will look at the <cite>XrApplicationInfo</cite>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrApplicationInfo</span><span class="w"> </span><span class="n">AI</span><span class="p">;</span>
+<span class="n">strcpy</span><span class="p">(</span><span class="n">AI</span><span class="p">.</span><span class="n">applicationName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.1&quot;</span><span class="p">);</span>
+<span class="n">AI</span><span class="p">.</span><span class="n">applicationVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">strcpy</span><span class="p">(</span><span class="n">AI</span><span class="p">.</span><span class="n">engineName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Engine&quot;</span><span class="p">);</span>
+<span class="n">AI</span><span class="p">.</span><span class="n">engineVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">AI</span><span class="p">.</span><span class="n">apiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_CURRENT_API_VERSION</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as application developer. The main member here is the apiVersion. Here we use the <cite>XR_CURRENT_API_VERSION</cite> macro to specific the OpenXR version that we want to run. Also note here the use of <cite>strcpy()</cite> to set the applicationName and engineName. If you look at <cite>XrApplicationInfo::applicationName</cite> and <cite>XrApplicationInfo::engineName</cite> they are of type <cite>char[]</cite>, hence you must copy your string into that <cite>char[]</cite> and you must also by aware of the allowable length.</p>
+<p>Similar to Vulkan, OpenXR allows application to extend functionality provided by the core specification. These could extra functionality provided by the hardware. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease.</p>
 </section>
 <section id="creating-an-xrsession">
 <h2><span class="section-number">2.2. </span>Creating an XrSession<a class="headerlink" href="#creating-an-xrsession" title="Permalink to this heading">¶</a></h2>
