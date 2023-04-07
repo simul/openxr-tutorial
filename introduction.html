@@ -138,25 +138,20 @@ adaptation. Developing a new app for a new platform was even more challenging.</
 slightly different perspectives. Most had a way to track the user’s head and hands or hand-controllers. Most had buttons,
 many had analogue controls like triggers or joysticks; many had haptic feedback.</p>
 <figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="_images/OpenXRBefore.png"><img alt="XR Fragmentation" src="_images/OpenXRBefore.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
-<p><span class="caption-text">XR fragmentation before OpenXR</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
-and outputting to its displays and haptic systems.</p>
-<figure class="align-center" id="id2">
-<a class="reference internal image-reference" href="_images/OpenXRAfter.png"><img alt="OpenXR resolves fragmentation by providing a common interface." src="_images/OpenXRAfter.png" style="width: 600px;" /></a>
-<figcaption>
-<p><span class="caption-text">OpenXR resolves fragmentation by providing a common interface</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+and outputting to its displays and haptic systems. Just as OpenGL and Vulkan provide a common API to access graphics hardware, so OpenXR
+allows you to write code that works with multiple XR platforms, with minimal adaptation.</p>
 </section>
 <section id="overview">
 <h2><span class="section-number">1.2. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
-<table class="longtable docutils align-default" id="id3">
-<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table class="longtable docutils align-default" id="id2">
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 16.7%" />
 <col style="width: 83.3%" />
@@ -208,8 +203,8 @@ to Actions or Poses, so the app knows what the user is doing.</p></td>
 </section>
 <section id="setting-up">
 <h2><span class="section-number">1.3. </span>Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this heading">¶</a></h2>
-<p>This section will help you set up a development environment.
-( Visual Studio &amp; Android Studio &amp; Monado for people without HMDs )</p>
+<p>This section will help you set up your development environment. This is the one place where your choice of platform really makes a difference!
+After that, things will be much more consistent.</p>
 <p>The exact procedure will depend on your target platform. So first, let’s choose this:</p>
 <form>
 	<div id='selectplatform'>
@@ -242,19 +237,19 @@ to Actions or Poses, so the app knows what the user is doing.</p></td>
 <div class="windows docutils container" id="windows-intro-1">
 <blockquote>
 <div><p class="rubric">Windows</p>
-<p>You’ll see instructions to build for Windows.</p>
+<p>You’ll see instructions to build on, and for Windows.</p>
 </div></blockquote>
 </div>
 <div class="linux docutils container" id="linux-intro-1">
 <blockquote>
 <div><p class="rubric">Linux</p>
-<p>You’ll see instructions to build for Linux.</p>
+<p>You’ll see instructions to build on, and for Linux.</p>
 </div></blockquote>
 </div>
 <div class="android docutils container" id="android-intro-1">
 <blockquote>
 <div><p class="rubric">Android</p>
-<p>You’ll see instructions to build for Android.</p>
+<p>You’ll see instructions to build for Android, using either a Linux or Windows PC.</p>
 </div></blockquote>
 </div>
 <div class="windows docutils container">
