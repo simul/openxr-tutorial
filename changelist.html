@@ -26,27 +26,27 @@
 	<script >
 	function updatePlatform()
 	{
-	var platform = Cookies.get("platform")
-	console.log("platform = " + platform);
-	if (platform == "windows") {
-	$(".linux").hide();
-	$(".android").hide();
-	$(".windows").show();
-	$(".windows-linux").show();
-	}
-	if (platform == "linux") {
-	$(".linux").show();
-	$(".android").hide();
-	$(".windows").hide();
-	$(".windows-linux").show();
-	}
-	if (platform == "android") {
-	$(".linux").hide();
-	$(".android").show();
-	$(".windows").hide();
-	$(".windows-linux").hide();
-	}
-	window.updatePlatform=updatePlatform;
+		var platform = Cookies.get("platform")
+		console.log("platform = " + platform);
+		if (platform == "windows") {
+			$(".linux").hide();
+			$(".android").hide();
+			$(".windows").show();
+			$(".windows-linux").show();
+		}
+		if (platform == "linux") {
+			$(".linux").show();
+			$(".android").hide();
+			$(".windows").hide();
+			$(".windows-linux").show();
+		}
+		if (platform == "android") {
+			$(".linux").hide();
+			$(".android").show();
+			$(".windows").hide();
+			$(".windows-linux").hide();
+		}
+		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -55,9 +55,7 @@
 	platform='windows';
 	}
 	</script>
-	<script defer>
-		updatePlatform();
-	</script>
+	<script defer src="_static/js/updatePlatform.js"></script>
 </head>
 
 <body class="wy-body-for-nav" onload="updatePlatform();"> 
@@ -121,6 +119,14 @@
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Fri 07 Apr</strong> : Fix broken theme table layout - tables should not overrun width.</div>
+<div class="line"><strong>Fri 07 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
+<div class="line"><strong>Fri 07 Apr</strong> : Add new diagrams.</div>
+<div class="line"><strong>Fri 07 Apr</strong> : Moved the majority of the Android setup docs to setup.rst.</div>
+<div class="line"><strong>Fri 07 Apr</strong> : Added text for Chapter 5.1. Minor updates for main.cpp.</div>
+<div class="line"><strong>Fri 07 Apr</strong> : Updated ` to be `` in rst to represent code block. Added XrSystemId section to Chapter 2.1 text.</div>
+<div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
+<div class="line"><strong>Thu 06 Apr</strong> : Text for Chapter 2.1.</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Adde platforms.html</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
 <div class="line"><strong>Thu 06 Apr</strong> : Platform selection radio box styling.</div>

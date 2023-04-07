@@ -28,27 +28,27 @@
 	<script >
 	function updatePlatform()
 	{
-	var platform = Cookies.get("platform")
-	console.log("platform = " + platform);
-	if (platform == "windows") {
-	$(".linux").hide();
-	$(".android").hide();
-	$(".windows").show();
-	$(".windows-linux").show();
-	}
-	if (platform == "linux") {
-	$(".linux").show();
-	$(".android").hide();
-	$(".windows").hide();
-	$(".windows-linux").show();
-	}
-	if (platform == "android") {
-	$(".linux").hide();
-	$(".android").show();
-	$(".windows").hide();
-	$(".windows-linux").hide();
-	}
-	window.updatePlatform=updatePlatform;
+		var platform = Cookies.get("platform")
+		console.log("platform = " + platform);
+		if (platform == "windows") {
+			$(".linux").hide();
+			$(".android").hide();
+			$(".windows").show();
+			$(".windows-linux").show();
+		}
+		if (platform == "linux") {
+			$(".linux").show();
+			$(".android").hide();
+			$(".windows").hide();
+			$(".windows-linux").show();
+		}
+		if (platform == "android") {
+			$(".linux").hide();
+			$(".android").show();
+			$(".windows").hide();
+			$(".windows-linux").hide();
+		}
+		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -57,9 +57,7 @@
 	platform='windows';
 	}
 	</script>
-	<script defer>
-		updatePlatform();
-	</script>
+	<script defer src="_static/js/updatePlatform.js"></script>
 </head>
 
 <body class="wy-body-for-nav" onload="updatePlatform();"> 
@@ -219,6 +217,182 @@ this one containing:</p>
 and put it in the Chapter2 directory. In this file, place the following code:</p>
 </div></blockquote>
 </div>
+<div class="android docutils container" id="android-id-1">
+<blockquote>
+<div><p class="rubric">Project Generation</p>
+<p>Here, I’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
+Open Android Studio, select New Project and choose an Empty Activity. Set the names and save location. The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat). Complete set up.</p>
+<img alt="Android Studio - New Project - Empty Activity." class="align-right" src="_images/android-studio-newproject.png" />
+<p class="rubric">CMake</p>
+<p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.
+Under the <code class="docutils literal notranslate"><span class="pre">app</span></code> folder, you can delete the <code class="docutils literal notranslate"><span class="pre">libs</span></code> folder, and under the <code class="docutils literal notranslate"><span class="pre">app/src</span></code> you can also delete the <code class="docutils literal notranslate"><span class="pre">androidTest</span></code> and <code class="docutils literal notranslate"><span class="pre">test</span></code> folders. Finally under <code class="docutils literal notranslate"><span class="pre">app/src/main</span></code>, delete the <code class="docutils literal notranslate"><span class="pre">java</span></code> folder and add a <code class="docutils literal notranslate"><span class="pre">cpp</span></code> folder. Under the <code class="docutils literal notranslate"><span class="pre">app/src/main/res</span></code>, delete the <code class="docutils literal notranslate"><span class="pre">values-night</span></code> and <code class="docutils literal notranslate"><span class="pre">xml</span></code> folders. Under the <code class="docutils literal notranslate"><span class="pre">values</span></code> modify colors.xml and theme.xml as shown.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- colors.xml --&gt;</span>
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimary&quot;</span><span class="nt">&gt;</span>#008577<span class="nt">&lt;/color&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimaryDark&quot;</span><span class="nt">&gt;</span>#00574B<span class="nt">&lt;/color&gt;</span>
+<span class="w">    </span><span class="nt">&lt;color</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorAccent&quot;</span><span class="nt">&gt;</span>#D81B60<span class="nt">&lt;/color&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+
+<span class="cm">&lt;!-- theme.xml --&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Base application theme. --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;style</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;AppTheme&quot;</span><span class="w"> </span><span class="na">parent=</span><span class="s">&quot;Theme.AppCompat.Light.DarkActionBar&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="cm">&lt;!-- Customize your theme here. --&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimary&quot;</span><span class="nt">&gt;</span>@color/colorPrimary<span class="nt">&lt;/item&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorPrimaryDark&quot;</span><span class="nt">&gt;</span>@color/colorPrimaryDark<span class="nt">&lt;/item&gt;</span>
+<span class="w">        </span><span class="nt">&lt;item</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;colorAccent&quot;</span><span class="nt">&gt;</span>@color/colorAccent<span class="nt">&lt;/item&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;/resources&gt;</span>
+</pre></div>
+</div>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">app/src/main/cpp</span></code> folder, create a CMakeLists.txt. We will use this file to specific how our Native C++ code will be built. This CMakeList will be invoked by Android Studio’s Gradle build system.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For more information about using CMake with Android Studio, read the</span>
+<span class="c"># documentation: https://d.android.com/studio/projects/add-native-code.html</span>
+
+<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;openxrtutorialch2&quot;</span><span class="p">)</span>
+
+<span class="c"># native_app_glue</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">native_app_glue</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/android/native_app_glue/android_native_app_glue.c</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">native_app_glue</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/android/native_app_glue</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">openxrtutorialch2</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="s">../../../../../Chapter2.1/main.cpp</span><span class="p">)</span>
+
+<span class="c"># import openxr_loader</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">openxr_loader</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="s">IMPORTED</span><span class="p">)</span>
+<span class="nb">set_target_properties</span><span class="p">(</span><span class="s">openxr_loader</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">IMPORTED_LOCATION</span><span class="w"> </span><span class="s2">&quot;../../../../../../thirdparty/openxr-sdk/android/libs/android.arm64-v8a/libopenxr_loader.so&quot;</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxrtutorialch2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">../../../../../thirdparty/openxr-sdk/include</span><span class="p">)</span>
+
+<span class="c"># vulkan - Found in the NDK</span>
+<span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxrtutorialch2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
+
+<span class="c"># log - Found in the NDK</span>
+<span class="nb">find_library</span><span class="p">(</span><span class="s">log-lib</span><span class="w"> </span><span class="s">log</span><span class="p">)</span>
+
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxrtutorialch2</span>
+<span class="w">        </span><span class="s">android</span>
+<span class="w">        </span><span class="s">native_app_glue</span>
+<span class="w">        </span><span class="s">openxr_loader</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">log-lib</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First, we set the minimum required cmake version, here we are using 3.22.1 and the project’s name. Next, we need to add a static library called native_app_glue. The native_app_glue library is compiled from a single source file android_native_app_glue.c. This interfaces between the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point. We also include that directory as we need access to the android_native_app_glue.h header file. Next, we need to set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> so that <code class="docutils literal notranslate"><span class="pre">ANativeActivity_onCreate()</span></code> is exported for the Java Virtual Machine to call. Next, we add our shared library openxrtutorialch2 that houses our code. Here, I have a relative path to our single C++ file.</p>
+<p>Now, we import the openxr_loader library. We need to do this, because it’s external to the NDK library, and won’t be automatically picked up. We call <code class="docutils literal notranslate"><span class="pre">set_target_properties()</span></code> to specific the location of libopenxr_loader.so. We also include the directory to the OpenXR headers. Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. At this time, we also find the log library. Finally we link the android, native_app_glue, openxr_loader, vulkan and log libraries to our openxrtutorialch2 library. Our libopenxrtutorialch2.so will packageed inside our apk along with any shared libraries that we have linked.</p>
+<p class="rubric">AndroidManifest.xml</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;manifest</span><span class="w"> </span><span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+<span class="w">    </span><span class="na">package=</span><span class="s">&quot;com.simul.openxrtutorialch2&quot;</span>
+<span class="w">    </span><span class="na">android:versionCode=</span><span class="s">&quot;1&quot;</span>
+<span class="w">    </span><span class="na">android:versionName=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;application</span>
+<span class="w">        </span><span class="na">android:allowBackup=</span><span class="s">&quot;false&quot;</span>
+<span class="w">        </span><span class="na">android:fullBackupContent=</span><span class="s">&quot;false&quot;</span>
+<span class="w">        </span><span class="na">android:icon=</span><span class="s">&quot;@mipmap/ic_launcher&quot;</span>
+<span class="w">        </span><span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span>
+<span class="w">        </span><span class="na">android:hasCode=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;activity</span>
+<span class="w">            </span><span class="na">android:name=</span><span class="s">&quot;android.app.NativeActivity&quot;</span>
+<span class="w">            </span><span class="na">android:configChanges=</span><span class="s">&quot;orientation|keyboardHidden&quot;</span>
+<span class="w">            </span><span class="na">android:debuggable=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;meta-data</span>
+<span class="w">                </span><span class="na">android:name=</span><span class="s">&quot;android.app.lib_name&quot;</span>
+<span class="w">                </span><span class="na">android:value=</span><span class="s">&quot;openxrtutorialch2&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;intent-filter&gt;</span>
+<span class="w">                </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/intent-filter&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/activity&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+</div>
+<p>We now need to modify our AndroidManifest.xml file to tell Android to run a Native Activity. We set <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.NativeActivity” and update <code class="docutils literal notranslate"><span class="pre">android:configChanges</span></code> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.lib_name” and <code class="docutils literal notranslate"><span class="pre">android:value</span></code> to “openxrtutorialch2”, where <code class="docutils literal notranslate"><span class="pre">android:value</span></code> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
+<p class="rubric">Gradle</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
+
+<span class="n">android</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">compileSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">    </span><span class="n">ndkVersion</span><span class="w"> </span><span class="s1">&#39;23.1.7779620&#39;</span>
+
+<span class="w">    </span><span class="n">defaultConfig</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">applicationId</span><span class="w"> </span><span class="s2">&quot;com.simul.openxrtutorialch2&quot;</span>
+<span class="w">        </span><span class="n">minSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">        </span><span class="n">targetSdkVersion</span><span class="w"> </span><span class="mi">29</span>
+<span class="w">        </span><span class="n">versionCode</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="n">versionName</span><span class="w"> </span><span class="s2">&quot;1.0&quot;</span>
+<span class="w">        </span><span class="n">ndk</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">abiFilters</span><span class="w"> </span><span class="s1">&#39;arm64-v8a&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">buildFeatures</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">prefab</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">buildTypes</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">release</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">minifyEnabled</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">            </span><span class="n">proguardFiles</span><span class="w"> </span><span class="n">getDefaultProguardFile</span><span class="o">(</span><span class="s1">&#39;proguard-android-optimize.txt&#39;</span><span class="o">),</span><span class="w"> </span><span class="s1">&#39;proguard-rules.pro&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">debug</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">jniDebuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">debuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">renderscriptDebuggable</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="n">minifyEnabled</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">externalNativeBuild</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">cmake</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">version</span><span class="w"> </span><span class="s1">&#39;3.22.1&#39;</span>
+<span class="w">            </span><span class="n">path</span><span class="w"> </span><span class="s1">&#39;src/main/cpp/CMakeLists.txt&#39;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="n">fileTree</span><span class="o">(</span><span class="nl">dir:</span><span class="w"> </span><span class="s1">&#39;libs&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">include:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;*.jar&#39;</span><span class="o">])</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.appcompat:appcompat:1.0.2&#39;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.constraintlayout:constraintlayout:1.1.3&#39;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;org.khronos.openxr:openxr_loader_for_android:1.0.27&#39;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now, we can config our build.gradle file in the <code class="docutils literal notranslate"><span class="pre">app</span></code> folder. First remove any references to Java, Kotlin and to testing. Next add in the <code class="docutils literal notranslate"><span class="pre">externalNativeBuild</span></code> section specifying CMake, its version and the location of the CMakeLists.txt that we created earlier. Also specify under the <code class="docutils literal notranslate"><span class="pre">ndk</span></code> section the <code class="docutils literal notranslate"><span class="pre">abiFilters</span></code>. We will just be using arm64-v8a in this tutorial. <code class="docutils literal notranslate"><span class="pre">ndkVersion</span></code> should also be specified.</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="c1">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span>
+<span class="n">buildscript</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">       </span><span class="n">google</span><span class="o">()</span>
+<span class="w">       </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">classpath</span><span class="w"> </span><span class="s1">&#39;com.android.tools.build:gradle:4.2.2&#39;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">allprojects</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">google</span><span class="o">()</span>
+<span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">task</span><span class="w"> </span><span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span><span class="w"> </span><span class="n">Delete</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">delete</span><span class="w"> </span><span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now, we can config our build.gradle file in the root folder of the project. This is a complete replacement the default one provided by Android Studio. This file stipulates the repositories and gradle version to be used.
+The settings.gradle can be reduce to just: <code class="docutils literal notranslate"><span class="pre">include</span> <span class="pre">':app'</span></code>, and in the gradle.properties we need to remove <code class="docutils literal notranslate"><span class="pre">kotlin.code.style=official</span></code> and <code class="docutils literal notranslate"><span class="pre">android.nonTransitiveRClass=true</span></code>.</p>
+<p>With that completed, we should now be able to sync the Gradle file and build the project.</p>
+<p>Now we’ll create our source file. Create a new text file called “main.cpp” and put it in the Chapter2 directory. This file will be referenced in the CMakeLists file we created, so ensure the path is correct. In this file, place the following code:</p>
+</div></blockquote>
+</div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define NO_MINMAX</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
@@ -258,6 +432,10 @@ Now add the following:</p>
 </div>
 <p>This defines the macro DEBUG_BREAK, according to what platform we’re building for. This macro will
 stop execution of your program when an error occurs, so you can see where it happened and fix it.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define OPENXR_CHECK(x, y) { if (!XR_SUCCEEDED(x)) { std::cout &lt;&lt; &quot;ERROR: OPENXR: &quot; &lt;&lt; y &lt;&lt; std::endl; } }</span>
+</pre></div>
+</div>
+<p>This defines the macro OPENXR_CHECK. Many OpenXR functions return a XrResult. This macro will check if the call has failed and logs a message to stdout. This can be modified to suit your needs.</p>
 <p>Now we will define the main class of your application. It’s just a stub for now, with an empty Run() method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span>
 <span class="p">{</span>
@@ -333,14 +511,57 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <span class="p">}</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple">
 <li><p>SETUP (Basic structure ready)</p></li>
 </ol>
 <p>Now that we have a basic application up and running with the OpenXR header files and libraries, we can start to set the core aspects of OpenXR. As a modern Khronos API, the OpenXR is heavily influcencd by the Vulkan API. So those who are familiar with the style of the Vulkan API will find OpenXR easy to follow.</p>
 <section id="creating-an-xrinstance">
 <h2><span class="section-number">2.1. </span>Creating an XrInstance<a class="headerlink" href="#creating-an-xrinstance" title="Permalink to this heading">¶</a></h2>
 <p>2.1. Creating an XrInstance / xrGetSystem (xrCreateInstance)</p>
-<p>The <cite>XrInstance</cite> is the fundational object that we need to create first. The <cite>XrInstance</cite> encompasses the application setup state, OpenXR API version and any layers and extensions. First we will look at the <cite>XrApplicationInfo</cite>.</p>
+<p class="rubric">XrInstance</p>
+<p>Firstly, add to the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class the methods: <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetSystemID()</span></code> and <code class="docutils literal notranslate"><span class="pre">DestroyInstance()</span></code>. Update <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> to call those methods in that order and add to the class in a private section the following members.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Run</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateInstance</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetInstanceProperties</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">instance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">activeAPILayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">activeInstanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> is the foundational object that we need to create first. The <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> encompasses the application setup state, OpenXR API version and any layers and extensions. So inside the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, we will first look at the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrApplicationInfo</span><span class="w"> </span><span class="n">AI</span><span class="p">;</span>
 <span class="n">strcpy</span><span class="p">(</span><span class="n">AI</span><span class="p">.</span><span class="n">applicationName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.1&quot;</span><span class="p">);</span>
 <span class="n">AI</span><span class="p">.</span><span class="n">applicationVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -349,8 +570,151 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <span class="n">AI</span><span class="p">.</span><span class="n">apiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_CURRENT_API_VERSION</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as application developer. The main member here is the apiVersion. Here we use the <cite>XR_CURRENT_API_VERSION</cite> macro to specific the OpenXR version that we want to run. Also note here the use of <cite>strcpy()</cite> to set the applicationName and engineName. If you look at <cite>XrApplicationInfo::applicationName</cite> and <cite>XrApplicationInfo::engineName</cite> they are of type <cite>char[]</cite>, hence you must copy your string into that <cite>char[]</cite> and you must also by aware of the allowable length.</p>
-<p>Similar to Vulkan, OpenXR allows application to extend functionality provided by the core specification. These could extra functionality provided by the hardware. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease.</p>
+<p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::apiVersion</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">XR_CURRENT_API_VERSION</span></code> macro to specific the OpenXR version that we want to run. Also note here the use of <code class="docutils literal notranslate"><span class="pre">strcpy()</span></code> to set the applicationName and engineName. If you look at <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::applicationName</span></code> and <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::engineName</span></code> members, they are of type <code class="docutils literal notranslate"><span class="pre">char[]</span></code>, hence you must copy your string into that <code class="docutils literal notranslate"><span class="pre">char[]</span></code> and you must also by aware of the allowable length.</p>
+<p>Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
+
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
+<span class="w">        </span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_D3D11_ENABLE_EXTENSION_NAME</span><span class="p">);</span>
+<span class="cp">#elif defined(XR_USE_GRAPHICS_API_D3D12)</span>
+<span class="w">        </span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_D3D12_ENABLE_EXTENSION_NAME</span><span class="p">);</span>
+<span class="cp">#elif defined(XR_USE_GRAPHICS_API_OPENGL)</span>
+<span class="w">        </span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_OPENGL_ENABLE_EXTENSION_NAME</span><span class="p">);</span>
+<span class="cp">#elif defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
+<span class="w">        </span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME</span><span class="p">);</span>
+<span class="cp">#elif defined(XR_USE_GRAPHICS_API_VULKAN)</span>
+<span class="w">        </span><span class="n">instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_VULKAN_ENABLE_EXTENSION_NAME</span><span class="p">);</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>Here, we store in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::string&gt;</span></code> the extension names that we would like to use. <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> is a macro of a string defined in openxr.h. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in Chapter 5.1. Depending on which <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro that you have defined, this code will add the relevant extension.</p>
+<p>Not all API layers and extensions are available to use, so we much check which ones can use. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">apiLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrApiLayerProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateApiLayerProperties</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apiLayerCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate ApiLayerProperties.&quot;</span><span class="p">);</span>
+<span class="n">apiLayerProperties</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">apiLayerCount</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">apiLayerProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">)</span>
+<span class="w">        </span><span class="n">apiLayerProperty</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_API_LAYER_PROPERTIES</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateApiLayerProperties</span><span class="p">(</span><span class="n">apiLayerCount</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apiLayerCount</span><span class="p">,</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate ApiLayerProperties.&quot;</span><span class="p">);</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">requestLayer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">apiLayers</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">layerProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestLayer</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">layerProperty</span><span class="p">.</span><span class="n">layerName</span><span class="p">))</span>
+<span class="w">                        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                        </span><span class="n">activeAPILayers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestLayer</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">extensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrExtensionProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensionProperties</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateInstanceExtensionProperties</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate InstanceExtensionProperties.&quot;</span><span class="p">);</span>
+<span class="n">extensionProperties</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">extensionCount</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">extensionProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">extensionProperties</span><span class="p">)</span>
+<span class="w">        </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_EXTENSION_PROPERTIES</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateInstanceExtensionProperties</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">extensionCount</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionCount</span><span class="p">,</span><span class="w"> </span><span class="n">extensionProperties</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate InstanceExtensionProperties.&quot;</span><span class="p">);</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">requestExtension</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">instanceExtensions</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">extensionProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">extensionProperties</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">extensionName</span><span class="p">))</span>
+<span class="w">                        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                        </span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>These functions are called twice. The first time is to get the count of the API layers or extensions and the second is to fill out the array of structures. Before the second call, we need set <code class="docutils literal notranslate"><span class="pre">XrApiLayerProperties::type</span></code> or <code class="docutils literal notranslate"><span class="pre">XrExtensionProperties::type</span></code> to the correct value, so that the second call can correctly fill out the data. After we have enumerated the API layers and extensions, we use a nested loop to check to see whether an API layers or extensions is availble and add it to the activeAPILayers and/or activeInstanceExtensions respectively. Note the activeAPILayers and activeInstanceExtensions are of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;const</span> <span class="pre">char*&gt;</span></code>. This will help us when fill out the next structure <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrInstanceCreateInfo</span><span class="w"> </span><span class="n">instanceCI</span><span class="p">;</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_INSTANCE_CREATE_INFO</span><span class="p">;</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">applicationInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AI</span><span class="p">;</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledApiLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">activeAPILayers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledApiLayerNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeAPILayers</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledExtensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledExtensionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateInstance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instanceCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instance</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Instance.&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This section is fairly simple, as we now just collect data from before and assign them to members in the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure. Finally, we get to call <code class="docutils literal notranslate"><span class="pre">xrCreateInstance()</span></code> where we take pointers to thr stack <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> objects. If the function succeeded, the result will be XR_SUCCESS and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> will be non-null.</p>
+<p>At the end of the program, we should destroy the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>. This is simple done with the function <code class="docutils literal notranslate"><span class="pre">xrDestroyInstance()</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">DestroyInstance</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy Instance.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Whilst we have an <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, lets check its properties. We fill out the type and next members of the structure <code class="docutils literal notranslate"><span class="pre">XrInstanceProperties</span></code> and pass it along with the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> to <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProperties()</span></code>. This function will fill out the rest of that structure for us to use. Here, we simply log to stdout the runtime’s name, and with the use of the <code class="docutils literal notranslate"><span class="pre">XR_VERSION_MAJOR</span></code>, <code class="docutils literal notranslate"><span class="pre">XR_VERSION_MINOR</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_VERSION_PATCH</span></code> macros, we parse and log the runtime version.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetInstanceProperties</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">XrInstanceProperties</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">;</span>
+<span class="w">        </span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_INSTANCE_PROPERTIES</span><span class="p">;</span>
+<span class="w">        </span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProperties</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instanceProperties</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProperties.&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Runtime: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeName</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_PATCH</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="rubric">XrSystemId</p>
+<p>The next object that we want to get is the <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code>. OpenXR ‘separates the concept of physical systems of XR devices from the logical objects that applications interact with directly. A system represents a collection of related devices in the runtime, often made up of several individual hardware components working together to enable XR experiences’.
+<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#system">OpenXR Specification 5. System</a>.</p>
+<p>So, a <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> could represent VR headset and a pair of contollers, or perhaps mobile device with video pass-through for AR. So we need to decide what type of <code class="docutils literal notranslate"><span class="pre">XrFormFactor</span></code> we are wanting to use, as some runtimes support multiple form factors. Here, we are selecting <code class="docutils literal notranslate"><span class="pre">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span></code> for a Meta Quest or Pico Neo.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//From openxr.h</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrFormFactor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_FORM_FACTOR_HANDHELD_DISPLAY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_FORM_FACTOR_MAX_ENUM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x7FFFFFFF</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrFormFactor</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We fill out the <code class="docutils literal notranslate"><span class="pre">XrSystemGetInfo</span></code> structure as desired and pass it as a pointer along with the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> and a pointer to the <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> to <code class="docutils literal notranslate"><span class="pre">xrGetSystem()</span></code>. If successful, we should now have a non-null <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetSystemID</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">XrSystemGetInfo</span><span class="w"> </span><span class="n">systemGI</span><span class="p">;</span>
+<span class="w">        </span><span class="n">systemGI</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_SYSTEM_GET_INFO</span><span class="p">;</span>
+<span class="w">        </span><span class="n">systemGI</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">systemGI</span><span class="p">.</span><span class="n">formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetSystem</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">systemGI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">systemID</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get SystemID.&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">XrSystemProperties</span><span class="w"> </span><span class="n">systemProperties</span><span class="p">;</span>
+<span class="w">        </span><span class="n">systemProperties</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_SYSTEM_PROPERTIES</span><span class="p">;</span>
+<span class="w">        </span><span class="n">systemProperties</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetSystemProperties</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="n">systemID</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">systemProperties</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get SystemProperties.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can now also get the system’s properties. We partially fill out a <code class="docutils literal notranslate"><span class="pre">XrSystemProperties</span></code> structure and pass it as a pointer along with the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> and the <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> to <code class="docutils literal notranslate"><span class="pre">xrGetSystemProperties()</span></code>. This function will fill out the rest of the <code class="docutils literal notranslate"><span class="pre">XrSystemProperties</span></code> structure; detailing the vendor’s ID, system’s name and the system’s graphics and tracking properties.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSystemGraphicsProperties</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">maxSwapchainImageHeight</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">maxSwapchainImageWidth</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">maxLayerCount</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrSystemGraphicsProperties</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSystemTrackingProperties</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrBool32</span><span class="w">    </span><span class="n">orientationTracking</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrBool32</span><span class="w">    </span><span class="n">positionTracking</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrSystemTrackingProperties</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSystemProperties</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrStructureType</span><span class="w">               </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">            </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSystemId</span><span class="w">                    </span><span class="n">systemId</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">                      </span><span class="n">vendorId</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">                          </span><span class="n">systemName</span><span class="p">[</span><span class="n">XR_MAX_SYSTEM_NAME_SIZE</span><span class="p">];</span>
+<span class="w">    </span><span class="n">XrSystemGraphicsProperties</span><span class="w">    </span><span class="n">graphicsProperties</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSystemTrackingProperties</span><span class="w">    </span><span class="n">trackingProperties</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrSystemProperties</span><span class="p">;</span>
+</pre></div>
+</div>
 </section>
 <section id="creating-an-xrsession">
 <h2><span class="section-number">2.2. </span>Creating an XrSession<a class="headerlink" href="#creating-an-xrsession" title="Permalink to this heading">¶</a></h2>

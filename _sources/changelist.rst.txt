@@ -1,5 +1,13 @@
 Changelist 
 ========= 
+| **Fri 07 Apr** : Fix broken theme table layout - tables should not overrun width.
+| **Fri 07 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+| **Fri 07 Apr** : Add new diagrams.
+| **Fri 07 Apr** : Moved the majority of the Android setup docs to setup.rst.
+| **Fri 07 Apr** : Added text for Chapter 5.1. Minor updates for main.cpp.
+| **Fri 07 Apr** : Updated ` to be `` in rst to represent code block. Added XrSystemId section to Chapter 2.1 text.
+| **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+| **Thu 06 Apr** : Text for Chapter 2.1.
 | **Thu 06 Apr** : Adde platforms.html
 | **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
 | **Thu 06 Apr** : Platform selection radio box styling.
