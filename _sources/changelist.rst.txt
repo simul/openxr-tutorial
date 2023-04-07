@@ -1,5 +1,6 @@
 Changelist 
 ========= 
+| **Fri 07 Apr** : Added image
 | **Fri 07 Apr** : Styles and README.md
 | **Fri 07 Apr** : Fix broken theme table layout - tables should not overrun width.
 | **Fri 07 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
