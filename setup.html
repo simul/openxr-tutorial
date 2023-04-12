@@ -127,20 +127,22 @@
 <h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <p>Once again, in case you want to see instructions for a different platform, select it here:</p>
 <form>
-	<div id='selectplatform'>
-		<div id='selectwindows'>
-			<label for="windows">Windows</label>
-			<input type='radio' id='windows' name='type' value='windows' />
+	<fieldset>
+		<div id='selectplatform'>
+			<div id='selectwindows'>
+				<label for="windows">Windows</label>
+				<input type='radio' id='windows' name='type' value='windows' />
+			</div>
+			<div id='selectlinux'>
+				<label for="linux">Linux</label>
+				<input type='radio' id='linux' name='type' value='linux' />
+			</div>
+			<div id='selectandroid'>
+				<label for="android">Android</label>
+				<input type='radio' id='android' name='type' value='android' />
+			</div>
 		</div>
-		<div id='selectlinux'>
-			<label for="linux">Linux</label>
-			<input type='radio' id='linux' name='type' value='linux' />
-		</div>
-		<div id='selectandroid'>
-			<label for="android">Android</label>
-			<input type='radio' id='android' name='type' value='android' />
-		</div>
-	</div>
+	</fieldset>
 </form>
 <script>
 	var platform = Cookies.get('platform')
@@ -153,34 +155,48 @@
 		updatePlatform();
 	});
 </script>
-<div class="windows docutils container" id="windows-intro-1">
-<blockquote>
-<div><p class="rubric">Windows</p>
+<div class="windows docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>windows-intro-1</p>
+<p class="rubric">Windows</p>
 <p>Showing instructions for Windows.</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
-<div class="linux docutils container" id="linux-intro-1">
-<blockquote>
-<div><p class="rubric">Linux</p>
+<div class="linux docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>linux-intro-1</p>
+<p class="rubric">Linux</p>
 <p>Showing instructions for Linux.</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
-<div class="android docutils container" id="id1">
-<blockquote>
-<div><p class="rubric">Android</p>
+<div class="android docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>android-intro-1</p>
+<p class="rubric">Android</p>
 <p>Showing instructions for Android.</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
-<div class="windows docutils container" id="windows-id-1">
-<blockquote>
-<div><p class="rubric">Windows</p>
+<div class="windows docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>windows-id-1</p>
+<p class="rubric">Windows</p>
 <p>For your Windows OpenXR project, we’ll use CMake to create some project files for Visual Studio.
 Create a directory where your code will go, we’ll call this the <em>workspace</em> directory.</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
-<div class="linux docutils container" id="linux-id-1">
-<blockquote>
-<div><p class="rubric">Linux</p>
+<div class="linux docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>linux-id-1</p>
+<p class="rubric">Linux</p>
 <p>For your Linux OpenXR project, we’ll use CMake alongside Visual Studio Code to build your project.
 Create a directory where your code will go, we’ll call this the <em>workspace</em> directory. Open VS Code and from
 the File menu, select “Open Folder…”</p>
@@ -190,11 +206,14 @@ the File menu, select “Open Folder…”</p>
 <p>The File menu of Visual Studio Code, with the command “Open Folder…” selected</p>
 <p>Select your <em>workspace</em> folder, which is now empty.
 Install the CMake extension for Visual Studio Code.</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
-<div class="windows-linux docutils container" id="windows-linux-id-1">
-<blockquote>
-<div><p class="rubric">Windows and Linux</p>
+<div class="windows-linux docutils container">
+<dl class="field-list">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>windows-linux-id-1</p>
+<p class="rubric">Windows and Linux</p>
 <p>Create a text file in the <em>workspace</em> folder called CMakeLists.txt.</p>
 <p>In it, put the following:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.15</span><span class="p">)</span>
@@ -215,7 +234,8 @@ this one containing:</p>
 </div>
 <p>That’s all we need for CMake. Now we’ll create our source file. Create a new text file called “main.cpp”
 and put it in the Chapter2 directory. In this file, place the following code:</p>
-</div></blockquote>
+</dd>
+</dl>
 </div>
 <div class="android docutils container" id="android-id-1">
 <blockquote>
