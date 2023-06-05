@@ -1,5 +1,8 @@
 Changelist 
 ========= 
+| **Fri 02 Jun** : Updated Chapter 1.1 and 1.2 outlines.
+| **Fri 02 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+| **Fri 02 Jun** : Added Outlines.md. Initial commit.
 | **Tue 11 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
 | **Tue 11 Apr** : Integrating android sections.
 | **Tue 11 Apr** : Added container for Android in introduction.rst.
