@@ -58,6 +58,10 @@
 	}
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
 </head>
 
 <body class="wy-body-for-nav" onload="updatePlatform();"> 
@@ -69,7 +73,7 @@
           
           
 			<a href="index.html"  class="" >
-				<img src="_static/OpenXR_500px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
 					Tutorial
@@ -115,7 +119,6 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">1. </span>Introduction</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr>
@@ -257,12 +260,18 @@ After that, things will be much more consistent.</p>
 The free Community edition of Visual Studio is available <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
 <p class="rubric">Direct3D 11 or 12</p>
 <p>Next you’ll want to choose which Graphics API you’ll be using. Direct3D 11 and 12 are built into the Windows SDK’s.
-If you’re using Direct3D, I recommend D3D12, because it supports indexed views: essentially, you can draw both eye views in one call. Vulkan also
-supports this.</p>
+If you’re using Direct3D, I recommend D3D12, because it supports <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">View Instancing</a>. Essentially, it allows you to draw both eye views in one call.</p>
 <p>Whether D3D11 or 12, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
 <p class="rubric">Vulkan Windows SDK</p>
 <p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Take a note of the installation location,
-as this will be needed later.</p>
+as this will be needed later.
+Vulkan, OpenGL and OpenGL ES also supports rendering to bith eye views with multiview.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p></li>
+<li><p><a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL/OpenGL ES Multiview</a>.</p></li>
+</ul>
+</div></blockquote>
 <p class="rubric">OpenXR SDK for Windows</p>
 <p>You’ll need a copy of the OpenXR SDK, which is distributed as a Git repository. If you’re familiar with Git, you can use your preferred command-line or GUI Git tool to get
 the SDK from <em>git&#64;github.com:KhronosGroup/OpenXR-SDK.git</em>.
@@ -284,11 +293,29 @@ Cmake will now configure the project, and a list of variables will appear in red
 <img alt="alternate text" class="align-right" src="_images/cmake-openxrsdk-2.png" />
 <p>You shouldn’t have to change any of these variables, but you can if you want. CMake should have
 automatically found the installation of the Vulkan SDK that you created previously, and used it to fill in the variables
-Vulkan_INCLUDE_DIR, Vulkan_LIBRARY and so on. If not, you can modify these variables
+<code class="docutils literal notranslate"><span class="pre">Vulkan_INCLUDE_DIR</span></code>, <code class="docutils literal notranslate"><span class="pre">Vulkan_LIBRARY</span></code> and so on. If not, you can modify these variables
 by clicking on the “Value” entries. The values should look like this:</p>
 <img alt="Vulkan variable highlighted in the CMake GUI." class="align-right" src="_images/cmake-vulkan-vars.png" />
-<p>The Vulkan variables in CMake GUI should read:    Vulkan_GLSLANG_VALIDATOR_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslangValidator.exe    Vulkan_GLSLC_EXECUTABLE C:/VulkanSDK/1.3.239.0/Bin/glslc.exe    Vulkan_INCLUDE_DIR C:/VulkanSDK/1.3.239.0/Include    Vulkan_LIBRARY    C:/VulkanSDK/1.3.239.0/Lib/vulkan-1.lib
-Obviously, the precise directory will depend on which version of the Vulkan SDK you installed.</p>
+<dl>
+<dt>The Vulkan variables in CMake GUI should read:</dt><dd><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_GLSLANG_VALIDATOR_EXECUTABLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Bin/glslangValidator.exe</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_GLSLC_EXECUTABLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Bin/glslc.exe</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_INCLUDE_DIR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Include</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_LIBRARY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Lib/vulkan-1.lib</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Obviously, the precise directory will depend on which version of the Vulkan SDK you installed.</p>
 <p>Now, we’re going to “Generate” the project files for the OpenXR SDK. Click “Generate”, and CMake GUI should
 now read “Generating done” in the output log at the bottom.</p>
 <img alt="CMake GUI should read &quot;Generating done&quot; in the output log at the bottom." class="align-right" src="_images/cmake-openxrsdk-generate.png" />
@@ -297,10 +324,10 @@ the file “OPENXR.sln”, and Visual Studio will open the solution.</p>
 <p>Select “Debug” from the Visual Studio “Solution Configurations” dropdown.</p>
 <img alt="In Visual Studio, the Solution Configuration dropdown menu is shown, with &quot;Debug&quot; selected." class="align-right" src="_images/visual-studio-openxr-debug.png" />
 <p>Go to the Build menu and select “Build Solution”. The projects will be compiled, and the output
-from openxr_loader.vcxproj should be a library called openxr_loaderd.lib.</p>
+from <code class="docutils literal notranslate"><span class="pre">openxr_loader.vcxproj</span></code> should be a library called <code class="docutils literal notranslate"><span class="pre">openxr_loaderd.lib</span></code>.</p>
 <img alt="In Visual Studio, the &quot;Build&quot; menu is shown, with the &quot;Build Solution&quot; option selected." class="align-right" src="_images/visual-studio-openxr-build.png" />
 <p>Now repeat the process for the Release build. Select “Release” from the Configurations dropdown,
-amd build the solution. This time, the library openxr_loader.lib will be built.</p>
+amd build the solution. This time, the library <code class="docutils literal notranslate"><span class="pre">openxr_loader.lib</span></code> will be built.</p>
 <p>You can now close this solution, you’re ready to start creating your first OpenXR project.</p>
 </div>
 <div class="linux docutils container">
@@ -341,8 +368,8 @@ cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<s
 make
 </pre></div>
 </div>
-<p>This builds libopenxr_loader.so, in Debug and Release flavours, in the directories:
-OpenXR-SDK/build/linux_debug/src/loader and OpenXR-SDK/build/linux_release/src/loader.
+<p>This builds <code class="docutils literal notranslate"><span class="pre">libopenxr_loader.so</span></code>, in Debug and Release flavours, in the directories:
+<code class="docutils literal notranslate"><span class="pre">OpenXR-SDK/build/linux_debug/src/loader</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXR-SDK/build/linux_release/src/loader</span></code>.
 Both files have the same name on Linux - the debug one is substantially larger however.
 And both are <em>dynamic</em> libraries by default, which will be loaded at runtime.</p>
 <p>Now you’re ready to start creating your first OpenXR project.</p>
@@ -352,14 +379,14 @@ And both are <em>dynamic</em> libraries by default, which will be loaded at runt
 <p>Android Studio is available to download here: <a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>.</p>
 <p class="rubric">OpenXR SDK</p>
 <p>For Android, you can download the OpenXR loader libraries from here: <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27">https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27</a>.
-Using the .aar file and a program like 7-Zip, you can extract the header files and libraries. Under prefab/modules/openxr_loader/include/openxr, you’ll find the headers, and under prefab/modules/openxr_loader/libs/, you’ll find the libraries for arm64-v8a, armeabi-v7a, x86 and x86_64.</p>
+Using the .aar file and a program like 7-Zip, you can extract the header files and libraries. Under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/include/openxr</span></code>, you’ll find the header files, and under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/libs/</span></code>, you’ll find the folders for the arm64-v8a, armeabi-v7a, x86 and x86_64 libraries.</p>
 <img alt="7-Zip internal file structure showing the OpenXR headers. prefab/modules/openxr_loader/include/openxr" class="align-right" src="_images/android-7Zip-include.png" />
 <img alt="7-Zip internal file structure showing the OpenXR libraries. prefab/modules/openxr_loader/libs" class="align-right" src="_images/android-7Zip-libs.png" />
 <p class="rubric">Vulkan</p>
-<p>Vulkan is recommended for Android VR for its modern, low-level API and extension support for multiview.
+<p>Vulkan is recommended for Android for its modern, low-level API and extension.
 Vulkan is included as part of the NDK provided Google and is supported on Android 7.0 (Nougat), API level 24 or higher. <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>.
 Alternatively, OpenGL ES is also an option for Android graphics.</p>
-<p>With the OpenXR loader and your Graphics API selected, you’re ready to start creating your first OpenXR project.</p>
+<p>With the OpenXR loader and your graphics API selected, you’re ready to start creating your first OpenXR project.</p>
 </div>
 </section>
 </section>

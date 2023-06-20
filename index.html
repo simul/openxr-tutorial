@@ -57,6 +57,10 @@
 	}
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
 </head>
 
 <body class="wy-body-for-nav" onload="updatePlatform();"> 
@@ -68,7 +72,7 @@
           
           
 			<a href="#"  class="" >
-				<img src="_static/OpenXR_500px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
 					Tutorial
@@ -109,7 +113,6 @@
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">OpenXR Tutorial</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr>
@@ -163,7 +166,11 @@ device.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#creating-an-xrinstance">2.1. Creating an XrInstance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#creating-an-xrinstance-xrgetsystem">2.1. Creating an XrInstance / xrGetSystem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#xrinstance">2.1.1. XrInstance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#xrsystemid">2.1.2. XrSystemId</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#creating-an-xrsession">2.2. Creating an XrSession</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#polling-the-event-loop">2.3. Polling the Event Loop</a></li>
 </ul>
@@ -182,7 +189,7 @@ device.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">5. Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="extensions.html#using-extensions-and-layers">5.1. Using Extensions and Layers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extensions.html#using-the-debug-utils-messenger-extension">5.2. Using the Debug Utils Messenger Extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html#using-xrcreatedebugutilsmessengerext">5.2. Using xrCreateDebugUtilsMessengerEXT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extensions.html#extension-examples">5.3. Extension Examples</a></li>
 </ul>
 </li>
