@@ -1,6 +1,10 @@
 Changelist 
 ========= 
 | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+| **Tue 20 Jun** : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.
+| **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+| **Tue 20 Jun** : Added android-studio-build-run-toolbar.png
+| **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
 | **Tue 20 Jun** : Clang format changes.
 | **Tue 20 Jun** : tutorial/introduction.rst: Vulkan variables are now in a table for Linux. Correction for D3D12 View Instancing and VK/GL/GLES multiview. Other minor fix ups.
 | **Tue 20 Jun** : Minor fix ups for tutorial/setup.rst.
