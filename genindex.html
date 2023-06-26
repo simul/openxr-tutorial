@@ -25,34 +25,36 @@
 	<script >
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		var oldelements = document.getElementsByClassName('selected-platform');
-		for (i = 0; i < oldelements.length; ++i)
-		{
-			oldelements[i].classList.remove('selected-platform');
-		}
-		var element = document.getElementById('select' + platformName);
-		element.classList.add('selected-platform');
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (typeof platform == 'undefined')
+		platform="linux";
+	if (platform == "windows") {
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").show();
+	$(".windows-linux").show();
+	}
+	if (platform == "linux") {
+	$(".linux").show();
+	$(".android").hide();
+	$(".windows").hide();
+	$(".windows-linux").show();
+	}
+	if (platform == "android") {
+	$(".linux").hide();
+	$(".android").show();
+	$(".windows").hide();
+	$(".windows-linux").hide();
+	}
+	var oldelements = document.getElementsByClassName('selected-platform');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-platform');
+	}
+	var element = document.getElementById('select' + platform);
+	element.classList.add('selected-platform');
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -63,8 +65,8 @@
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-        @import url('https://fonts.cdnfonts.com/css/menlo');
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
 	</style>
 </head>
 
