@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Search &mdash; OpenXR Tutorial  documentation</title>
+	<title>&lt;no title&gt; &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
-    
 	<!--[if lt IE 9]>
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
@@ -20,10 +20,8 @@
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
-    <script src="_static/searchtools.js"></script>
-    <script src="_static/language_data.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
-	<link rel="search" title="Search" href="#" > 
+	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -88,7 +86,7 @@
 				
 			</a>
 <div role="search">
-    <form id="rtd-search-form" class="wy-form" action="#" method="get">
+    <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
         <label class="search-label" for="q">Search the tutorial</label>
         <input type="text" name="q" id="q" placeholder="Search..." aria-label="Search docs">
         <input type="hidden" name="check_keywords" value="yes">
@@ -118,7 +116,7 @@
 		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Search</li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
@@ -146,18 +144,38 @@
 				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
 					  <div itemprop="articleBody">
 						  
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search functionality.
-    </p>
-  </div>
-  </noscript>
+  <p>gantt
+title Schedule
+dateFormat  DD-MMM-YYYY
+axisFormat %b %d %Y
+tickInterval 1month
+excludes    weekends
+section Phase 1
+Design                  ,a1, 01-MAY-2023, 11d
+Design Implementation   ,16-MAY-2023    , 12d
+Outlines 1.1, 1.2, 2.1	,o1, 01-MAY-2023, 6d
+Draft Chapter 1.1       ,09-MAY-2023    ,6d
+Draft Chapter 2.1       ,16-MAY-2023    , 10d
+Phase 1 Milestone       ,crit,milestone, m1, 31-MAY-2023,1d</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>section Phase 2
+2.3 Draft 1.2, 1.3		,30-MAY-2023	,10d
+2.1 Outlines 2.2, 2.3	,23-MAY-2023	,10d
+2.6 Draft 2.2, 2.3		,06-JUN-2023	,10d
+2.2 Outlines 3.1, 3.2	,30-MAY-2023	,10d
+2.7 Draft Chapter 3     ,13-JUN-2023    ,15d
+2.4 Outline 4			,06-JUN-2023	,10d
+2.8 Draft Chapter 4     ,20-JUN-2023    ,15d
+2.5 Outline 5			,13-JUN-2023	,10d
+2.9 Draft Chapter 5     ,27-JUN-2023    ,15d
+1st Draft Complete      ,crit,milestone, m2, 17-JUL-2023,1d
+2.10 2nd Draft          ,04-JUL-2023    ,20d
+2.11 Internal Testing   ,04-JUL-2023    ,20d
+2nd Draft Complete      ,crit,milestone, m3, 31-JUL-2023,1d
+2.11 External Testing   ,01-AUG-2023    ,20d
+SiteComplete            ,crit,milestone, m4, 30-AUG-2023,1d
+</pre></div>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
 					  </div>
 				  </div>
@@ -178,14 +196,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-  <script>
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script id="searchindexloader"></script>
-   
-
+  </script> 
 
 </body>
 </html>

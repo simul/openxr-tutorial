@@ -46,6 +46,13 @@
 			$(".windows").hide();
 			$(".windows-linux").hide();
 		}
+		var oldelements = document.getElementsByClassName('selected-platform');
+		for (i = 0; i < oldelements.length; ++i)
+		{
+			oldelements[i].classList.remove('selected-platform');
+		}
+		var element = document.getElementById('select' + platformName);
+		element.classList.add('selected-platform');
 		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -89,7 +96,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
@@ -105,20 +112,38 @@
           <a href="index.html">OpenXR Tutorial</a>
       </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+	  <div class="wy-nav-content">
+		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Outline</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		var platform = Cookies.get('platform')
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatform();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+			  <div class="rst-content">
+				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					  <div itemprop="articleBody">
+						  
   <section id="outline">
 <h1>Outline<a class="headerlink" href="#outline" title="Permalink to this heading">¶</a></h1>
 <section id="chapter-1-1-what-is-the-goal-of-openxr">
@@ -137,17 +162,23 @@ Introduce concept of the Loader and describe some aspects and implications.
 Discuss API layers, their use in extensibility.
 Describe the concept of the Runtime, mention different runtimes and where they are found.
 Discuss how graphics are enabled by Instance extensions, how OpenXR supports various Graphics APIs with support for future ones too.
-Introduce the Input System, show how it enables extensibility, cross-device applications.</p>
-<p>Again, appropriate diagrams, matching site colour scheme and design.</p>
+Introduce the Input System, show how it enables extensibility, cross-device applications.
+Again, appropriate diagrams, matching site colour scheme and design.</p>
 </section>
-<section id="id1">
-<h2>1.3<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
-<p>Rename 1.3 to “Setting up a Development Environment”? Move to Chapter 2?</p>
+<section id="chapter-1-3-setting-up">
+<h2>Chapter 1.3 Setting Up<a class="headerlink" href="#chapter-1-3-setting-up" title="Permalink to this heading">¶</a></h2>
+<p>Rename 1.3 to “Setting up a Development Environment”? Move to Chapter 2?
+Highly platform-dependent. Also API-dependent.
+Perhaps: separate tabs for Windows GL, WIndows D3D12, Windows Vulkan etc.
+Where to get the SDK.
+What dependencies are required, and where to get them. Again, highly platform- and API-dependent.
+Introduce CMake and briefly explain its use.
+For Android, discuss gradle files.</p>
 </section>
 <section id="chapter-2">
 <h2>Chapter 2<a class="headerlink" href="#chapter-2" title="Permalink to this heading">¶</a></h2>
-<p>There is substantial “Setup” that we expect to be needed before “Creating an XrInstance”. Perhaps a whole subsection 2.1 on creating CMake projects and building on PC/Linux or building for Android?</p>
-<p>Possibly separate Ch2 into two chapters, one for setting up the project, one for initiating OpenXR?</p>
+<p>There is substantial “Setup” that we expect to be needed before “Creating an XrInstance”. Perhaps a whole subsection 2.1 on creating CMake projects and building on PC/Linux or building for Android?
+Possibly separate Ch2 into two chapters, one for setting up the project, one for initiating OpenXR?</p>
 </section>
 <section id="chapter-2-1-creating-an-xrinstance">
 <h2>Chapter 2.1 Creating an XRInstance<a class="headerlink" href="#chapter-2-1-creating-an-xrinstance" title="Permalink to this heading">¶</a></h2>
@@ -160,12 +191,28 @@ Describe XrInstanceCreateInfo and its members. Show code to set this struct up a
 Show how to get instance properties.
 Discuss XrSystemId and its uses. Show code to obtain the system id.</p>
 </section>
+<section id="chapter-2-2-creating-an-xrsession">
+<h2>Chapter 2.2 Creating an XrSession<a class="headerlink" href="#chapter-2-2-creating-an-xrsession" title="Permalink to this heading">¶</a></h2>
+<p>Introduce XrSession and explain its purpose.
+Code sample showing XrSessionCreateInfo and xrCreateSession().
+Need to present all different types the Graphics API structures the interface with XrSessionCreateInfo. Explain the use of next pointer.
+Describe lifetime of an application and what XrSessionStates are and how to react to the them.
+Describe briefly Beginning, Ending and Destroying an XrSession.</p>
+</section>
+<section id="chapter-2-3-polling-the-event-loop">
+<h2>Chapter 2.3 Polling the Event Loop<a class="headerlink" href="#chapter-2-3-polling-the-event-loop" title="Permalink to this heading">¶</a></h2>
+<p>Introduce xrPollEvent() and explain that the function should be called each frame.
+Explain that events are queued, so you’d drain the queue and that the .type will be change to XR_TYPE_EVENT_DATA_…
+Code sample showing the function in use and the casting of structures depending on the type.
+Describe the XrEventDataEventsLost, XrEventDataInstanceLossPending, XrEventDataInteractionProfileChanged, XrEventDataReferenceSpaceChangePending, XrEventDataSessionStateChanged.
+Getting the new SxSession from XrEventDataSessionStateChanged - code.</p>
+</section>
 </section>
 
 
-           </div>
-          </div>
-          <footer>
+					  </div>
+				  </div>
+				  <footer>
 
   <hr>
 
@@ -174,9 +221,9 @@ Discuss XrSystemId and its uses. Show code to obtain the system id.</p>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
+			  </div>
+		  </div>
+	  </div>
   </div>
   <script>
       jQuery(function () {

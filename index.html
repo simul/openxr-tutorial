@@ -22,7 +22,7 @@
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
-	<link rel="next" title="1. Introduction" href="introduction.html" > 
+	<link rel="next" title="1. 👋 Introduction" href="introduction.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -47,6 +47,13 @@
 			$(".windows").hide();
 			$(".windows-linux").hide();
 		}
+		var oldelements = document.getElementsByClassName('selected-platform');
+		for (i = 0; i < oldelements.length; ++i)
+		{
+			oldelements[i].classList.remove('selected-platform');
+		}
+		var element = document.getElementById('select' + platformName);
+		element.classList.add('selected-platform');
 		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -90,7 +97,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
@@ -106,20 +113,38 @@
           <a href="#">OpenXR Tutorial</a>
       </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+	  <div class="wy-nav-content">
+		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">OpenXR Tutorial</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		var platform = Cookies.get('platform')
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatform();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+			  <div class="rst-content">
+				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					  <div itemprop="articleBody">
+						  
   <section id="openxr-tutorial">
 <h1>OpenXR Tutorial<a class="headerlink" href="#openxr-tutorial" title="Permalink to this heading">¶</a></h1>
 <p>This tutorial will teach you how to use the OpenXR API.
@@ -159,7 +184,7 @@ device.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#goal-of-openxr">1.1. Goal of OpenXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#overview">1.2. Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#setting-up">1.3. Setting Up</a></li>
@@ -199,10 +224,10 @@ device.</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-right" title="1. Introduction" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+					  </div>
+				  </div>
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-right" title="1. 👋 Introduction" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr>
@@ -212,9 +237,9 @@ device.</p>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
+			  </div>
+		  </div>
+	  </div>
   </div>
   <script>
       jQuery(function () {

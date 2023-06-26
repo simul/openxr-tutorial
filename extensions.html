@@ -47,6 +47,13 @@
 			$(".windows").hide();
 			$(".windows-linux").hide();
 		}
+		var oldelements = document.getElementsByClassName('selected-platform');
+		for (i = 0; i < oldelements.length; ++i)
+		{
+			oldelements[i].classList.remove('selected-platform');
+		}
+		var element = document.getElementById('select' + platformName);
+		element.classList.add('selected-platform');
 		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -90,7 +97,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
@@ -111,20 +118,38 @@
           <a href="index.html">OpenXR Tutorial</a>
       </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+	  <div class="wy-nav-content">
+		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">5. </span>Extensions</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		var platform = Cookies.get('platform')
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatform();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+			  <div class="rst-content">
+				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					  <div itemprop="articleBody">
+						  
   <section id="extensions">
 <h1><span class="section-number">5. </span>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple" start="5">
@@ -178,9 +203,7 @@ xrEnumerateApiLayerProperties,</p>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateDebugMessenger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">;</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">;</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">{</span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">};</span>
 <span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageSeverities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">;</span>
 <span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_CONFORMANCE_BIT_EXT</span><span class="p">;</span>
 <span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrDebugUtilsMessengerCallbackEXT</span><span class="p">)</span><span class="n">OpenXRMessageCallbackFunction</span><span class="p">;</span>
@@ -276,9 +299,9 @@ xrEnumerateApiLayerProperties,</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+					  </div>
+				  </div>
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="actions.html" class="btn btn-neutral float-left" title="4. Actions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -289,9 +312,9 @@ xrEnumerateApiLayerProperties,</p>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
+			  </div>
+		  </div>
+	  </div>
   </div>
   <script>
       jQuery(function () {

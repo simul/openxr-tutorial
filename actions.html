@@ -48,6 +48,13 @@
 			$(".windows").hide();
 			$(".windows-linux").hide();
 		}
+		var oldelements = document.getElementsByClassName('selected-platform');
+		for (i = 0; i < oldelements.length; ++i)
+		{
+			oldelements[i].classList.remove('selected-platform');
+		}
+		var element = document.getElementById('select' + platformName);
+		element.classList.add('selected-platform');
 		window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -91,7 +98,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Actions</a><ul>
@@ -113,20 +120,38 @@
           <a href="index.html">OpenXR Tutorial</a>
       </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+	  <div class="wy-nav-content">
+		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">4. </span>Actions</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		var platform = Cookies.get('platform')
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatform();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+			  <div class="rst-content">
+				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					  <div itemprop="articleBody">
+						  
   <section id="actions">
 <h1><span class="section-number">4. </span>Actions<a class="headerlink" href="#actions" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple" start="4">
@@ -153,9 +178,9 @@ xrSuggestInteractionProfileBindings)</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+					  </div>
+				  </div>
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="graphics.html" class="btn btn-neutral float-left" title="3. Graphics" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="extensions.html" class="btn btn-neutral float-right" title="5. Extensions" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
@@ -167,9 +192,9 @@ xrSuggestInteractionProfileBindings)</p>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
+			  </div>
+		  </div>
+	  </div>
   </div>
   <script>
       jQuery(function () {

@@ -1,0 +1,30 @@
+gantt
+    title Schedule
+    dateFormat  DD-MMM-YYYY
+    axisFormat %b %d %Y
+    tickInterval 1month
+    excludes    weekends
+    section Phase 1
+    Design                  ,a1, 01-MAY-2023, 11d
+    Design Implementation   ,16-MAY-2023    , 12d
+    Outlines 1.1, 1.2, 2.1	,o1, 01-MAY-2023, 6d
+    Draft Chapter 1.1       ,09-MAY-2023    ,6d
+    Draft Chapter 2.1       ,16-MAY-2023    , 10d
+    Phase 1 Milestone       ,crit,milestone, m1, 31-MAY-2023,1d
+
+    section Phase 2
+	2.3 Draft 1.2, 1.3		,30-MAY-2023	,10d
+	2.1 Outlines 2.2, 2.3	,23-MAY-2023	,10d
+	2.6 Draft 2.2, 2.3		,06-JUN-2023	,10d
+	2.2 Outlines 3.1, 3.2	,30-MAY-2023	,10d
+    2.7 Draft Chapter 3     ,13-JUN-2023    ,15d
+	2.4 Outline 4			,06-JUN-2023	,10d
+    2.8 Draft Chapter 4     ,20-JUN-2023    ,15d
+	2.5 Outline 5			,13-JUN-2023	,10d
+    2.9 Draft Chapter 5     ,27-JUN-2023    ,15d
+    1st Draft Complete      ,crit,milestone, m2, 17-JUL-2023,1d
+    2.10 2nd Draft          ,04-JUL-2023    ,20d
+    2.11 Internal Testing   ,04-JUL-2023    ,20d
+    2nd Draft Complete      ,crit,milestone, m3, 31-JUL-2023,1d
+    2.11 External Testing   ,01-AUG-2023    ,20d
+    SiteComplete            ,crit,milestone, m4, 30-AUG-2023,1d
