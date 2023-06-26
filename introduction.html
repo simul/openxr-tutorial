@@ -164,7 +164,7 @@ adaptation. Developing a new app for a new platform was even more challenging.</
 <p>In spite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two
 slightly different perspectives. Most had a way to track the user’s head and hands or hand-controllers. Most had buttons,
 many had analogue controls like triggers or joysticks; many had haptic feedback.</p>
-<figure class="align-center" id="id1">
+<figure class="align-left" id="id1">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
 <p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
@@ -259,20 +259,28 @@ CMake is a program that generates project files, such as the .vcxproj and .sln f
 that Visual Studio needs.
 Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>.</p>
 <p>Once CMake is installed, click the Windows button, and type “cmake” to find the application Cmake GUI.</p>
-<img alt="Find CMake by clicking the Windows icon and typing &quot;cmake&quot;." class="align-right" src="_images/find_cmake.png" />
+<figure class="align-default">
+<img alt="Find CMake by clicking the Windows icon and typing &quot;cmake&quot;." src="_images/find_cmake.png" />
+</figure>
 <p>In the CMake Gui, enter the location of the OpenXR SDK in the top text box, marked “Where is the source code”. Below, in the box marked “Where to
 build the binaries”, enter a subdirectory of that folder, called “build”.</p>
-<img alt="CMake GUI: location of the OpenXR SDK has been entered as the source directory, and that a subdirectory &quot;build&quot; has been entered as the binary directory." class="align-right" src="_images/cmake-openxrsdk-1.png" />
+<figure class="align-default">
+<img alt="CMake GUI: location of the OpenXR SDK has been entered as the source directory, and that a subdirectory &quot;build&quot; has been entered as the binary directory." src="_images/cmake-openxrsdk-1.png" />
+</figure>
 <p>Click the button below marked “Configure”. A popup will ask if CMake should create the “build” directory. Click “Yes”.
 Now a box will appear where you can select a “Generator”. This should default to the version of
 Visual Studio you’ve just installed. Click Finish.
 Cmake will now configure the project, and a list of variables will appear in red.</p>
-<img alt="alternate text" class="align-right" src="_images/cmake-openxrsdk-2.png" />
+<figure class="align-default">
+<img alt="alternate text" src="_images/cmake-openxrsdk-2.png" />
+</figure>
 <p>You shouldn’t have to change any of these variables, but you can if you want. CMake should have
 automatically found the installation of the Vulkan SDK that you created previously, and used it to fill in the variables
 <code class="docutils literal notranslate"><span class="pre">Vulkan_INCLUDE_DIR</span></code>, <code class="docutils literal notranslate"><span class="pre">Vulkan_LIBRARY</span></code> and so on. If not, you can modify these variables
 by clicking on the “Value” entries. The values should look like this:</p>
-<img alt="Vulkan variable highlighted in the CMake GUI." class="align-right" src="_images/cmake-vulkan-vars.png" />
+<figure class="align-default">
+<img alt="Vulkan variable highlighted in the CMake GUI." src="_images/cmake-vulkan-vars.png" />
+</figure>
 <dl>
 <dt>The Vulkan variables in CMake GUI should read:</dt><dd><table class="docutils align-default">
 <tbody>
@@ -295,14 +303,20 @@ by clicking on the “Value” entries. The values should look like this:</p>
 <p>Obviously, the precise directory will depend on which version of the Vulkan SDK you installed.</p>
 <p>Now, we’re going to “Generate” the project files for the OpenXR SDK. Click “Generate”, and CMake GUI should
 now read “Generating done” in the output log at the bottom.</p>
-<img alt="CMake GUI should read &quot;Generating done&quot; in the output log at the bottom." class="align-right" src="_images/cmake-openxrsdk-generate.png" />
+<figure class="align-default">
+<img alt="CMake GUI should read &quot;Generating done&quot; in the output log at the bottom." src="_images/cmake-openxrsdk-generate.png" />
+</figure>
 <p>Now we can build the SDK. Click “Open Project” in CMake GUI, or navigate to your “build” folder and double-click on
 the file “OPENXR.sln”, and Visual Studio will open the solution.</p>
 <p>Select “Debug” from the Visual Studio “Solution Configurations” dropdown.</p>
-<img alt="In Visual Studio, the Solution Configuration dropdown menu is shown, with &quot;Debug&quot; selected." class="align-right" src="_images/visual-studio-openxr-debug.png" />
+<figure class="align-default">
+<img alt="In Visual Studio, the Solution Configuration dropdown menu is shown, with &quot;Debug&quot; selected." src="_images/visual-studio-openxr-debug.png" />
+</figure>
 <p>Go to the Build menu and select “Build Solution”. The projects will be compiled, and the output
 from <code class="docutils literal notranslate"><span class="pre">openxr_loader.vcxproj</span></code> should be a library called <code class="docutils literal notranslate"><span class="pre">openxr_loaderd.lib</span></code>.</p>
-<img alt="In Visual Studio, the &quot;Build&quot; menu is shown, with the &quot;Build Solution&quot; option selected." class="align-right" src="_images/visual-studio-openxr-build.png" />
+<figure class="align-default">
+<img alt="In Visual Studio, the &quot;Build&quot; menu is shown, with the &quot;Build Solution&quot; option selected." src="_images/visual-studio-openxr-build.png" />
+</figure>
 <p>Now repeat the process for the Release build. Select “Release” from the Configurations dropdown,
 amd build the solution. This time, the library <code class="docutils literal notranslate"><span class="pre">openxr_loader.lib</span></code> will be built.</p>
 <p>You can now close this solution, you’re ready to start creating your first OpenXR project.</p>
@@ -358,8 +372,12 @@ And both are <em>dynamic</em> libraries by default, which will be loaded at runt
 <p>For Android, we will use the CMake <code class="docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code> command in the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to get the OpenXR package from Khronos’s OpenXR-SDK-Source GitHub page.</p>
 <p>For Android, you can download the OpenXR loader libraries from here: <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27">https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27</a>.
 Using the .aar file and a program like 7-Zip, you can extract the header files and libraries. Under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/include/openxr</span></code>, you’ll find the header files, and under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/libs/</span></code>, you’ll find the folders for the arm64-v8a, armeabi-v7a, x86 and x86_64 libraries.</p>
-<img alt="7-Zip internal file structure showing the OpenXR headers. prefab/modules/openxr_loader/include/openxr" class="align-right" src="_images/android-7Zip-include.png" />
-<img alt="7-Zip internal file structure showing the OpenXR libraries. prefab/modules/openxr_loader/libs" class="align-right" src="_images/android-7Zip-libs.png" />
+<figure class="align-default">
+<img alt="7-Zip internal file structure showing the OpenXR headers. prefab/modules/openxr_loader/include/openxr" src="_images/android-7Zip-include.png" />
+</figure>
+<figure class="align-default">
+<img alt="7-Zip internal file structure showing the OpenXR libraries. prefab/modules/openxr_loader/libs" src="_images/android-7Zip-libs.png" />
+</figure>
 <p class="rubric">Vulkan</p>
 <p>Vulkan is recommended for Android for its modern, low-level API and extension.
 Vulkan is included as part of the NDK provided Google and is supported on Android 7.0 (Nougat), API level 24 or higher. <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>.
