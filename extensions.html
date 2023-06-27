@@ -30,7 +30,7 @@
 	var platform = Cookies.get("platform")
 	console.log("platform = " + platform);
 	if (typeof platform == 'undefined')
-		platform="linux";
+	platform="linux";
 	if (platform == "windows") {
 	$(".linux").hide();
 	$(".android").hide();
@@ -56,6 +56,8 @@
 	}
 	var element = document.getElementById('select' + platform);
 	element.classList.add('selected-platform');
+	var element2 = document.getElementById('select' + platform +"-inline");
+	element2.classList.add('selected-platform');
 	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -115,13 +117,12 @@
       </div>
     </nav>
 
-    <div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">OpenXR Tutorial</a>
-      </nav>
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
 
-	  <div class="wy-nav-content">
-		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">5. </span>Extensions</li>
@@ -148,10 +149,11 @@
 	  </li>
   </ul>
 </div>
-			  <div class="rst-content">
-				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-					  <div itemprop="articleBody">
-						  
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+						<div itemprop="articleBody">
+							
   <section id="extensions">
 <h1><span class="section-number">5. </span>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple" start="5">
@@ -301,9 +303,9 @@ xrEnumerateApiLayerProperties,</p>
 </section>
 
 
-					  </div>
-				  </div>
-				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+						</div>
+					</div>
+					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="actions.html" class="btn btn-neutral float-left" title="4. Actions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -314,10 +316,10 @@ xrEnumerateApiLayerProperties,</p>
   </div> 
 
 </footer>
-			  </div>
-		  </div>
-	  </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
   <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);

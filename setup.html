@@ -31,7 +31,7 @@
 	var platform = Cookies.get("platform")
 	console.log("platform = " + platform);
 	if (typeof platform == 'undefined')
-		platform="linux";
+	platform="linux";
 	if (platform == "windows") {
 	$(".linux").hide();
 	$(".android").hide();
@@ -57,6 +57,8 @@
 	}
 	var element = document.getElementById('select' + platform);
 	element.classList.add('selected-platform');
+	var element2 = document.getElementById('select' + platform +"-inline");
+	element2.classList.add('selected-platform');
 	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -120,13 +122,12 @@
       </div>
     </nav>
 
-    <div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">OpenXR Tutorial</a>
-      </nav>
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
 
-	  <div class="wy-nav-content">
-		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">2. </span>Setup</li>
@@ -153,42 +154,28 @@
 	  </li>
   </ul>
 </div>
-			  <div class="rst-content">
-				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-					  <div itemprop="articleBody">
-						  
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+						<div itemprop="articleBody">
+							
   <section id="setup">
 <h1><span class="section-number">2. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <p>Select your platform, as the instructions are different depending on your selection.</p>
-<form>
-	<fieldset>
-		<div id='selectplatform'>
-			<div id='selectwindows'>
-				<label for="windows">Windows</label>
-				<input type='radio' id='windows' name='type' value='windows' />
-			</div>
-			<div id='selectlinux'>
-				<label for="linux">Linux</label>
-				<input type='radio' id='linux' name='type' value='linux' />
-			</div>
-			<div id='selectandroid'>
-				<label for="android">Android</label>
-				<input type='radio' id='android' name='type' value='android' />
-			</div>
-		</div>
-	</fieldset>
-</form>
-<script>
-	var platform = Cookies.get('platform')
-	var radiobtn = document.getElementById(platform);
-	if (radiobtn)
-		radiobtn.checked = true;
-	$('input:radio').on('change', function ()
-	{
-		Cookies.set('platform', $(this).val(), { expires: 365 })
-		updatePlatform();
-	});
-</script>
+<div class='select-platform-container-inline'>
+	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+		<p>Windows</p>
+	</button>
+	<button class="select-platform-inline" id='selectlinux-inline' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+		<p>Linux</p>
+	</button>
+	<button class="select-platform-inline" id='selectandroid-inline' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+		<p>Android</p>
+	</button>
+</div>
 <div class="windows docutils container" id="windows-id-1">
 <p class="rubric">Windows</p>
 <p>For the Windows OpenXR project, we’ll use CMake to create some project files for Visual Studio.
@@ -329,8 +316,8 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 
 <span class="w">            </span><span class="nt">&lt;intent-filter&gt;</span>
 <span class="w">                </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.oculus.intent.category.VR&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">            </span><span class="nt">&lt;/intent-filter&gt;</span>
 <span class="w">        </span><span class="nt">&lt;/activity&gt;</span>
 <span class="w">    </span><span class="nt">&lt;/application&gt;</span>
@@ -338,7 +325,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </pre></div>
 </div>
 <p>We now need to modify our <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code> file to tell Android to run a Native Activity. We set <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.NativeActivity” and update <code class="docutils literal notranslate"><span class="pre">android:configChanges</span></code> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.lib_name” and <code class="docutils literal notranslate"><span class="pre">android:value</span></code> to “openxrtutorialch2”, where <code class="docutils literal notranslate"><span class="pre">android:value</span></code> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
-<p>For Meta devices, we need to set this <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code> too.</p>
+<p>We need to set this <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code> too.</p>
 <p class="rubric">Gradle</p>
 <div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
 
@@ -807,9 +794,9 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 </section>
 
 
-					  </div>
-				  </div>
-				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+						</div>
+					</div>
+					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="1. 👋 Introduction" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="graphics.html" class="btn btn-neutral float-right" title="3. Graphics" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
@@ -821,10 +808,10 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
   </div> 
 
 </footer>
-			  </div>
-		  </div>
-	  </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
   <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);

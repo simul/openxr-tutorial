@@ -7556,8 +7556,29 @@ span[id*=MathJax-Span]
 {
 	
 }
-
-.rst-content
+.select-platform-container-inline
 {
+	align-content:center;
+	width:100%;
+	max-width:800px;
+}
+.select-platform-inline
+{
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	vertical-align: top;
+	width:20%;
+	min-width:80px;
 	margin:20px;
+	border-color:silver;
+}
+.select-platform-inline > img
+{
+	max-height:40px;
+}
+
+.wy-nav-content
+{
+	margin: 140px 140px 20px 40px;
 }
