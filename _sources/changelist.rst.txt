@@ -1,5 +1,21 @@
 Changelist 
 ========= 
+| **Tue 27 Jun** : Added FetchContent_Declare() for Linux build. Not tested!
+| **Tue 27 Jun** : Updated Window build to use FetchContent_Populate()
+| **Tue 27 Jun** : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.
+| **Tue 27 Jun** : Updated draft text of Chapter 1.2.
+| **Mon 26 Jun** : p and figure limited to 800px, so code alone can expand horizontally.
+| **Mon 26 Jun** : Move tab highlight code to updatePlatform.
+| **Mon 26 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+| **Mon 26 Jun** : Styling: purple breadcrumb ribbon at top. Platform selection tabs instead of radio buttons. Icon for introduction from getemoji.com.
+| **Mon 26 Jun** : Added more to Chapter 1.2 draft text.
+| **Mon 26 Jun** : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.
+| **Mon 26 Jun** : Update Android to use FetchContent_Declare(). Minor fix in Chapter2.1/main.cpp.
+| **Fri 23 Jun** : Updated Chapter2.1/main.cpp to match code pattern.
+| **Fri 23 Jun** : Removed unused libopenxr_loader.so libraries.
+| **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
+| **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
+| **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
 | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
 | **Tue 20 Jun** : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.
 | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
@@ -84,13 +100,3 @@ Changelist
 | **Thu 30 Mar** : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.
 | **Thu 30 Mar** : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.
 | **Thu 30 Mar** : Added openxr binaries.
-| **Thu 30 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Thu 30 Mar** : Removed CMAKE_MSVC_RUNTIME_LIBRARY due to MSVC CXX errors. Updated OpenXR SDK.
-| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Wed 29 Mar** : Added initial theme, logo.
-| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Wed 29 Mar** : Added Chapter2.1 code WIP.
-| **Wed 29 Mar** : Added openxr libs and headers
-| **Wed 29 Mar** : Fix CMakeLists.txt
-| **Wed 29 Mar** : Added initial Sphinx files.
-| **Wed 29 Mar** : Initial commit

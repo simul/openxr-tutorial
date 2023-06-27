@@ -329,8 +329,8 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 
 <span class="w">            </span><span class="nt">&lt;intent-filter&gt;</span>
 <span class="w">                </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.oculus.intent.category.VR&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">                </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">            </span><span class="nt">&lt;/intent-filter&gt;</span>
 <span class="w">        </span><span class="nt">&lt;/activity&gt;</span>
 <span class="w">    </span><span class="nt">&lt;/application&gt;</span>
@@ -338,7 +338,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </pre></div>
 </div>
 <p>We now need to modify our <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code> file to tell Android to run a Native Activity. We set <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.NativeActivity” and update <code class="docutils literal notranslate"><span class="pre">android:configChanges</span></code> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.lib_name” and <code class="docutils literal notranslate"><span class="pre">android:value</span></code> to “openxrtutorialch2”, where <code class="docutils literal notranslate"><span class="pre">android:value</span></code> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
-<p>For Meta devices, we need to set this <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code> too.</p>
+<p>We need to set this <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code> too.</p>
 <p class="rubric">Gradle</p>
 <div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
 

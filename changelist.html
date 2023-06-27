@@ -26,27 +26,36 @@
 	<script >
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (typeof platform == 'undefined')
+		platform="linux";
+	if (platform == "windows") {
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").show();
+	$(".windows-linux").show();
+	}
+	if (platform == "linux") {
+	$(".linux").show();
+	$(".android").hide();
+	$(".windows").hide();
+	$(".windows-linux").show();
+	}
+	if (platform == "android") {
+	$(".linux").hide();
+	$(".android").show();
+	$(".windows").hide();
+	$(".windows-linux").hide();
+	}
+	var oldelements = document.getElementsByClassName('selected-platform');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-platform');
+	}
+	var element = document.getElementById('select' + platform);
+	element.classList.add('selected-platform');
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -57,8 +66,8 @@
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-        @import url('https://fonts.cdnfonts.com/css/menlo');
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
 	</style>
 </head>
 
@@ -89,7 +98,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
@@ -105,23 +114,57 @@
           <a href="index.html">OpenXR Tutorial</a>
       </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+	  <div class="wy-nav-content">
+		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Changelist</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		var platform = Cookies.get('platform')
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatform();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+			  <div class="rst-content">
+				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					  <div itemprop="articleBody">
+						  
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Tue 27 Jun</strong> : Added FetchContent_Declare() for Linux build. Not tested!</div>
+<div class="line"><strong>Tue 27 Jun</strong> : Updated Window build to use FetchContent_Populate()</div>
+<div class="line"><strong>Tue 27 Jun</strong> : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.</div>
+<div class="line"><strong>Tue 27 Jun</strong> : Updated draft text of Chapter 1.2.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : p and figure limited to 800px, so code alone can expand horizontally.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Move tab highlight code to updatePlatform.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Styling: purple breadcrumb ribbon at top. Platform selection tabs instead of radio buttons. Icon for introduction from getemoji.com.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Added more to Chapter 1.2 draft text.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.</div>
+<div class="line"><strong>Mon 26 Jun</strong> : Update Android to use FetchContent_Declare(). Minor fix in Chapter2.1/main.cpp.</div>
+<div class="line"><strong>Fri 23 Jun</strong> : Updated Chapter2.1/main.cpp to match code pattern.</div>
+<div class="line"><strong>Fri 23 Jun</strong> : Removed unused libopenxr_loader.so libraries.</div>
+<div class="line"><strong>Fri 23 Jun</strong> : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.</div>
+<div class="line"><strong>Fri 23 Jun</strong> : Updated to Gradle 8.1 and AGP 7.4.2.</div>
+<div class="line"><strong>Fri 23 Jun</strong> : Improved readability of the find_apiLayer_extension section.</div>
 <div class="line"><strong>Tue 20 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
 <div class="line"><strong>Tue 20 Jun</strong> : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.</div>
 <div class="line"><strong>Tue 20 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
@@ -206,23 +249,13 @@
 <div class="line"><strong>Thu 30 Mar</strong> : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.</div>
 <div class="line"><strong>Thu 30 Mar</strong> : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.</div>
 <div class="line"><strong>Thu 30 Mar</strong> : Added openxr binaries.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Removed CMAKE_MSVC_RUNTIME_LIBRARY due to MSVC CXX errors. Updated OpenXR SDK.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added initial theme, logo.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added Chapter2.1 code WIP.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added openxr libs and headers</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Fix CMakeLists.txt</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added initial Sphinx files.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Initial commit</div>
 </div>
 </section>
 
 
-           </div>
-          </div>
-          <footer>
+					  </div>
+				  </div>
+				  <footer>
 
   <hr>
 
@@ -231,9 +264,9 @@
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
+			  </div>
+		  </div>
+	  </div>
   </div>
   <script>
       jQuery(function () {
