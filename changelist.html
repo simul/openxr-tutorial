@@ -29,7 +29,7 @@
 	var platform = Cookies.get("platform")
 	console.log("platform = " + platform);
 	if (typeof platform == 'undefined')
-		platform="linux";
+	platform="linux";
 	if (platform == "windows") {
 	$(".linux").hide();
 	$(".android").hide();
@@ -55,6 +55,8 @@
 	}
 	var element = document.getElementById('select' + platform);
 	element.classList.add('selected-platform');
+	var element2 = document.getElementById('select' + platform +"-inline");
+	element2.classList.add('selected-platform');
 	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -109,13 +111,12 @@
       </div>
     </nav>
 
-    <div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">OpenXR Tutorial</a>
-      </nav>
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
 
-	  <div class="wy-nav-content">
-		  <div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Changelist</li>
@@ -142,13 +143,16 @@
 	  </li>
   </ul>
 </div>
-			  <div class="rst-content">
-				  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-					  <div itemprop="articleBody">
-						  
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+						<div itemprop="articleBody">
+							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
+<div class="line"><strong>Tue 27 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
+<div class="line"><strong>Tue 27 Jun</strong> : Fix content padding.</div>
 <div class="line"><strong>Tue 27 Jun</strong> : Added FetchContent_Declare() for Linux build. Not tested!</div>
 <div class="line"><strong>Tue 27 Jun</strong> : Updated Window build to use FetchContent_Populate()</div>
 <div class="line"><strong>Tue 27 Jun</strong> : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.</div>
@@ -247,15 +251,13 @@
 <div class="line"><strong>Thu 30 Mar</strong> : Added android version still WIP.</div>
 <div class="line"><strong>Thu 30 Mar</strong> : Added initial rst files and images.</div>
 <div class="line"><strong>Thu 30 Mar</strong> : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Added openxr binaries.</div>
 </div>
 </section>
 
 
-					  </div>
-				  </div>
-				  <footer>
+						</div>
+					</div>
+					<footer>
 
   <hr>
 
@@ -264,10 +266,10 @@
   </div> 
 
 </footer>
-			  </div>
-		  </div>
-	  </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
   <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
