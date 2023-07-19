@@ -54,9 +54,15 @@
 	oldelements[i].classList.remove('selected-platform');
 	}
 	var element = document.getElementById('select' + platform);
+	if(element)
+	{
 	element.classList.add('selected-platform');
-	var element2 = document.getElementById('select' + platform +"-inline");
+	}
+	var element2 = document.getElementById('select' + platform + "-inline");
+	if(element2)
+	{
 	element2.classList.add('selected-platform');
+	}
 	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
@@ -115,9 +121,15 @@
 	oldelements[i].classList.remove('selected-selected-graphics-api');
 	}
 	var element = document.getElementById('select' + graphicsApi);
+	if(element)
+	{
 	element.classList.add('selected-selected-graphics-api');
+	}
 	var element2 = document.getElementById('select' + graphicsApi +"-inline");
-	element2.classList.add('selected-selected-graphics-api');
+	if (element2)
+	{
+		element2.classList.add('selected-selected-graphics-api');
+	}
 	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
 	<script >
@@ -184,7 +196,7 @@
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
-		<img class="platform-tab-img" src="_static/css/windows.svg" alt="Windows" />
+		<img class="platform-tab-img" src="_static/css/windows-mono.svg" alt="Windows" />
 	</button>
 	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
 		<img class="platform-tab-img" src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
@@ -237,7 +249,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Fix 2-setup.rst indentation.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Null checks in platform tab scripts.
+| **Wed 19 Jul** : Fix 2-setup.rst indentation.
 | **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
 | **Wed 19 Jul** : Platform/API tab styling.
 | **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
@@ -336,7 +349,6 @@
 | **Fri 02 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Fri 02 Jun** : Added Outlines.md. Initial commit.
 | **Tue 11 Apr** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Tue 11 Apr** : Integrating android sections.
 </pre></div>
 </div>
 </section>
