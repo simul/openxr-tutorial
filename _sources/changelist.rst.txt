@@ -1,7 +1,7 @@
 Changelist 
 ========= 
 .. code-block:: json 
-ECHO is on.
+"" 
     | **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
     | **Tue 18 Jul** : Added sub-chapter markers form Chapter 2.
     | **Tue 18 Jul** : Added Chapter 2.3 text. Minor update to Outlines.md.
