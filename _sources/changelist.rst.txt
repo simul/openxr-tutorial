@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
+    | **Wed 19 Jul** : Platform/API tab styling.
     | **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
     | **Tue 18 Jul** : Added sub-chapter markers form Chapter 2.
     | **Tue 18 Jul** : Added Chapter 2.3 text. Minor update to Outlines.md.
@@ -100,5 +102,3 @@ Changelist
     | **Tue 11 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 11 Apr** : Integrating android sections.
     | **Tue 11 Apr** : Added container for Android in introduction.rst.
-    | **Fri 07 Apr** : Added image
-    | **Fri 07 Apr** : Styles and README.md

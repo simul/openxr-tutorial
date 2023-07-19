@@ -204,13 +204,13 @@
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
-		<img src="_static/css/windows.svg" alt="Windows" />
+		<img class="platform-tab-img" src="_static/css/windows.svg" alt="Windows" />
 	</button>
 	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
-		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+		<img class="platform-tab-img" src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
 	</button>
 	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
-		<img src="_static/css/android-original.svg" alt="Android" />
+		<img class="platform-tab-img" src="_static/css/android-original.svg" alt="Android" />
 	</button>
 </div>
 <script>
@@ -224,19 +224,19 @@
 
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
-		<img src="_static/css/d3d11.png" alt="DirectX 11" />
+		<img class="api-tab-img" src="_static/css/d3d11.png" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img src="_static/css/d3d12.png" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/d3d12.png" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
-		<img src="_static/css/opengl.png" alt="OpenGL" />
+		<img class="api-tab-img" src="_static/css/opengl.png" alt="OpenGL" />
 	</button>
 	<button class="select-graphics-api" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img src="_static/css/opengles.png" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/opengles.png" alt="OpenGL ES" />
 	</button>
 	<button class="select-graphics-api" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
-		<img src="_static/css/vulkan.png" alt="Vulkan" />
+		<img class="api-tab-img" src="_static/css/vulkan.png" alt="Vulkan" />
 	</button>
 </div>
 <script>
@@ -503,7 +503,11 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </pre></div>
 </div>
 <p>We now need to modify our <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code> file to tell Android to run a Native Activity. We set <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.NativeActivity” and update <code class="docutils literal notranslate"><span class="pre">android:configChanges</span></code> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.lib_name” and <code class="docutils literal notranslate"><span class="pre">android:value</span></code> to “openxrtutorialch2”, where <code class="docutils literal notranslate"><span class="pre">android:value</span></code> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
-<p>We need to set this <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code> too.</p>
+<p>We need to tell the app that it should take over rendering when active, rather than appearing in a window. Set <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code>.
+Note: not all devices yet support this category. For example, for Oculus Quest devices you will need</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code> for the same purpose.</p>
+</div></blockquote>
 <p class="rubric">Gradle</p>
 <div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
 
