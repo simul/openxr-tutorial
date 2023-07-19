@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>1. 👋 Introduction &mdash; OpenXR Tutorial  documentation</title>
+	<title>👋 1 Introduction &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
@@ -22,7 +22,7 @@
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
-	<link rel="next" title="2. Setup" href="setup.html" >
+	<link rel="next" title="2 Setup" href="2-setup.html" >
 	<link rel="prev" title="OpenXR Tutorial" href="index.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
@@ -69,6 +69,67 @@
 	}
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
+	<script >
+	function updateGraphicsAPI()
+	{
+	var graphicsApi = Cookies.get("graphicsApi")
+	console.log("graphicsApi = " + graphicsApi);
+	if (typeof graphicsApi == 'undefined')
+	platform="vulkan";
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d11").hide();
+	$(".d3d12").show();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "opengl") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").show();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "opengles") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").show();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").show();
+	}
+	var oldelements = document.getElementsByClassName('selected-graphics-api');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-selected-graphics-api');
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	element.classList.add('selected-selected-graphics-api');
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	element2.classList.add('selected-selected-graphics-api');
+	window.updateGraphicsAPI=updateGraphicsAPI;
+	}</script>
+	<script >
+	var graphicsApi = Cookies.get("graphicsApi")
+	if (graphicsApi==undefined) {
+	Cookies.set('graphicsApi', 'vulkan',{ expires: 365})
+	platform='vulkan';
+	}
+	</script>
+	<script defer src="_static/js/updateGraphicsAPI.js"></script>
 	<style>
 	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 	@import url('https://fonts.cdnfonts.com/css/menlo');
@@ -102,16 +163,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. 👋 Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1. Goal of OpenXR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#overview">1.2. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3. Setting Up</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">👋 1 Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1 Goal of OpenXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">1.2 Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3 Setting Up</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">5. Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 </ul>
 
         </div>
@@ -126,7 +187,7 @@
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">1. </span>👋 Introduction</li>
+      <li class="breadcrumb-item active">👋 1 Introduction</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
@@ -147,6 +208,32 @@
 		updatePlatform();
 	};
 </script>
+
+<div id='selectgraphicsapi'>
+	<button class="select-graphics-api" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+		<img src="_static/css/d3d11.png" alt="DirectX 11" />
+	</button>
+	<button class="select-graphics-api" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+		<img src="_static/css/d3d12.png" alt="DirectX 12" />
+	</button>
+	<button class="select-graphics-api" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+		<img src="_static/css/opengl.png" alt="OpenGL" />
+	</button>
+	<button class="select-graphics-api" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+		<img src="_static/css/opengles.png" alt="OpenGL ES" />
+	</button>
+	<button class="select-graphics-api" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+		<img src="_static/css/vulkan.png" alt="Vulkan" />
+	</button>
+</div>
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		var graphicsApi = Cookies.get('graphicsApi')
+		Cookies.set('graphicsApi', graphicsApiName, { expires: 365 })
+		updateGraphicsAPI();
+	};
+</script>
 	  </li>
   </ul>
 </div>
@@ -156,9 +243,9 @@
 						<div itemprop="articleBody">
 							
   <section id="introduction">
-<h1><span class="section-number">1. </span>👋 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<h1>👋 1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
 <section id="goal-of-openxr">
-<h2><span class="section-number">1.1. </span>Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
+<h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple
 hardware platforms had to write different code for each platform to address the different hardware.
 Each platform had its own, often proprietary, API, and deploying an existing app to a new platform required a lot of
@@ -177,7 +264,7 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 allows you to write code that works with multiple XR platforms, with minimal adaptation.</p>
 </section>
 <section id="overview">
-<h2><span class="section-number">1.2. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
 <table class="longtable docutils align-default" id="id2">
 <caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
@@ -237,7 +324,7 @@ to Actions or Poses, so the app knows what the user is doing.</p></td>
 <p>OpenXR recognised that there is vast and ever changing array of hardware and configurations in the XR space. With new headsets and contollers coming to the market, an abstraction of the input system was needed so that same application can target difference and newer hardware. The abstraction is done via the concept of an <code class="docutils literal notranslate"><span class="pre">XrAction</span></code>, which acts as handle to interactive elements of the application. Instead of directly querying the state of any one button, joysticks, trigger, touch pad etc., you create an <code class="docutils literal notranslate"><span class="pre">XrAction</span></code> for a specific action such as a “menu_click”. You provide a suggested binding along with an interaction profile so that OpenXR can link that action with the available input hardware at runtime.</p>
 </section>
 <section id="setting-up">
-<h2><span class="section-number">1.3. </span>Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this heading">¶</a></h2>
+<h2>1.3 Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this heading">¶</a></h2>
 <p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent.</p>
 <p>You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for
 by clicking a tab, or one of the buttons below.</p>
@@ -255,6 +342,29 @@ by clicking a tab, or one of the buttons below.</p>
 		<p>Android</p>
 	</button>
 </div>
+<div class='select-graphics-api-container-inline'></div>
+	<button class="select-graphics-api-inline" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
+		<img src="_static/css/d3d11.png" alt="DirectX 11" />
+		<p>DirectX 11</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
+		<img src="_static/css/d3d12.png" alt="DirectX 12" />
+		<p>DirectX 12</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
+		<img src="_static/css/opengl.png" alt="OpenGL" />
+		<p>OpenGL</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
+		<img src="_static/css/opengles.png" alt="OpenGL ES" />
+		<p>OpenGL ES</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
+		<img src="_static/css/vulkan.png" alt="Vulkan" />
+		<p>Vulkan</p>
+	</button>
+</div>
+
 <div class="windows docutils container" id="windows-intro-1">
 <blockquote>
 <div><p class="rubric">Windows</p>
@@ -433,7 +543,7 @@ Alternatively, OpenGL ES is also an option for Android graphics.</p>
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="OpenXR Tutorial" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="setup.html" class="btn btn-neutral float-right" title="2. Setup" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="2-setup.html" class="btn btn-neutral float-right" title="2 Setup" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr>

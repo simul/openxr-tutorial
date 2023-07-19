@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>5. Extensions &mdash; OpenXR Tutorial  documentation</title>
+	<title>5 Extensions &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
@@ -22,7 +22,7 @@
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
-	<link rel="prev" title="4. Actions" href="actions.html" > 
+	<link rel="prev" title="4 Interactions" href="4-actions.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -68,6 +68,67 @@
 	}
 	</script>
 	<script defer src="_static/js/updatePlatform.js"></script>
+	<script >
+	function updateGraphicsAPI()
+	{
+	var graphicsApi = Cookies.get("graphicsApi")
+	console.log("graphicsApi = " + graphicsApi);
+	if (typeof graphicsApi == 'undefined')
+	platform="vulkan";
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d11").hide();
+	$(".d3d12").show();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "opengl") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").show();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "opengles") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").show();
+	$(".vulkan").hide();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").show();
+	}
+	var oldelements = document.getElementsByClassName('selected-graphics-api');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-selected-graphics-api');
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	element.classList.add('selected-selected-graphics-api');
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	element2.classList.add('selected-selected-graphics-api');
+	window.updateGraphicsAPI=updateGraphicsAPI;
+	}</script>
+	<script >
+	var graphicsApi = Cookies.get("graphicsApi")
+	if (graphicsApi==undefined) {
+	Cookies.set('graphicsApi', 'vulkan',{ expires: 365})
+	platform='vulkan';
+	}
+	</script>
+	<script defer src="_static/js/updateGraphicsAPI.js"></script>
 	<style>
 	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 	@import url('https://fonts.cdnfonts.com/css/menlo');
@@ -101,14 +162,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. 👋 Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-extensions-and-layers">5.1. Using Extensions and Layers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-xrcreatedebugutilsmessengerext">5.2. Using xrCreateDebugUtilsMessengerEXT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#extension-examples">5.3. Extension Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5 Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-extensions-and-layers">Using Extensions and Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-xrcreatedebugutilsmessengerext">Using xrCreateDebugUtilsMessengerEXT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extension-examples">Extension Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -125,7 +186,7 @@
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">5. </span>Extensions</li>
+      <li class="breadcrumb-item active">5 Extensions</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
@@ -146,6 +207,32 @@
 		updatePlatform();
 	};
 </script>
+
+<div id='selectgraphicsapi'>
+	<button class="select-graphics-api" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+		<img src="_static/css/d3d11.png" alt="DirectX 11" />
+	</button>
+	<button class="select-graphics-api" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+		<img src="_static/css/d3d12.png" alt="DirectX 12" />
+	</button>
+	<button class="select-graphics-api" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+		<img src="_static/css/opengl.png" alt="OpenGL" />
+	</button>
+	<button class="select-graphics-api" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+		<img src="_static/css/opengles.png" alt="OpenGL ES" />
+	</button>
+	<button class="select-graphics-api" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+		<img src="_static/css/vulkan.png" alt="Vulkan" />
+	</button>
+</div>
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		var graphicsApi = Cookies.get('graphicsApi')
+		Cookies.set('graphicsApi', graphicsApiName, { expires: 365 })
+		updateGraphicsAPI();
+	};
+</script>
 	  </li>
   </ul>
 </div>
@@ -155,17 +242,17 @@
 						<div itemprop="articleBody">
 							
   <section id="extensions">
-<h1><span class="section-number">5. </span>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
+<h1>5 Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple" start="5">
 <li><p>EXTENSIONS (extensions debug and hand tracking)</p></li>
 </ol>
 <section id="using-extensions-and-layers">
-<h2><span class="section-number">5.1. </span>Using Extensions and Layers<a class="headerlink" href="#using-extensions-and-layers" title="Permalink to this heading">¶</a></h2>
+<h2>Using Extensions and Layers<a class="headerlink" href="#using-extensions-and-layers" title="Permalink to this heading">¶</a></h2>
 <p>5.1. Using Extensions and Layers xrEnumerateInstanceExtensionProperties,
 xrEnumerateApiLayerProperties,</p>
 </section>
 <section id="using-xrcreatedebugutilsmessengerext">
-<h2><span class="section-number">5.2. </span>Using xrCreateDebugUtilsMessengerEXT<a class="headerlink" href="#using-xrcreatedebugutilsmessengerext" title="Permalink to this heading">¶</a></h2>
+<h2>Using xrCreateDebugUtilsMessengerEXT<a class="headerlink" href="#using-xrcreatedebugutilsmessengerext" title="Permalink to this heading">¶</a></h2>
 <p>XR_EXT_debug_utils is an instance extension for OpenXR, which allows the application to get more information on any errors or warnings etc. You can specify which message severities and types will checked. If a debug message raised, it is passed to the callback function, which can optionally use the user data pointer provided in the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure.</p>
 <p>In the code below, we first check that <code class="docutils literal notranslate"><span class="pre">&quot;XR_EXT_debug_utils&quot;</span></code> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code> which we used to create the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> with the use of this little helper function <code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code>. Next, we set up the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> struct; specifying all the message severities and types.</p>
 <dl class="simple">
@@ -188,7 +275,7 @@ xrEnumerateApiLayerProperties,</p>
 <p>Next, we set the callback function that we want to use, and it must match the <code class="docutils literal notranslate"><span class="pre">PFN_xrDebugUtilsMessengerCallbackEXT</span></code> signature. Optionally, you can set a userData pointer, perhaps to a class, but we have set it to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> in this example.</p>
 <p>XR_EXT_debug_utils is an extension and as such its functions are not loaded by default by the OpenXR loader. Therefore, we need to get the address of the function through the use of <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProcAddr()</span></code>. We pass the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> and a string of the function we want to get, along a pointer to a function pointer variable. We need to cast that pointer to a function pointer variable to a <code class="docutils literal notranslate"><span class="pre">PFN_xrVoidFunction*</span></code> type. Once we have the <code class="docutils literal notranslate"><span class="pre">xrCreateDebugUtilsMessengerEXT()</span></code> function, we call it by passing the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, a pointer to our <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure and a pointer to our <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>. If all is successful, we have set up the DebugUtilsMessenger callback.</p>
 <p>At the end of the program, we should destroy the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>. Again, the <code class="docutils literal notranslate"><span class="pre">xrDestroyDebugUtilsMessengerEXT()</span></code> function needs to be loaded through the use of <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProcAddr()</span></code> (See example below). Once loaded, we can call it by passing the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code> and thus destroying it.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsStringInVector</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsStringInVector</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">item</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -200,30 +287,42 @@ xrEnumerateApiLayerProperties,</p>
 <span class="p">}</span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="kt">bool</span><span class="w"> </span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">checkValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">checkValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">checkValue</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">checkValue</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateDebugMessenger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">{</span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">};</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageSeverities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">;</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_CONFORMANCE_BIT_EXT</span><span class="p">;</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrDebugUtilsMessengerCallbackEXT</span><span class="p">)</span><span class="n">OpenXRMessageCallbackFunction</span><span class="p">;</span>
-<span class="w">        </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">PFN_xrCreateDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">;</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessengerCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">DestroyDebugMessenger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">PFN_xrDestroyDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">;</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="nf">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">xrInstance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">{</span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">};</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageSeverities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_CONFORMANCE_BIT_EXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrDebugUtilsMessengerCallbackEXT</span><span class="p">)</span><span class="n">OpenXRMessageCallbackFunction</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">PFN_xrCreateDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessengerCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">PFN_xrDestroyDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy DebugUtilsMessenger.&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -297,8 +396,9 @@ xrEnumerateApiLayerProperties,</p>
 </div>
 </section>
 <section id="extension-examples">
-<h2><span class="section-number">5.3. </span>Extension Examples<a class="headerlink" href="#extension-examples" title="Permalink to this heading">¶</a></h2>
-<p>5.3. Extension examples including XR_EXT_HAND_TRACKING cubes at joints.</p>
+<h2>Extension Examples<a class="headerlink" href="#extension-examples" title="Permalink to this heading">¶</a></h2>
+<p>5.3. Extension examples including XR_EXT_HAND_TRACKING cubes at joints.
+OpenXR Specification 12.31 XR_EXT_hand_tracking &lt;<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking</a>&gt;`_.</p>
 </section>
 </section>
 
@@ -306,7 +406,7 @@ xrEnumerateApiLayerProperties,</p>
 						</div>
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="actions.html" class="btn btn-neutral float-left" title="4. Actions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="4-actions.html" class="btn btn-neutral float-left" title="4 Interactions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr>
