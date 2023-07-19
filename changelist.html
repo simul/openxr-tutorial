@@ -237,114 +237,108 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
+| **Tue 18 Jul** : Added sub-chapter markers form Chapter 2.
+| **Tue 18 Jul** : Added Chapter 2.3 text. Minor update to Outlines.md.
+| **Tue 18 Jul** : Added openxr-session-life-cycle.svg. Updated Chapter 2.2 text to include changes to the class.
+| **Tue 18 Jul** : Updated GL and GLES api version validation. Vulkan now picks is own queueFamilyIndex. Added extra Document tags to code. Added Chapter 2.2 text for GL, GLES and VK.
+| **Mon 17 Jul** : Initial commit for Chapter 2.2 text (D3D11 and D3D12 only).
+| **Mon 17 Jul** : Added placeholder square images for Graphics APIs. Added code samples to Chapter 2.2 text.
+| **Mon 17 Jul** : Initial commit for updating Graphics API on website. No new logos.
+| **Mon 17 Jul** : Removing Chapter2.1 as all code in now maintained in Chapter2, Chapter3 and Chapter4.
+| **Mon 17 Jul** : Updated Android application name.
+| **Mon 17 Jul** : Updated Chapter 2.1 text to use Chapter2/main.cpp
+| **Mon 17 Jul** : Updated code examples for Chapter 5 and code format in Chapter 2.
+| **Fri 14 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 14 Jul** : Added Chapter4. Added DebugOutput.h - redirects std::cout and std::cerr to debugger for Windows and Android. Transitioning to using #if instead of if() for XR_DOCS_CHAPTER_VERSION - this is more consistent with the user&#39;s experience.
+| **Fri 14 Jul** : Copied changes from Ch3 to Ch2 for AndroidManifest.xml.
+| **Fri 14 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 14 Jul** : Added &lt;category android:name=&quot;com.oculus.intent.category.VR&quot; /&gt; to AndroidManifest.xml
+| **Fri 14 Jul** : Changed Chapter 3 to use independent XrSwapchains per view. Removed &#39;multiview support&#39;.
+| **Fri 14 Jul** : Fix for GraphicsAPI_OpenGL::CreateImageView() for GraphicsAPI_OpenGL_ES::CreateImageView when creating 2D views.
+| **Fri 14 Jul** : Updated Android system events handling for Chapters 2 and 3.
+| **Wed 12 Jul** : Split GraphicsAPI out into separate implementation files.
+| **Wed 12 Jul** : Removed abiFilters. Updated to 7.5 for gradle and 7.4.2 for AGP. Fix applicationId for Chapter 3.
+| **Wed 12 Jul** : Fixed compilation errors for GraphicsAPI_OpenGL_ES. Minor fix for Chapter3/main.cpp.
+| **Fri 07 Jul** : Code for Chapter 3.3. Tested on Windows D3D11, D3D12, OpenGL and Vulkan.
+| **Fri 07 Jul** : Added code for Chapter 3.1.
+| **Wed 05 Jul** : Updated .gitignore files.
+| **Wed 05 Jul** : Added code for Chapter 2.3.
+| **Wed 05 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Wed 05 Jul** : Updated Chapter2.1 code example locations.
+| **Tue 04 Jul** : Downgrade Gradle to get around Android Studio compile failure.
+| **Tue 04 Jul** : Outlines for Ch4.
+| **Tue 04 Jul** : Moved content plan to README.md.
+| **Tue 04 Jul** : README.md formatting.
+| **Tue 04 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 04 Jul** : Moved timetable into README.md
+| **Tue 04 Jul** : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. XR_DOCS_CHAPTER_... defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.
+| **Mon 03 Jul** : Added Outlines for Chapters 5.1 and 5.2.
+| **Mon 03 Jul** : Added Chapter Outlines for 3.1 and 3.2.
+| **Mon 03 Jul** : Updated the usage of std::vector&lt;&gt;::resize() in Chapter 2.1 and 2.2.
+| **Fri 30 Jun** : Disabled jetifier in gradle.properties files.
+| **Fri 30 Jun** : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.
+| **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.
+| **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
+| **Fri 30 Jun** : Minor text corrections to 2-setup.rst.
+| **Fri 30 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Fri 30 Jun** : Added Chapter 2.2 code. Multiple Graphics APIs added. Test on Windows only (D3D11, D3D12, OpenGL and Vulkan). WIP.
+| **Wed 28 Jun** : Rename rst files to include chapter numbers.
+| **Wed 28 Jun** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
+| **Wed 28 Jun** : Update /thirdparty to remove old OpenXR SDK for PC and added openxr_loader_manifest_only-1.0.27.aar
+| **Wed 28 Jun** : Unified CMakeLists.txt for Chapter2.1 and move Android build folder.
+| **Tue 27 Jun** : Update README.md
+| **Tue 27 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 27 Jun** : Fix content padding.
+| **Tue 27 Jun** : Added FetchContent_Declare() for Linux build. Not tested!
+| **Tue 27 Jun** : Updated Window build to use FetchContent_Populate()
+| **Tue 27 Jun** : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.
+| **Tue 27 Jun** : Updated draft text of Chapter 1.2.
+| **Mon 26 Jun** : p and figure limited to 800px, so code alone can expand horizontally.
+| **Mon 26 Jun** : Move tab highlight code to updatePlatform.
+| **Mon 26 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Mon 26 Jun** : Styling: purple breadcrumb ribbon at top. Platform selection tabs instead of radio buttons. Icon for introduction from getemoji.com.
+| **Mon 26 Jun** : Added more to Chapter 1.2 draft text.
+| **Mon 26 Jun** : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.
+| **Mon 26 Jun** : Update Android to use FetchContent_Declare(). Minor fix in Chapter2.1/main.cpp.
+| **Fri 23 Jun** : Updated Chapter2.1/main.cpp to match code pattern.
+| **Fri 23 Jun** : Removed unused libopenxr_loader.so libraries.
+| **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
+| **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
+| **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
+| **Tue 20 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 20 Jun** : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.
+| **Tue 20 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 20 Jun** : Added android-studio-build-run-toolbar.png
+| **Tue 20 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 20 Jun** : Clang format changes.
+| **Tue 20 Jun** : tutorial/introduction.rst: Vulkan variables are now in a table for Linux. Correction for D3D12 View Instancing and VK/GL/GLES multiview. Other minor fix ups.
+| **Tue 20 Jun** : Minor fix ups for tutorial/setup.rst.
+| **Tue 20 Jun** : Minor code revision.
+| **Mon 19 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Mon 19 Jun** : Android sample is debugging now. Update AndroidManifest.xml to support Meta devices. Updated setup.rst to full include Android set up.
+| **Mon 19 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Mon 19 Jun** : Styling update: Poppins and Menlo fonts; light grey side panel; purple logo, purple section highlights.
+| **Mon 19 Jun** : Clean up of Chapter 2.1 text.
+| **Fri 16 Jun** : Added detents to code blocks. Replaced more code with literalinclude. Cleaned up rubics and selectable sections. Minor text revisions.
+| **Fri 16 Jun** : extensions.rst updated headers and added detent to code block.
+| **Fri 16 Jun** : Reordered methods in class OpenXRTutorial_Ch2_1.
+| **Fri 16 Jun** : Updated Chapter2.1/main.cpp for extension.rst.
+| **Fri 16 Jun** : Updated extensions.rst to use rst literalinclude.
+| **Thu 15 Jun** : Using .. literalinclude:: in setup.rst to reference the original source code. WIP. Added XR_DOCS_TAG_BEGIN_... and Added XR_DOCS_TAG_END_... as markers for RST to reference.
+| **Thu 15 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Thu 15 Jun** : Added .clang-format for uniform styling and updated Chapter2.1/main.cpp.
+| **Mon 05 Jun** : Add outline for 2.1, rewrite 1.1/1.2 outlines.
+| **Fri 02 Jun** : Updated Chapter 1.1 and 1.2 outlines.
+| **Fri 02 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Fri 02 Jun** : Added Outlines.md. Initial commit.
+| **Tue 11 Apr** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 11 Apr** : Integrating android sections.
+| **Tue 11 Apr** : Added container for Android in introduction.rst.
+| **Fri 07 Apr** : Added image
+| **Fri 07 Apr** : Styles and README.md
 </pre></div>
 </div>
-<dl>
-<dt>“”</dt><dd><div class="line-block">
-<div class="line"><strong>Wed 19 Jul</strong> : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.</div>
-<div class="line"><strong>Tue 18 Jul</strong> : Added sub-chapter markers form Chapter 2.</div>
-<div class="line"><strong>Tue 18 Jul</strong> : Added Chapter 2.3 text. Minor update to Outlines.md.</div>
-<div class="line"><strong>Tue 18 Jul</strong> : Added openxr-session-life-cycle.svg. Updated Chapter 2.2 text to include changes to the class.</div>
-<div class="line"><strong>Tue 18 Jul</strong> : Updated GL and GLES api version validation. Vulkan now picks is own queueFamilyIndex. Added extra Document tags to code. Added Chapter 2.2 text for GL, GLES and VK.</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Initial commit for Chapter 2.2 text (D3D11 and D3D12 only).</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Added placeholder square images for Graphics APIs. Added code samples to Chapter 2.2 text.</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Initial commit for updating Graphics API on website. No new logos.</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Removing Chapter2.1 as all code in now maintained in Chapter2, Chapter3 and Chapter4.</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Updated Android application name.</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Updated Chapter 2.1 text to use Chapter2/main.cpp</div>
-<div class="line"><strong>Mon 17 Jul</strong> : Updated code examples for Chapter 5 and code format in Chapter 2.</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Added Chapter4. Added DebugOutput.h - redirects std::cout and std::cerr to debugger for Windows and Android. Transitioning to using #if instead of if() for XR_DOCS_CHAPTER_VERSION - this is more consistent with the user’s experience.</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Copied changes from Ch3 to Ch2 for AndroidManifest.xml.</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Added &lt;category android:name=”com.oculus.intent.category.VR” /&gt; to AndroidManifest.xml</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Changed Chapter 3 to use independent XrSwapchains per view. Removed ‘multiview support’.</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Fix for GraphicsAPI_OpenGL::CreateImageView() for GraphicsAPI_OpenGL_ES::CreateImageView when creating 2D views.</div>
-<div class="line"><strong>Fri 14 Jul</strong> : Updated Android system events handling for Chapters 2 and 3.</div>
-<div class="line"><strong>Wed 12 Jul</strong> : Split GraphicsAPI out into separate implementation files.</div>
-<div class="line"><strong>Wed 12 Jul</strong> : Removed abiFilters. Updated to 7.5 for gradle and 7.4.2 for AGP. Fix applicationId for Chapter 3.</div>
-<div class="line"><strong>Wed 12 Jul</strong> : Fixed compilation errors for GraphicsAPI_OpenGL_ES. Minor fix for Chapter3/main.cpp.</div>
-<div class="line"><strong>Fri 07 Jul</strong> : Code for Chapter 3.3. Tested on Windows D3D11, D3D12, OpenGL and Vulkan.</div>
-<div class="line"><strong>Fri 07 Jul</strong> : Added code for Chapter 3.1.</div>
-<div class="line"><strong>Wed 05 Jul</strong> : Updated .gitignore files.</div>
-<div class="line"><strong>Wed 05 Jul</strong> : Added code for Chapter 2.3.</div>
-<div class="line"><strong>Wed 05 Jul</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Wed 05 Jul</strong> : Updated Chapter2.1 code example locations.</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Downgrade Gradle to get around Android Studio compile failure.</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Outlines for Ch4.</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Moved content plan to README.md.</div>
-<div class="line"><strong>Tue 04 Jul</strong> : README.md formatting.</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Moved timetable into README.md</div>
-<div class="line"><strong>Tue 04 Jul</strong> : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. <a href="#id1"><span class="problematic" id="id2">XR_DOCS_CHAPTER_</span></a>… defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.</div>
-<div class="line"><strong>Mon 03 Jul</strong> : Added Outlines for Chapters 5.1 and 5.2.</div>
-<div class="line"><strong>Mon 03 Jul</strong> : Added Chapter Outlines for 3.1 and 3.2.</div>
-<div class="line"><strong>Mon 03 Jul</strong> : Updated the usage of std::vector&lt;&gt;::resize() in Chapter 2.1 and 2.2.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Disabled jetifier in gradle.properties files.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Test on Android (OpenGLES and Vulkan). WIP.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Minor text corrections to 2-setup.rst.</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Fri 30 Jun</strong> : Added Chapter 2.2 code. Multiple Graphics APIs added. Test on Windows only (D3D11, D3D12, OpenGL and Vulkan). WIP.</div>
-<div class="line"><strong>Wed 28 Jun</strong> : Rename rst files to include chapter numbers.</div>
-<div class="line"><strong>Wed 28 Jun</strong> : Merge branch ‘main’ of github.com:KhronosGroup/OpenXR-Tutorials into main</div>
-<div class="line"><strong>Wed 28 Jun</strong> : Update /thirdparty to remove old OpenXR SDK for PC and added openxr_loader_manifest_only-1.0.27.aar</div>
-<div class="line"><strong>Wed 28 Jun</strong> : Unified CMakeLists.txt for Chapter2.1 and move Android build folder.</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Update README.md</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Fix content padding.</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Added FetchContent_Declare() for Linux build. Not tested!</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Updated Window build to use FetchContent_Populate()</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.</div>
-<div class="line"><strong>Tue 27 Jun</strong> : Updated draft text of Chapter 1.2.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : p and figure limited to 800px, so code alone can expand horizontally.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Move tab highlight code to updatePlatform.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Styling: purple breadcrumb ribbon at top. Platform selection tabs instead of radio buttons. Icon for introduction from getemoji.com.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Added more to Chapter 1.2 draft text.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.</div>
-<div class="line"><strong>Mon 26 Jun</strong> : Update Android to use FetchContent_Declare(). Minor fix in Chapter2.1/main.cpp.</div>
-<div class="line"><strong>Fri 23 Jun</strong> : Updated Chapter2.1/main.cpp to match code pattern.</div>
-<div class="line"><strong>Fri 23 Jun</strong> : Removed unused libopenxr_loader.so libraries.</div>
-<div class="line"><strong>Fri 23 Jun</strong> : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.</div>
-<div class="line"><strong>Fri 23 Jun</strong> : Updated to Gradle 8.1 and AGP 7.4.2.</div>
-<div class="line"><strong>Fri 23 Jun</strong> : Improved readability of the find_apiLayer_extension section.</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Added android-studio-build-run-toolbar.png</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Clang format changes.</div>
-<div class="line"><strong>Tue 20 Jun</strong> : tutorial/introduction.rst: Vulkan variables are now in a table for Linux. Correction for D3D12 View Instancing and VK/GL/GLES multiview. Other minor fix ups.</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Minor fix ups for tutorial/setup.rst.</div>
-<div class="line"><strong>Tue 20 Jun</strong> : Minor code revision.</div>
-<div class="line"><strong>Mon 19 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Mon 19 Jun</strong> : Android sample is debugging now. Update AndroidManifest.xml to support Meta devices. Updated setup.rst to full include Android set up.</div>
-<div class="line"><strong>Mon 19 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Mon 19 Jun</strong> : Styling update: Poppins and Menlo fonts; light grey side panel; purple logo, purple section highlights.</div>
-<div class="line"><strong>Mon 19 Jun</strong> : Clean up of Chapter 2.1 text.</div>
-<div class="line"><strong>Fri 16 Jun</strong> : Added detents to code blocks. Replaced more code with literalinclude. Cleaned up rubics and selectable sections. Minor text revisions.</div>
-<div class="line"><strong>Fri 16 Jun</strong> : extensions.rst updated headers and added detent to code block.</div>
-<div class="line"><strong>Fri 16 Jun</strong> : Reordered methods in class OpenXRTutorial_Ch2_1.</div>
-<div class="line"><strong>Fri 16 Jun</strong> : Updated Chapter2.1/main.cpp for extension.rst.</div>
-<div class="line"><strong>Fri 16 Jun</strong> : Updated extensions.rst to use rst literalinclude.</div>
-<div class="line"><strong>Thu 15 Jun</strong> : Using .. literalinclude:: in setup.rst to reference the original source code. WIP. Added <a href="#id3"><span class="problematic" id="id4">XR_DOCS_TAG_BEGIN_</span></a>… and Added <a href="#id5"><span class="problematic" id="id6">XR_DOCS_TAG_END_</span></a>… as markers for RST to reference.</div>
-<div class="line"><strong>Thu 15 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 15 Jun</strong> : Added .clang-format for uniform styling and updated Chapter2.1/main.cpp.</div>
-<div class="line"><strong>Mon 05 Jun</strong> : Add outline for 2.1, rewrite 1.1/1.2 outlines.</div>
-<div class="line"><strong>Fri 02 Jun</strong> : Updated Chapter 1.1 and 1.2 outlines.</div>
-<div class="line"><strong>Fri 02 Jun</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Fri 02 Jun</strong> : Added Outlines.md. Initial commit.</div>
-<div class="line"><strong>Tue 11 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 11 Apr</strong> : Integrating android sections.</div>
-<div class="line"><strong>Tue 11 Apr</strong> : Added container for Android in introduction.rst.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Added image</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Styles and README.md</div>
-</div>
-</dd>
-</dl>
 </section>
 
 
