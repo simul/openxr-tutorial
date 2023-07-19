@@ -118,17 +118,17 @@
 	var oldelements = document.getElementsByClassName('selected-graphics-api');
 	for (i = 0; i < oldelements.length; ++i)
 	{
-	oldelements[i].classList.remove('selected-selected-graphics-api');
+	oldelements[i].classList.remove('selected-graphics-api');
 	}
 	var element = document.getElementById('select' + graphicsApi);
 	if(element)
 	{
-	element.classList.add('selected-selected-graphics-api');
+	element.classList.add('selected-graphics-api');
 	}
 	var element2 = document.getElementById('select' + graphicsApi +"-inline");
 	if (element2)
 	{
-		element2.classList.add('selected-selected-graphics-api');
+		element2.classList.add('selected-graphics-api');
 	}
 	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
@@ -249,7 +249,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Null checks in platform tab scripts.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Fix invalid selected-graphics-api class tags.
+| **Wed 19 Jul** : Null checks in platform tab scripts.
 | **Wed 19 Jul** : Fix 2-setup.rst indentation.
 | **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
 | **Wed 19 Jul** : Platform/API tab styling.
@@ -348,7 +349,6 @@
 | **Fri 02 Jun** : Updated Chapter 1.1 and 1.2 outlines.
 | **Fri 02 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Fri 02 Jun** : Added Outlines.md. Initial commit.
-| **Tue 11 Apr** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 </pre></div>
 </div>
 </section>
