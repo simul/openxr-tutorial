@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 19 Jul** : Cookie lowercase names.
     | **Wed 19 Jul** : Fix invalid selected-graphics-api class tags.
     | **Wed 19 Jul** : Null checks in platform tab scripts.
     | **Wed 19 Jul** : Fix 2-setup.rst indentation.
@@ -101,4 +102,3 @@ Changelist
     | **Mon 05 Jun** : Add outline for 2.1, rewrite 1.1/1.2 outlines.
     | **Fri 02 Jun** : Updated Chapter 1.1 and 1.2 outlines.
     | **Fri 02 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Fri 02 Jun** : Added Outlines.md. Initial commit.
