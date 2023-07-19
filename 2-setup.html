@@ -242,8 +242,8 @@
 <script>
 	function chooseGraphicsAPI(graphicsApiName)
 	{
-		var graphicsApi = Cookies.get('graphicsApi')
-		Cookies.set('graphicsApi', graphicsApiName, { expires: 365 })
+		var graphicsApi = Cookies.get('graphicsapi')
+		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
 		updateGraphicsAPI();
 	};
 </script>
@@ -504,10 +504,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </div>
 <p>We now need to modify our <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code> file to tell Android to run a Native Activity. We set <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.NativeActivity” and update <code class="docutils literal notranslate"><span class="pre">android:configChanges</span></code> to “orientation|keyboardHidden” to not close the activity on those changes. Next under the meta-data section, we set these values: <code class="docutils literal notranslate"><span class="pre">android:name</span></code> to “android.app.lib_name” and <code class="docutils literal notranslate"><span class="pre">android:value</span></code> to “openxrtutorialch2”, where <code class="docutils literal notranslate"><span class="pre">android:value</span></code> is name of the library we created in the CMakeLists, thus pointing our NativeActivity to the correct library.</p>
 <p>We need to tell the app that it should take over rendering when active, rather than appearing in a window. Set <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code>.
-Note: not all devices yet support this category. For example, for Oculus Quest devices you will need</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code> for the same purpose.</p>
-</div></blockquote>
+Note: not all devices yet support this category. For example, for Oculus Quest devices you will need <code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code> for the same purpose.</p>
 <p class="rubric">Gradle</p>
 <div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.android.application&#39;</span>
 
