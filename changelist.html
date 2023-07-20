@@ -249,7 +249,16 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 19 Jul** : Cookie lowercase names.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 20 Jul** : Added SetRenderAttachments() for GL to have a combined color and depth framebuffer. ClearColor() and ClearDepth() revert and now unbind their parameter framebuffer.
+| **Thu 20 Jul** : Ensured correct parameter name for ClearColor() and ClearDepth().
+| **Thu 20 Jul** : Removed unbinds from ClearColor() and ClearDepth() in GraphicsAPI_OpenGL.
+| **Thu 20 Jul** : Added rendering to Chapter4/main.cpp, but not working in GL. Move all rendering enums inside to GraphicsAPI. Updated GraphicsAPI_OpenGL. DescriptorInfo uses bindingIndex now.
+| **Thu 20 Jul** : Fixed build errors for GraphicsAPI_OpenGL.
+| **Thu 20 Jul** : Renamed some methods in GraphicsAPI. Cleaned up samplers in GraphicsAPI_OpenGL.
+| **Thu 20 Jul** : Init commit for GraphicsAPI_OpenGL fully complete. Not Tested!
+| **Wed 19 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Wed 19 Jul** : Partial text for Chapter 3.1.
+| **Wed 19 Jul** : Cookie lowercase names.
 | **Wed 19 Jul** : Fix invalid selected-graphics-api class tags.
 | **Wed 19 Jul** : Null checks in platform tab scripts.
 | **Wed 19 Jul** : Fix 2-setup.rst indentation.
@@ -340,15 +349,6 @@
 | **Mon 19 Jun** : Clean up of Chapter 2.1 text.
 | **Fri 16 Jun** : Added detents to code blocks. Replaced more code with literalinclude. Cleaned up rubics and selectable sections. Minor text revisions.
 | **Fri 16 Jun** : extensions.rst updated headers and added detent to code block.
-| **Fri 16 Jun** : Reordered methods in class OpenXRTutorial_Ch2_1.
-| **Fri 16 Jun** : Updated Chapter2.1/main.cpp for extension.rst.
-| **Fri 16 Jun** : Updated extensions.rst to use rst literalinclude.
-| **Thu 15 Jun** : Using .. literalinclude:: in setup.rst to reference the original source code. WIP. Added XR_DOCS_TAG_BEGIN_... and Added XR_DOCS_TAG_END_... as markers for RST to reference.
-| **Thu 15 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Thu 15 Jun** : Added .clang-format for uniform styling and updated Chapter2.1/main.cpp.
-| **Mon 05 Jun** : Add outline for 2.1, rewrite 1.1/1.2 outlines.
-| **Fri 02 Jun** : Updated Chapter 1.1 and 1.2 outlines.
-| **Fri 02 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 </pre></div>
 </div>
 </section>

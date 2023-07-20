@@ -178,7 +178,13 @@
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 Setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3 Graphics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">Creating Swapchains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">Creating Swapchains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">XrViewConfigurationView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainformats">xrEnumerateSwapchainFormats()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrcreateswapchain">xrCreateSwapchain()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainimages">xrEnumerateSwapchainImages()</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#building-a-renderloop">Building a RenderLoop</a></li>
 </ul>
 </li>
@@ -255,17 +261,371 @@
 							
   <section id="graphics">
 <h1>3 Graphics<a class="headerlink" href="#graphics" title="Permalink to this heading">¶</a></h1>
-<ol class="arabic simple" start="3">
-<li><p>GRAPHICS (solid color render at end)</p></li>
-</ol>
+<p>Select your platform, as the instructions are different depending on your selection.</p>
+<div class='select-platform-container-inline'>
+	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
+		<img src="_static/css/windows-mono.svg" alt="Windows" />
+		<p>Windows</p>
+	</button>
+	<button class="select-platform-inline" id='selectlinux-inline' onclick="choosePlatform('linux')">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+		<p>Linux</p>
+	</button>
+	<button class="select-platform-inline" id='selectandroid-inline' onclick="choosePlatform('android')">
+		<img src="_static/css/android-original.svg" alt="Android" />
+		<p>Android</p>
+	</button>
+</div>
+<div class='select-graphics-api-container-inline'></div>
+	<button class="select-graphics-api-inline" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
+		<img src="_static/css/d3d11.png" alt="DirectX 11" />
+		<p>DirectX 11</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
+		<img src="_static/css/d3d12.png" alt="DirectX 12" />
+		<p>DirectX 12</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
+		<img src="_static/css/opengl.png" alt="OpenGL" />
+		<p>OpenGL</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
+		<img src="_static/css/opengles.png" alt="OpenGL ES" />
+		<p>OpenGL ES</p>
+	</button>
+	<button class="select-graphics-api-inline" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
+		<img src="_static/css/vulkan.png" alt="Vulkan" />
+		<p>Vulkan</p>
+	</button>
+</div>
+
+<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demostrate its interaction with all the Graphics APIs.</p>
 <section id="creating-swapchains">
 <h2>Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
-<p>3.1. Creating SwapChains for color and depth (xrEnumerateSwapchainFormats)</p>
+<p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
+<p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for an OpenXR application we don’t use the API specific swapchain, which can be tied closly the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, have multiple views that need to rendered to create the XR experience. Listed below are a few scenarios with differing view counts:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1 view  - AR viewer on a mobile device.</p></li>
+<li><p>2 views - VR head mounted display.</p></li>
+<li><p>6 views - Multi-wall projection-based (CAVE-like) VR system.</p></li>
+</ul>
+</div></blockquote>
+<p>Orthogonal to multiple views is the layering of multiple rendered images or camera feeds. You could, for a example, have a background that is a video pass-through of your enviroment, a stereo view of rendering graphics and quad overlay of a HUD or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views.</p>
+<p>Firstly, we will update the class to add the new methods and members.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorialChapter3</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
+
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="c1">// Draw Frame.</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">viewConfigurationViews</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SwapchainAndDepthImage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">XrSwapchain</span><span class="w"> </span><span class="n">swapchain</span><span class="p">{};</span>
+<span class="w">                </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">void</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">colorImageViews</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImageView</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">swapchainAndDepthImages</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="xrviewconfigurationview">
+<h3>XrViewConfigurationView<a class="headerlink" href="#xrviewconfigurationview" title="Permalink to this heading">¶</a></h3>
+<p>The first thing we to do is get all of the views available to out view configuration. It is worth just parsing the name of this type: <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. I break the typename up as follow “XrViewConfiguration” - “View”, where it relates to one view in the view configuration, which may contain multiple view. We call <code class="docutils literal notranslate"><span class="pre">xrEnumerateViewConfigurationViews()</span></code> twice, first to get the count of the views in the view configuration, and second to fill in the data to the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrViewConfigurationView&gt;</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetViewConfigurationViews</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewConfigurationViewSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateViewConfigurationViews</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemID</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewConfigurationViewSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate ViewConfigurationViews.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">viewConfigurationViews</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewConfigurationViewSize</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW_CONFIGURATION_VIEW</span><span class="p">});</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateViewConfigurationViews</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemID</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfigurationViewSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewConfigurationViewSize</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfigurationViews</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate ViewConfigurationViews.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="xrenumerateswapchainformats">
+<h3>xrEnumerateSwapchainFormats()<a class="headerlink" href="#xrenumerateswapchainformats" title="Permalink to this heading">¶</a></h3>
+<p>Due to way that OpenXR and its composite operate, there are certain preferred image formats that should be used by the swapchain. When calling <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code>, the <code class="docutils literal notranslate"><span class="pre">XrSession</span></code> and alongwith the Graphics API will return an array of API-specific formats ordered in preference. <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code> take a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> values. The use of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> is a simple type cast from a <code class="docutils literal notranslate"><span class="pre">DXGI_FOMRAT</span></code>, <code class="docutils literal notranslate"><span class="pre">GLenum</span></code> or a <code class="docutils literal notranslate"><span class="pre">VkFormat</span></code>. The runtime “should support <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span></code> and <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span> <span class="pre">sRGB</span></code> formats if possible” (<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#swapchain-image-management">OpenXR Specification 10.1. Swapchain Image Management</a>).</p>
+<p>Linear or sRGB color space? OpenXR’s compositor performs all blend operations in a linear color space i.e. the values have not been gamma encoded. Most gamma-encoding operations are algebraically non-linear, so you can’t composite the values wieh simple addition or multiplication operations. If you wish to use an sRGB color format, you must use an API-specific sRGB color format such as <code class="docutils literal notranslate"><span class="pre">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span></code>, <code class="docutils literal notranslate"><span class="pre">GL_SRGB8_ALPHA8</span></code> or <code class="docutils literal notranslate"><span class="pre">VK_FORMAT_R8G8B8A8_SRGB</span></code>. The OpenXR runtime will automatically do sRGB-to-linear color space conversions when reading the image. There are two issues with here:</p>
+<ol class="arabic simple">
+<li><p>Runtime conversion of image data could be too slow and affect performance and comfort.</p></li>
+<li><p>The conversion process may not use the same style of gamma encoding/decoding and there could be a loss in color accuracy.</p></li>
+</ol>
+<p>If you’d like more information on color spaces and gamma in compute graphics, Guy Davidson from Creative Assembly has a fantastic video presentation from Meeting C++ 2021 on this topic <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">here</a>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">formatSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainFormats</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Formats&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">formats</span><span class="p">(</span><span class="n">formatSize</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainFormats</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Formats&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Next, we do some checks to confirm that the views in the view configuration are the same size and thus suitable for stereo rendering. With check done, we can alias to views together when create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. We resize our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage</span></code> structure and enter a for each loop to create all required resources.</p>
+</section>
+<section id="xrcreateswapchain">
+<h3>xrCreateSwapchain()<a class="headerlink" href="#xrcreateswapchain" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">faceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">arraySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">mipCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateSwapchain</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Swapchain&quot;</span><span class="p">);</span>
+<span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Here, we fill out the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo</span></code> structure. The <code class="docutils literal notranslate"><span class="pre">sampleCount</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> member can be assigned from the <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. We set the <code class="docutils literal notranslate"><span class="pre">createFlags</span></code> to 0 as we require no contraints or functionality. We set the <code class="docutils literal notranslate"><span class="pre">usageFlags</span></code> to <code class="docutils literal notranslate"><span class="pre">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span> <span class="pre">|</span> <span class="pre">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span></code> requesting that the image are suitable to be read in a shader and to be used as a render output.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Flag bits for XrSwapchainUsageFlags</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000002</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_TRANSFER_SRC_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_TRANSFER_DST_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000010</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000020</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_MUTABLE_FORMAT_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000040</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_MND</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000080</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_KHR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000080</span><span class="p">;</span><span class="w">  </span><span class="c1">// alias of XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_MND</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">XrFlags64</span><span class="w"> </span><span class="n">XrCompositionLayerFlags</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Below is a explanation of XrSwapchainUsageFlagBits match with the Graphics APIs.</p>
+<div class="d3d11 docutils container" id="d3d11-id-1">
+<p class="rubric">DirectX 11</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XrSwapchainUsageFlagBits</p></td>
+<td><p>Corresponding D3D11 bind flag bits</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</p></td>
+<td><p>D3D11_BIND_RENDER_TARGET</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</p></td>
+<td><p>D3D11_BIND_DEPTH_STENCIL</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT</p></td>
+<td><p>D3D11_BIND_UNORDERED_ACCESS</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_SRC_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_DST_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_SAMPLED_BIT</p></td>
+<td><p>D3D11_BIND_SHADER_RESOURCE</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_MUTABLE_FORMAT_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_KHR</p></td>
+<td><p>ignored</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="d3d12 docutils container" id="d3d12-id-1">
+<p class="rubric">DirectX 12</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XrSwapchainUsageFlagBits</p></td>
+<td><p>Corresponding D3D12 resource flag bits</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</p></td>
+<td><p>D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</p></td>
+<td><p>D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT</p></td>
+<td><p>D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_SRC_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_DST_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_SAMPLED_BIT</p></td>
+<td><p>D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_MUTABLE_FORMAT_BIT</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_KHR</p></td>
+<td><p>ignored</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="opengl docutils container" id="opengl-id-1">
+<p class="rubric">OpenGL</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">XrSwapchainUsageFlags</span></code> are ignored as OpenGL can’t specify usage of an image.</p>
+</div>
+<div class="opengles docutils container" id="opengles-id-1">
+<p class="rubric">OpenGL ES</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">XrSwapchainUsageFlags</span></code> are ignored as OpenGL ES can’t specify usage of an image.</p>
+</div>
+<div class="vulkan docutils container" id="vulkan-id-1">
+<p class="rubric">Vulkan</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XrSwapchainUsageFlagBits</p></td>
+<td><p>Corresponding Vulkan flag bit</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_STORAGE_BIT</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_SRC_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_TRANSFER_SRC_BIT</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_TRANSFER_DST_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_TRANSFER_DST_BIT</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_SAMPLED_BIT</p></td>
+<td><p>VK_IMAGE_USAGE_SAMPLED_BIT</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SWAPCHAIN_USAGE_MUTABLE_FORMAT_BIT</p></td>
+<td><p>VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_KHR</p></td>
+<td><p>VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Next, set the values for <code class="docutils literal notranslate"><span class="pre">faceCount</span></code>, <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> and <code class="docutils literal notranslate"><span class="pre">mipCount</span></code>. <code class="docutils literal notranslate"><span class="pre">faceCount</span></code> describes the number of faces in the image and is used for creating cubemap textures. <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> describes the number of layers in an image. Here, we use <code class="docutils literal notranslate"><span class="pre">1</span></code>, as we have separate swapchain per view/eye, but for a stereo view you could pass <code class="docutils literal notranslate"><span class="pre">2</span></code> and have an image 2D array, which is suitable for multiview rendering. <code class="docutils literal notranslate"><span class="pre">mipCount</span></code> describes the number of mips levels, useful when using the swapchain image as sampled image. Finally, we can set the format. Here, we ask our <code class="docutils literal notranslate"><span class="pre">GraphicsAPIs</span></code> class to pick a suitable format for the swapachain for the enumerated format we acquired early. Here is the code for <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::SelectSwapchainFormat()</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GraphicsAPI::SelectSwapchainFormat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formats</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supportSwapchainFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetSupportedSwapchainFormats</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;::</span><span class="n">const_iterator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find_first_of</span><span class="p">(</span><span class="n">formats</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+<span class="w">                                                                                       </span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: Unable to find supported Swapchain Format&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">swapchainFormatIt</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The is function calls a pure virtual function called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific format us to use.</p>
+<div class="d3d11 docutils container" id="id1">
+<p class="rubric">DirectX 11</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM_SRGB</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container" id="id2">
+<p class="rubric">DirectX 12</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM_SRGB</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container" id="id3">
+<p class="rubric">OpenGL</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L229-L236</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GL_RGB10_A2</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_RGBA16F</span><span class="p">,</span>
+<span class="w">        </span><span class="c1">// The two below should only be used as a fallback, as they are linear color formats without enough bits for color</span>
+<span class="w">        </span><span class="c1">// depth, thus leading to banding.</span>
+<span class="w">        </span><span class="n">GL_RGBA8</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_RGBA8_SNORM</span><span class="p">,</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container" id="id4">
+<p class="rubric">OpenGL ES</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengles.cpp#L208-L216</span>
+<span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MAJOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMajorVersion</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">GL_RGBA8</span><span class="p">,</span><span class="w"> </span><span class="n">GL_RGBA8_SNORM</span><span class="p">,</span><span class="w"> </span><span class="n">GL_SRGB8_ALPHA8</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">GL_RGBA8</span><span class="p">,</span><span class="w"> </span><span class="n">GL_RGBA8_SNORM</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container" id="id5">
+<p class="rubric">Vulkan</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">VK_FORMAT_B8G8R8A8_SRGB</span><span class="p">,</span>
+<span class="w">        </span><span class="n">VK_FORMAT_R8G8B8A8_SRGB</span><span class="p">,</span>
+<span class="w">        </span><span class="n">VK_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
+<span class="w">        </span><span class="n">VK_FORMAT_R8G8B8A8_UNORM</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>We call <code class="docutils literal notranslate"><span class="pre">xrCreateSwapchain()</span></code> to create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, which if successful will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> will be non-null. We copy our swapchain format to our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::swapchainFormat</span></code> for later usage.</p>
+</section>
+<section id="xrenumerateswapchainimages">
+<h3>xrEnumerateSwapchainImages()<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
+<p>Now that we have created the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, we need to get access to the all images in the swapchain.</p>
+</section>
 </section>
 <section id="building-a-renderloop">
 <h2>Building a RenderLoop<a class="headerlink" href="#building-a-renderloop" title="Permalink to this heading">¶</a></h2>
-<p>3.2. The Renderloop (xrWaitFrame/xrBeginFrame/xrEndFrame/ env.blend.mode)
-(solid color)</p>
 </section>
 </section>
 
