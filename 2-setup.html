@@ -137,8 +137,8 @@
 	<script >
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
-	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-	platform='vulkan';
+		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+		platform='vulkan';
 	}
 	</script>
 	<script defer src="_static/js/updateGraphicsAPI.js"></script>
@@ -254,8 +254,8 @@
 <script>
 	function chooseGraphicsAPI(graphicsApiName)
 	{
-		var graphicsApi = Cookies.get('graphicsapi')
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
+		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 	};
 </script>
@@ -637,7 +637,15 @@ For Android, we include our <code class="docutils literal notranslate"><span cla
 stop execution of your program when an error occurs, so you can see where it happened and fix it.
 We use this macro in the <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> function, which we will discuss in <a class="reference internal" href="5-extensions.html"><span class="doc">Chapter 5.2.</span></a></p>
 <p>In <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>, add:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define OPENXR_CHECK(x, y)                                                                                                                              \</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define OPENXR_CHECK1(x, y)                                                                                                                           \</span>
+<span class="cp">    {                                                                                                                                                   \</span>
+<span class="cp">        XrResult result = (x);                                                                                                                          \</span>
+<span class="cp">        if (!XR_SUCCEEDED(result)) {                                                                                                                    \</span>
+<span class="cp">            std::cout &lt;&lt; &quot;ERROR: OPENXR: &quot; &lt;&lt; int(result) &lt;&lt; &quot;(&quot; &lt;&lt; result &lt;&lt; &quot;) &quot; &lt;&lt; y &lt;&lt; std::endl; \</span>
+<span class="cp">        }                                                                                                                                               \</span>
+<span class="cp">    }</span>
+
+<span class="cp">#define OPENXR_CHECK(x, y)                                                                                                                              \</span>
 <span class="cp">    {                                                                                                                                                   \</span>
 <span class="cp">        XrResult result = (x);                                                                                                                          \</span>
 <span class="cp">        if (!XR_SUCCEEDED(result)) {                                                                                                                    \</span>
@@ -1261,7 +1269,7 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <span class="w">    </span><span class="n">ksGpuSurfaceDepthFormat</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">{</span><span class="n">KS_GPU_SURFACE_DEPTH_FORMAT_D24</span><span class="p">};</span>
 <span class="w">    </span><span class="n">ksGpuSampleCount</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">{</span><span class="n">KS_GPU_SAMPLE_COUNT_1</span><span class="p">};</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ksGpuWindow_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">driverInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">queueInfo</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">colorFormat</span><span class="p">,</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">,</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">,</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: Failed to create Context.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: Failed to create Context.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -1270,8 +1278,10 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMinorVersion</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrVersion</span><span class="w"> </span><span class="n">glApiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MAKE_VERSION</span><span class="p">(</span><span class="n">glMajorVersion</span><span class="p">,</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: The created OpenGL version doesn&#39;t meet the minimum requried API version for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="o">=</span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">		</span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="o">=</span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: The created OpenGL version &quot;</span><span class="o">&lt;&lt;</span><span class="n">glMajorVersion</span><span class="o">&lt;&lt;</span><span class="s">&quot;.&quot;</span><span class="o">&lt;&lt;</span><span class="n">glMinorVersion</span><span class="o">&lt;&lt;</span><span class="s">&quot; doesn&#39;t meet the minimum requried API version &quot;</span><span class="o">&lt;&lt;</span><span class="n">requiredMajorVersion</span><span class="o">&lt;&lt;</span><span class="s">&quot;.&quot;</span><span class="o">&lt;&lt;</span><span class="n">requiredMinorVersion</span><span class="o">&lt;&lt;</span><span class="s">&quot; for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT</span><span class="p">);</span>
@@ -1357,6 +1367,12 @@ Click the “Gear” icon to edit the file launch.json, and enter the following:
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL ES: The created OpenGL ES version doesn&#39;t meet the minimum requried API version for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT_SYNCHRONOUS</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageCallback</span><span class="p">(</span><span class="n">GLDebugCallback</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_FALSE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DEBUG_TYPE_ERROR</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_TRUE</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::~</span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>

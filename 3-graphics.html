@@ -137,8 +137,8 @@
 	<script >
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
-	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-	platform='vulkan';
+		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+		platform='vulkan';
 	}
 	</script>
 	<script defer src="_static/js/updateGraphicsAPI.js"></script>
@@ -246,8 +246,8 @@
 <script>
 	function chooseGraphicsAPI(graphicsApiName)
 	{
-		var graphicsApi = Cookies.get('graphicsapi')
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
+		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 	};
 </script>
