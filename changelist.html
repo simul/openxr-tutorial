@@ -27,7 +27,7 @@
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	console.log("platform = " + platform);
+	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
 	platform = "linux";
@@ -70,25 +70,28 @@
 	{
 		var platform = Cookies.get("platform");
 		var graphicsApi = Cookies.get("graphicsapi")
+		console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
 		window.limitAPIChoice=limitAPIChoice;
 		var newApi=graphicsApi;
 		if (platform == "windows")
 		{
-			if (graphicsApi == "opengles")
+			if (graphicsApi == "opengles"||graphicsApi==undefined)
 				newApi="vulkan";
 		}
 		if (platform == "linux")
 		{
-			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12")
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
 				newApi="vulkan";
 		}
-		if (platform == "android")
+		if (platform == "android"||graphicsApi==undefined)
 		{
 			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
 				newApi="vulkan";
 		}
+		console.log("newApi = "+newApi);
 		if (newApi != graphicsApi)
 		{
+			console.log("setting graphicsapi = "+newApi);
 			Cookies.set('graphicsapi', newApi,{ expires: 365})
 			graphicsApi=newApi;
 			updateGraphicsAPI();
@@ -266,7 +269,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : limitAPIChoice based on choice of platform.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : Default API based on platform if undefined.
+| **Sun 23 Jul** : limitAPIChoice based on choice of platform.
 | **Sun 23 Jul** : API-specific rendering for Chapter 4.
 | **Sun 23 Jul** : Chapter 4.1-4.4 text
 | **Fri 21 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
@@ -365,7 +369,6 @@
 | **Fri 23 Jun** : Removed unused libopenxr_loader.so libraries.
 | **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
 | **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
-| **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
 </pre></div>
 </div>
 </section>
