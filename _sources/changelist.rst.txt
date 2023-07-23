@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Sun 23 Jul** : Disabled API buttons in greyscale.
     | **Sun 23 Jul** : limitAPIChoice() functionality.
     | **Sun 23 Jul** : enable/disable API buttons depending on platform choice.
     | **Sun 23 Jul** : Default API based on platform if undefined.
@@ -101,4 +102,3 @@ Changelist
     | **Mon 26 Jun** : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.
     | **Mon 26 Jun** : Update Android to use FetchContent_Declare(). Minor fix in Chapter2.1/main.cpp.
     | **Fri 23 Jun** : Updated Chapter2.1/main.cpp to match code pattern.
-    | **Fri 23 Jun** : Removed unused libopenxr_loader.so libraries.
