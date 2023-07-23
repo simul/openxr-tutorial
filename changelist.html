@@ -38,14 +38,29 @@
 	if (platform == "windows")
 	{
 	$(".windows").show();
+	document.getElementById("selectopengles").disabled = true;
+	document.getElementById("selectd3d11").disabled = false;
+	document.getElementById("selectd3d12").disabled = false;
+	document.getElementById("selectvulkan").disabled = false;
+	document.getElementById("selectopengl").disabled = true;
 	}
 	if (platform == "linux")
 	{
 	$(".linux").show();
+	document.getElementById("selectd3d11").disabled = true;
+	document.getElementById("selectd3d12").disabled = true;
+	document.getElementById("selectopengles").disabled = true;
+	document.getElementById("selectvulkan").disabled = false;
+	document.getElementById("selectopengl").disabled = false;
 	}
 	if (platform == "android")
 	{
 	$(".android").show();
+	document.getElementById("selectd3d11").disabled = true;
+	document.getElementById("selectd3d12").disabled = true;
+	document.getElementById("selectopengles").disabled = false;
+	document.getElementById("selectvulkan").disabled = false;
+	document.getElementById("selectopengl").disabled = true;
 	}
 	var oldelements = document.getElementsByClassName('selected-platform');
 	for (i = 0; i < oldelements.length; ++i)
@@ -269,7 +284,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : Default API based on platform if undefined.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : enable/disable API buttons depending on platform choice.
+| **Sun 23 Jul** : Default API based on platform if undefined.
 | **Sun 23 Jul** : limitAPIChoice based on choice of platform.
 | **Sun 23 Jul** : API-specific rendering for Chapter 4.
 | **Sun 23 Jul** : Chapter 4.1-4.4 text
@@ -368,7 +384,6 @@
 | **Fri 23 Jun** : Updated Chapter2.1/main.cpp to match code pattern.
 | **Fri 23 Jun** : Removed unused libopenxr_loader.so libraries.
 | **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
-| **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
 </pre></div>
 </div>
 </section>
