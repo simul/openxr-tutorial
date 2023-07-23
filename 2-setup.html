@@ -28,44 +28,43 @@
 	<script >
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (typeof platform == 'undefined')
-		platform="linux";
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		var oldelements = document.getElementsByClassName('selected-platform');
-		for (i = 0; i < oldelements.length; ++i)
-		{
-			oldelements[i].classList.remove('selected-platform');
-		}
-		var element = document.getElementById('select' + platform);
-		if(element)
-		{
-			element.classList.add('selected-platform');
-		}
-		var element2 = document.getElementById('select' + platform + "-inline");
-		if(element2)
-		{
-			element2.classList.add('selected-platform');
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux";
+	}
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").hide();
+	if (platform == "windows")
+	{
+	$(".windows").show();
+	}
+	if (platform == "linux")
+	{
+	$(".linux").show();
+	}
+	if (platform == "android")
+	{
+	$(".android").show();
+	}
+	var oldelements = document.getElementsByClassName('selected-platform');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-platform');
+	}
+	var element = document.getElementById('select' + platform);
+	if(element)
+	{
+	element.classList.add('selected-platform');
+	}
+	var element2 = document.getElementById('select' + platform + "-inline");
+	if(element2)
+	{
+	element2.classList.add('selected-platform');
+	}
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -81,40 +80,27 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			platform="vulkan";
+			graphicsApi = "vulkan";
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
 		if (graphicsApi == "d3d11") {
 			$(".d3d11").show();
-			$(".d3d12").hide();
-			$(".opengl").hide();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "d3d12") {
-			$(".d3d11").hide();
 			$(".d3d12").show();
-			$(".opengl").hide();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "opengl") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
 			$(".opengl").show();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "opengles") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
-			$(".opengl").hide();
 			$(".opengles").show();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "vulkan") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
-			$(".opengl").hide();
-			$(".opengles").hide();
 			$(".vulkan").show();
 		}
 		var oldelements = document.getElementsByClassName('selected-graphics-api');
@@ -138,7 +124,7 @@
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
 		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-		platform='vulkan';
+		graphicsApi='vulkan';
 	}
 	</script>
 	<script defer src="_static/js/updateGraphicsAPI.js"></script>
@@ -148,7 +134,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -324,7 +310,7 @@ First, Create a directory where the code will go, we’ll call this the <em>work
 <p>Select your <em>workspace</em> folder, which is now empty.
 If you haven’t previously done so, install the CMake extension for Visual Studio Code.</p>
 </div>
-<div class="windows-linux docutils container" id="windows-linux-id-1">
+<div class="windows linux docutils container" id="windows-linux-id-1">
 <p class="rubric">Windows and Linux</p>
 <p>Now, create a text file in the <em>workspace</em> folder called <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and in it, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.15</span><span class="p">)</span>
@@ -703,7 +689,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </pre></div>
 </div>
 <p>Then, we create the actual platform specific main function (our entry point to the application), which will call <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>:</p>
-<div class="windows-linux docutils container" id="id3">
+<div class="windows linux docutils container" id="id3">
 <p class="rubric">Windows and Linux</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">();</span>

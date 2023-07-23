@@ -28,44 +28,43 @@
 	<script >
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (typeof platform == 'undefined')
-		platform="linux";
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		var oldelements = document.getElementsByClassName('selected-platform');
-		for (i = 0; i < oldelements.length; ++i)
-		{
-			oldelements[i].classList.remove('selected-platform');
-		}
-		var element = document.getElementById('select' + platform);
-		if(element)
-		{
-			element.classList.add('selected-platform');
-		}
-		var element2 = document.getElementById('select' + platform + "-inline");
-		if(element2)
-		{
-			element2.classList.add('selected-platform');
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform")
+	console.log("platform = " + platform);
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux";
+	}
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").hide();
+	if (platform == "windows")
+	{
+	$(".windows").show();
+	}
+	if (platform == "linux")
+	{
+	$(".linux").show();
+	}
+	if (platform == "android")
+	{
+	$(".android").show();
+	}
+	var oldelements = document.getElementsByClassName('selected-platform');
+	for (i = 0; i < oldelements.length; ++i)
+	{
+	oldelements[i].classList.remove('selected-platform');
+	}
+	var element = document.getElementById('select' + platform);
+	if(element)
+	{
+	element.classList.add('selected-platform');
+	}
+	var element2 = document.getElementById('select' + platform + "-inline");
+	if(element2)
+	{
+	element2.classList.add('selected-platform');
+	}
+	window.updatePlatform=updatePlatform;
 	}</script>
 	<script >
 	var platform = Cookies.get("platform")
@@ -81,40 +80,27 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			platform="vulkan";
+			graphicsApi = "vulkan";
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
 		if (graphicsApi == "d3d11") {
 			$(".d3d11").show();
-			$(".d3d12").hide();
-			$(".opengl").hide();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "d3d12") {
-			$(".d3d11").hide();
 			$(".d3d12").show();
-			$(".opengl").hide();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "opengl") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
 			$(".opengl").show();
-			$(".opengles").hide();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "opengles") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
-			$(".opengl").hide();
 			$(".opengles").show();
-			$(".vulkan").hide();
 		}
 		if (graphicsApi == "vulkan") {
-			$(".d3d11").hide();
-			$(".d3d12").hide();
-			$(".opengl").hide();
-			$(".opengles").hide();
 			$(".vulkan").show();
 		}
 		var oldelements = document.getElementsByClassName('selected-graphics-api');
@@ -138,7 +124,7 @@
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
 		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-		platform='vulkan';
+		graphicsApi='vulkan';
 	}
 	</script>
 	<script defer src="_static/js/updateGraphicsAPI.js"></script>
@@ -148,7 +134,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -472,200 +458,210 @@ controller’s position.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xr_linear_algebra.h&quot;</span>
 </pre></div>
 </div>
-<p>This provides a simple matrix and vector library for our render code.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="k">struct</span><span class="w"> </span><span class="nc">CameraConstants</span>
-<span class="w">	</span><span class="p">{</span>
-<span class="w">		</span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">worldViewProj</span><span class="p">;</span>
-<span class="w">		</span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
+<p>This provides a simple matrix and vector library for our render code. Now, after the code for DestroySession(), add the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">CameraConstants</span>
+<span class="p">{</span>
+<span class="w">	</span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">worldViewProj</span><span class="p">;</span>
+<span class="w">	</span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">CameraConstants</span><span class="w"> </span><span class="n">cameraConstants</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">CreateResources</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">// Vertices for a 1x1x1 meter cube. (Left/Right, Top/Bottom, Front/Back)</span>
+<span class="w">	</span><span class="k">constexpr</span><span class="w"> </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">vertexPositions</span><span class="p">[]</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
+<span class="w">										</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}};</span>
+
+<span class="w">	</span><span class="cp">#define CUBE_SIDE(V1, V2, V3, V4, V5, V6) vertexPositions[V6], vertexPositions[V5], vertexPositions[V4], vertexPositions[V3], vertexPositions[V2], vertexPositions[V1],</span>
+
+<span class="w">	</span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">cubeVertices</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">		</span><span class="c1">// -X</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">	 </span><span class="c1">// +X</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">	</span><span class="c1">// -Y</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">	</span><span class="c1">// +Y</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">	</span><span class="c1">// -Z</span>
+<span class="w">		</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">	</span><span class="c1">// +Z</span>
 <span class="w">	</span><span class="p">};</span>
-<span class="w">	</span><span class="n">CameraConstants</span><span class="w"> </span><span class="n">cameraConstants</span><span class="p">;</span>
-<span class="w">	</span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateResources</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">		</span><span class="c1">// Vertices for a 1x1x1 meter cube. (Left/Right, Top/Bottom, Front/Back)</span>
-<span class="w">		</span><span class="k">constexpr</span><span class="w"> </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">vertexPositions</span><span class="p">[]</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}</span>
-<span class="w">											</span><span class="p">,{</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">}};</span>
 
-<span class="w">		</span><span class="cp">#define CUBE_SIDE(V1, V2, V3, V4, V5, V6) vertexPositions[V6], vertexPositions[V5], vertexPositions[V4], vertexPositions[V3], vertexPositions[V2], vertexPositions[V1],</span>
+<span class="w">	</span><span class="c1">// Winding order is clockwise. Each side uses a different color.</span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">cubeIndices</span><span class="p">[</span><span class="mi">36</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="mi">4</span><span class="p">,</span><span class="w">  </span><span class="mi">5</span><span class="p">,</span><span class="w">   </span><span class="c1">// -X</span>
+<span class="w">		</span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="mi">7</span><span class="p">,</span><span class="w">  </span><span class="mi">8</span><span class="p">,</span><span class="w">  </span><span class="mi">9</span><span class="p">,</span><span class="w">  </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">  </span><span class="c1">// +X</span>
+<span class="w">		</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Y</span>
+<span class="w">		</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Y</span>
+<span class="w">		</span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Z</span>
+<span class="w">		</span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Z</span>
+<span class="w">	</span><span class="p">};</span>
+<span class="w">	</span><span class="n">vertexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
+<span class="w">		</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeVertices</span><span class="p">),</span>
+<span class="w">		 </span><span class="o">&amp;</span><span class="n">cubeVertices</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
 
-<span class="w">		</span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">cubeVertices</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">		</span><span class="c1">// -X</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">	 </span><span class="c1">// +X</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">	</span><span class="c1">// -Y</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">	</span><span class="c1">// +Y</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">	</span><span class="c1">// -Z</span>
-<span class="w">			</span><span class="n">CUBE_SIDE</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">	</span><span class="c1">// +Z</span>
-<span class="w">		</span><span class="p">};</span>
+<span class="w">	</span><span class="n">indexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
+<span class="w">		</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">INDEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeIndices</span><span class="p">),</span>
+<span class="w">		 </span><span class="o">&amp;</span><span class="n">cubeIndices</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
 
-<span class="w">		</span><span class="c1">// Winding order is clockwise. Each side uses a different color.</span>
-<span class="w">		</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">cubeIndices</span><span class="p">[</span><span class="mi">36</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">			</span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="mi">4</span><span class="p">,</span><span class="w">  </span><span class="mi">5</span><span class="p">,</span><span class="w">   </span><span class="c1">// -X</span>
-<span class="w">			</span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="mi">7</span><span class="p">,</span><span class="w">  </span><span class="mi">8</span><span class="p">,</span><span class="w">  </span><span class="mi">9</span><span class="p">,</span><span class="w">  </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">  </span><span class="c1">// +X</span>
-<span class="w">			</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Y</span>
-<span class="w">			</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Y</span>
-<span class="w">			</span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Z</span>
-<span class="w">			</span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Z</span>
-<span class="w">		</span><span class="p">};</span>
-<span class="w">		</span><span class="n">vertexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
-<span class="w">			</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeVertices</span><span class="p">),</span>
-<span class="w">			 </span><span class="o">&amp;</span><span class="n">cubeVertices</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
+<span class="w">	</span><span class="kt">float</span><span class="w"> </span><span class="n">colour</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
 
-<span class="w">		</span><span class="n">indexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
-<span class="w">			</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">INDEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeIndices</span><span class="p">),</span>
-<span class="w">			 </span><span class="o">&amp;</span><span class="n">cubeIndices</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
-
-<span class="w">		</span><span class="kt">float</span><span class="w"> </span><span class="n">colour</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
-
-<span class="w">		</span><span class="n">uniformBuffer_Frag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
-<span class="w">			</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">colour</span><span class="p">),</span><span class="w"> </span><span class="n">colour</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
-<span class="w">			</span>
-<span class="w">		</span><span class="n">uniformBuffer_Vert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
-<span class="w">			</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
+<span class="w">	</span><span class="n">uniformBuffer_Frag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
+<span class="w">		</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">colour</span><span class="p">),</span><span class="w"> </span><span class="n">colour</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
+<span class="w">		</span>
+<span class="w">	</span><span class="n">uniformBuffer_Vert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">(</span>
+<span class="w">		</span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">});</span>
 </pre></div>
 </div>
+<p>We’ve created a struct to represent a small uniform buffer (constant buffer), CameraConstants, and defined an instance to store its values globally. We’ve defined the start of the function CreateResources(), with the vertices and indices for a cube, and we’ve created the corresponding buffers with our choice of graphics API.</p>
+<p>We’ve also created a Uniform Buffer object, API-dependent, for CameraConstants.</p>
+<div class="opengl docutils container">
+<p>For OpenGL, we will use GLSL version 4.5: add this code to define our vertex and pixel shaders, and to create a shader program:</p>
+</div>
+<div class="vulkan docutils container">
+<p>For Vulkan, we will use GLSL version 4.5: add this code to define our vertex and pixel shaders, and to create a shader program:</p>
+</div>
 <div class="opengl vulkan docutils container">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				#version 450</span>
-<span class="s">				//Color Vertex Shader</span>
-<span class="s">				layout(std140, binding = 1) uniform CameraConstants</span>
-<span class="s">				{</span>
-<span class="s">					mat4 worldViewProj;</span>
-<span class="s">					mat4 world;</span>
-<span class="s">				};</span>
-<span class="s">				layout(location = 0) in vec4 a_Positions;</span>
-<span class="s">				void main()</span>
-<span class="s">				{</span>
-<span class="s">					gl_Position = worldViewProj*a_Positions;</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			#version 450</span>
+<span class="s">			//Color Vertex Shader</span>
+<span class="s">			layout(std140, binding = 1) uniform CameraConstants</span>
+<span class="s">			{</span>
+<span class="s">				mat4 worldViewProj;</span>
+<span class="s">				mat4 world;</span>
+<span class="s">			};</span>
+<span class="s">			layout(location = 0) in vec4 a_Positions;</span>
+<span class="s">			void main()</span>
+<span class="s">			{</span>
+<span class="s">				gl_Position = worldViewProj*a_Positions;</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				#version 450</span>
-<span class="s">				//Texture Fragment Shader</span>
-<span class="s">				layout(location = 0) out vec4 o_Color;</span>
-<span class="s">				layout(std140, binding = 0) uniform Data</span>
-<span class="s">				{</span>
-<span class="s">					vec4 color;</span>
-<span class="s">				} d_Data;</span>
-<span class="s">				void main()</span>
-<span class="s">				{</span>
-<span class="s">					o_Color = d_Data.color;</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
-<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			#version 450</span>
+<span class="s">			//Texture Fragment Shader</span>
+<span class="s">			layout(location = 0) out vec4 o_Color;</span>
+<span class="s">			layout(std140, binding = 0) uniform Data</span>
+<span class="s">			{</span>
+<span class="s">				vec4 color;</span>
+<span class="s">			} d_Data;</span>
+<span class="s">			void main()</span>
+<span class="s">			{</span>
+<span class="s">				o_Color = d_Data.color;</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">	</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL_ES</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				#version 310 es</span>
-<span class="s">				//Color Vertex Shader</span>
-<span class="s">				layout(std140, binding = 1) uniform CameraConstants</span>
-<span class="s">				{</span>
-<span class="s">					mat4 worldViewProj;</span>
-<span class="s">					mat4 world;</span>
-<span class="s">				};</span>
-<span class="s">				layout(location = 0) in highp vec4 a_Positions;</span>
-<span class="s">				layout(location = 0) out highp vec2 o_TexCoord;</span>
-<span class="s">				void main()</span>
-<span class="s">				{</span>
-<span class="s">					gl_Position = worldViewProj*a_Positions;</span>
-<span class="s">					int face=gl_VertexID/6;</span>
-<span class="s">					o_TexCoord=vec2(float(face),0);</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<p>For OpenGL ES, we will use GLSL version 3.1: add this code to define our vertex and pixel shaders, and to create a shader program:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL_ES</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			#version 310 es</span>
+<span class="s">			//Color Vertex Shader</span>
+<span class="s">			layout(std140, binding = 1) uniform CameraConstants</span>
+<span class="s">			{</span>
+<span class="s">				mat4 worldViewProj;</span>
+<span class="s">				mat4 world;</span>
+<span class="s">			};</span>
+<span class="s">			layout(location = 0) in highp vec4 a_Positions;</span>
+<span class="s">			layout(location = 0) out highp vec2 o_TexCoord;</span>
+<span class="s">			void main()</span>
+<span class="s">			{</span>
+<span class="s">				gl_Position = worldViewProj*a_Positions;</span>
+<span class="s">				int face=gl_VertexID/6;</span>
+<span class="s">				o_TexCoord=vec2(float(face),0);</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				#version 310 es</span>
-<span class="s">				//Color Fragment Shader</span>
-<span class="s">				layout(location = 0) in highp vec2 i_TexCoord;</span>
-<span class="s">				layout(location = 0) out highp vec4 o_Color;</span>
-<span class="s">				layout(std140, binding = 0) uniform Data</span>
-<span class="s">				{</span>
-<span class="s">					highp vec4 color;</span>
-<span class="s">				} d_Data;</span>
-<span class="s">				</span>
-<span class="s">				void main()</span>
-<span class="s">				{</span>
-<span class="s">					highp vec3 colours[6];</span>
-<span class="s">					colours[0]=vec3(1.0,0,0);</span>
-<span class="s">					colours[1]=vec3(0.1,0,0);</span>
-<span class="s">					colours[2]=vec3(0,1.0,0);</span>
-<span class="s">					colours[3]=vec3(0,0.1,0);</span>
-<span class="s">					colours[4]=vec3(0,0,1.0);</span>
-<span class="s">					colours[5]=vec3(0,0,0.1);</span>
-<span class="s">					int i=int(i_TexCoord.x);</span>
-<span class="s">					o_Color = d_Data.color;</span>
-<span class="s">					o_Color.rgb = colours[i];</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
-<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			#version 310 es</span>
+<span class="s">			//Color Fragment Shader</span>
+<span class="s">			layout(location = 0) in highp vec2 i_TexCoord;</span>
+<span class="s">			layout(location = 0) out highp vec4 o_Color;</span>
+<span class="s">			layout(std140, binding = 0) uniform Data</span>
+<span class="s">			{</span>
+<span class="s">				highp vec4 color;</span>
+<span class="s">			} d_Data;</span>
+<span class="s">			</span>
+<span class="s">			void main()</span>
+<span class="s">			{</span>
+<span class="s">				highp vec3 colours[6];</span>
+<span class="s">				colours[0]=vec3(1.0,0,0);</span>
+<span class="s">				colours[1]=vec3(0.1,0,0);</span>
+<span class="s">				colours[2]=vec3(0,1.0,0);</span>
+<span class="s">				colours[3]=vec3(0,0.1,0);</span>
+<span class="s">				colours[4]=vec3(0,0,1.0);</span>
+<span class="s">				colours[5]=vec3(0,0,0.1);</span>
+<span class="s">				int i=int(i_TexCoord.x);</span>
+<span class="s">				o_Color = d_Data.color;</span>
+<span class="s">				o_Color.rgb = colours[i];</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">	</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d11 d3d12 docutils container">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D11</span><span class="w">  </span><span class="o">||</span><span class="w"> </span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				//Color Vertex Shader</span>
-<span class="s">				</span>
-<span class="s">				struct VS_IN</span>
-<span class="s">				{</span>
-<span class="s">					float4 a_Positions : TEXCOORD0;</span>
-<span class="s">				};</span>
-<span class="s">				</span>
-<span class="s">				struct VS_OUT</span>
-<span class="s">				{</span>
-<span class="s">					float4 o_Position : SV_Position;</span>
-<span class="s">				};</span>
-<span class="s">				</span>
-<span class="s">				VS_OUT main(VS_IN IN)</span>
-<span class="s">				{</span>
-<span class="s">					VS_OUT OUT;</span>
-<span class="s">					OUT.o_Position = IN.a_Positions;</span>
-<span class="s">					return OUT;</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<p>For Direct 3D, add this code to define our vertex and pixel shaders:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D11</span><span class="w">  </span><span class="o">||</span><span class="w"> </span><span class="n">apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			//Color Vertex Shader</span>
+<span class="s">			</span>
+<span class="s">			struct VS_IN</span>
+<span class="s">			{</span>
+<span class="s">				float4 a_Positions : TEXCOORD0;</span>
+<span class="s">			};</span>
+<span class="s">			</span>
+<span class="s">			struct VS_OUT</span>
+<span class="s">			{</span>
+<span class="s">				float4 o_Position : SV_Position;</span>
+<span class="s">			};</span>
+<span class="s">			</span>
+<span class="s">			VS_OUT main(VS_IN IN)</span>
+<span class="s">			{</span>
+<span class="s">				VS_OUT OUT;</span>
+<span class="s">				OUT.o_Position = IN.a_Positions;</span>
+<span class="s">				return OUT;</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">			</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">				//Color Fragment Shader</span>
-<span class="s">				</span>
-<span class="s">				struct PS_OUT</span>
-<span class="s">				{</span>
-<span class="s">					float4 o_Color : SV_Target0;</span>
-<span class="s">				};</span>
-<span class="s">				</span>
-<span class="s">				cbuffer Data : register(b0)</span>
-<span class="s">				{</span>
-<span class="s">					float4 d_Data_color;</span>
-<span class="s">				};</span>
-<span class="s">				</span>
-<span class="s">				PS_OUT main()</span>
-<span class="s">				{</span>
-<span class="s">					PS_OUT OUT;</span>
-<span class="s">					OUT.o_Color = d_Data_color;</span>
-<span class="s">					return OUT;</span>
-<span class="s">				}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="w">			</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
-<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
+<span class="s">			//Color Fragment Shader</span>
+<span class="s">			</span>
+<span class="s">			struct PS_OUT</span>
+<span class="s">			{</span>
+<span class="s">				float4 o_Color : SV_Target0;</span>
+<span class="s">			};</span>
+<span class="s">			</span>
+<span class="s">			cbuffer Data : register(b0)</span>
+<span class="s">			{</span>
+<span class="s">				float4 d_Data_color;</span>
+<span class="s">			};</span>
+<span class="s">			</span>
+<span class="s">			PS_OUT main()</span>
+<span class="s">			{</span>
+<span class="s">				PS_OUT OUT;</span>
+<span class="s">				OUT.o_Color = d_Data_color;</span>
+<span class="s">				return OUT;</span>
+<span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">		</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">	</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">		</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PipelineCreateInfo</span><span class="w"> </span><span class="n">pipelineCI</span><span class="p">;</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">shaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">vertexShader</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentShader</span><span class="p">};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">VertexType</span><span class="o">::</span><span class="n">VEC4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TEXCOORD&quot;</span><span class="p">}};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">bindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)}};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">inputAssemblyState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PrimitiveTopology</span><span class="o">::</span><span class="n">TRIANGLE_LIST</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">rasterisationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PolygonMode</span><span class="o">::</span><span class="n">FILL</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CullMode</span><span class="o">::</span><span class="n">BACK</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">FrontFace</span><span class="o">::</span><span class="n">COUNTER_CLOCKWISE</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">multisampleState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthStencilState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CompareOp</span><span class="o">::</span><span class="n">GREATER</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
-<span class="w">		</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">colourBlendState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">LogicOp</span><span class="o">::</span><span class="n">NO_OP</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE_MINUS_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ColourComponentBit</span><span class="p">)</span><span class="mi">15</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}};</span>
-<span class="w">		</span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreatePipeline</span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PipelineCreateInfo</span><span class="w"> </span><span class="n">pipelineCI</span><span class="p">;</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">shaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">vertexShader</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentShader</span><span class="p">};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">VertexType</span><span class="o">::</span><span class="n">VEC4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TEXCOORD&quot;</span><span class="p">}};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">bindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)}};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">inputAssemblyState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PrimitiveTopology</span><span class="o">::</span><span class="n">TRIANGLE_LIST</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">rasterisationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PolygonMode</span><span class="o">::</span><span class="n">FILL</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CullMode</span><span class="o">::</span><span class="n">BACK</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">FrontFace</span><span class="o">::</span><span class="n">COUNTER_CLOCKWISE</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">multisampleState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthStencilState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CompareOp</span><span class="o">::</span><span class="n">GREATER</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">	</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">colourBlendState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">LogicOp</span><span class="o">::</span><span class="n">NO_OP</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE_MINUS_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ColourComponentBit</span><span class="p">)</span><span class="mi">15</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}};</span>
+<span class="w">	</span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreatePipeline</span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>

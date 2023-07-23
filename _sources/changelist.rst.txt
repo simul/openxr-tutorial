@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Sun 23 Jul** : API-specific rendering for Chapter 4.
     | **Sun 23 Jul** : Chapter 4.1-4.4 text
     | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Fri 21 Jul** : Adding xr_linear_algebra.h, a copy of xr_linear.h from the OpenXR SDK, with slight modification to compile with the current codebase. Chapter 4 code and text. Rendering a coloured cube at the left grip pose.
@@ -101,4 +102,3 @@ Changelist
     | **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
     | **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
     | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 20 Jun** : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.
