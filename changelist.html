@@ -26,7 +26,7 @@
 	<script >
 	function updatePlatform()
 	{
-	var platform = Cookies.get("platform")
+	var platform = Cookies.get("platform");
 	console.log("platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
@@ -62,8 +62,39 @@
 	{
 	element2.classList.add('selected-platform');
 	}
+	limitAPIChoice();
 	window.updatePlatform=updatePlatform;
-	}</script>
+	}
+	
+	function limitAPIChoice()
+	{
+		var platform = Cookies.get("platform");
+		var graphicsApi = Cookies.get("graphicsapi")
+		window.limitAPIChoice=limitAPIChoice;
+		var newApi=graphicsApi;
+		if (platform == "windows")
+		{
+			if (graphicsApi == "opengles")
+				newApi="vulkan";
+		}
+		if (platform == "linux")
+		{
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12")
+				newApi="vulkan";
+		}
+		if (platform == "android")
+		{
+			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+				newApi="vulkan";
+		}
+		if (newApi != graphicsApi)
+		{
+			Cookies.set('graphicsapi', newApi,{ expires: 365})
+			graphicsApi=newApi;
+			updateGraphicsAPI();
+		}
+	}
+	</script>
 	<script >
 	var platform = Cookies.get("platform")
 	if (platform==undefined) {
@@ -235,7 +266,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : API-specific rendering for Chapter 4.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sun 23 Jul** : limitAPIChoice based on choice of platform.
+| **Sun 23 Jul** : API-specific rendering for Chapter 4.
 | **Sun 23 Jul** : Chapter 4.1-4.4 text
 | **Fri 21 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Fri 21 Jul** : Adding xr_linear_algebra.h, a copy of xr_linear.h from the OpenXR SDK, with slight modification to compile with the current codebase. Chapter 4 code and text. Rendering a coloured cube at the left grip pose.
@@ -334,7 +366,6 @@
 | **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
 | **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
 | **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
-| **Tue 20 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 </pre></div>
 </div>
 </section>

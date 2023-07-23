@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Sun 23 Jul** : limitAPIChoice based on choice of platform.
     | **Sun 23 Jul** : API-specific rendering for Chapter 4.
     | **Sun 23 Jul** : Chapter 4.1-4.4 text
     | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Fri 23 Jun** : Changed Android CMake to use find_package() for openxr_loader. app/build.gradle: enabled prefab support for the OpenXR AAR.
     | **Fri 23 Jun** : Updated to Gradle 8.1 and AGP 7.4.2.
     | **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
-    | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
