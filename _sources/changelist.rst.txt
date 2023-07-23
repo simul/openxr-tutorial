@@ -2,6 +2,14 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Sun 23 Jul** : Chapter 4.1-4.4 text
+    | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 21 Jul** : Adding xr_linear_algebra.h, a copy of xr_linear.h from the OpenXR SDK, with slight modification to compile with the current codebase. Chapter 4 code and text. Rendering a coloured cube at the left grip pose.
+    | **Fri 21 Jul** : Finished implementing GraphicsAPI_D3D11. Not working. Extended DescriptorInfo.
+    | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 21 Jul** : Polling action states.
+    | **Fri 21 Jul** : Added SetBufferData() to GraphicsAPI.
+    | **Fri 21 Jul** : Added SetViewports() and SetScissors() to GraphicsAPI. Updated Chapter 4 and OpenGL ES shaders.
     | **Fri 21 Jul** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Fri 21 Jul** : Added implementation for GraphicsAPI_OpenGL_ES. Minor fixes to GraphicsAPI_OpenGL.
     | **Thu 20 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -94,11 +102,3 @@ Changelist
     | **Fri 23 Jun** : Improved readability of the find_apiLayer_extension section.
     | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 20 Jun** : Theme updates: use OpenXR purple, no grey highlight in subsections. Restore tabs to 4 in clang-format.
-    | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 20 Jun** : Added android-studio-build-run-toolbar.png
-    | **Tue 20 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 20 Jun** : Clang format changes.
-    | **Tue 20 Jun** : tutorial/introduction.rst: Vulkan variables are now in a table for Linux. Correction for D3D12 View Instancing and VK/GL/GLES multiview. Other minor fix ups.
-    | **Tue 20 Jun** : Minor fix ups for tutorial/setup.rst.
-    | **Tue 20 Jun** : Minor code revision.
-    | **Mon 19 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
