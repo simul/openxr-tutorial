@@ -700,19 +700,12 @@ For Android, we include our <code class="docutils literal notranslate"><span cla
 stop execution of your program when an error occurs, so you can see where it happened and fix it.
 We use this macro in the <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> function, which we will discuss in <a class="reference internal" href="5-extensions.html"><span class="doc">Chapter 5.2.</span></a></p>
 <p>In <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>, add:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define OPENXR_CHECK1(x, y)                                                                                                                           \</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define OPENXR_CHECK(x, y)                                                                                                                              \</span>
 <span class="cp">    {                                                                                                                                                   \</span>
 <span class="cp">        XrResult result = (x);                                                                                                                          \</span>
 <span class="cp">        if (!XR_SUCCEEDED(result)) {                                                                                                                    \</span>
-<span class="cp">            std::cout &lt;&lt; &quot;ERROR: OPENXR: &quot; &lt;&lt; int(result) &lt;&lt; &quot;(&quot; &lt;&lt; result &lt;&lt; &quot;) &quot; &lt;&lt; y &lt;&lt; std::endl; \</span>
-<span class="cp">        }                                                                                                                                               \</span>
-<span class="cp">    }</span>
-
-<span class="cp">#define OPENXR_CHECK(x, y)                                                                                                                              \</span>
-<span class="cp">    {                                                                                                                                                   \</span>
-<span class="cp">        XrResult result = (x);                                                                                                                          \</span>
-<span class="cp">        if (!XR_SUCCEEDED(result)) {                                                                                                                    \</span>
-<span class="cp">            std::cout &lt;&lt; &quot;ERROR: OPENXR: &quot; &lt;&lt; int(result) &lt;&lt; &quot;(&quot; &lt;&lt; (xrInstance ? GetXRErrorString(xrInstance, result) : &quot;&quot;) &lt;&lt; &quot;) &quot; &lt;&lt; y &lt;&lt; std::endl; \</span>
+<span class="cp">            std::cerr &lt;&lt; &quot;ERROR: OPENXR: &quot; &lt;&lt; int(result) &lt;&lt; &quot;(&quot; &lt;&lt; (xrInstance ? GetXRErrorString(xrInstance, result) : &quot;&quot;) &lt;&lt; &quot;) &quot; &lt;&lt; y &lt;&lt; std::endl; \</span>
+<span class="cp">            OpenXRDebugBreak();                                                                                                                               \</span>
 <span class="cp">        }                                                                                                                                               \</span>
 <span class="cp">    }</span>
 
