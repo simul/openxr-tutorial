@@ -85,7 +85,7 @@
 	var oldelements = document.getElementsByClassName('selected-platform');
 	console.log("selected-platform on "+oldelements.length+" elements.");
 		[].forEach.call(oldelements, function(el) {
-			el.classList.remove('selected-graphics-api');
+			el.classList.remove('selected-platform');
 			console.log("Removing selected-platform from "+el.id);
 		});
 	var element = document.getElementById('select' + platform);
@@ -311,7 +311,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Tab buttons: alpha, grayscale, brightness.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Fix incorrect class tag.
+| **Tue 25 Jul** : Tab buttons: alpha, grayscale, brightness.
 | **Tue 25 Jul** : Download link for HelperFunctions.h and force download links to open in new window.
 | **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
 | **Tue 25 Jul** : Log debugging layout.html
@@ -410,7 +411,6 @@
 | **Tue 04 Jul** : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. XR_DOCS_CHAPTER_... defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.
 | **Mon 03 Jul** : Added Outlines for Chapters 5.1 and 5.2.
 | **Mon 03 Jul** : Added Chapter Outlines for 3.1 and 3.2.
-| **Mon 03 Jul** : Updated the usage of std::vector&lt;&gt;::resize() in Chapter 2.1 and 2.2.
 </pre></div>
 </div>
 </section>

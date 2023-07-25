@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 25 Jul** : Fix incorrect class tag.
     | **Tue 25 Jul** : Tab buttons: alpha, grayscale, brightness.
     | **Tue 25 Jul** : Download link for HelperFunctions.h and force download links to open in new window.
     | **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 04 Jul** : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. XR_DOCS_CHAPTER_... defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.
     | **Mon 03 Jul** : Added Outlines for Chapters 5.1 and 5.2.
     | **Mon 03 Jul** : Added Chapter Outlines for 3.1 and 3.2.
-    | **Mon 03 Jul** : Updated the usage of std::vector<>::resize() in Chapter 2.1 and 2.2.
