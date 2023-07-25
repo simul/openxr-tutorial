@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
     | **Tue 25 Jul** : Log debugging layout.html
     | **Tue 25 Jul** : console logging for internal platform choice.
     | **Tue 25 Jul** : Don't highlight inline platform selection, test.
@@ -101,4 +102,3 @@ Changelist
     | **Mon 03 Jul** : Updated the usage of std::vector<>::resize() in Chapter 2.1 and 2.2.
     | **Fri 30 Jun** : Disabled jetifier in gradle.properties files.
     | **Fri 30 Jun** : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.
-    | **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.

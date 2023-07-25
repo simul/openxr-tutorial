@@ -37,11 +37,6 @@
 	var selectopengles=document.getElementById("selectopengles");
 	var selectvulkan=document.getElementById("selectvulkan");
 	var selectopengl=document.getElementById("selectopengl");
-	console.log("selectd3d11 = " + selectd3d11);
-	console.log("selectd3d12 = " + selectd3d12);
-	console.log("selectopengles = " + selectopengles);
-	console.log("selectvulkan = " + selectvulkan);
-	console.log("selectopengl = " + selectopengl);
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
@@ -88,14 +83,16 @@
 		selectopengl.disabled = true;
 	}
 	var oldelements = document.getElementsByClassName('selected-platform');
-	for (i = 0; i < oldelements.length; ++i)
-	{
-		oldelements[i].classList.remove('selected-platform');
-	}
+	console.log("selected-platform on "+oldelements.length+" elements.");
+		[].forEach.call(oldelements, function(el) {
+			el.classList.remove('selected-graphics-api');
+			console.log("Removing selected-platform from "+el.id);
+		});
 	var element = document.getElementById('select' + platform);
 	if(element)
 	{
 		element.classList.add('selected-platform');
+		console.log("Adding selected-platform to "+element.id);
 	}
 	var element2 = document.getElementById('select' + platform + "-inline");
 	if(element2)
@@ -180,10 +177,9 @@
 			$(".vulkan").show();
 		}
 		var oldelements = document.getElementsByClassName('selected-graphics-api');
-		for (i = 0; i < oldelements.length; ++i)
-		{
-			oldelements[i].classList.remove('selected-graphics-api');
-		}
+		[].forEach.call(oldelements, function(el) {
+			el.classList.remove('selected-graphics-api');
+		});
 		var element = document.getElementById('select' + graphicsApi);
 		if(element)
 		{
@@ -313,7 +309,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Log debugging layout.html
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
+| **Tue 25 Jul** : Log debugging layout.html
 | **Tue 25 Jul** : console logging for internal platform choice.
 | **Tue 25 Jul** : Don&#39;t highlight inline platform selection, test.
 | **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
@@ -412,7 +409,6 @@
 | **Mon 03 Jul** : Updated the usage of std::vector&lt;&gt;::resize() in Chapter 2.1 and 2.2.
 | **Fri 30 Jun** : Disabled jetifier in gradle.properties files.
 | **Fri 30 Jun** : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.
-| **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.
 </pre></div>
 </div>
 </section>
