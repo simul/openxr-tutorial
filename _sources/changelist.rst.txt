@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 25 Jul** : Don't highlight inline platform selection, test.
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
     | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
@@ -101,4 +102,3 @@ Changelist
     | **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.
     | **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
     | **Fri 30 Jun** : Minor text corrections to 2-setup.rst.
-    | **Fri 30 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main

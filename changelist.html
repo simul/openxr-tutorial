@@ -90,17 +90,17 @@
 	var oldelements = document.getElementsByClassName('selected-platform');
 	for (i = 0; i < oldelements.length; ++i)
 	{
-	oldelements[i].classList.remove('selected-platform');
+		oldelements[i].classList.remove('selected-platform');
 	}
 	var element = document.getElementById('select' + platform);
 	if(element)
 	{
-	element.classList.add('selected-platform');
+		element.classList.add('selected-platform');
 	}
 	var element2 = document.getElementById('select' + platform + "-inline");
 	if(element2)
 	{
-	element2.classList.add('selected-platform');
+		//element2.classList.add('selected-platform');
 	}
 	if(limitAPIChoice())
 		updateGraphicsAPI();
@@ -308,7 +308,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Don&#39;t highlight inline platform selection, test.
+| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 25 Jul** : Remove &lt;p&gt; tags nested in &lt;button&gt;s.
 | **Tue 25 Jul** : Remove &lt;p&gt; tags nested in &lt;button&gt;s.
 | **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
@@ -407,7 +408,6 @@
 | **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.
 | **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
 | **Fri 30 Jun** : Minor text corrections to 2-setup.rst.
-| **Fri 30 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 </pre></div>
 </div>
 </section>
