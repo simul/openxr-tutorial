@@ -102,7 +102,8 @@
 	var element2 = document.getElementById('select' + platform + "-inline");
 	if(element2)
 	{
-		//element2.classList.add('selected-platform');
+		element2.classList.add('selected-platform');
+		console.log("Adding selected-platform to "+element2.id);
 	}
 	if(limitAPIChoice())
 		updateGraphicsAPI();
@@ -1906,11 +1907,7 @@ In the <code class="docutils literal notranslate"><span class="pre">XrSessionBeg
 			</div>
 		</div>
 	</div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+  <script></script> 
 
 </body>
 </html>
