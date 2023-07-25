@@ -103,6 +103,10 @@
 		element2.classList.add('selected-platform');
 		console.log("Adding selected-platform to "+element2.id);
 	}
+	else
+	{
+		console.log('select' + platform + "-inline not found");
+	}
 	if(limitAPIChoice())
 		updateGraphicsAPI();
 	window.updatePlatform=updatePlatform;
@@ -309,7 +313,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : console logging for internal platform choice.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Log debugging layout.html
+| **Tue 25 Jul** : console logging for internal platform choice.
 | **Tue 25 Jul** : Don&#39;t highlight inline platform selection, test.
 | **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 25 Jul** : Remove &lt;p&gt; tags nested in &lt;button&gt;s.
@@ -408,7 +413,6 @@
 | **Fri 30 Jun** : Disabled jetifier in gradle.properties files.
 | **Fri 30 Jun** : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.
 | **Fri 30 Jun** : Test on Android (OpenGLES and Vulkan). WIP.
-| **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
 </pre></div>
 </div>
 </section>
