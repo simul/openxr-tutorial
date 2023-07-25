@@ -84,10 +84,13 @@
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
 	console.log("selected-platform on "+oldelements.length+" elements.");
-		[].forEach.call(oldelements, function(el) {
-			el.classList.remove('selected-platform');
-			console.log("Removing selected-platform from "+el.id);
-		});
+	while (oldelements.length > 0)
+	{
+		var el=oldelements.item(0);
+		el.classList.remove('selected-platform');
+		console.log("Removing selected-platform from "+el.id);
+		oldelements = document.querySelectorAll(".selected-platform");
+	}
 	var element = document.getElementById('select' + platform);
 	if(element)
 	{
@@ -180,10 +183,13 @@
 		}
 		var oldelements = document.querySelectorAll(".selected-graphics-api");
 		console.log("selected-platform on "+oldelements.length+" elements.");
-			[].forEach.call(oldelements, function(el) {
-				el.classList.remove('selected-graphics-api');
-				console.log("Removing selected-graphics-api from "+el.id);
-			});
+		while (oldelements.length > 0)
+		{
+			var el=oldelements.item(0);
+			el.classList.remove('selected-graphics-api');
+			console.log("Removing selected-graphics-api from "+el.id);
+			oldelements = document.querySelectorAll(".selected-graphics-api");
+		}
 		var element = document.getElementById('select' + graphicsApi);
 		if(element)
 		{
@@ -313,7 +319,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Alternative js to remove selected-platform class.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : js still fails to iterate the loop. Trying a while loop...
+| **Tue 25 Jul** : Alternative js to remove selected-platform class.
 | **Tue 25 Jul** : Fix incorrect class tag.
 | **Tue 25 Jul** : Tab buttons: alpha, grayscale, brightness.
 | **Tue 25 Jul** : Download link for HelperFunctions.h and force download links to open in new window.
@@ -412,7 +419,6 @@
 | **Tue 04 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 04 Jul** : Moved timetable into README.md
 | **Tue 04 Jul** : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. XR_DOCS_CHAPTER_... defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.
-| **Mon 03 Jul** : Added Outlines for Chapters 5.1 and 5.2.
 </pre></div>
 </div>
 </section>
