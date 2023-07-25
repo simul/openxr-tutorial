@@ -140,13 +140,15 @@
 			return true;
 		}
 		return false;
-	}
-	</script>
-	<script >
-	var platform = Cookies.get("platform")
-	if (platform==undefined) {
-	Cookies.set('platform', 'windows',{ expires: 365})
-	platform='windows';
+		}
+	function makeLinksOpenInNewWindow()
+	{ 
+		var download_hrefs = document.getElementsByClassName('reference download internal');
+		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			console.log("Adding target blank to "+el.id);
+		});
+		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
 	function updateGraphicsAPI()
 	{
@@ -205,7 +207,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -309,7 +311,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Download link for HelperFunctions.h and force download links to open in new window.
+| **Tue 25 Jul** : Believed fix for two-highlighted-buttons issue.
 | **Tue 25 Jul** : Log debugging layout.html
 | **Tue 25 Jul** : console logging for internal platform choice.
 | **Tue 25 Jul** : Don&#39;t highlight inline platform selection, test.
@@ -408,7 +411,6 @@
 | **Mon 03 Jul** : Added Chapter Outlines for 3.1 and 3.2.
 | **Mon 03 Jul** : Updated the usage of std::vector&lt;&gt;::resize() in Chapter 2.1 and 2.2.
 | **Fri 30 Jun** : Disabled jetifier in gradle.properties files.
-| **Fri 30 Jun** : Added GraphicsAPI_Type for runtime API selection. Updated main.cpp to switch between the Graphics APIs.
 </pre></div>
 </div>
 </section>
