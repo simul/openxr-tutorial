@@ -2,6 +2,18 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 25 Jul** : Remove hardcoded XR_RUNTIME_JSON putenv.
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 25 Jul** : Added code snippets for draft text for Chapter 3.2.
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 25 Jul** : Don't use tabs in clang-format.
+    | **Tue 25 Jul** : Merge pull request #16 from dnovillo/patch-1
+    | **Tue 25 Jul** : Finished Chapter 3.1 draft text, updated documentation tags in code.
+    | **Tue 25 Jul** : Fixed linking issue in Chapters 2 and 3. Fixed strncpy macros and compilation issue in Chapter3/main.cpp.
     | **Tue 25 Jul** : Chapter4 draft for review.
     | **Mon 24 Jul** : Separate RenderCube function.
     | **Sun 23 Jul** : Disabled API buttons in greyscale.
@@ -31,6 +43,7 @@ Changelist
     | **Thu 20 Jul** : Fixed build errors for GraphicsAPI_OpenGL.
     | **Thu 20 Jul** : Renamed some methods in GraphicsAPI. Cleaned up samplers in GraphicsAPI_OpenGL.
     | **Thu 20 Jul** : Init commit for GraphicsAPI_OpenGL fully complete. Not Tested!
+    | **Wed 19 Jul** : Update 3-graphics.rst
     | **Wed 19 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 19 Jul** : Partial text for Chapter 3.1.
     | **Wed 19 Jul** : Cookie lowercase names.
@@ -89,16 +102,3 @@ Changelist
     | **Wed 28 Jun** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Wed 28 Jun** : Update /thirdparty to remove old OpenXR SDK for PC and added openxr_loader_manifest_only-1.0.27.aar
     | **Wed 28 Jun** : Unified CMakeLists.txt for Chapter2.1 and move Android build folder.
-    | **Tue 27 Jun** : Update README.md
-    | **Tue 27 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 27 Jun** : Fix content padding.
-    | **Tue 27 Jun** : Added FetchContent_Declare() for Linux build. Not tested!
-    | **Tue 27 Jun** : Updated Window build to use FetchContent_Populate()
-    | **Tue 27 Jun** : Updated intent-filter in AndroidManifest.xml to use org.khronos.openxr.intent.category.IMMERSIVE_HMD.
-    | **Tue 27 Jun** : Updated draft text of Chapter 1.2.
-    | **Mon 26 Jun** : p and figure limited to 800px, so code alone can expand horizontally.
-    | **Mon 26 Jun** : Move tab highlight code to updatePlatform.
-    | **Mon 26 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Mon 26 Jun** : Styling: purple breadcrumb ribbon at top. Platform selection tabs instead of radio buttons. Icon for introduction from getemoji.com.
-    | **Mon 26 Jun** : Added more to Chapter 1.2 draft text.
-    | **Mon 26 Jun** : Added Chapter 2.2 and 2.3 outlines. Minor clean up in setup.rst.

@@ -608,24 +608,29 @@ controller’s position.</p>
 <span class="s">                   mat4 modelViewProj;</span>
 <span class="s">                   mat4 model;</span>
 <span class="s">			};</span>
-<span class="s">			layout(location = 0) in vec4 a_Positions;</span>
+<span class="s">			layout(location = 0) in highp vec4 a_Positions;</span>
+<span class="s">			layout(location = 0) out highp vec2 o_TexCoord;</span>
 <span class="s">			void main()</span>
 <span class="s">			{</span>
 <span class="s">				gl_Position = modelViewProj*a_Positions;</span>
+<span class="s">				int face=gl_VertexID/6;</span>
+<span class="s">				o_TexCoord=vec2(float(face),0);</span>
 <span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="w">		</span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
 <span class="w">		</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
 <span class="s">			#version 450</span>
 <span class="s">			//Texture Fragment Shader</span>
-<span class="s">			layout(location = 0) out vec4 o_Color;</span>
+<span class="s">			layout(location = 0) in highp vec2 i_TexCoord;</span>
+<span class="s">			layout(location = 0) out highp vec4 o_Color;</span>
 <span class="s">			layout(std140, binding = 0) uniform Data</span>
 <span class="s">			{</span>
-<span class="s">				vec4 color;</span>
+<span class="s">				highp vec4 colours[6];</span>
 <span class="s">			} d_Data;</span>
 <span class="s">			void main()</span>
 <span class="s">			{</span>
-<span class="s">				o_Color = d_Data.color;</span>
+<span class="s">				int i=int(i_TexCoord.x);</span>
+<span class="s">				o_Color = d_Data.colours[i];</span>
 <span class="s">			}</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="w">		</span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 <span class="w">	</span><span class="p">}</span>
