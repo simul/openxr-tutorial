@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
+    | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
+    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 25 Jul** : Chapter2 fixups to match later code. XR_RUNTIME_JSON in main CMakeLists.txt Add older tags to Chapter4.
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -97,8 +102,3 @@ Changelist
     | **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
     | **Fri 30 Jun** : Minor text corrections to 2-setup.rst.
     | **Fri 30 Jun** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Fri 30 Jun** : Added Chapter 2.2 code. Multiple Graphics APIs added. Test on Windows only (D3D11, D3D12, OpenGL and Vulkan). WIP.
-    | **Wed 28 Jun** : Rename rst files to include chapter numbers.
-    | **Wed 28 Jun** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Wed 28 Jun** : Update /thirdparty to remove old OpenXR SDK for PC and added openxr_loader_manifest_only-1.0.27.aar
-    | **Wed 28 Jun** : Unified CMakeLists.txt for Chapter2.1 and move Android build folder.

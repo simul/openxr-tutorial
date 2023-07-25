@@ -146,9 +146,6 @@
 	Cookies.set('platform', 'windows',{ expires: 365})
 	platform='windows';
 	}
-	</script>
-	<script defer src="_static/js/updatePlatform.js"></script>
-	<script>
 	function updateGraphicsAPI()
 	{
 		var graphicsApi = Cookies.get("graphicsapi")
@@ -201,7 +198,6 @@
 		graphicsApi='vulkan';
 	}
 	</script>
-	<script defer src="_static/js/updateGraphicsAPI.js"></script>
 	<style>
 	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 	@import url('https://fonts.cdnfonts.com/css/menlo');
@@ -312,7 +308,12 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 25 Jul** : Remove &lt;p&gt; tags nested in &lt;button&gt;s.
+| **Tue 25 Jul** : Remove &lt;p&gt; tags nested in &lt;button&gt;s.
+| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 25 Jul** : Chapter2 fixups to match later code. XR_RUNTIME_JSON in main CMakeLists.txt Add older tags to Chapter4.
+| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
 | **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 25 Jul** : Remove hardcoded XR_RUNTIME_JSON putenv.
@@ -407,11 +408,6 @@
 | **Fri 30 Jun** : Fixed destroying Vulkan objects in class GraphicsAPI_Vulkan.
 | **Fri 30 Jun** : Minor text corrections to 2-setup.rst.
 | **Fri 30 Jun** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Fri 30 Jun** : Added Chapter 2.2 code. Multiple Graphics APIs added. Test on Windows only (D3D11, D3D12, OpenGL and Vulkan). WIP.
-| **Wed 28 Jun** : Rename rst files to include chapter numbers.
-| **Wed 28 Jun** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
-| **Wed 28 Jun** : Update /thirdparty to remove old OpenXR SDK for PC and added openxr_loader_manifest_only-1.0.27.aar
-| **Wed 28 Jun** : Unified CMakeLists.txt for Chapter2.1 and move Android build folder.
 </pre></div>
 </div>
 </section>

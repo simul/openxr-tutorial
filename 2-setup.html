@@ -148,9 +148,6 @@
 	Cookies.set('platform', 'windows',{ expires: 365})
 	platform='windows';
 	}
-	</script>
-	<script defer src="_static/js/updatePlatform.js"></script>
-	<script>
 	function updateGraphicsAPI()
 	{
 		var graphicsApi = Cookies.get("graphicsapi")
@@ -203,7 +200,6 @@
 		graphicsApi='vulkan';
 	}
 	</script>
-	<script defer src="_static/js/updateGraphicsAPI.js"></script>
 	<style>
 	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 	@import url('https://fonts.cdnfonts.com/css/menlo');
@@ -336,47 +332,45 @@
 <div class='select-platform-container-inline'>
 	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
 		<img src="_static/css/windows-mono.svg" alt="Windows" />
-		<p>Windows</p>
+		Windows
 	</button>
 	<button class="select-platform-inline" id='selectlinux-inline' onclick="choosePlatform('linux')">
 		<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
-		<p>Linux</p>
+		Linux
 	</button>
 	<button class="select-platform-inline" id='selectandroid-inline' onclick="choosePlatform('android')">
 		<img src="_static/css/android-original.svg" alt="Android" />
-		<p>Android</p>
+		Android
 	</button>
 </div>
 <div class='select-graphics-api-container-inline'></div>
 	<button class="select-graphics-api-inline" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
 		<img src="_static/css/d3d11.png" alt="DirectX 11" />
-		<p>DirectX 11</p>
+		DirectX 11
 	</button>
 	<button class="select-graphics-api-inline" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
 		<img src="_static/css/d3d12.png" alt="DirectX 12" />
-		<p>DirectX 12</p>
+		DirectX 12
 	</button>
 	<button class="select-graphics-api-inline" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
 		<img src="_static/css/opengl.png" alt="OpenGL" />
-		<p>OpenGL</p>
+		OpenGL
 	</button>
 	<button class="select-graphics-api-inline" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
 		<img src="_static/css/opengles.png" alt="OpenGL ES" />
-		<p>OpenGL ES</p>
+		OpenGL ES
 	</button>
 	<button class="select-graphics-api-inline" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
 		<img src="_static/css/vulkan.png" alt="Vulkan" />
-		<p>Vulkan</p>
+		Vulkan
 	</button>
 </div>
 
 <div class="windows docutils container" id="windows-id-1">
-<p class="rubric">Windows</p>
 <p>For the Windows OpenXR project, we’ll use CMake to create some project files for Visual Studio.
 First, create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
 </div>
 <div class="linux docutils container" id="linux-id-1">
-<p class="rubric">Linux</p>
 <p>You are free to use any code editor and/or compiler; this tutorial will use Visual Studio Code.
 For the Linux OpenXR project, we’ll use CMake alongside Visual Studio Code to build the project.
 First, Create a directory where the code will go, we’ll call this the <em>workspace</em> directory. Open Visual Studio Code and from the File menu, select “Open Folder…”</p>
@@ -388,7 +382,6 @@ First, Create a directory where the code will go, we’ll call this the <em>work
 If you haven’t previously done so, install the CMake extension for Visual Studio Code.</p>
 </div>
 <div class="windows linux docutils container" id="windows-linux-id-1">
-<p class="rubric">Windows and Linux</p>
 <p>Now, create a text file in the <em>workspace</em> folder called <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and in it, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.15</span><span class="p">)</span>
 <span class="nb">project</span><span class="p">(</span><span class="s">openxr-tutorial</span><span class="p">)</span>
@@ -473,6 +466,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
 <span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
+<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
 <span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
 <span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPIs.h&quot;</span>
 <span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
@@ -519,6 +513,10 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 
 <span class="nb">else</span><span class="p">()</span>
 <span class="w">    </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="w">		</span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
+<span class="w">	</span><span class="nb">endif</span><span class="p">()</span>
 <span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
 
@@ -754,7 +752,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">OpenXRTutorialChapter2</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">VULKAN</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">OPENGL</span><span class="p">);</span>
 <span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
@@ -770,8 +768,8 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </div>
 <div class="android docutils container" id="id4">
 <p class="rubric">Android</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">androidApp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">AndroidAppState</span><span class="w"> </span><span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">androidAppState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidApp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">AndroidAppState</span><span class="w"> </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidAppState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">android_main</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">app</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Allow interaction with JNI and the JVM on this thread.</span>
@@ -779,6 +777,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="w">    </span><span class="n">JNIEnv</span><span class="w"> </span><span class="o">*</span><span class="n">env</span><span class="p">;</span>
 <span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">vm</span><span class="o">-&gt;</span><span class="n">AttachCurrentThread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
 
+<span class="w">	</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span><span class="w">  </span><span class="c1">// Dummy XrInstance variable for OPENXR_CHECK macro.</span>
 <span class="w">    </span><span class="n">PFN_xrInitializeLoaderKHR</span><span class="w"> </span><span class="n">xrInitializeLoaderKHR</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">XR_NULL_HANDLE</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrInitializeLoaderKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrInitializeLoaderKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">xrInitializeLoaderKHR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -790,10 +789,10 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="w">    </span><span class="n">loaderInitializeInfoAndroid</span><span class="p">.</span><span class="n">applicationContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrInitializeLoaderKHR</span><span class="p">((</span><span class="n">XrLoaderInitInfoBaseHeaderKHR</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">loaderInitializeInfoAndroid</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to initialise Loader for Android.&quot;</span><span class="p">);</span>
 
-<span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">androidAppState</span><span class="p">;</span>
-<span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">onAppCmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">AndroidAppHandleCmd</span><span class="p">;</span>
+<span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidAppState</span><span class="p">;</span>
+<span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">onAppCmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">AndroidAppHandleCmd</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">OpenXRTutorialChapter2</span><span class="o">::</span><span class="n">androidApp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidApp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
