@@ -247,26 +247,26 @@
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">👾 3 Graphics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">Creating Swapchains</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">XrViewConfigurationView</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainformats">xrEnumerateSwapchainFormats</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrcreateswapchain">xrCreateSwapchain</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainimages">xrEnumerateSwapchainImages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#create-depth-image-and-image-views">Create Depth Image And Image Views</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrdestroyswapchain">xrDestroySwapchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">3.1 Creating Swapchains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">3.1.1 XrViewConfigurationView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainformats">3.1.2 xrEnumerateSwapchainFormats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrcreateswapchain">3.1.3 xrCreateSwapchain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainimages">3.1.4 xrEnumerateSwapchainImages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-depth-image-and-image-views">3.1.5 Create Depth Image And Image Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrdestroyswapchain">3.1.6 xrDestroySwapchain</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#building-a-renderloop">Building a RenderLoop</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateenvironmentblendmodes">xrEnumerateEnvironmentBlendModes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrcreatereferencespace">xrCreateReferenceSpace</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#renderframe">RenderFrame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#renderlayer">RenderLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-a-renderloop">3.2 Building a RenderLoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xrenumerateenvironmentblendmodes">3.2.1 xrEnumerateEnvironmentBlendModes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrcreatereferencespace">3.2.2 xrCreateReferenceSpace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#renderframe">3.2.3 RenderFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#renderlayer">3.2.4 RenderLayer</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">🕹 4 Interactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a></li>
 </ul>
 
         </div>
@@ -379,14 +379,13 @@
 
 <p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demostrate its interaction with all the Graphics APIs.</p>
 <section id="creating-swapchains">
-<h2>Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
+<h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
 <p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
-<p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for an OpenXR application we don’t use the API specific swapchain, which can be tied closely the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, have multiple views that need to be rendered to create the XR experience. Listed below are a few scenarios with differing view counts:</p>
+<p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for an OpenXR application we don’t use the API-specific swapchain, which can be tied closely the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, have multiple views that need to be rendered to create the XR experience. Listed below are a few scenarios with differing view counts:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>1 view  - AR viewer on a mobile device.</p></li>
 <li><p>2 views - VR head mounted display.</p></li>
-<li><p>6 views - Multi-wall projection-based (CAVE-like) VR system.</p></li>
 </ul>
 </div></blockquote>
 <p>Orthogonal to multiple views is the layering of multiple rendered images or camera feeds. You could, for a example, have a background that is a video pass-through of your enviroment, a stereo view of rendering graphics and quad overlay of a HUD or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views.</p>
@@ -441,7 +440,7 @@
 </pre></div>
 </div>
 <section id="xrviewconfigurationview">
-<h3>XrViewConfigurationView<a class="headerlink" href="#xrviewconfigurationview" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.1 XrViewConfigurationView<a class="headerlink" href="#xrviewconfigurationview" title="Permalink to this heading">¶</a></h3>
 <p>The first thing we need to do is get all of the views available to our view configuration. It is worth just parsing the name of this type: <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. I break the typename up as follow “XrViewConfiguration” - “View”, where it relates to one view in the view configuration, which may contain multiple views. We call <code class="docutils literal notranslate"><span class="pre">xrEnumerateViewConfigurationViews()</span></code> twice, first to get the count of the views in the view configuration, and second to fill in the data to the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrViewConfigurationView&gt;</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetViewConfigurationViews</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewConfigurationViewSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -453,7 +452,7 @@
 </div>
 </section>
 <section id="xrenumerateswapchainformats">
-<h3>xrEnumerateSwapchainFormats<a class="headerlink" href="#xrenumerateswapchainformats" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.2 xrEnumerateSwapchainFormats<a class="headerlink" href="#xrenumerateswapchainformats" title="Permalink to this heading">¶</a></h3>
 <p>Due to way that OpenXR and its composite operate, there are certain preferred image formats that should be used by the swapchain. When calling <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code>, the <code class="docutils literal notranslate"><span class="pre">XrSession</span></code> and alongwith the Graphics API will return an array of API-specific formats ordered in preference. <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code> takes a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> values. The use of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> is a simple type cast from a <code class="docutils literal notranslate"><span class="pre">DXGI_FORMAT</span></code>, <code class="docutils literal notranslate"><span class="pre">GLenum</span></code> or a <code class="docutils literal notranslate"><span class="pre">VkFormat</span></code>. The runtime “should support <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span></code> and <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span> <span class="pre">sRGB</span></code> formats if possible” (<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#swapchain-image-management">OpenXR Specification 10.1. Swapchain Image Management</a>).</p>
 <p>Linear or sRGB color space? OpenXR’s compositor performs all blend operations in a linear color space (i.e. the values have not been gamma encoded). Most gamma-encoding operations are algebraically non-linear, so you can’t composite the values with simple addition or multiplication operations. If you wish to use an sRGB color format, you must use an API-specific sRGB color format such as <code class="docutils literal notranslate"><span class="pre">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span></code>, <code class="docutils literal notranslate"><span class="pre">GL_SRGB8_ALPHA8</span></code> or <code class="docutils literal notranslate"><span class="pre">VK_FORMAT_R8G8B8A8_SRGB</span></code>. The OpenXR runtime will automatically do sRGB-to-linear color space conversions when reading the image. There are two issues with this:</p>
 <ol class="arabic simple">
@@ -470,7 +469,7 @@
 <p>Next, we do some checks to confirm that the views in the view configuration are the same size and thus suitable for stereo rendering. With this check done, we can alias to views together when create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. We resize our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage</span></code> structure and enter a for each loop to create all required resources.</p>
 </section>
 <section id="xrcreateswapchain">
-<h3>xrCreateSwapchain<a class="headerlink" href="#xrcreateswapchain" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.3 xrCreateSwapchain<a class="headerlink" href="#xrcreateswapchain" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
@@ -696,7 +695,7 @@
 <p>We call <code class="docutils literal notranslate"><span class="pre">xrCreateSwapchain()</span></code> to create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, which, if successful, will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> will be non-null. We copy our swapchain format to our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::swapchainFormat</span></code> for later usage.</p>
 </section>
 <section id="xrenumerateswapchainimages">
-<h3>xrEnumerateSwapchainImages<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.4 xrEnumerateSwapchainImages<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
 <p>Now that we have created the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, we need to get access to the all images in the swapchain. We first call <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainImages()</span></code> to get the count of the images in the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. Next, we set up an array of structures to store the images from the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. In this tutorial, this array of structures, which stores the swapchains images, are stored in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class. We do this, because OpenXR will return to the application an array of structures that contain the API-specific handles to the swapchain images. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> is a virtual method implemented by each graphics API, which resizes an API-specific <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImage...KHR&gt;</span></code> and returns a pointer to the first element in that array casting it to a <code class="docutils literal notranslate"><span class="pre">XrSwapchainImageBaseHeader</span> <span class="pre">*</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainImages</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Images.&quot;</span><span class="p">);</span>
@@ -796,7 +795,7 @@
 </div>
 </section>
 <section id="create-depth-image-and-image-views">
-<h3>Create Depth Image And Image Views<a class="headerlink" href="#create-depth-image-and-image-views" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.5 Create Depth Image And Image Views<a class="headerlink" href="#create-depth-image-and-image-views" title="Permalink to this heading">¶</a></h3>
 <p>Next, we create a depth image so that we can correctly render 3D prespective graphics to the view. In this tutorial, we have a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ImageCreateInfo</span></code> structure and virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateImage()</span></code> that creates the API-specific objects.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageCreateInfo</span><span class="w"> </span><span class="n">depthImageCI</span><span class="p">;</span>
 <span class="n">depthImageCI</span><span class="p">.</span><span class="n">dimension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
@@ -909,7 +908,7 @@
 We store our newly created color image views for the swapchain in <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::colorImageViews</span></code> and the depth image view in <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::depthImageView</span></code> for later usage when rendering.</p>
 </section>
 <section id="xrdestroyswapchain">
-<h3>xrDestroySwapchain<a class="headerlink" href="#xrdestroyswapchain" title="Permalink to this heading">¶</a></h3>
+<h3>3.1.6 xrDestroySwapchain<a class="headerlink" href="#xrdestroyswapchain" title="Permalink to this heading">¶</a></h3>
 <p>When the main render loop has finished and the application is shutting down, we need to destroy our created <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. This is done by calling <code class="docutils literal notranslate"><span class="pre">xrDestroySwapchain()</span></code> with the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> and it will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> if successful. At the same time, we destroy the associated depth image and all of the views that the graphics API created. In this tutorial, we use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImageView()</span></code> to destroy those objects.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">DestroySwapchain</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SwapchainAndDepthImage</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">swapchainAndDepthImages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -929,20 +928,83 @@ We store our newly created color image views for the swapchain in <code class="d
 </section>
 </section>
 <section id="building-a-renderloop">
-<h2>Building a RenderLoop<a class="headerlink" href="#building-a-renderloop" title="Permalink to this heading">¶</a></h2>
+<h2>3.2 Building a RenderLoop<a class="headerlink" href="#building-a-renderloop" title="Permalink to this heading">¶</a></h2>
+<p>With the most of the OpenXR objects now set up, we can now turn our attention to rendering graphics. You will likely have your own rendering solution in place with things hooked up to OpenXR and ready to get going. There are two further OpenXR object that need to render; pertaining to where the user is and what the user sees of the external environment around them. Namely, these are the ‘environment blend mode’ and the ‘reference space’.</p>
+<p>Then, with those final pieces in place, we can look to the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLoop()</span></code> code to invoke graphics work on the GPU and present it back to OpenXR and its compositor through the use of composition layers and within the scope of an XR Frame.</p>
 <section id="xrenumerateenvironmentblendmodes">
-<h3>xrEnumerateEnvironmentBlendModes<a class="headerlink" href="#xrenumerateenvironmentblendmodes" title="Permalink to this heading">¶</a></h3>
+<h3>3.2.1 xrEnumerateEnvironmentBlendModes<a class="headerlink" href="#xrenumerateenvironmentblendmodes" title="Permalink to this heading">¶</a></h3>
+<p>Environment blend is done at the final stage after the compositor has flatten and blended all the compositing layer passed to OpenXR at the <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. The enum describes how OpenXR should blend the rendering view with the external environment behind the screen(s). The most common usages are as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>VR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span></code> is the most common as not all VR HMD have pass through functional either through cameras or optics. VR HMD that do have pass through can suppt other blend modes.</p></li>
+<li><p>AR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span></code> or <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ALPHA_BLEND</span></code> are most common to composite rendering rendered image with external environment.</p></li>
+</ul>
+</div></blockquote>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XrEnvironmentBlendMode</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_ENVIRONMENT_BLEND_MODE_OPAQUE</p></td>
+<td><p>The composition layers will be displayed with no view of the physical world behind them.
+The composited image will be interpreted as an RGB image, ignoring the composited alpha channel.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</p></td>
+<td><p>The composition layers will be additively blended with the real world behind the display.
+The composited image will be interpreted as an RGB image, ignoring the composited alpha channel during the additive blending.
+This will cause black composited pixels to appear transparent.</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_ENVIRONMENT_BLEND_MODE_ALPHA_BLEND</p></td>
+<td><p>The composition layers will be alpha-blended with the real world behind the display.
+The composited image will be interpreted as an RGBA image, with the composited alpha channel determining each pixel’s
+level of blending with the real world behind the display.</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#compositing">XrEnvironmentBlendMode - Enumerant Descriptions</a>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrEnvironmentBlendMode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ALPHA_BLEND</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x7FFFFFFF</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrEnvironmentBlendMode</span><span class="p">;</span>
+</pre></div>
+</div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetEnvironmentBlendModes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemID</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">environmentBlendModes</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">environmentBlendModeSize</span><span class="p">);</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemID</span><span class="p">,</span><span class="w"> </span><span class="n">viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="n">environmentBlendModes</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">environmentBlendModes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">    </span><span class="c1">// Pick the first application supported blend mode supported by the hardware.</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">applicationEnvironmentBlendModes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">environmentBlendModes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">environmentBlendModes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">mode</span><span class="p">)</span>
+<span class="w">              </span><span class="o">!=</span><span class="w"> </span><span class="n">environmentBlendModes</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>We enumerate the environment blend modes as shown above. This function take a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s as multiple environment blend modes could be available to the system. The runtime will return the array ordered by its preference for the system.</p>
 </section>
 <section id="xrcreatereferencespace">
-<h3>xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
+<h3>3.2.2 xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
+<p>Now that OpenXR know what the user should see, we need to tell OpenXR from where should the user by seeing. This is where the referene space comes in.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrReferenceSpaceType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_VIEW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_LOCAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_STAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_UNBOUNDED_MSFT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000038000</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_COMBINED_EYE_VARJO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000121000</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_LOCAL_FLOOR_EXT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000426000</span><span class="p">,</span>
+<span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_MAX_ENUM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x7FFFFFFF</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrReferenceSpaceType</span><span class="p">;</span>
+</pre></div>
+</div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateReferenceSpace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrReferenceSpaceCreateInfo</span><span class="w"> </span><span class="n">referenceSpaceCI</span><span class="p">{</span><span class="n">XR_TYPE_REFERENCE_SPACE_CREATE_INFO</span><span class="p">};</span>
 <span class="w">    </span><span class="n">referenceSpaceCI</span><span class="p">.</span><span class="n">referenceSpaceType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_REFERENCE_SPACE_TYPE_LOCAL</span><span class="p">;</span>
@@ -953,7 +1015,7 @@ We store our newly created color image views for the swapchain in <code class="d
 </div>
 </section>
 <section id="renderframe">
-<h3>RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
+<h3>3.2.3 RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RenderFrame</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
@@ -978,7 +1040,7 @@ We store our newly created color image views for the swapchain in <code class="d
 
 <span class="w">        </span><span class="n">XrFrameEndInfo</span><span class="w"> </span><span class="n">frameEndInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_END_INFO</span><span class="p">};</span>
 <span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">displayTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">;</span>
-<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">environmentBlendModes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">environmentBlendMode</span><span class="p">;</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rendered</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">            </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="o">**&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">layers</span><span class="p">);</span>
@@ -993,7 +1055,7 @@ We store our newly created color image views for the swapchain in <code class="d
 </div>
 </section>
 <section id="renderlayer">
-<h3>RenderLayer<a class="headerlink" href="#renderlayer" title="Permalink to this heading">¶</a></h3>
+<h3>3.2.4 RenderLayer<a class="headerlink" href="#renderlayer" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">views</span><span class="p">(</span><span class="n">viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW</span><span class="p">});</span>
 
@@ -1036,7 +1098,22 @@ We store our newly created color image views for the swapchain in <code class="d
 
 <span class="w">        </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">BeginRendering</span><span class="p">();</span>
 
-<span class="w">        </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="c1">// VR mode background</span>
+<span class="w">              </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">1.0f</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="c1">// AR mode background</span>
+<span class="w">              </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">0.17f</span><span class="p">,</span>
+<span class="w">                                      </span><span class="mf">1.0f</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
 <span class="w">        </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
 
 <span class="w">        </span><span class="n">graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>

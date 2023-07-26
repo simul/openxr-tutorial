@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 26 Jul** : Removed reference to Multi-wall projection-based (CAVE-like) VR system in Chapter 3 text.
+    | **Wed 26 Jul** : Fixed numbering/rst headers for all chapters.
+    | **Wed 26 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 26 Jul** : Merge pull request #24 from KhronosGroup/rb/blendmode
+    | **Wed 26 Jul** : Merge branch 'main' into rb/blendmode
     | **Tue 25 Jul** : js still fails to iterate the loop. Trying a while loop...
     | **Tue 25 Jul** : Alternative js to remove selected-platform class.
     | **Tue 25 Jul** : Fix incorrect class tag.
@@ -16,6 +21,11 @@ Changelist
     | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 25 Jul** : Chapter2 fixups to match later code. XR_RUNTIME_JSON in main CMakeLists.txt Add older tags to Chapter4.
+    | **Tue 25 Jul** : Pick better default for env blend mode
+    | **Tue 25 Jul** : Chapter 3 fixes
+    | **Tue 25 Jul** : Identation fixes
+    | **Tue 25 Jul** : Merge branch 'main' into rb/blendmode
+    | **Tue 25 Jul** : Blend mode and build fixes
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -92,13 +102,3 @@ Changelist
     | **Fri 07 Jul** : Code for Chapter 3.3. Tested on Windows D3D11, D3D12, OpenGL and Vulkan.
     | **Fri 07 Jul** : Added code for Chapter 3.1.
     | **Wed 05 Jul** : Updated .gitignore files.
-    | **Wed 05 Jul** : Added code for Chapter 2.3.
-    | **Wed 05 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 05 Jul** : Updated Chapter2.1 code example locations.
-    | **Tue 04 Jul** : Downgrade Gradle to get around Android Studio compile failure.
-    | **Tue 04 Jul** : Outlines for Ch4.
-    | **Tue 04 Jul** : Moved content plan to README.md.
-    | **Tue 04 Jul** : README.md formatting.
-    | **Tue 04 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 04 Jul** : Moved timetable into README.md
-    | **Tue 04 Jul** : Renamed Chapter 2.2 to Chapter 2 and bundling sub-chapter section into a single chapter project. Created Common/ folder to hold common code between all chapters. XR_DOCS_CHAPTER_... defines which chapters to use. OpenXRDebugUtils code moved out of Chapter 2.
