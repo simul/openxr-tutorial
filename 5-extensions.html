@@ -248,12 +248,9 @@
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">🕹 4 Interactions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">✨ 5 Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#extensions-extensions-debug-and-hand-tracking">5 EXTENSIONS (extensions debug and hand tracking)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-extensions-and-layers-xrenumerateinstanceextensionproperties-xrenumerateapilayerproperties">5.1 Using Extensions and Layers xrEnumerateInstanceExtensionProperties, xrEnumerateApiLayerProperties</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-xrcreatedebugutilsmessengerext">5.2 Using xrCreateDebugUtilsMessengerEXT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extension-examples-including-xr-ext-hand-tracking-cubes-at-joints">5.3 Extension examples including XR_EXT_HAND_TRACKING cubes at joints</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-extensions-and-layers-xrenumerateinstanceextensionproperties-xrenumerateapilayerproperties">5.1 Using Extensions and Layers xrEnumerateInstanceExtensionProperties, xrEnumerateApiLayerProperties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-xrcreatedebugutilsmessengerext">5.2 Using xrCreateDebugUtilsMessengerEXT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extension-examples-including-xr-ext-hand-tracking-cubes-at-joints">5.3 Extension examples including XR_EXT_HAND_TRACKING cubes at joints</a></li>
 </ul>
 </li>
 </ul>
@@ -328,13 +325,11 @@
 							
   <section id="extensions">
 <h1>✨ 5 Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
-<section id="extensions-extensions-debug-and-hand-tracking">
-<h2>5 EXTENSIONS (extensions debug and hand tracking)<a class="headerlink" href="#extensions-extensions-debug-and-hand-tracking" title="Permalink to this heading">¶</a></h2>
 <section id="using-extensions-and-layers-xrenumerateinstanceextensionproperties-xrenumerateapilayerproperties">
-<h3>5.1 Using Extensions and Layers xrEnumerateInstanceExtensionProperties, xrEnumerateApiLayerProperties<a class="headerlink" href="#using-extensions-and-layers-xrenumerateinstanceextensionproperties-xrenumerateapilayerproperties" title="Permalink to this heading">¶</a></h3>
+<h2>5.1 Using Extensions and Layers xrEnumerateInstanceExtensionProperties, xrEnumerateApiLayerProperties<a class="headerlink" href="#using-extensions-and-layers-xrenumerateinstanceextensionproperties-xrenumerateapilayerproperties" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="using-xrcreatedebugutilsmessengerext">
-<h3>5.2 Using xrCreateDebugUtilsMessengerEXT<a class="headerlink" href="#using-xrcreatedebugutilsmessengerext" title="Permalink to this heading">¶</a></h3>
+<h2>5.2 Using xrCreateDebugUtilsMessengerEXT<a class="headerlink" href="#using-xrcreatedebugutilsmessengerext" title="Permalink to this heading">¶</a></h2>
 <p>XR_EXT_debug_utils is an instance extension for OpenXR, which allows the application to get more information on any errors or warnings etc. You can specify which message severities and types will checked. If a debug message raised, it is passed to the callback function, which can optionally use the user data pointer provided in the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure.</p>
 <p>In the code below, we first check that <code class="docutils literal notranslate"><span class="pre">&quot;XR_EXT_debug_utils&quot;</span></code> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code> which we used to create the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> with the use of this little helper function <code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code>. Next, we set up the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> struct; specifying all the message severities and types.</p>
 <dl class="simple">
@@ -478,9 +473,8 @@
 </div>
 </section>
 <section id="extension-examples-including-xr-ext-hand-tracking-cubes-at-joints">
-<h3>5.3 Extension examples including XR_EXT_HAND_TRACKING cubes at joints<a class="headerlink" href="#extension-examples-including-xr-ext-hand-tracking-cubes-at-joints" title="Permalink to this heading">¶</a></h3>
+<h2>5.3 Extension examples including XR_EXT_HAND_TRACKING cubes at joints<a class="headerlink" href="#extension-examples-including-xr-ext-hand-tracking-cubes-at-joints" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR Specification 12.31 XR_EXT_hand_tracking &lt;<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking</a>&gt;`_.</p>
-</section>
 </section>
 </section>
 
