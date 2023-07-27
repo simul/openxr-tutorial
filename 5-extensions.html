@@ -31,7 +31,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux";
+		platform = "linux"; // Set default here.
 	}
 	var selectd3d11=document.getElementById("selectd3d11");
 	var selectd3d12=document.getElementById("selectd3d12");
@@ -159,7 +159,9 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			graphicsApi = "vulkan";
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
 		// first, hide all the api's
 		$(".d3d11").hide();
 		$(".d3d12").hide();
@@ -367,21 +369,25 @@
 <span class="kr">inline</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">checkValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">checkValue</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">checkValue</span><span class="p">);</span>
 <span class="p">}</span>
+
+<span class="cp">#ifdef _MSC_VER</span>
+<span class="cp">#define strncpy(dst, src, count) strcpy_s(dst, count, src);</span>
+<span class="cp">#endif</span>
 </pre></div>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateDebugMessenger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">m_activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">DestroyDebugMessenger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">m_activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="nf">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">xrInstance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="nf">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">{</span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">};</span>
 <span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageSeverities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">;</span>
 <span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_CONFORMANCE_BIT_EXT</span><span class="p">;</span>
@@ -390,15 +396,15 @@
 
 <span class="w">    </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">{};</span>
 <span class="w">    </span><span class="n">PFN_xrCreateDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">;</span>
-<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessengerCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessengerCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create DebugUtilsMessenger.&quot;</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">PFN_xrDestroyDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">;</span>
-<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy DebugUtilsMessenger.&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>

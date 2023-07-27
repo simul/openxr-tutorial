@@ -31,7 +31,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux";
+		platform = "linux"; // Set default here.
 	}
 	var selectd3d11=document.getElementById("selectd3d11");
 	var selectd3d12=document.getElementById("selectd3d12");
@@ -159,7 +159,9 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			graphicsApi = "vulkan";
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
 		// first, hide all the api's
 		$(".d3d11").hide();
 		$(".d3d12").hide();
@@ -364,6 +366,20 @@ device.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-setup.html#project-setup">Project Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#cmake-and-project-files">CMake and Project Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#common-files">Common Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="2-setup.html#debugoutput">DebugOutput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="2-setup.html#helperfunctions">HelperFunctions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="2-setup.html#openxrdebugutils">OpenXRDebugUtils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="2-setup.html#openxrhelper">OpenXRHelper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="2-setup.html#graphicsapi">GraphicsAPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#openxrtutorial-and-main">OpenXRTutorial and Main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#build-and-run">Build and Run</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrinstance-xrgetsystem">2.1 Creating an XrInstance / xrGetSystem</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrinstance">2.1.1 XrInstance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsystemid">2.1.2 XrSystemId</a></li>
@@ -371,7 +387,7 @@ device.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrsession">2.2 Creating an XrSession</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsession">2.2.1 XrSession</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#graphicsapi">2.2.2 GraphicsAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#id13">2.2.2 GraphicsAPI</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#polling-the-event-loop">2.3 Polling the Event Loop</a><ul>

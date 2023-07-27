@@ -29,7 +29,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux";
+		platform = "linux"; // Set default here.
 	}
 	var selectd3d11=document.getElementById("selectd3d11");
 	var selectd3d12=document.getElementById("selectd3d12");
@@ -157,7 +157,9 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			graphicsApi = "vulkan";
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
 		// first, hide all the api's
 		$(".d3d11").hide();
 		$(".d3d12").hide();

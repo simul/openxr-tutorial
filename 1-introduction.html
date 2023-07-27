@@ -32,7 +32,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux";
+		platform = "linux"; // Set default here.
 	}
 	var selectd3d11=document.getElementById("selectd3d11");
 	var selectd3d12=document.getElementById("selectd3d12");
@@ -160,7 +160,9 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			graphicsApi = "vulkan";
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
 		// first, hide all the api's
 		$(".d3d11").hide();
 		$(".d3d12").hide();
@@ -335,10 +337,10 @@ adaptation. Developing a new app for a new platform was even more challenging.</
 <p>In spite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two
 slightly different perspectives. Most had a way to track the user’s head and hands or hand-controllers. Most had buttons,
 many had analogue controls like triggers or joysticks; many had haptic feedback.</p>
-<figure class="align-left" id="id1">
+<figure class="align-left" id="id12">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
-<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
@@ -348,8 +350,8 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 <section id="overview">
 <h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
-<table class="longtable docutils align-default" id="id2">
-<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table class="longtable docutils align-default" id="id13">
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id13" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 16.7%" />
 <col style="width: 83.3%" />
@@ -367,34 +369,52 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 <td><p>The Application is your program, called an “app” for short.</p></td>
 </tr>
 <tr class="row-even"><td><p>Runtime</p></td>
-<td><p>A Runtime is a specific implementation of the OpenXR functionality. It might be provided by a
-hardware vendor, as part of a device’s operating system; it might be supplied by a software vendor
+<td><dl class="simple">
+<dt>A Runtime is a specific implementation of the OpenXR functionality. It might be provided by a</dt><dd><p>hardware vendor, as part of a device’s operating system; it might be supplied by a software vendor
 to enable OpenXR support with a specific range of hardware. The Loader finds the appropriate Runtime
-and loads it when OpenXR is initialized.</p></td>
+and loads it when OpenXR is initialized.</p>
+</dd>
+</dl>
+</td>
 </tr>
 <tr class="row-odd"><td><p>Loader</p></td>
-<td><p>The OpenXR loader is a special library that connects your app to whichever OpenXR runtime
-you’re using. The loader’s job is to find the Runtime and initialize it, then allow your app to access
+<td><dl class="simple">
+<dt>The OpenXR loader is a special library that connects your app to whichever OpenXR runtime</dt><dd><p>you’re using. The loader’s job is to find the Runtime and initialize it, then allow your app to access
 the Runtime’s version of the API. Some devices can have multiple Runtimes available, but only one can
-be active at any given time.</p></td>
+be active at any given time.</p>
+</dd>
+</dl>
+</td>
 </tr>
 <tr class="row-even"><td><p>Layers</p></td>
-<td><p>API layers are optional components that augment an OpenXR system. A Layer might help with debugging,
-or filter information between the app and the Runtime. API layers are enabled when the OpenXR Instance
-is created.</p></td>
+<td><dl class="simple">
+<dt>API layers are optional components that augment an OpenXR system. A Layer might help with debugging,</dt><dd><p>or filter information between the app and the Runtime. API layers are enabled when the OpenXR Instance
+is created.</p>
+</dd>
+</dl>
+</td>
 </tr>
 <tr class="row-odd"><td><p>Instance</p></td>
-<td><p>The Instance is an object that allows your app to communicate with a Runtime. You’ll ask OpenXR to create an Instance
-when initializing XR support in your app. If the Runtime supports it, you might have more than one Instance
-at a time, if more than one XR device is in use.</p></td>
+<td><dl class="simple">
+<dt>The Instance is an object that allows your app to communicate with a Runtime. You’ll ask OpenXR to create an Instance</dt><dd><p>when initializing XR support in your app. If the Runtime supports it, you might have more than one Instance
+at a time, if more than one XR device is in use.</p>
+</dd>
+</dl>
+</td>
 </tr>
 <tr class="row-even"><td><p>Graphics</p></td>
-<td><p>OpenXR usually needs to connect to a graphics API, in order to permit rendering of headset views for example.
-Which Graphics API’s are supported depends on the Runtime.</p></td>
+<td><dl class="simple">
+<dt>OpenXR usually needs to connect to a graphics API, in order to permit rendering of headset views for example.</dt><dd><p>Which Graphics API’s are supported depends on the Runtime.</p>
+</dd>
+</dl>
+</td>
 </tr>
 <tr class="row-odd"><td><p>Input</p></td>
-<td><p>The OpenXR Input System allows apps to query what inputs are available. These can then be bound
-to Actions or Poses, so the app knows what the user is doing.</p></td>
+<td><dl class="simple">
+<dt>The OpenXR Input System allows apps to query what inputs are available. These can then be bound</dt><dd><p>to Actions or Poses, so the app knows what the user is doing.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -447,176 +467,75 @@ by clicking a tab, or one of the buttons below.</p>
 	</button>
 </div>
 
-<div class="windows docutils container" id="windows-intro-1">
-<blockquote>
-<div><p class="rubric">Windows</p>
-<p>Windows is the selected platform.</p>
-</div></blockquote>
-</div>
-<div class="linux docutils container" id="linux-intro-1">
-<blockquote>
-<div><p class="rubric">Linux</p>
-<p>Linux is the selected platform.</p>
-</div></blockquote>
-</div>
-<div class="android docutils container" id="android-intro-1">
-<blockquote>
-<div><p class="rubric">Android</p>
-<p>Android is the selected platform.</p>
-</div></blockquote>
-</div>
 <div class="windows docutils container">
 <p class="rubric">Visual Studio</p>
-<p>If you’ll be building an OpenXR project for PC-based devices, we’ll assume you’ll be using Microsoft Visual Studio.
-The free Community edition of Visual Studio is available <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
-<p class="rubric">Direct3D 11 or 12</p>
-<p>Next you’ll want to choose which Graphics API you’ll be using. Direct3D 11 and 12 are built into the Windows SDK’s.
-If you’re using Direct3D, D3D12 is recommended because it supports <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">View Instancing</a>. Essentially, it allows you to draw both eye views in one call.</p>
-<p>In both cases, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
-<p class="rubric">Vulkan Windows SDK</p>
-<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Take a note of the installation location,
-as this will be needed later. Vulkan, OpenGL and OpenGL ES also support rendering to both eye views with multiview.</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p></li>
-<li><p><a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL/OpenGL ES Multiview</a>.</p></li>
-</ul>
-</div></blockquote>
-<p class="rubric">OpenXR SDK for Windows</p>
-<p>You’ll need a copy of the OpenXR SDK, which is distributed as a Git repository. If you’re familiar with Git, you can use your preferred command-line or GUI Git tool to get
-the SDK from <em>git&#64;github.com:KhronosGroup/OpenXR-SDK.git</em>.
-Alternatively, you can download it as a .zip file from <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK">github.com/KhronosGroup/OpenXR-SDK</a>.</p>
+<p>If you’ll be building an OpenXR project for Microsoft Windows PC based devices, we’ll assume you’ll be using Microsoft Visual Studio.
+The free Community edition of Visual Studio is available to download <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
 <p class="rubric">CMake</p>
-<p>The OpenXR SDK is distributed as source code, and you’ll need to build it using CMake.
-CMake is a program that generates project files, such as the .vcxproj and .sln files
-that Visual Studio needs.
-Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>.</p>
-<p>Once CMake is installed, click the Windows button, and type “cmake” to find the application Cmake GUI.</p>
-<figure class="align-default">
-<img alt="Find CMake by clicking the Windows icon and typing &quot;cmake&quot;." src="_images/find_cmake.png" />
-</figure>
-<p>In the CMake Gui, enter the location of the OpenXR SDK in the top text box, marked “Where is the source code”. Below, in the box marked “Where to
-build the binaries”, enter a subdirectory of that folder, called “build”.</p>
-<figure class="align-default">
-<img alt="CMake GUI: location of the OpenXR SDK has been entered as the source directory, and that a subdirectory &quot;build&quot; has been entered as the binary directory." src="_images/cmake-openxrsdk-1.png" />
-</figure>
-<p>Click the button below marked “Configure”. A popup will ask if CMake should create the “build” directory. Click “Yes”.
-Now a box will appear where you can select a “Generator”. This should default to the version of
-Visual Studio you’ve just installed. Click Finish.
-Cmake will now configure the project, and a list of variables will appear in red.</p>
-<figure class="align-default">
-<img alt="alternate text" src="_images/cmake-openxrsdk-2.png" />
-</figure>
-<p>You shouldn’t have to change any of these variables, but you can if you want. CMake should have
-automatically found the installation of the Vulkan SDK that you created previously, and used it to fill in the variables
-<code class="docutils literal notranslate"><span class="pre">Vulkan_INCLUDE_DIR</span></code>, <code class="docutils literal notranslate"><span class="pre">Vulkan_LIBRARY</span></code> and so on. If not, you can modify these variables
-by clicking on the “Value” entries. The values should look like this:</p>
-<figure class="align-default">
-<img alt="Vulkan variable highlighted in the CMake GUI." src="_images/cmake-vulkan-vars.png" />
-</figure>
-<dl>
-<dt>The Vulkan variables in CMake GUI should read:</dt><dd><table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_GLSLANG_VALIDATOR_EXECUTABLE</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Bin/glslangValidator.exe</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_GLSLC_EXECUTABLE</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Bin/glslc.exe</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_INCLUDE_DIR</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Include</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Vulkan_LIBRARY</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">C:/VulkanSDK/1.3.239.0/Lib/vulkan-1.lib</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</dd>
-</dl>
-<p>Obviously, the precise directory will depend on which version of the Vulkan SDK you installed.</p>
-<p>Now, we’re going to “Generate” the project files for the OpenXR SDK. Click “Generate”, and CMake GUI should
-now read “Generating done” in the output log at the bottom.</p>
-<figure class="align-default">
-<img alt="CMake GUI should read &quot;Generating done&quot; in the output log at the bottom." src="_images/cmake-openxrsdk-generate.png" />
-</figure>
-<p>Now we can build the SDK. Click “Open Project” in CMake GUI, or navigate to your “build” folder and double-click on
-the file “OPENXR.sln”, and Visual Studio will open the solution.</p>
-<p>Select “Debug” from the Visual Studio “Solution Configurations” dropdown.</p>
-<figure class="align-default">
-<img alt="In Visual Studio, the Solution Configuration dropdown menu is shown, with &quot;Debug&quot; selected." src="_images/visual-studio-openxr-debug.png" />
-</figure>
-<p>Go to the Build menu and select “Build Solution”. The projects will be compiled, and the output
-from <code class="docutils literal notranslate"><span class="pre">openxr_loader.vcxproj</span></code> should be a library called <code class="docutils literal notranslate"><span class="pre">openxr_loaderd.lib</span></code>.</p>
-<figure class="align-default">
-<img alt="In Visual Studio, the &quot;Build&quot; menu is shown, with the &quot;Build Solution&quot; option selected." src="_images/visual-studio-openxr-build.png" />
-</figure>
-<p>Now repeat the process for the Release build. Select “Release” from the Configurations dropdown,
-amd build the solution. This time, the library <code class="docutils literal notranslate"><span class="pre">openxr_loader.lib</span></code> will be built.</p>
-<p>You can now close this solution, you’re ready to start creating your first OpenXR project.</p>
+<p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake to generate the Visual Studio Solution and Project files.</p>
+<p>Next you’ll want to choose which Graphics API you’ll be using.</p>
+<p class="rubric">Direct3D 11 or 12</p>
+<p>Direct3D 11 and 12 are built into the Windows SDK’s. If you’re using Direct3D, D3D12 is recommended, because it supports <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">View Instancing</a>. Essentially, it allows you to draw both eye views in one call.</p>
+<p>In both cases, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
+<p class="rubric">Vulkan</p>
+<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan also supports rendering to both eye views with multiview. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p class="rubric">OpenGL</p>
+<p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. It was originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> specification.
+If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL also supports rendering to both eye views with multiview - <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
 </div>
 <div class="linux docutils container">
 <p class="rubric">Visual Studio Code for Linux</p>
-<p>To install Visual Studio Code, go to <a class="reference external" href="https://code.visualstudio.com/">code.visualstudio.com</a> and click the “Download for Linux” button.</p>
-<p class="rubric">OpenXR SDK for Linux</p>
-<p>You’ll need a copy of the OpenXR SDK, which is distributed as a Git repository. If you’re familiar with Git, you can use your preferred command-line or GUI Git tool to get
-the SDK from <em>git&#64;github.com:KhronosGroup/OpenXR-SDK.git</em>.</p>
-<p>In the downloaded repo, you’ll find a file called README.md, which contains up-to-date instructions
-for building the libraries. So follow these instructions in the <em>Linux</em> section. In
-general, you will first want to install the required packages, which at the time of writing were:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>build-essential
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>cmake
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libgl1-mesa-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libvulkan-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libx11-xcb-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-dri2-0-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-glx0-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-icccm4-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-keysyms1-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxcb-randr0-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxrandr-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libxxf86vm-dev
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mesa-common-dev
-</pre></div>
-</div>
-<p>From the OpenXR-SDK directory,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>build/linux_debug
-<span class="nb">cd</span><span class="w"> </span>build/linux_debug
-cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Debug<span class="w"> </span>../..
-make
-</pre></div>
-</div>
-<p>Now return to the OpenXR-SDK directory, and build the release library:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>build/linux_release
-<span class="nb">cd</span><span class="w"> </span>build/linux_release
-cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span>../..
-make
-</pre></div>
-</div>
-<p>This builds <code class="docutils literal notranslate"><span class="pre">libopenxr_loader.so</span></code>, in Debug and Release flavours, in the directories:
-<code class="docutils literal notranslate"><span class="pre">OpenXR-SDK/build/linux_debug/src/loader</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXR-SDK/build/linux_release/src/loader</span></code>.
-Both files have the same name on Linux - the debug one is substantially larger however.
-And both are <em>dynamic</em> libraries by default, which will be loaded at runtime.</p>
-<p>Now you’re ready to start creating your first OpenXR project.</p>
+<p>To install Visual Studio Code, go to <a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> and click the “Download for Linux” button.</p>
+<p class="rubric">CMake</p>
+<p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake with Visual Studio Code to build the project.</p>
+<p class="rubric">Vulkan</p>
+<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p class="rubric">OpenGL</p>
+<p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. It was originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> specification.
+If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - <a class="reference external" href="Tutorial:_OpenGL_3.0_Context_Creation_(GLX)">Tutorial: OpenGL 3.0 Context Creation (GLX)</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
 </div>
 <div class="android docutils container">
 <p class="rubric">Android Studio</p>
 <p>Android Studio is available to download here: <a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>.</p>
 <p class="rubric">OpenXR SDK</p>
-<p>For Android, we will use the CMake <code class="docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code> command in the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to get the OpenXR package from Khronos’s OpenXR-SDK-Source GitHub page.</p>
-<p>For Android, you can download the OpenXR loader libraries from here: <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27">https://github.com/KhronosGroup/OpenXR-SDK-Source/releases/release-1.0.27</a>.
-Using the .aar file and a program like 7-Zip, you can extract the header files and libraries. Under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/include/openxr</span></code>, you’ll find the header files, and under <code class="docutils literal notranslate"><span class="pre">prefab/modules/openxr_loader/libs/</span></code>, you’ll find the folders for the arm64-v8a, armeabi-v7a, x86 and x86_64 libraries.</p>
-<figure class="align-default">
-<img alt="7-Zip internal file structure showing the OpenXR headers. prefab/modules/openxr_loader/include/openxr" src="_images/android-7Zip-include.png" />
-</figure>
-<figure class="align-default">
-<img alt="7-Zip internal file structure showing the OpenXR libraries. prefab/modules/openxr_loader/libs" src="_images/android-7Zip-libs.png" />
-</figure>
+<p>In conjunction with the later <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, we add this to our dependencies in the <code class="docutils literal notranslate"><span class="pre">app/build.gradle</span></code> file. This <code class="docutils literal notranslate"><span class="pre">openxr_loader_for_android</span></code> also contains an <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code> files that includes the required uses-permissions, authorising the OpenXR runtime broker and states the intent to use the <code class="docutils literal notranslate"><span class="pre">OpenXRRuntimeService</span></code> and the <code class="docutils literal notranslate"><span class="pre">OpenXRApiLayerService</span></code>.</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="n">fileTree</span><span class="o">(</span><span class="nl">dir:</span><span class="w"> </span><span class="s1">&#39;libs&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">include:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;*.jar&#39;</span><span class="o">])</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.appcompat:appcompat:1.0.2&#39;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;androidx.constraintlayout:constraintlayout:1.1.3&#39;</span>
+<span class="hll"><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;org.khronos.openxr:openxr_loader_for_android:1.0.27&#39;</span>
+</span><span class="w">    </span><span class="c1">//implementation files(&#39;../../thirdparty/openxr_loader_manifest_only-1.0.27.aar&#39;)</span>
+<span class="o">}</span>
+</pre></div>
+</div>
 <p class="rubric">Vulkan</p>
 <p>Vulkan is recommended for Android for its modern, low-level API and extension.
-Vulkan is included as part of the NDK provided Google and is supported on Android 7.0 (Nougat), API level 24 or higher. <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>.
-Alternatively, OpenGL ES is also an option for Android graphics.</p>
-<p>With the OpenXR loader and your graphics API selected, you’re ready to start creating your first OpenXR project.</p>
+Vulkan is included as part of the NDK provided Google and is supported on Android 7.0 (Nougat), API level 24 or higher. <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>. Vulkan also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p class="rubric">OpenGL ES</p>
+<p>Alternatively, OpenGL ES is also an option for Android graphics.
+For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL ES API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>.
+If you want to use OpenGL ES stand-alone, you will need to use EGL to create a valid OpenGL ES Context for Android - <a class="reference external" href="https://www.khronos.org/egl">EGL Overview</a>. You will also need to use a function loader like GLAD to access functions for OpenGL ES - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL ES also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL ES Multiview</a>.</p>
 </div>
+<p class="rubric">OpenXR SDK</p>
+<p>In this tutorial, we will use CMake <code class="docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code> command in the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> files to get the OpenXR SDK package from Khronos’s OpenXR-SDK-Source GitHub page, as shown below.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
+
+<span class="c"># openxr_loader - From github.com/KhronosGroup</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
+<span class="nb">FetchContent_Declare</span><span class="p">(</span>
+<span class="w">        </span><span class="s">OpenXR</span>
+<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=390455e9395a92d6b730afb8f23fac8e</span>
+<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.27.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
+<span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you prefer to git clone or download the SDK yourself from Khronos’s OpenXR-SDK-Source GitHub page <a class="reference external" href="https://github.com/KhronosGroupOpenXR-SDK">here</a>. You can either use your preferred command-line or GUI Git tool, or download it as a .zip file.</p>
+<p>With the OpenXR loader and your graphics API selected, you’re ready to start creating your first OpenXR project.</p>
 </section>
 </section>
 

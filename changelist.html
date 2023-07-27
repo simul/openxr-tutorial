@@ -30,7 +30,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux";
+		platform = "linux"; // Set default here.
 	}
 	var selectd3d11=document.getElementById("selectd3d11");
 	var selectd3d12=document.getElementById("selectd3d12");
@@ -158,7 +158,9 @@
 		var graphicsApi = Cookies.get("graphicsapi")
 		console.log("graphicsapi = " + graphicsApi);
 		if (typeof graphicsApi == 'undefined')
-			graphicsApi = "vulkan";
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
 		// first, hide all the api's
 		$(".d3d11").hide();
 		$(".d3d12").hide();
@@ -319,7 +321,20 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 26 Jul** : Fixed rst header for Chapter 5.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 27 Jul** : Updated Chapter 2 text for Android upto CMake - WIP.
+| **Thu 27 Jul** : Removed unneeded linux vscode images. Updated Build and Run section for linux and other minor correction in Chapter 2 text.
+| **Thu 27 Jul** : Chapter 2 minor updates.
+| **Thu 27 Jul** : GraphicsAPI and OpenXRTutorial and Main sections in Chapter 2 text updated. Windows run-through is complete - to be checked. Stub class clean up in Chapter 2 and 3 texts. and removed cmake-tutorial2-1.png.
+| **Thu 27 Jul** : Moved GraphicsAPI_Type outside of OpenXRTutorial_Main()
+| **Thu 27 Jul** : Moved strncpy to HelperFunctions.h. Clear up in OpenXRHelper.h and HelperFunctions.h and Chapter main and cmake files. Chapter 2 Project Setup rewrite WIP.
+| **Thu 27 Jul** : Removed GraphicsAPIs.h as name was confusing, we just include the API-specific headers now.
+| **Wed 26 Jul** : Revert layout.html
+| **Wed 26 Jul** : Amended Chapter 1.3 to remove building OpenXR from source. Instead describes using FetchContent_Declare(), Graphics API SDK, CMake and IDE set ups. Chapter now doesn&#39;t now follow on correctly. Deleted unneeded images.
+| **Wed 26 Jul** : Minor updates to Chapter 2 text.
+| **Wed 26 Jul** : Compile time API choice added to Chapter3/main.cpp.
+| **Wed 26 Jul** : All Chapter classes use &#39;m_&#39; for members.
+| **Wed 26 Jul** : Updated all GraphicsAPIs to use m_xrInstance for XrInstance parameter for the OPENXR_CHECK macro. OpenXRHelper.h cleared and using m_xrInstance.
+| **Wed 26 Jul** : Fixed rst header for Chapter 5.
 | **Wed 26 Jul** : Removed reference to Multi-wall projection-based (CAVE-like) VR system in Chapter 3 text.
 | **Wed 26 Jul** : Fixed numbering/rst headers for all chapters.
 | **Wed 26 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
@@ -406,19 +421,6 @@
 | **Mon 17 Jul** : Updated Android application name.
 | **Mon 17 Jul** : Updated Chapter 2.1 text to use Chapter2/main.cpp
 | **Mon 17 Jul** : Updated code examples for Chapter 5 and code format in Chapter 2.
-| **Fri 14 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Fri 14 Jul** : Added Chapter4. Added DebugOutput.h - redirects std::cout and std::cerr to debugger for Windows and Android. Transitioning to using #if instead of if() for XR_DOCS_CHAPTER_VERSION - this is more consistent with the user&#39;s experience.
-| **Fri 14 Jul** : Copied changes from Ch3 to Ch2 for AndroidManifest.xml.
-| **Fri 14 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Fri 14 Jul** : Added &lt;category android:name=&quot;com.oculus.intent.category.VR&quot; /&gt; to AndroidManifest.xml
-| **Fri 14 Jul** : Changed Chapter 3 to use independent XrSwapchains per view. Removed &#39;multiview support&#39;.
-| **Fri 14 Jul** : Fix for GraphicsAPI_OpenGL::CreateImageView() for GraphicsAPI_OpenGL_ES::CreateImageView when creating 2D views.
-| **Fri 14 Jul** : Updated Android system events handling for Chapters 2 and 3.
-| **Wed 12 Jul** : Split GraphicsAPI out into separate implementation files.
-| **Wed 12 Jul** : Removed abiFilters. Updated to 7.5 for gradle and 7.4.2 for AGP. Fix applicationId for Chapter 3.
-| **Wed 12 Jul** : Fixed compilation errors for GraphicsAPI_OpenGL_ES. Minor fix for Chapter3/main.cpp.
-| **Fri 07 Jul** : Code for Chapter 3.3. Tested on Windows D3D11, D3D12, OpenGL and Vulkan.
-| **Fri 07 Jul** : Added code for Chapter 3.1.
 </pre></div>
 </div>
 </section>
