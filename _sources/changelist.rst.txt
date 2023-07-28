@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 27 Jul** : Update Chapter 2 to complete Android Project setup walk through. Windows, Linux and Android all ready to be checked for Chapter 2 / Project Setup.
+    | **Thu 27 Jul** : Updated gradle.properties in Chapters 2, 3 and 4.
     | **Thu 27 Jul** : Updated Chapter 2 text for Android upto CMake - WIP.
     | **Thu 27 Jul** : Removed unneeded linux vscode images. Updated Build and Run section for linux and other minor correction in Chapter 2 text.
     | **Thu 27 Jul** : Chapter 2 minor updates.
@@ -100,5 +102,3 @@ Changelist
     | **Mon 17 Jul** : Initial commit for updating Graphics API on website. No new logos.
     | **Mon 17 Jul** : Removing Chapter2.1 as all code in now maintained in Chapter2, Chapter3 and Chapter4.
     | **Mon 17 Jul** : Updated Android application name.
-    | **Mon 17 Jul** : Updated Chapter 2.1 text to use Chapter2/main.cpp
-    | **Mon 17 Jul** : Updated code examples for Chapter 5 and code format in Chapter 2.
