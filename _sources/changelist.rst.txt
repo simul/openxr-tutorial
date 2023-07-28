@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 28 Jul** : Amended draft text of Chapter 2 in relation to comments on commit 7738eb6. Android build files are now shown as diffs (added thirdparty/AndroidDefaultApp/*/*.* files to facilitate this) and implemented other recommendations. Reduced amount of code snippets in Project Setup section of Chapter 2.
+    | **Fri 28 Jul** : Updated Android build files for all chapters. Removed activity_main.xml, colors.xml and styles.xml. Updated CMake/Gradle files to use XR 1.0.28.2. Updated build.gradle, app/build.gradle, settings.gradle and AndroidManifest.xml files from comment for commit 7738eb6. Android will need a test walk-through - WIP.
     | **Thu 27 Jul** : Update Chapter 2 to complete Android Project setup walk through. Windows, Linux and Android all ready to be checked for Chapter 2 / Project Setup.
     | **Thu 27 Jul** : Updated gradle.properties in Chapters 2, 3 and 4.
     | **Thu 27 Jul** : Updated Chapter 2 text for Android upto CMake - WIP.
@@ -100,5 +102,3 @@ Changelist
     | **Mon 17 Jul** : Initial commit for Chapter 2.2 text (D3D11 and D3D12 only).
     | **Mon 17 Jul** : Added placeholder square images for Graphics APIs. Added code samples to Chapter 2.2 text.
     | **Mon 17 Jul** : Initial commit for updating Graphics API on website. No new logos.
-    | **Mon 17 Jul** : Removing Chapter2.1 as all code in now maintained in Chapter2, Chapter3 and Chapter4.
-    | **Mon 17 Jul** : Updated Android application name.
