@@ -333,7 +333,7 @@ manufacturers, by software companies. There are even open source runtimes. But w
 runtime you use, if it’s compliant with the OpenXR standard, your OpenXR-compliant code will
 work with it.</p>
 <p>This tutorial introduces programming with OpenXR. If you use a game engine such as Unreal Engine, Unity or Godot,
-you may not need to interact directly with OpenXR: the engine abstracts this away. It may be benificial
+you may not need to interact directly with OpenXR: the engine abstracts this away. It may be beneficial
 to learn the underlying concepts however.</p>
 <p>OpenXR is designed to work with various different graphics API’s: Vulkan, Direct3D 11 and 12,
 OpenGL and OpenGL ES are all supported at present. You will need some familiarity with your graphics
@@ -348,7 +348,7 @@ API of choice to get the most out of this tutorial.</p>
 <section id="tutorial-structure">
 <h2>Tutorial Structure<a class="headerlink" href="#tutorial-structure" title="Permalink to this heading">¶</a></h2>
 <p>The tutorial is divided into several main sections. Each section walks you through
-part of the process of creating an XR program, and assumes that the previous secions have
+part of the process of creating an XR program, and assumes that the previous sections have
 been completed.</p>
 <p>At the end of each section is a link to download the full example source code up to that point.</p>
 <p>This code can also be downloaded from the following repository: <a class="reference external" href="https://github.com/simul/openxr-tutorial-src">https://github.com/simul/openxr-tutorial-src</a></p>
@@ -363,23 +363,23 @@ device.</p>
 <li class="toctree-l2"><a class="reference internal" href="1-introduction.html#goal-of-openxr">1.1 Goal of OpenXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="1-introduction.html#overview">1.2 Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="1-introduction.html#setting-up">1.3 Setting Up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#project-setup">1.4 Project Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#cmake-and-project-files">1.4.1 CMake and Project Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#common-files">1.4.2 Common Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1-introduction.html#debugoutput">DebugOutput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1-introduction.html#helperfunctions">HelperFunctions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1-introduction.html#openxrdebugutils">OpenXRDebugUtils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1-introduction.html#openxrhelper">OpenXRHelper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1-introduction.html#graphicsapi">GraphicsAPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#openxrtutorial-and-main">1.4.3 OpenXRTutorial and Main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#build-and-run">1.4.4 Build and Run</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-setup.html#project-setup">Project Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#cmake-and-project-files">CMake and Project Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#common-files">Common Files</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="2-setup.html#debugoutput">DebugOutput</a></li>
-<li class="toctree-l4"><a class="reference internal" href="2-setup.html#helperfunctions">HelperFunctions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="2-setup.html#openxrdebugutils">OpenXRDebugUtils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="2-setup.html#openxrhelper">OpenXRHelper</a></li>
-<li class="toctree-l4"><a class="reference internal" href="2-setup.html#graphicsapi">GraphicsAPI</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#openxrtutorial-and-main">OpenXRTutorial and Main</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#build-and-run">Build and Run</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrinstance-xrgetsystem">2.1 Creating an XrInstance / xrGetSystem</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrinstance">2.1.1 XrInstance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsystemid">2.1.2 XrSystemId</a></li>
@@ -387,7 +387,7 @@ device.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrsession">2.2 Creating an XrSession</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsession">2.2.1 XrSession</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#id41">2.2.2 GraphicsAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#graphicsapi">2.2.2 GraphicsAPI</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2-setup.html#polling-the-event-loop">2.3 Polling the Event Loop</a><ul>

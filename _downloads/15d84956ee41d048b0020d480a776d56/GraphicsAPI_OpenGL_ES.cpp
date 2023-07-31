@@ -374,7 +374,9 @@ GraphicsAPI_OpenGL_ES::GraphicsAPI_OpenGL_ES(XrInstance m_xrInstance, XrSystemId
 
     const XrVersion glApiVersion = XR_MAKE_VERSION(glMajorVersion, glMinorVersion, 0);
     if (graphicsRequirements.minApiVersionSupported >= glApiVersion) {
-        std::cout << "ERROR: OPENGL ES: The created OpenGL ES version doesn't meet the minimum requried API version for OpenXR." << std::endl;
+        int requiredMajorVersion = XR_VERSION_MAJOR(graphicsRequirements.minApiVersionSupported);
+        int requiredMinorVersion = XR_VERSION_MINOR(graphicsRequirements.minApiVersionSupported);
+        std::cerr << "ERROR: OPENGL ES: The created OpenGL ES version " << glMajorVersion << "." << glMinorVersion << " doesn't meet the minimum required API version " << requiredMajorVersion << "." << requiredMinorVersion << " for OpenXR." << std::endl;
     }
 
     glEnable(GL_DEBUG_OUTPUT);
@@ -414,7 +416,7 @@ void *GraphicsAPI_OpenGL_ES::CreateImage(const ImageCreateInfo &imageCI) {
     glBindTexture(target, texture);
 
     if (target == GL_TEXTURE_1D) {
-        // glTexStorage1D() is not availble - Poor work around.
+        // glTexStorage1D() is not available - Poor work around.
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexStorage2D(GL_TEXTURE_2D, imageCI.mipLevels, imageCI.format, imageCI.width, 1);
         glBindTexture(GL_TEXTURE_2D, 0);

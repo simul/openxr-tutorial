@@ -379,7 +379,7 @@
 	</button>
 </div>
 
-<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demostrate its interaction with all the Graphics APIs.</p>
+<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with all the Graphics APIs.</p>
 <section id="creating-swapchains">
 <h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
 <p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
@@ -390,7 +390,7 @@
 <li><p>2 views - VR head mounted display.</p></li>
 </ul>
 </div></blockquote>
-<p>Orthogonal to multiple views is the layering of multiple rendered images or camera feeds. You could, for a example, have a background that is a video pass-through of your enviroment, a stereo view of rendering graphics and quad overlay of a HUD or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views.</p>
+<p>Orthogonal to multiple views is the layering of multiple rendered images or camera feeds. You could, for a example, have a background that is a video pass-through of your environment, a stereo view of rendering graphics and quad overlay of a HUD or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views.</p>
 <p>Firstly, we will update the class to add the new methods and members.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
@@ -486,7 +486,7 @@
 <span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Here, we fill out the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo</span></code> structure. The <code class="docutils literal notranslate"><span class="pre">sampleCount</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> members can be assigned from the <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. We set the <code class="docutils literal notranslate"><span class="pre">createFlags</span></code> to 0 as we require no contraints or functionality. We set the <code class="docutils literal notranslate"><span class="pre">usageFlags</span></code> to <code class="docutils literal notranslate"><span class="pre">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span> <span class="pre">|</span> <span class="pre">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span></code> requesting that the image are suitable to be read in a shader and to be used as a render output.</p>
+<p>Here, we fill out the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo</span></code> structure. The <code class="docutils literal notranslate"><span class="pre">sampleCount</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> members can be assigned from the <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. We set the <code class="docutils literal notranslate"><span class="pre">createFlags</span></code> to 0 as we require no constraints or functionality. We set the <code class="docutils literal notranslate"><span class="pre">usageFlags</span></code> to <code class="docutils literal notranslate"><span class="pre">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span> <span class="pre">|</span> <span class="pre">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span></code> requesting that the image are suitable to be read in a shader and to be used as a render output.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Flag bits for XrSwapchainUsageFlags</span>
 <span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span><span class="p">;</span>
 <span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrSwapchainUsageFlags</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000002</span><span class="p">;</span>
@@ -798,7 +798,7 @@
 </section>
 <section id="create-depth-image-and-image-views">
 <h3>3.1.5 Create Depth Image And Image Views<a class="headerlink" href="#create-depth-image-and-image-views" title="Permalink to this heading">¶</a></h3>
-<p>Next, we create a depth image so that we can correctly render 3D prespective graphics to the view. In this tutorial, we have a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ImageCreateInfo</span></code> structure and virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateImage()</span></code> that creates the API-specific objects.</p>
+<p>Next, we create a depth image so that we can correctly render 3D perspective graphics to the view. In this tutorial, we have a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ImageCreateInfo</span></code> structure and virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateImage()</span></code> that creates the API-specific objects.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageCreateInfo</span><span class="w"> </span><span class="n">depthImageCI</span><span class="p">;</span>
 <span class="n">depthImageCI</span><span class="p">.</span><span class="n">dimension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="n">depthImageCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
@@ -993,7 +993,7 @@ level of blending with the real world behind the display.</p></td>
 </section>
 <section id="xrcreatereferencespace">
 <h3>3.2.2 xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
-<p>Now that OpenXR know what the user should see, we need to tell OpenXR from where should the user by seeing. This is where the referene space comes in.</p>
+<p>Now that OpenXR know what the user should see, we need to tell OpenXR from where should the user by seeing. This is where the reference space comes in.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrReferenceSpaceType</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_VIEW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">    </span><span class="n">XR_REFERENCE_SPACE_TYPE_LOCAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>

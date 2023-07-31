@@ -2,6 +2,13 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.
+    | **Mon 31 Jul** : Moved Chapter 2 - Project Setup to Chapter 1.4. Fixed rst :ref: links to other section.
+    | **Mon 31 Jul** : Fixes for Chapter 1 and 2 draft texts in relation to comments on commit c3b73f2.
+    | **Mon 31 Jul** : Merge pull request #39 from rpavlik/gradle-fixes
+    | **Fri 28 Jul** : Update tutorial/Outlines.md
+    | **Fri 28 Jul** : codespell
+    | **Fri 28 Jul** : Make gradlew executable
     | **Fri 28 Jul** : Amended draft text of Chapter 2 in relation to comments on commit 7738eb6. Android build files are now shown as diffs (added thirdparty/AndroidDefaultApp/*/*.* files to facilitate this) and implemented other recommendations. Reduced amount of code snippets in Project Setup section of Chapter 2.
     | **Fri 28 Jul** : Updated Android build files for all chapters. Removed activity_main.xml, colors.xml and styles.xml. Updated CMake/Gradle files to use XR 1.0.28.2. Updated build.gradle, app/build.gradle, settings.gradle and AndroidManifest.xml files from comment for commit 7738eb6. Android will need a test walk-through - WIP.
     | **Thu 27 Jul** : Update Chapter 2 to complete Android Project setup walk through. Windows, Linux and Android all ready to be checked for Chapter 2 / Project Setup.
@@ -95,10 +102,3 @@ Changelist
     | **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
     | **Wed 19 Jul** : Platform/API tab styling.
     | **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
-    | **Tue 18 Jul** : Added sub-chapter markers form Chapter 2.
-    | **Tue 18 Jul** : Added Chapter 2.3 text. Minor update to Outlines.md.
-    | **Tue 18 Jul** : Added openxr-session-life-cycle.svg. Updated Chapter 2.2 text to include changes to the class.
-    | **Tue 18 Jul** : Updated GL and GLES api version validation. Vulkan now picks is own queueFamilyIndex. Added extra Document tags to code. Added Chapter 2.2 text for GL, GLES and VK.
-    | **Mon 17 Jul** : Initial commit for Chapter 2.2 text (D3D11 and D3D12 only).
-    | **Mon 17 Jul** : Added placeholder square images for Graphics APIs. Added code samples to Chapter 2.2 text.
-    | **Mon 17 Jul** : Initial commit for updating Graphics API on website. No new logos.
