@@ -175,6 +175,20 @@ DXGI_FORMAT ToDXGI_FORMAT(GraphicsAPI::VertexType type) {
     }
 }
 
+GraphicsAPI_D3D11::GraphicsAPI_D3D11() {
+    D3D11_CHECK(CreateDXGIFactory2(0, IID_PPV_ARGS(&factory)), "Failed to create DXGI factory.");
+
+    UINT i = 0;
+    IDXGIAdapter *adapter = nullptr;
+    DXGI_ADAPTER_DESC adapterDesc = {};
+    while (factory->EnumAdapters(i, &adapter) != DXGI_ERROR_NOT_FOUND) {
+        adapter->GetDesc(&adapterDesc);
+        break;
+    }
+    D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+    D3D11_CHECK(D3D11CreateDevice(adapter, D3D_DRIVER_TYPE_UNKNOWN, 0, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1, D3D11_SDK_VERSION, &device, nullptr, &immediateContext), "Failed to create D3D11 Device.");
+}
+
 // XR_DOCS_TAG_BEGIN_GraphicsAPI_D3D11
 GraphicsAPI_D3D11::GraphicsAPI_D3D11(XrInstance m_xrInstance, XrSystemId systemId) {
     OPENXR_CHECK(xrGetInstanceProcAddr(m_xrInstance, "xrGetD3D11GraphicsRequirementsKHR", (PFN_xrVoidFunction *)&xrGetD3D11GraphicsRequirementsKHR), "Failed to get InstanceProcAddr.");
@@ -194,6 +208,11 @@ GraphicsAPI_D3D11::GraphicsAPI_D3D11(XrInstance m_xrInstance, XrSystemId systemI
     }
 
     D3D11_CHECK(D3D11CreateDevice(adapter, D3D_DRIVER_TYPE_UNKNOWN, 0, D3D11_CREATE_DEVICE_DEBUG, &graphicsRequirements.minFeatureLevel, 1, D3D11_SDK_VERSION, &device, nullptr, &immediateContext), "Failed to create D3D11 Device.");
+
+	device->QueryInterface( __uuidof(ID3D11Debug), (void**)&d3dDebug );
+	d3dDebug->QueryInterface( __uuidof(ID3D11InfoQueue), (void**)&infoQueue );
+	infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_WARNING, true);
+	infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, true);
 }
 
 GraphicsAPI_D3D11::~GraphicsAPI_D3D11() {
@@ -202,6 +221,52 @@ GraphicsAPI_D3D11::~GraphicsAPI_D3D11() {
     D3D11_SAFE_RELEASE(factory);
 }
 // XR_DOCS_TAG_END_GraphicsAPI_D3D11
+static bool DesktopSwapchainVsync = false;
+void *GraphicsAPI_D3D11::CreateDesktopSwapchain(const SwapchainCreateInfo &swapchainCI) {
+    DesktopSwapchainVsync = swapchainCI.vsync;
+    IDXGISwapChain1 *swapchain = nullptr;
+    DXGI_SWAP_CHAIN_DESC1 swapchainDesc;
+    swapchainDesc.Width = swapchainCI.width;
+    swapchainDesc.Height = swapchainCI.height;
+    swapchainDesc.Format = (DXGI_FORMAT)swapchainCI.format;
+    swapchainDesc.Stereo = false;
+    swapchainDesc.SampleDesc = {1, 0};
+    swapchainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    swapchainDesc.BufferCount = swapchainCI.count;  // One of these is locked by Windows
+    swapchainDesc.Scaling = DXGI_SCALING_STRETCH;
+    swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    swapchainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+    swapchainDesc.Flags = swapchainCI.vsync == false ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
+    D3D11_CHECK(factory->CreateSwapChainForHwnd(device, (HWND)swapchainCI.windowHandle, &swapchainDesc, nullptr, nullptr, &swapchain), "Failed to create Swapchain.");
+    return swapchain;
+}
+
+void GraphicsAPI_D3D11::DestroyDesktopSwapchain(void *&swapchain) {
+    IDXGISwapChain *d3d11Swapchain = reinterpret_cast<IDXGISwapChain *>(swapchain);
+    D3D11_SAFE_RELEASE(d3d11Swapchain);
+    swapchain = nullptr;
+}
+
+void *GraphicsAPI_D3D11::GetDesktopSwapchainImage(void *swapchain, uint32_t index) {
+    IDXGISwapChain *d3d11Swapchain = reinterpret_cast<IDXGISwapChain *>(swapchain);
+    ID3D11Texture2D *texture = nullptr;
+    D3D11_CHECK(d3d11Swapchain->GetBuffer(0, IID_PPV_ARGS(&texture)), "Failed to get Swapchain Image.");
+    return texture;
+}
+
+void GraphicsAPI_D3D11::AcquireDesktopSwapchanImage(void *swapchain, uint32_t& index) {
+    IDXGISwapChain3 *d3d11Swapchain = reinterpret_cast<IDXGISwapChain3 *>(swapchain);
+    index = d3d11Swapchain->GetCurrentBackBufferIndex();
+}
+
+void GraphicsAPI_D3D11::PresentDesktopSwapchainImage(void *swapchain, uint32_t index) {
+    IDXGISwapChain *d3d11Swapchain = reinterpret_cast<IDXGISwapChain *>(swapchain);
+    if (DesktopSwapchainVsync) {
+        D3D11_CHECK(d3d11Swapchain->Present(1, 0), "Failed to present the Image from Swapchain.");
+    } else {
+        D3D11_CHECK(d3d11Swapchain->Present(0, DXGI_PRESENT_ALLOW_TEARING), "Failed to present the Image from Swapchain.");
+    }
+}
 
 // XR_DOCS_TAG_BEGIN_GraphicsAPI_D3D11_GetGraphicsBinding
 void *GraphicsAPI_D3D11::GetGraphicsBinding() {
@@ -485,7 +550,7 @@ void GraphicsAPI_D3D11::DestroySampler(void *&sampler) {
 void *GraphicsAPI_D3D11::CreateBuffer(const BufferCreateInfo &bufferCI) {
     D3D11_SUBRESOURCE_DATA initData{};
     initData.pSysMem = bufferCI.data;
-    initData.SysMemPitch = bufferCI.stride;
+    initData.SysMemPitch = (UINT)bufferCI.stride;
     initData.SysMemSlicePitch = 0;
     bool cpu_access = (bufferCI.type == GraphicsAPI::BufferCreateInfo::Type::UNIFORM);
 
@@ -722,7 +787,7 @@ void GraphicsAPI_D3D11::SetPipeline(void *pipeline) {
             element.SemanticIndex = attribute.bindingIndex;
             element.Format = ToDXGI_FORMAT(attribute.vertexType);
             element.InputSlot = attribute.bindingIndex;
-            element.AlignedByteOffset = attribute.offset;
+            element.AlignedByteOffset = (UINT)attribute.offset;
             element.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
             element.InstanceDataStepRate = 0;
             elements.push_back(element);
@@ -774,6 +839,7 @@ void GraphicsAPI_D3D11::SetPipeline(void *pipeline) {
     rasteriserStateDesc.ScissorEnable = true;
     rasteriserStateDesc.MultisampleEnable = pipelineCI.multisampleState.rasterisationSamples > 1;
     rasteriserStateDesc.AntialiasedLineEnable = false;
+	
     D3D11_CHECK(device->CreateRasterizerState(&rasteriserStateDesc, &rasteriserState), "Failed to create Rasterizer State.");
     immediateContext->RSSetState(rasteriserState);
     D3D11_SAFE_RELEASE(rasteriserState);
@@ -806,6 +872,7 @@ void GraphicsAPI_D3D11::SetPipeline(void *pipeline) {
     blendDesc.IndependentBlendEnable = true;
     size_t i = 0;
     for (auto &blend : pipelineCI.colourBlendState.attachments) {
+		blendDesc.RenderTarget[i].RenderTargetWriteMask=0xFF;
         blendDesc.RenderTarget[i].BlendEnable = blend.blendEnable;
         blendDesc.RenderTarget[i].SrcBlend = ToD3D11_BLEND(blend.srcColourBlendFactor);
         blendDesc.RenderTarget[i].DestBlend = ToD3D11_BLEND(blend.dstColourBlendFactor);
@@ -827,7 +894,7 @@ void GraphicsAPI_D3D11::SetPipeline(void *pipeline) {
 void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
     UINT slot = descriptorInfo.bindingIndex;
     switch (descriptorInfo.stage) {
-    case DescriptorInfo::Stage::VERTEX : {
+    case DescriptorInfo::Stage::VERTEX: {
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
             immediateContext->VSSetConstantBuffers(slot, 1, (ID3D11Buffer *const *)&descriptorInfo.resource);
         } else if (descriptorInfo.type == DescriptorInfo::Type::IMAGE) {
@@ -837,6 +904,7 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
     case DescriptorInfo::Stage::TESSELLATION_CONTROL: {
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
@@ -848,6 +916,7 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
     case DescriptorInfo::Stage::TESSELLATION_EVALUATION: {
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
@@ -859,6 +928,7 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
     case DescriptorInfo::Stage::GEOMETRY: {
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
@@ -870,6 +940,7 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
     case DescriptorInfo::Stage::FRAGMENT: {
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
@@ -881,8 +952,9 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
-    case DescriptorInfo::Stage::COMPUTE: { // UAVs?
+    case DescriptorInfo::Stage::COMPUTE: {  // UAVs?
         if (descriptorInfo.type == DescriptorInfo::Type::BUFFER) {
             immediateContext->CSSetConstantBuffers(slot, 1, (ID3D11Buffer *const *)&descriptorInfo.resource);
         } else if (descriptorInfo.type == DescriptorInfo::Type::IMAGE) {
@@ -892,6 +964,7 @@ void GraphicsAPI_D3D11::SetDescriptor(const DescriptorInfo &descriptorInfo) {
         } else {
             std::cout << "ERROR: D3D11: Unknown Descriptor Type." << std::endl;
         }
+        break;
     }
     default:
         break;
@@ -905,7 +978,7 @@ void GraphicsAPI_D3D11::SetVertexBuffers(void **vertexBuffers, size_t count) {
     for (size_t i = 0; i < count; i++) {
         for (const VertexInputBinding &vertexBinding : vertexInputState.bindings) {
             if (vertexBinding.bindingIndex == (uint32_t)i) {
-                strides.push_back(vertexBinding.stride);
+                strides.push_back((UINT)vertexBinding.stride);
                 offsets.push_back(0);
             }
         }
@@ -914,7 +987,7 @@ void GraphicsAPI_D3D11::SetVertexBuffers(void **vertexBuffers, size_t count) {
 }
 
 void GraphicsAPI_D3D11::SetIndexBuffer(void *indexBuffer) {
-    ID3D11Buffer* d3d11IndexBuffer = (ID3D11Buffer *) indexBuffer;
+    ID3D11Buffer *d3d11IndexBuffer = (ID3D11Buffer *)indexBuffer;
     const BufferCreateInfo &bufferCI = buffers[d3d11IndexBuffer];
     immediateContext->IASetIndexBuffer(d3d11IndexBuffer, bufferCI.indexBufferUint16 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
 }

@@ -34,55 +34,35 @@
 	{
 		platform = "linux"; // Set default here.
 	}
-	var selectd3d11=document.getElementById("selectd3d11");
-	var selectd3d12=document.getElementById("selectd3d12");
-	var selectopengles=document.getElementById("selectopengles");
-	var selectvulkan=document.getElementById("selectvulkan");
-	var selectopengl=document.getElementById("selectopengl");
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
-	$(".windows").show();
-	if(selectd3d11)
-		selectd3d11.disabled = false;
-	if(selectd3d12)
-		selectd3d12.disabled = false;
-	if(selectopengles)
-		selectopengles.disabled = true;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = false;
+		$(".windows").show();
+		$(".selectd3d11").disabled = false;
+		$(".selectd3d12").disabled = false;
+		$(".selectopengles").disabled = true;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = false;
 	}
 	if (platform == "linux")
 	{
-	$(".linux").show();
-	if(selectd3d11)
-		selectd3d11.disabled = true;
-	if(selectd3d12)
-		selectd3d12.disabled = true;
-	if(selectopengles)
-		selectopengles.disabled = true;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = false;
+		$(".linux").show();
+		$(".selectd3d11").disabled = true;
+		$(".selectd3d12").disabled = true;
+		$(".selectopengles").disabled = true;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = false;
 	}
 	if (platform == "android")
 	{
-	$(".android").show();
-	if(selectd3d11)
-		selectd3d11.disabled = true;
-	if(selectd3d12)
-		selectd3d12.disabled = true;
-	if(selectopengles)
-		selectopengles.disabled = false;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = true;
+		$(".android").show();
+		$(".selectd3d11").disabled = true;
+		$(".selectd3d12").disabled = true;
+		$(".selectopengles").disabled = false;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = true;
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
 	console.log("selected-platform on "+oldelements.length+" elements.");
@@ -284,6 +264,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">⚙️ 2 Setup</li>
+	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
@@ -306,19 +287,19 @@
 </script>
 
 <div id='selectgraphicsapi'>
-	<button class="select-graphics-api" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/d3d11.png" alt="DirectX 11" />
 	</button>
-	<button class="select-graphics-api" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
 		<img class="api-tab-img" src="_static/css/d3d12.png" alt="DirectX 12" />
 	</button>
-	<button class="select-graphics-api" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/opengl.png" alt="OpenGL" />
 	</button>
-	<button class="select-graphics-api" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
 		<img class="api-tab-img" src="_static/css/opengles.png" alt="OpenGL ES" />
 	</button>
-	<button class="select-graphics-api" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/vulkan.png" alt="Vulkan" />
 	</button>
 </div>
@@ -356,24 +337,24 @@
 		Android
 	</button>
 </div>
-<div class='select-graphics-api-container-inline'></div>
-	<button class="select-graphics-api-inline" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
+<div class='select-graphics-api-container-inline'>
+	<button class="select-graphics-api-inline selectd3d11" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
 		<img src="_static/css/d3d11.png" alt="DirectX 11" />
 		DirectX 11
 	</button>
-	<button class="select-graphics-api-inline" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
+	<button class="select-graphics-api-inline selectd3d12" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
 		<img src="_static/css/d3d12.png" alt="DirectX 12" />
 		DirectX 12
 	</button>
-	<button class="select-graphics-api-inline" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
+	<button class="select-graphics-api-inline selectopengl" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
 		<img src="_static/css/opengl.png" alt="OpenGL" />
 		OpenGL
 	</button>
-	<button class="select-graphics-api-inline" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
+	<button class="select-graphics-api-inline selectopengles" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
 		<img src="_static/css/opengles.png" alt="OpenGL ES" />
 		OpenGL ES
 	</button>
-	<button class="select-graphics-api-inline" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
+	<button class="select-graphics-api-inline selectvulkan" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
 		<img src="_static/css/vulkan.png" alt="Vulkan" />
 		Vulkan
 	</button>
@@ -670,6 +651,11 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">D3D11_CHECK</span><span class="p">(</span><span class="n">D3D11CreateDevice</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span><span class="w"> </span><span class="n">D3D_DRIVER_TYPE_UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">D3D11_CREATE_DEVICE_DEBUG</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minFeatureLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">D3D11_SDK_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">immediateContext</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create D3D11 Device.&quot;</span><span class="p">);</span>
+
+<span class="w">	</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">QueryInterface</span><span class="p">(</span><span class="w"> </span><span class="n">__uuidof</span><span class="p">(</span><span class="n">ID3D11Debug</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">d3dDebug</span><span class="w"> </span><span class="p">);</span>
+<span class="w">	</span><span class="n">d3dDebug</span><span class="o">-&gt;</span><span class="n">QueryInterface</span><span class="p">(</span><span class="w"> </span><span class="n">__uuidof</span><span class="p">(</span><span class="n">ID3D11InfoQueue</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">infoQueue</span><span class="w"> </span><span class="p">);</span>
+<span class="w">	</span><span class="n">infoQueue</span><span class="o">-&gt;</span><span class="n">SetBreakOnSeverity</span><span class="p">(</span><span class="n">D3D11_MESSAGE_SEVERITY_WARNING</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">	</span><span class="n">infoQueue</span><span class="o">-&gt;</span><span class="n">SetBreakOnSeverity</span><span class="p">(</span><span class="n">D3D11_MESSAGE_SEVERITY_ERROR</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="n">GraphicsAPI_D3D11</span><span class="o">::~</span><span class="n">GraphicsAPI_D3D11</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -779,7 +765,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMinorVersion</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrVersion</span><span class="w"> </span><span class="n">glApiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MAKE_VERSION</span><span class="p">(</span><span class="n">glMajorVersion</span><span class="p">,</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: The created OpenGL version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; doesn&#39;t meet the minimum required API version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -865,7 +851,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMinorVersion</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrVersion</span><span class="w"> </span><span class="n">glApiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MAKE_VERSION</span><span class="p">(</span><span class="n">glMajorVersion</span><span class="p">,</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL ES: The created OpenGL ES version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; doesn&#39;t meet the minimum required API version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -1273,9 +1259,8 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </pre></div>
 </div>
 <p>(*) Applications may wish to re-create objects like <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> and <code class="docutils literal notranslate"><span class="pre">XrSession</span></code>, if hardware changes were detected.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="_images/openxr-session-life-cycle.svg"><img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" width="99%" /></a>
-</figure>
+<figure class="align-center" style="width: 99px">
+<img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" /></figure>
 </section>
 <section id="xrbeginsession-and-xrendsession">
 <h3>2.3.3 xrBeginSession and xrEndSession<a class="headerlink" href="#xrbeginsession-and-xrendsession" title="Permalink to this heading">¶</a></h3>

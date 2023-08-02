@@ -2,6 +2,17 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 01 Aug** : Fixing GraphicsAPI_Test/main.cpp shaders. Reworking Ch4.
+    | **Tue 01 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 01 Aug** : Fixed non-rendering D3D11. Fixed colour corruption (passing uints pixel-vertex shader).
+    | **Tue 01 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 01 Aug** : Updated Chapter 4 now rendering with D3D11. GraphicsAPI_Test/main.cpp renders the same cuboid as Chapter 4. GraphicsAPI_D3D11::SetDescriptor() updated switch statement with breaks.
+    | **Mon 31 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Mon 31 Jul** : Work-in-progress disclaimer added.
+    | **Mon 31 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Mon 31 Jul** : Added GraphicsAPI_Test for testing of GraphicsAPI without OpenXR.
+    | **Mon 31 Jul** : Minor update to Chapter 2 and 3 code.
+    | **Mon 31 Jul** : Shaders for D3D compile.
     | **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.
     | **Mon 31 Jul** : Moved Chapter 2 - Project Setup to Chapter 1.4. Fixed rst :ref: links to other section.
     | **Mon 31 Jul** : Fixes for Chapter 1 and 2 draft texts in relation to comments on commit c3b73f2.
@@ -91,14 +102,3 @@ Changelist
     | **Thu 20 Jul** : Added rendering to Chapter4/main.cpp, but not working in GL. Move all rendering enums inside to GraphicsAPI. Updated GraphicsAPI_OpenGL. DescriptorInfo uses bindingIndex now.
     | **Thu 20 Jul** : Fixed build errors for GraphicsAPI_OpenGL.
     | **Thu 20 Jul** : Renamed some methods in GraphicsAPI. Cleaned up samplers in GraphicsAPI_OpenGL.
-    | **Thu 20 Jul** : Init commit for GraphicsAPI_OpenGL fully complete. Not Tested!
-    | **Wed 19 Jul** : Update 3-graphics.rst
-    | **Wed 19 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 19 Jul** : Partial text for Chapter 3.1.
-    | **Wed 19 Jul** : Cookie lowercase names.
-    | **Wed 19 Jul** : Fix invalid selected-graphics-api class tags.
-    | **Wed 19 Jul** : Null checks in platform tab scripts.
-    | **Wed 19 Jul** : Fix 2-setup.rst indentation.
-    | **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
-    | **Wed 19 Jul** : Platform/API tab styling.
-    | **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.

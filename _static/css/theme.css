@@ -7243,7 +7243,7 @@ html.writer-html5 .rst-content table.docutils td > p, html.writer-html5 .rst-con
 
 .rst-content code.literal, .rst-content tt.literal
 {
-    color: #e74c3c;
+    color: #e74 c3c;
     white-space: normal
 }
 
@@ -7633,7 +7633,15 @@ button.select-graphics-api > img
 {
 filter: grayscale(100%);
 }
+button.select-graphics-api-inline > img
+{
+filter: grayscale(100%);
+}
 button.select-graphics-api:disabled > img
+{
+filter: opacity(30%) grayscale(100%);
+}
+button.select-graphics-api-inline:disabled > img
 {
 filter: opacity(30%) grayscale(100%);
 }
@@ -7641,4 +7649,16 @@ filter: opacity(30%) grayscale(100%);
 button.selected-graphics-api > img
 {
 filter: grayscale(0%);
+}
+button.select-graphics-api-inline > img
+{
+filter: grayscale(0%);
+}
+
+.disclaimer
+{
+	color:red;
+	background:white;
+	margin-left:120px;
+	font-weight:900;
 }

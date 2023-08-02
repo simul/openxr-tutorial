@@ -32,55 +32,35 @@
 	{
 		platform = "linux"; // Set default here.
 	}
-	var selectd3d11=document.getElementById("selectd3d11");
-	var selectd3d12=document.getElementById("selectd3d12");
-	var selectopengles=document.getElementById("selectopengles");
-	var selectvulkan=document.getElementById("selectvulkan");
-	var selectopengl=document.getElementById("selectopengl");
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
-	$(".windows").show();
-	if(selectd3d11)
-		selectd3d11.disabled = false;
-	if(selectd3d12)
-		selectd3d12.disabled = false;
-	if(selectopengles)
-		selectopengles.disabled = true;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = false;
+		$(".windows").show();
+		$(".selectd3d11").disabled = false;
+		$(".selectd3d12").disabled = false;
+		$(".selectopengles").disabled = true;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = false;
 	}
 	if (platform == "linux")
 	{
-	$(".linux").show();
-	if(selectd3d11)
-		selectd3d11.disabled = true;
-	if(selectd3d12)
-		selectd3d12.disabled = true;
-	if(selectopengles)
-		selectopengles.disabled = true;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = false;
+		$(".linux").show();
+		$(".selectd3d11").disabled = true;
+		$(".selectd3d12").disabled = true;
+		$(".selectopengles").disabled = true;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = false;
 	}
 	if (platform == "android")
 	{
-	$(".android").show();
-	if(selectd3d11)
-		selectd3d11.disabled = true;
-	if(selectd3d12)
-		selectd3d12.disabled = true;
-	if(selectopengles)
-		selectopengles.disabled = false;
-	if(selectvulkan)
-		selectvulkan.disabled = false;
-	if(selectopengl)
-		selectopengl.disabled = true;
+		$(".android").show();
+		$(".selectd3d11").disabled = true;
+		$(".selectd3d12").disabled = true;
+		$(".selectopengles").disabled = false;
+		$(".selectvulkan").disabled = false;
+		$(".selectopengl").disabled = true;
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
 	console.log("selected-platform on "+oldelements.length+" elements.");
@@ -264,6 +244,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Changelist</li>
+	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
@@ -286,19 +267,19 @@
 </script>
 
 <div id='selectgraphicsapi'>
-	<button class="select-graphics-api" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/d3d11.png" alt="DirectX 11" />
 	</button>
-	<button class="select-graphics-api" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
 		<img class="api-tab-img" src="_static/css/d3d12.png" alt="DirectX 12" />
 	</button>
-	<button class="select-graphics-api" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/opengl.png" alt="OpenGL" />
 	</button>
-	<button class="select-graphics-api" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
 		<img class="api-tab-img" src="_static/css/opengles.png" alt="OpenGL ES" />
 	</button>
-	<button class="select-graphics-api" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/vulkan.png" alt="Vulkan" />
 	</button>
 </div>
@@ -321,7 +302,18 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 01 Aug** : Fixing GraphicsAPI_Test/main.cpp shaders. Reworking Ch4.
+| **Tue 01 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 01 Aug** : Fixed non-rendering D3D11. Fixed colour corruption (passing uints pixel-vertex shader).
+| **Tue 01 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 01 Aug** : Updated Chapter 4 now rendering with D3D11. GraphicsAPI_Test/main.cpp renders the same cuboid as Chapter 4. GraphicsAPI_D3D11::SetDescriptor() updated switch statement with breaks.
+| **Mon 31 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Mon 31 Jul** : Work-in-progress disclaimer added.
+| **Mon 31 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Mon 31 Jul** : Added GraphicsAPI_Test for testing of GraphicsAPI without OpenXR.
+| **Mon 31 Jul** : Minor update to Chapter 2 and 3 code.
+| **Mon 31 Jul** : Shaders for D3D compile.
+| **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.
 | **Mon 31 Jul** : Moved Chapter 2 - Project Setup to Chapter 1.4. Fixed rst :ref: links to other section.
 | **Mon 31 Jul** : Fixes for Chapter 1 and 2 draft texts in relation to comments on commit c3b73f2.
 | **Mon 31 Jul** : Merge pull request #39 from rpavlik/gradle-fixes
@@ -410,17 +402,6 @@
 | **Thu 20 Jul** : Added rendering to Chapter4/main.cpp, but not working in GL. Move all rendering enums inside to GraphicsAPI. Updated GraphicsAPI_OpenGL. DescriptorInfo uses bindingIndex now.
 | **Thu 20 Jul** : Fixed build errors for GraphicsAPI_OpenGL.
 | **Thu 20 Jul** : Renamed some methods in GraphicsAPI. Cleaned up samplers in GraphicsAPI_OpenGL.
-| **Thu 20 Jul** : Init commit for GraphicsAPI_OpenGL fully complete. Not Tested!
-| **Wed 19 Jul** : Update 3-graphics.rst
-| **Wed 19 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Wed 19 Jul** : Partial text for Chapter 3.1.
-| **Wed 19 Jul** : Cookie lowercase names.
-| **Wed 19 Jul** : Fix invalid selected-graphics-api class tags.
-| **Wed 19 Jul** : Null checks in platform tab scripts.
-| **Wed 19 Jul** : Fix 2-setup.rst indentation.
-| **Wed 19 Jul** : Added Chapter 4 CreateActionPoses.
-| **Wed 19 Jul** : Platform/API tab styling.
-| **Wed 19 Jul** : Minor updates and correction to Outlines.md and 2-setup.rst. Updated code for Chapter3.
 </pre></div>
 </div>
 </section>
