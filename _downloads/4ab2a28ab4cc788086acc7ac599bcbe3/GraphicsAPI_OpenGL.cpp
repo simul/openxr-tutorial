@@ -349,6 +349,30 @@ void GLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLs
         DEBUG_BREAK;
 }
 
+GraphicsAPI_OpenGL::GraphicsAPI_OpenGL() {
+    // https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L103-L121
+    // Initialize the gl extensions. Note we have to open a window.
+    ksDriverInstance driverInstance{};
+    ksGpuQueueInfo queueInfo{};
+    ksGpuSurfaceColorFormat colorFormat{KS_GPU_SURFACE_COLOR_FORMAT_B8G8R8A8};
+    ksGpuSurfaceDepthFormat depthFormat{KS_GPU_SURFACE_DEPTH_FORMAT_D24};
+    ksGpuSampleCount sampleCount{KS_GPU_SAMPLE_COUNT_1};
+    if (!ksGpuWindow_Create(&window, &driverInstance, &queueInfo, 0, colorFormat, depthFormat, sampleCount, 640, 480, false)) {
+        std::cerr << "ERROR: OPENGL: Failed to create Context." << std::endl;
+    }
+
+    GLint glMajorVersion = 0;
+    GLint glMinorVersion = 0;
+    glGetIntegerv(GL_MAJOR_VERSION, &glMajorVersion);
+    glGetIntegerv(GL_MINOR_VERSION, &glMinorVersion);
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(GLDebugCallback, nullptr);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_FALSE);
+    glDebugMessageControl(GL_DONT_CARE, GL_DEBUG_TYPE_ERROR, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+}
+
 // XR_DOCS_TAG_BEGIN_GraphicsAPI_OpenGL
 GraphicsAPI_OpenGL::GraphicsAPI_OpenGL(XrInstance m_xrInstance, XrSystemId systemId) {
     OPENXR_CHECK(xrGetInstanceProcAddr(m_xrInstance, "xrGetOpenGLGraphicsRequirementsKHR", (PFN_xrVoidFunction *)&xrGetOpenGLGraphicsRequirementsKHR), "Failed to get InstanceProcAddr.");
@@ -384,10 +408,19 @@ GraphicsAPI_OpenGL::GraphicsAPI_OpenGL(XrInstance m_xrInstance, XrSystemId syste
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_FALSE);
     glDebugMessageControl(GL_DONT_CARE, GL_DEBUG_TYPE_ERROR, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 }
+
 GraphicsAPI_OpenGL::~GraphicsAPI_OpenGL() {
     ksGpuWindow_Destroy(&window);
 }
 // XR_DOCS_TAG_END_GraphicsAPI_OpenGL
+
+void *GraphicsAPI_OpenGL::CreateDesktopSwapchain(const SwapchainCreateInfo &swapchainCI) { return nullptr; }
+void GraphicsAPI_OpenGL::DestroyDesktopSwapchain(void *&swapchain) {}
+void *GraphicsAPI_OpenGL::GetDesktopSwapchainImage(void *swapchain, uint32_t index) { return nullptr; }
+void GraphicsAPI_OpenGL::AcquireDesktopSwapchanImage(void *swapchain, uint32_t &index) {}
+void GraphicsAPI_OpenGL::PresentDesktopSwapchainImage(void *swapchain, uint32_t index) {
+    SwapBuffers(window.hDC);
+}
 
 // XR_DOCS_TAG_BEGIN_GraphicsAPI_OpenGL_GetGraphicsBinding
 void *GraphicsAPI_OpenGL::GetGraphicsBinding() {
@@ -536,8 +569,8 @@ void *GraphicsAPI_OpenGL::CreateSampler(const SamplerCreateInfo &samplerCI) {
     glSamplerParameterf(sampler, GL_TEXTURE_MIN_LOD, samplerCI.minLod);
     glSamplerParameterf(sampler, GL_TEXTURE_MAX_LOD, samplerCI.maxLod);
 
-    // BorderColour
-    glSamplerParameterfv(sampler, GL_TEXTURE_BORDER_COLOR, samplerCI.borderColour);
+    // BorderColor
+    glSamplerParameterfv(sampler, GL_TEXTURE_BORDER_COLOR, samplerCI.borderColor);
 
     return (void *)(uint64_t)sampler;
 }
@@ -1015,6 +1048,9 @@ void GraphicsAPI_OpenGL::SetDescriptor(const DescriptorInfo &descriptorInfo) {
     }
 }
 
+void GraphicsAPI_OpenGL::UpdateDescriptors() {
+}
+
 void GraphicsAPI_OpenGL::SetVertexBuffers(void **vertexBuffers, size_t count) {
     const VertexInputState &vertexInputState = pipelines[setPipeline].vertexInputState;
     for (size_t i = 0; i < count; i++) {
@@ -1056,7 +1092,7 @@ void GraphicsAPI_OpenGL::SetIndexBuffer(void *indexBuffer) {
 
 void GraphicsAPI_OpenGL::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) {
     PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC glDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)GetExtension("glDrawElementsInstancedBaseVertexBaseInstance");  // 4.2+
-    GLenum indexType = buffers[setIndexBuffer].indexBufferUint16 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+    GLenum indexType = buffers[setIndexBuffer].stride == 4 ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
     glDrawElementsInstancedBaseVertexBaseInstance(ToGLTopology(pipelines[setPipeline].inputAssemblyState.topology), indexCount, indexType, nullptr, instanceCount, vertexOffset, firstInstance);
 }
 

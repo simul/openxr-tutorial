@@ -2,6 +2,19 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 03 Aug** : Merge branch 'main' of https://github.com/simul/openxr-tutorial-src into main
+    | **Thu 03 Aug** : Fixing Linux build, not yet functional.
+    | **Thu 03 Aug** : Fixing Linux build, not yet functional.
+    | **Thu 03 Aug** : Vulkan: Moved MemoryTypeFromProperties to function (not a lambda). Update DestroyImage() and DestroyImageView(). Added Sampler and Buffer creation. Added SetBufferData() and some rendering functions. WIP.
+    | **Thu 03 Aug** : Updated SamplerCreateInfo borderColor and D3D11 Sampler.
+    | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Thu 03 Aug** : Removed indexBufferUint16 from BufferCreateInfo. SetIndexBuffer() checks the stride is 2 or 4. Vulkan WIP.
+    | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 03 Aug** : Two controllers in Chapter 4. More app-specific action names. Fixed open in new window functionality for links.
+    | **Thu 03 Aug** : GraphicsAPI majority of methods are now pure virtual. Vulkan, OpenGL and OpenGL ES added default constructor and swapchain methods. D3D12 renamed member to currentDesktopSwapchainImage. GetSwapchainImage() set the image state in D3D12 and Vulkan. Vulkan updated presentation and image layout transition code. Update GraphicsAPI_Test/main.cpp to quickly switch between APIs.
+    | **Wed 02 Aug** : Minor changes to GraphicsAPI_Test/main.cpp.
+    | **Wed 02 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 02 Aug** : D3D12 implementation of GraphicsAPI is done for GraphicsAPI_Test. Added DescriptorInfo and formats to PipelineCreateInfo. Minor change to GraphicsAPI_D3D11. Added GraphicsAPI::UpdateDescriptors() and templated Align<>() function.
     | **Tue 01 Aug** : Fixing GraphicsAPI_Test/main.cpp shaders. Reworking Ch4.
     | **Tue 01 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 01 Aug** : Fixed non-rendering D3D11. Fixed colour corruption (passing uints pixel-vertex shader).
@@ -89,16 +102,3 @@ Changelist
     | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Fri 21 Jul** : Polling action states.
     | **Fri 21 Jul** : Added SetBufferData() to GraphicsAPI.
-    | **Fri 21 Jul** : Added SetViewports() and SetScissors() to GraphicsAPI. Updated Chapter 4 and OpenGL ES shaders.
-    | **Fri 21 Jul** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Fri 21 Jul** : Added implementation for GraphicsAPI_OpenGL_ES. Minor fixes to GraphicsAPI_OpenGL.
-    | **Thu 20 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 20 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 20 Jul** : Added SetRenderAttachments() for GL to have a combined color and depth framebuffer. ClearColor() and ClearDepth() revert and now unbind their parameter framebuffer.
-    | **Thu 20 Jul** : Ensured correct parameter name for ClearColor() and ClearDepth().
-    | **Thu 20 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 20 Jul** : Added initial hlsl shaders and GraphicsAPI_D3D11 object creation code.
-    | **Thu 20 Jul** : Removed unbinds from ClearColor() and ClearDepth() in GraphicsAPI_OpenGL.
-    | **Thu 20 Jul** : Added rendering to Chapter4/main.cpp, but not working in GL. Move all rendering enums inside to GraphicsAPI. Updated GraphicsAPI_OpenGL. DescriptorInfo uses bindingIndex now.
-    | **Thu 20 Jul** : Fixed build errors for GraphicsAPI_OpenGL.
-    | **Thu 20 Jul** : Renamed some methods in GraphicsAPI. Cleaned up samplers in GraphicsAPI_OpenGL.

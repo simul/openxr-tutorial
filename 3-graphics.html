@@ -125,11 +125,17 @@
 			return true;
 		}
 		return false;
-		}
+	}
 	function makeLinksOpenInNewWindow()
 	{ 
+		console.log("makeLinksOpenInNewWindow ");
 		var download_hrefs = document.getElementsByClassName('reference download internal');
 		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			console.log("Adding target blank to "+el.id);
+		});
+		link_hrefs = document.getElementsByClassName('reference external');
+		[].forEach.call(link_hrefs, function(el) {
 			el.setAttribute('target', "_blank");
 			console.log("Adding target blank to "+el.id);
 		});
@@ -865,7 +871,11 @@
 </div>
 <div class="d3d12 docutils container" id="id17">
 <p class="rubric">DirectX 12</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">        </span><span class="n">ID3D12Resource</span><span class="o">*</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageStates</span><span class="p">[</span><span class="n">image</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_RESOURCE_STATE_RENDER_TARGET</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">image</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -883,7 +893,11 @@
 </div>
 <div class="vulkan docutils container" id="id20">
 <p class="rubric">Vulkan</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">VkImage</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageStates</span><span class="p">[</span><span class="n">image</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">image</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>

@@ -4,8 +4,15 @@
 #if defined(XR_USE_GRAPHICS_API_OPENGL)
 class GraphicsAPI_OpenGL : public GraphicsAPI {
 public:
+    GraphicsAPI_OpenGL();
     GraphicsAPI_OpenGL(XrInstance m_xrInstance, XrSystemId systemId);
     ~GraphicsAPI_OpenGL();
+
+    virtual void* CreateDesktopSwapchain(const SwapchainCreateInfo& swapchainCI) override;
+    virtual void DestroyDesktopSwapchain(void*& swapchain) override;
+    virtual void* GetDesktopSwapchainImage(void* swapchain, uint32_t index) override;
+    virtual void AcquireDesktopSwapchanImage(void* swapchain, uint32_t& index) override;
+    virtual void PresentDesktopSwapchainImage(void* swapchain, uint32_t index) override;
 
     virtual int64_t GetDepthFormat() override { return (int64_t)GL_DEPTH_COMPONENT32F; }
 
@@ -32,8 +39,8 @@ public:
     virtual void* CreatePipeline(const PipelineCreateInfo& pipelineCI) override;
     virtual void DestroyPipeline(void*& pipeline) override;
 
-    virtual void BeginRendering();
-    virtual void EndRendering();
+    virtual void BeginRendering() override;
+    virtual void EndRendering() override;
 
     virtual void SetBufferData(void* buffer, size_t offset, size_t size, void* data) override;
 
@@ -46,6 +53,7 @@ public:
 
     virtual void SetPipeline(void* pipeline) override;
     virtual void SetDescriptor(const DescriptorInfo& descriptorInfo) override;
+    virtual void UpdateDescriptors() override;
     virtual void SetVertexBuffers(void** vertexBuffers, size_t count) override;
     virtual void SetIndexBuffer(void* indexBuffer) override;
     virtual void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t firstIndex = 0, int32_t vertexOffset = 0, uint32_t firstInstance = 0) override;

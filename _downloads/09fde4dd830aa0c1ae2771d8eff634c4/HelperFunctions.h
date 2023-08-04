@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <cstring>
 #include <unordered_map>
 
 // Debugbreak
@@ -31,6 +32,11 @@ template <typename T>
 inline bool BitwiseCheck(const T &value, const T &checkValue) {
     return ((value & checkValue) == checkValue);
 }
+
+template <typename T>
+T Align(T value, T alignment) {
+    return (value + (alignment - 1)) & ~(alignment - 1);
+};
 
 #ifdef _MSC_VER
 #define strncpy(dst, src, count) strcpy_s(dst, count, src);
