@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 04 Aug** : Updated SetRenderAttachments() parameter to take pipeline, width and height. Vulkan finished Framebuffer and descriptor sets. All GraphicsAPI are now complete.
+    | **Fri 04 Aug** : Chapter4/CMakeLists.txt updated CMake add_custom_command TARGET to OpenXRTutorialChapter4.
+    | **Fri 04 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Fri 04 Aug** : Removed d3dcompiler from CMake and headers and chapter 1 text. All APIs external build/copy shaders and load them. Check on Windows and Android. GraphicsAPI_Vulkan added shaders and pipeline creation. Added ReadTextFile and ReadBinaryFile - Chapter 4 has the Android variants.
+    | **Fri 04 Aug** : Updated shaders.
     | **Thu 03 Aug** : Merge branch 'main' of https://github.com/simul/openxr-tutorial-src into main
     | **Thu 03 Aug** : Fixing Linux build, not yet functional.
     | **Thu 03 Aug** : Fixing Linux build, not yet functional.
@@ -97,8 +102,3 @@ Changelist
     | **Sun 23 Jul** : API-specific rendering for Chapter 4.
     | **Sun 23 Jul** : Chapter 4.1-4.4 text
     | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Fri 21 Jul** : Adding xr_linear_algebra.h, a copy of xr_linear.h from the OpenXR SDK, with slight modification to compile with the current codebase. Chapter 4 code and text. Rendering a coloured cube at the left grip pose.
-    | **Fri 21 Jul** : Finished implementing GraphicsAPI_D3D11. Not working. Extended DescriptorInfo.
-    | **Fri 21 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Fri 21 Jul** : Polling action states.
-    | **Fri 21 Jul** : Added SetBufferData() to GraphicsAPI.

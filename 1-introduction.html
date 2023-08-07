@@ -723,9 +723,8 @@ In it, put the following code:</p>
 <span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 </span><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3dcompiler.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="nb">e</span><span class="p">()</span>
-<span class="nb">rget_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+</span><span class="hll"><span class="nb">else</span><span class="p">()</span>
+</span><span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
@@ -753,9 +752,8 @@ In it, put the following code:</p>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 </span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3dcompiler.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="nb">e</span><span class="p">()</span>
-<span class="nb">rget_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+</span><span class="hll"><span class="nb">else</span><span class="p">()</span>
+</span><span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
@@ -783,20 +781,19 @@ In it, put the following code:</p>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3dcompiler.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="nb">e</span><span class="p">()</span>
-<span class="nb">rget_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+<span class="nb">else</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
 <span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-<span class="hll"><span class="nb">endif</span><span class="p">()</span>
-</span><span class="hll">
+<span class="nb">endif</span><span class="p">()</span>
+<span class="hll">
 </span><span class="hll"><span class="c"># Fix redirection to a different project&#39;s build folder</span>
-</span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
+</span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -813,16 +810,15 @@ In it, put the following code:</p>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3dcompiler.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="nb">e</span><span class="p">()</span>
-<span class="nb">rget_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
-<span class="hll"><span class="nb">endif</span><span class="p">()</span>
-</span><span class="hll">
+<span class="nb">else</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+<span class="nb">endif</span><span class="p">()</span>
+<span class="hll">
 </span><span class="hll"><span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
 </span><span class="hll"><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 </span><span class="hll"><span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
-</span><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
+</span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+</span><span class="nb">endif</span><span class="p">()</span>
 
 <span class="c"># Fix redirection to a different project&#39;s build folder</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
@@ -832,7 +828,7 @@ In it, put the following code:</p>
 </div>
 <p>Now, we set up the project file by adding an executable with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. Next, we optionally set a the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> in the debugger environment. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory and link <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> from <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. We don’t have to add OpenXR as a include directory; as we specified them to be located in the CMake Build directory under <code class="docutils literal notranslate"><span class="pre">openxr/</span></code> when using <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>, so we just include the OpenXR headers from the CMake Build directory.</p>
 <p>Next, is the include directories and linkage for the graphics APIs.
-For Microsoft Windows, we link <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code>, <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code>, <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">d3dcompiler.lib</span></code>, so that we can use Direct3D 11, Direct3D 12, the DirectX Graphics Infrastructure and the D3D Compiler. The headers are automatically included as part of the Visual Studio project.
+For Microsoft Windows, we link <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code>, <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 11, Direct3D 12 and the DirectX Graphics Infrastructure. The headers are automatically included as part of the Visual Studio project.
 If you have the Vulkan SDK installed, we try to find that package, add the include directories and link the Vulkan libraries.
 As a default, we add gfxwrapper for OpenGL, we add the include directories and link the gfxwrapper libraries from the OpenXR-SDK.</p>
 <p>That’s all we need for CMake, we need for this project.</p>
@@ -1367,7 +1363,6 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="d3d11 docutils container" id="id37">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3dcompiler.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
@@ -1376,7 +1371,6 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d12.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3dcompiler.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>

@@ -652,40 +652,26 @@ controller’s position.</p>
 <p>For Vulkan, we will use GLSL version 4.5: add this code to define our vertex and pixel shaders:</p>
 </div>
 <div class="opengl vulkan docutils container">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               #version 450</span>
-<span class="s">               //Color Vertex Shader</span>
-<span class="s">               layout(std140, binding = 1) uniform CameraConstants</span>
-<span class="s">               {</span>
-<span class="s">                   mat4 viewProj;</span>
-<span class="s">                   mat4 modelViewProj;</span>
-<span class="s">                   mat4 model;</span>
-<span class="s">               };</span>
-<span class="s">               layout(location = 0) in highp vec4 a_Positions;</span>
-<span class="s">               layout(location = 0) out flat uvec2 o_TexCoord;</span>
-<span class="s">               void main()</span>
-<span class="s">               {</span>
-<span class="s">                   gl_Position = modelViewProj * a_Positions;</span>
-<span class="s">                   int face = gl_VertexID / 6;</span>
-<span class="s">                   o_TexCoord = uvec2(face, 0);</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;VertexShader.glsl&quot;</span><span class="p">);</span>
 <span class="w">       </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               #version 450</span>
-<span class="s">               //Texture Fragment Shader</span>
-<span class="s">               layout(location = 0) in flat uvec2 i_TexCoord;</span>
-<span class="s">               layout(location = 0) out highp vec4 o_Color;</span>
-<span class="s">               layout(std140, binding = 0) uniform Data</span>
-<span class="s">               {</span>
-<span class="s">                   highp vec4 colors[6];</span>
-<span class="s">               } d_Data;</span>
-<span class="s">               void main()</span>
-<span class="s">               {</span>
-<span class="s">                   uint i = i_TexCoord.x;</span>
-<span class="s">                   o_Color = d_Data.colors[i];</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;PixelShader.glsl&quot;</span><span class="p">);</span>
+<span class="w">       </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">if</span><span class="w"> </span><span class="n">defined</span><span class="p">(</span><span class="n">__ANDROID__</span><span class="p">)</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;shaders/VertexShader.spv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="k">else</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader.spv&quot;</span><span class="p">);</span>
+<span class="n">endif</span>
+<span class="w">       </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="k">if</span><span class="w"> </span><span class="n">defined</span><span class="p">(</span><span class="n">__ANDROID__</span><span class="p">)</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;shaders/PixelShader.spv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="k">else</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader.spv&quot;</span><span class="p">);</span>
+<span class="n">endif</span>
 <span class="w">       </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 <span class="w">   </span><span class="p">}</span>
 </pre></div>
@@ -694,40 +680,18 @@ controller’s position.</p>
 <div class="opengles docutils container">
 <p>For OpenGL ES, we will use GLSL version 3.1: add this code to define our vertex and pixel shaders:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL_ES</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               #version 310 es</span>
-<span class="s">               //Color Vertex Shader</span>
-<span class="s">               layout(std140, binding = 1) uniform CameraConstants</span>
-<span class="s">               {</span>
-<span class="s">                   mat4 viewProj;</span>
-<span class="s">                   mat4 modelViewProj;</span>
-<span class="s">                   mat4 model;</span>
-<span class="s">               };</span>
-<span class="s">               layout(location = 0) in highp vec4 a_Positions;</span>
-<span class="s">               layout(location = 0) out flat uvec2 o_TexCoord;</span>
-<span class="s">               void main()</span>
-<span class="s">               {</span>
-<span class="s">                   gl_Position = modelViewProj * a_Positions;</span>
-<span class="s">                   int face = gl_VertexID / 6;</span>
-<span class="s">                   o_TexCoord = uvec2(face, 0);</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="n">defined</span><span class="p">(</span><span class="n">__ANDROID__</span><span class="p">)</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;shaders/VertexShader_GLES.glsl&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="k">else</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;VertexShader_GLES.glsl&quot;</span><span class="p">);</span>
+<span class="n">endif</span>
 <span class="w">       </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               #version 310 es</span>
-<span class="s">               //Color Fragment Shader</span>
-<span class="s">               layout(location = 0) in flat uvec2 i_TexCoord;</span>
-<span class="s">               layout(location = 0) out highp vec4 o_Color;</span>
-<span class="s">               layout(std140, binding = 0) uniform Data</span>
-<span class="s">               {</span>
-<span class="s">                   highp vec4 colors[6];</span>
-<span class="s">               } d_Data;</span>
-<span class="s">               </span>
-<span class="s">               void main()</span>
-<span class="s">               {</span>
-<span class="s">                   uint i = i_TexCoord.x;</span>
-<span class="s">                   o_Color = d_Data.colors[i];</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="n">defined</span><span class="p">(</span><span class="n">__ANDROID__</span><span class="p">)</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;shaders/PixelShader_GLES.glsl&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="k">else</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;PixelShader_GLES.glsl&quot;</span><span class="p">);</span>
+<span class="n">endif</span>
 <span class="w">       </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 <span class="w">   </span><span class="p">}</span>
 </pre></div>
@@ -735,63 +699,18 @@ controller’s position.</p>
 </div>
 <div class="d3d11 d3d12 docutils container">
 <p>For Direct 3D, add this code to define our vertex and pixel shaders:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D11</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               //Color Vertex Shader</span>
-
-<span class="s">               cbuffer CameraConstants : register(b1)</span>
-<span class="s">               {</span>
-<span class="s">                   float4x4 viewProj;</span>
-<span class="s">                   float4x4 modelViewProj;</span>
-<span class="s">                   float4x4 model;</span>
-<span class="s">               };</span>
-<span class="s">               struct VS_IN</span>
-<span class="s">               {</span>
-<span class="s">                   uint vertexId : SV_VertexId;</span>
-<span class="s">                   float4 a_Positions : TEXCOORD0;</span>
-<span class="s">               };</span>
-<span class="s">               </span>
-<span class="s">               struct VS_OUT</span>
-<span class="s">               {</span>
-<span class="s">                   float4 o_Position	: SV_Position;</span>
-<span class="s">				uint2 o_TexCoord		: TEXCOORD0;</span>
-<span class="s">               };</span>
-<span class="s">               </span>
-<span class="s">               VS_OUT main(VS_IN IN)</span>
-<span class="s">               {</span>
-<span class="s">                   VS_OUT OUT;</span>
-<span class="s">                   OUT.o_Position = mul(modelViewProj,IN.a_Positions);</span>
-<span class="s">                   int face = IN.vertexId / 6;</span>
-<span class="s">                   OUT.o_TexCoord = uint2(face, 0);</span>
-<span class="s">                   return OUT;</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D11</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader_5_0.cso&quot;</span><span class="p">);</span>
 <span class="w">       </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 
-<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">R</span><span class="s">&quot;</span><span class="dl">(</span>
-<span class="s">               //Color Fragment Shader</span>
-<span class="s">               </span>
-<span class="s">               struct PS_IN</span>
-<span class="s">               {</span>
-<span class="s">                   float4 i_Position	: SV_Position;</span>
-<span class="s">				uint2 i_TexCoord		: TEXCOORD0;</span>
-<span class="s">               };</span>
-<span class="s">               struct PS_OUT</span>
-<span class="s">               {</span>
-<span class="s">                   float4 o_Color : SV_Target0;</span>
-<span class="s">               };</span>
-<span class="s">               </span>
-<span class="s">               cbuffer Data : register(b0)</span>
-<span class="s">               {</span>
-<span class="s">                   float4 colors[6];</span>
-<span class="s">               };</span>
-<span class="s">               </span>
-<span class="s">               PS_OUT main(PS_IN IN)</span>
-<span class="s">               {</span>
-<span class="s">                   PS_OUT OUT;</span>
-<span class="s">                   int i = int(IN.i_TexCoord.x);</span>
-<span class="s">                   OUT.o_Color = colors[i];</span>
-<span class="s">                   return OUT;</span>
-<span class="s">               }</span><span class="dl">)</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader_5_0.cso&quot;</span><span class="p">);</span>
+<span class="w">       </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader_5_1.cso&quot;</span><span class="p">);</span>
+<span class="w">       </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="w">       </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader_5_1.cso&quot;</span><span class="p">);</span>
 <span class="w">       </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
 <span class="w">   </span><span class="p">}</span>
 </pre></div>
@@ -805,7 +724,7 @@ controller’s position.</p>
 <span class="w">   </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">inputAssemblyState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PrimitiveTopology</span><span class="o">::</span><span class="n">TRIANGLE_LIST</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
 <span class="w">   </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">rasterisationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PolygonMode</span><span class="o">::</span><span class="n">FILL</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CullMode</span><span class="o">::</span><span class="n">BACK</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">FrontFace</span><span class="o">::</span><span class="n">COUNTER_CLOCKWISE</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
 <span class="w">   </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">multisampleState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
-<span class="w">       </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthStencilState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CompareOp</span><span class="o">::</span><span class="n">LESS_OR_EQUAL</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">   </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthStencilState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CompareOp</span><span class="o">::</span><span class="n">LESS_OR_EQUAL</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
 <span class="w">   </span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">colourBlendState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">LogicOp</span><span class="o">::</span><span class="n">NO_OP</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE_MINUS_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ColourComponentBit</span><span class="p">)</span><span class="mi">15</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}};</span>
 <span class="w">   </span><span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreatePipeline</span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">);</span>
 </pre></div>
@@ -826,7 +745,7 @@ controller’s position.</p>
 </pre></div>
 </div>
 <p>Recall that we’ve already inserted a call to PollActions() in the function RenderFrame(), so we’re ready to render the controller position and input values. In RenderLayer, after the call to ClearDepth(), let’s set up the rendering state:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">     </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">     </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
 <span class="w">     </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetViewports</span><span class="p">(</span><span class="o">&amp;</span><span class="n">viewport</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 <span class="w">     </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetScissors</span><span class="p">(</span><span class="o">&amp;</span><span class="n">scissor</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 
