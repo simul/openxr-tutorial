@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 08 Aug** : Text fixes.
     | **Tue 08 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 08 Aug** : Added images to Ch4. Added best-practices text to Ch4.
     | **Tue 08 Aug** : Finished Chapter 3.2 text. Minor correction to Chapter 1 text.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 25 Jul** : Finished Chapter 3.1 draft text, updated documentation tags in code.
     | **Tue 25 Jul** : Fixed linking issue in Chapters 2 and 3. Fixed strncpy macros and compilation issue in Chapter3/main.cpp.
     | **Tue 25 Jul** : Chapter4 draft for review.
-    | **Mon 24 Jul** : Separate RenderCube function.

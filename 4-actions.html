@@ -238,12 +238,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">🕹 4 Interactions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#using-spaces">4.1. Using Spaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interaction-profiles-and-bindings">4.2 Interaction Profiles and Bindings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interaction-profiles-and-bindings">4.3 Interaction Profiles and Bindings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#binding-interactions">Binding Interactions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#theory-and-best-practices-for-interaction-profiles">Theory and Best Practices for Interaction Profiles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-actions-in-the-app">Using Actions in the app</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#using-actions-in-the-app">4.4 Using Actions in the app</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rendering-the-controller-position">4.5 Rendering the Controller position</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#checking-for-connected-controllers">4.6 Checking for Connected Controllers</a></li>
 </ul>
@@ -434,7 +434,7 @@ So you can create multiple ActionSets, but we only need one for this example. Th
 <p>Each Action and ActionSet has both a name, for internal use, and a localized description to show to the end-user. This is because the user may want to re-map actions from the default controls, so there must be a human-readable name to show them.</p>
 </section>
 <section id="interaction-profiles-and-bindings">
-<h2>4.2 Interaction Profiles and Bindings<a class="headerlink" href="#interaction-profiles-and-bindings" title="Permalink to this heading">¶</a></h2>
+<h2>4.3 Interaction Profiles and Bindings<a class="headerlink" href="#interaction-profiles-and-bindings" title="Permalink to this heading">¶</a></h2>
 <p>As OpenXR is an API for many different devices, it needs to provide a way for you as a developer to refer to the various buttons, joysticks, inputs and outputs that a device may have, without needing to know in advance which device or devices the user will have.</p>
 <p>To do this, OpenXR defines the concept of <em>interaction profiles</em>. An interaction profile is a collection of interactions supported by a given device and runtime, and defined by means of textual paths.</p>
 <p>The first element of the interaction profile is the Profile Path, of the form “/interaction_profiles/&lt;vendor_name&gt;/&lt;type_name&gt;”. Then, each interaction is defined by a
@@ -474,7 +474,7 @@ user’s devices.</p>
 <span class="w">        </span><span class="p">});</span>
 </pre></div>
 </div>
-<p>Here, we create a proposed match-up between our app-specific actions, and XrPaths which refer to specific controls as interpreted by the Runtime. We call <cite>xrSuggestInteractionProfileBindings()</cite>. If the user’s device supports the given profile ( and “/interaction_profiles/khr/simple_controller” should <em>always</em> be supported in an OpenXR-compliant runtime), it will recognize these paths and can map them to its own controls. If the user’s device does not support a profile, the bindings will be ignored.
+<p>Here, we create a proposed match-up between our app-specific actions, and XrPaths which refer to specific controls as interpreted by the Runtime. We call <cite>xrSuggestInteractionProfileBindings()</cite>. If the user’s device supports the given profile ( and “/interaction_profiles/khr/simple_controller” should <em>always</em> be supported in an OpenXR runtime), it will recognize these paths and can map them to its own controls. If the user’s device does not support a profile, the bindings will be ignored.
 The suggested bindings are not guaranteed to be used: that’s up to the runtime. Some runtimes allow users to override the default bindings, and OpenXR expects this.</p>
 </section>
 <section id="theory-and-best-practices-for-interaction-profiles">
@@ -482,14 +482,15 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 <p>To get the best results from your app on the end-user’s device, it is important to understand the key principles behind the Interaction Profile system. These are laid out in the OpenXR Guide (<a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md">https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md</a>) but in brief:</p>
 <ul class="simple">
 <li><p>An app written for OpenXR should work without modification on any device/runtime combination, even those created after the app has been written.</p></li>
-<li><p>A device and runtime that are OpenXR-compliant should work with any OpenXR-compatible application, even those written after the device has been built.</p></li>
+<li><p>A device and runtime that support OpenXR should work with any OpenXR-compatible application, even those written after the device has been built.</p></li>
 </ul>
 <p>The way this is achieved is as follows: usually, each device will have its own “native” profile, and should also support “khr/simple_controller”. As a developer, <em>you should test the devices and runtimes you have</em>, and you should <em>specify profile bindings for each device you have tested</em>. You should <em>not</em> implement profiles you have not tested or try to anticipate profiles or features that have not been implemented. It is the <em>runtime’s responsibility</em> to support non-native runtimes where possible,</p>
 <p>A device can support any number of interaction profiles, either the nine profiles defined in the OpenXR standard, or an extension profile (see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions</a>).</p>
-<p>See also <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles</a> and</p>
+<p>See also <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles</a>.</p>
+</section>
 </section>
 <section id="using-actions-in-the-app">
-<h3>Using Actions in the app<a class="headerlink" href="#using-actions-in-the-app" title="Permalink to this heading">¶</a></h3>
+<h2>4.4 Using Actions in the app<a class="headerlink" href="#using-actions-in-the-app" title="Permalink to this heading">¶</a></h2>
 <p>ActionSets and Suggested Bindings are created before the session is initialized. There is session-specific setup to be done for our actions also. After the call to CreateResources(), add:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="n">CreateActionPoses</span><span class="p">();</span>
 <span class="w">      </span><span class="n">AttachActionSet</span><span class="p">();</span>
@@ -597,7 +598,6 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 </div>
 <p>If, and only if the action is active, we use <cite>xrLocateSpace</cite> to obtain the current pose of the controller. We specify that we want this relative to our reference space <cite>localOrStageSpace</cite>, because this is the global space we’re using for rendering. We’ll use <cite>leftGripPose</cite> in the next section to render the
 controller’s position.</p>
-</section>
 </section>
 <section id="rendering-the-controller-position">
 <h2>4.5 Rendering the Controller position<a class="headerlink" href="#rendering-the-controller-position" title="Permalink to this heading">¶</a></h2>
