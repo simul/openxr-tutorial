@@ -1269,6 +1269,40 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrSessionState</span><span class="p">;</span>
 </pre></div>
 </div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Event Type</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SESSION_STATE_UNKNOWN</p></td>
+<td><p>This is an unknown, pseudo-default state and should not be returned by the runtime.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SESSION_STATE_IDLE</p></td>
+<td><p>This is an initial state after creating or after ending the session.</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SESSION_STATE_READY</p></td>
+<td><p>This state, raised from the runtime, indicates that the session is ready to begin.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SESSION_STATE_SYNCHRONIZED</p></td>
+<td><p>The application has synced its frame loop with the runtime, but isn’t displaying its contents.</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SESSION_STATE_VISIBLE</p></td>
+<td><p>The application has synced its frame loop with the runtime and it is displaying its contents.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SESSION_STATE_FOCUSED</p></td>
+<td><p>The application has synced its frame loop with the runtime and it is displaying its contents and can receive XR inputs.</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SESSION_STATE_STOPPING</p></td>
+<td><p>The runtime is requesting that the application stop it frame loop rendering and end the session.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_SESSION_STATE_LOSS_PENDING</p></td>
+<td><p>The runtime is indicating that current session is no longer valid and should be destroyed. (*)</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_SESSION_STATE_EXITING</p></td>
+<td><p>The runtime is requesting that the application to destroy the session, usually from the user’s request.</p></td>
+</tr>
+</tbody>
+</table>
 <p>(*) Applications may wish to re-create objects like <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> and <code class="docutils literal notranslate"><span class="pre">XrSession</span></code>, if hardware changes were detected.</p>
 <figure class="align-center" style="width: 99px">
 <img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" /></figure>
