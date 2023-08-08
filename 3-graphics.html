@@ -1009,9 +1009,79 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 <p>First, we fill out a <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo</span></code> structure. The first member is of type <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceType</span></code></p>
+<table class="longtable docutils align-default" id="id21">
+<caption><span class="caption-text">OpenXR Reference Spaces</span><a class="headerlink" href="#id21" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>XrReferenceSpaceType</p></th>
+<th class="head"><p>Diagram</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>XR_REFERENCE_SPACE_TYPE_VIEW</p></td>
+<td><figure class="align-center">
+<img alt="OpenXR Reference Space View" src="_images/OpenXR-ReferenceSpace-View.png" />
+</figure>
+</td>
+<td><p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD.</p></td>
+</tr>
+<tr class="row-odd"><td><p>XR_REFERENCE_SPACE_TYPE_LOCAL</p></td>
+<td><figure class="align-center">
+<img alt="OpenXR Reference Space Local" src="_images/OpenXR-ReferenceSpace-Local.png" />
+</figure>
+</td>
+<td><p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at application start up or from a calibreated origin point. It is most often used for rendering seated-scale experiences such as car racing or aircraft cockpits, where a physical floor is not required. When recentering, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></td>
+</tr>
+<tr class="row-even"><td><p>XR_REFERENCE_SPACE_TYPE_STAGE</p></td>
+<td><figure class="align-center">
+<img alt="OpenXR Reference Space Stage" src="_images/OpenXR-ReferenceSpace-Stage.png" />
+</figure>
+</td>
+<td><p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is define to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is also axis aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or room-scale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#reference-spaces">7.1. Reference Spaces</a>.</p>
+<p>The default coordinate system in OpenXR is right-handed with +Y up, +X to the right, and -Z forward.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/OpenXR-Coordinate-System.png"><img alt="OpenXR Default Coordinate System" src="_images/OpenXR-Coordinate-System.png" style="width: 50%;" /></a>
+</figure>
+<p>You may wish to call <code class="docutils literal notranslate"><span class="pre">xrEnumerateReferenceSpaces()</span></code> to get all <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceType</span></code> s available to the system, before choosing one that is suitable for your application and the user’s environment.</p>
 </section>
 <section id="renderframe">
 <h3>3.2.3 RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, add the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> methods.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">RenderLayer</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Below is the code needed for rendering a frame in OpenXR. Each frame, we sequence through the three primary functions <code class="docutils literal notranslate"><span class="pre">xrWaitFrame()</span></code>, <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. These functions wrap around our rendering code and communicate to the OpenXR rumtime that we are rendering and that we need to synchronize with the XR compositor’s frame hook.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RenderFrame</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
@@ -1047,6 +1117,50 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameEndInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end the XR Frame.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
+</pre></div>
+</div>
+<p>The primary structure in use here is the <code class="docutils literal notranslate"><span class="pre">XrFrameState</span></code>, which contains various helpful members such <code class="docutils literal notranslate"><span class="pre">predictedDisplayTime</span></code>, which is the predicted time that the frame will be displayed to the user, and <code class="docutils literal notranslate"><span class="pre">shouldRender</span></code>, which states whether the application should render any graphics. This could occurs when the application is transitioning into or out of a running sesssion or that the system UI is focused and covering the application.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrFrameState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">    </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrTime</span><span class="w">                </span><span class="n">predictedDisplayTime</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrDuration</span><span class="w">            </span><span class="n">predictedDisplayPeriod</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrBool32</span><span class="w">              </span><span class="n">shouldRender</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrFrameState</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code> should ‘book-end’ all the rendering code in the XR frame and should be called in pairs. <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> should be called just before excuting any GPU work for the frame. When calling <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>, we need to pass an <code class="docutils literal notranslate"><span class="pre">XrFrameEndInfo</span></code> structure to that function. We assign the <code class="docutils literal notranslate"><span class="pre">displayTime</span></code>, which could be adjusted from the <code class="docutils literal notranslate"><span class="pre">XrFrameState::predictedDisplayTime</span></code> and we assign our <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code>. We also assign a count and pointer to an array of <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerBaseHeader</span> <span class="pre">*</span></code> s. These Composition Layers are used by the OpenXR compositor to create the final image for the views.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XR_MAY_ALIAS</span><span class="w"> </span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrStructureType</span><span class="w">             </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">    </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrCompositionLayerFlags</span><span class="w">     </span><span class="n">layerFlags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSpace</span><span class="w">                     </span><span class="n">space</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrCompositionLayerBaseHeader</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In this tutorial, we use the a single <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjection</span></code>, which describes an <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> and an array of <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code>, which in turn descibe the <code class="docutils literal notranslate"><span class="pre">XrPosef</span></code> of the views relative to the reference space, the Field Of View of the views and which <code class="docutils literal notranslate"><span class="pre">XrSwapchainSubImage</span></code> the view relative to.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainSubImage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrSwapchain</span><span class="w">    </span><span class="n">swapchain</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrRect2Di</span><span class="w">      </span><span class="n">imageRect</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">       </span><span class="n">imageArrayIndex</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainSubImage</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrCompositionLayerProjectionView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrStructureType</span><span class="w">             </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">    </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrPosef</span><span class="w">                     </span><span class="n">pose</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrFovf</span><span class="w">                      </span><span class="n">fov</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSwapchainSubImage</span><span class="w">         </span><span class="n">subImage</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrCompositionLayerProjectionView</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrCompositionLayerProjection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrStructureType</span><span class="w">                            </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">                   </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrCompositionLayerFlags</span><span class="w">                    </span><span class="n">layerFlags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSpace</span><span class="w">                                    </span><span class="n">space</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">                                   </span><span class="n">viewCount</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrCompositionLayerProjectionView</span><span class="o">*</span><span class="w">    </span><span class="n">views</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
