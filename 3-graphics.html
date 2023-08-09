@@ -1009,43 +1009,74 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 <p>First, we fill out a <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo</span></code> structure. The first member is of type <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceType</span></code></p>
-<table class="longtable docutils align-default" id="id21">
-<caption><span class="caption-text">OpenXR Reference Spaces</span><a class="headerlink" href="#id21" title="Permalink to this table">¶</a></caption>
-<colgroup>
-<col style="width: 20.0%" />
-<col style="width: 60.0%" />
-<col style="width: 20.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>XrReferenceSpaceType</p></th>
-<th class="head"><p>Diagram</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>XR_REFERENCE_SPACE_TYPE_VIEW</p></td>
-<td><figure class="align-center">
+<p>When we create the reference space, we specify a pose (<code class="docutils literal notranslate"><span class="pre">poseInReferenceSpace</span></code>) of identity:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">referenceSpaceCI.poseInReferenceSpace</span> <span class="pre">=</span> <span class="pre">{{0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">1.0f},</span> <span class="pre">{0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">0.0f}};</span></code></p>
+</div></blockquote>
+<p>i.e. an identity quaternion for the orientation, a position at the origin. Had we specified a different pose, the origin of the reference space would have been offset from the runtime’s default.</p>
+<p>A space is a frame of reference defined not by its instantaneous values, but semantically, by its purpose and relationship to other spaces. For the actual, instantaneous position and orientation of a space, we call this a “pose”.</p>
+<p>By using a local space - defined with <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code> - we specify that the views are relative to the XR hardware’s “local” space - either the headset’s starting position or some other world-locked origin.</p>
+<p>Some devices support stage space - <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code> - this implies a roomscale space with its origin on the floor.</p>
+<figure class="align-left" id="id21">
+<img alt="OpenXR Reference Spaces" src="_images/OpenXRSpaces.png" />
+<figcaption>
+<p><span class="caption-text">Reference Spaces in OpenXR</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>How these are interpreted is a matter for the OpenXR runtime.</p>
+<p>Another kind of reference space is view space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code>).
+View space is oriented with the user’s head, and is useful for user-interface and many
+other purposes. We don’t use it to generate view matrices for rendering, because those are often offset from the view space due to stereo rendering.</p>
+<p>See <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html">https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html</a>
+.. list-table:: OpenXR Reference Spaces</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">widths<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 3 1</p>
+</dd>
+<dt class="field-even">class<span class="colon">:</span></dt>
+<dd class="field-even"><p>longtable</p>
+</dd>
+<dt class="field-odd">header-rows<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1</p>
+</dd>
+</dl>
+<ul>
+<li><ul class="simple">
+<li><p>XrReferenceSpaceType</p></li>
+<li><p>Diagram</p></li>
+<li><p>Description</p></li>
+</ul>
+</li>
+<li><ul>
+<li><p>XR_REFERENCE_SPACE_TYPE_VIEW</p></li>
+<li><figure class="align-center">
 <img alt="OpenXR Reference Space View" src="_images/OpenXR-ReferenceSpace-View.png" />
 </figure>
-</td>
-<td><p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD.</p></td>
-</tr>
-<tr class="row-odd"><td><p>XR_REFERENCE_SPACE_TYPE_LOCAL</p></td>
-<td><figure class="align-center">
+</li>
+<li><p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD.</p></li>
+</ul>
+</li>
+<li><ul>
+<li><p>XR_REFERENCE_SPACE_TYPE_LOCAL</p></li>
+<li><figure class="align-center">
 <img alt="OpenXR Reference Space Local" src="_images/OpenXR-ReferenceSpace-Local.png" />
 </figure>
-</td>
-<td><p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at application start up or from a calibreated origin point. It is most often used for rendering seated-scale experiences such as car racing or aircraft cockpits, where a physical floor is not required. When recentering, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></td>
-</tr>
-<tr class="row-even"><td><p>XR_REFERENCE_SPACE_TYPE_STAGE</p></td>
-<td><figure class="align-center">
+</li>
+<li><p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the sapce. +Y is up, +X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at application start up or from a calibreated origin point. It is most often used for rendering seated-scale experiences such as car racing or aircraft cockpits, where a physical floor is not required. When recentering, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></li>
+</ul>
+</li>
+<li><ul>
+<li><p>XR_REFERENCE_SPACE_TYPE_STAGE</p></li>
+<li><figure class="align-center">
 <img alt="OpenXR Reference Space Stage" src="_images/OpenXR-ReferenceSpace-Stage.png" />
 </figure>
-</td>
-<td><p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is define to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is also axis aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or room-scale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></td>
-</tr>
-</tbody>
-</table>
+</li>
+<li><p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is define to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is also axis aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or room-scale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to respond to.</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
 <p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#reference-spaces">7.1. Reference Spaces</a>.</p>
 <p>The default coordinate system in OpenXR is right-handed with +Y up, +X to the right, and -Z forward.</p>
 <figure class="align-center">

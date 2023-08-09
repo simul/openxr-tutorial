@@ -236,7 +236,6 @@
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">🕹 4 Interactions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-spaces">4.1. Using Spaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interaction-profiles-and-bindings">4.3 Interaction Profiles and Bindings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#binding-interactions">Binding Interactions</a></li>
@@ -323,31 +322,6 @@
   <section id="interactions">
 <h1>🕹 4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
 <p>An OpenXR application has interactions with the user which can be user input to the application, or haptic output back to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: spaces, actions, and bindings.</p>
-<section id="using-spaces">
-<h2>4.1. Using Spaces<a class="headerlink" href="#using-spaces" title="Permalink to this heading">¶</a></h2>
-<p>Key to the interaction system is the concept of a <em>space</em>. A space is a frame of reference
-defined not by its instantaneous values, but semantically, by its purpose and relationship to other spaces. For the actual, instantaneous position and orientation of a space, we call this a “pose”.</p>
-<p>In Section 3.2, we created a _reference_ space called <code class="docutils literal notranslate"><span class="pre">localOrStageSpace</span></code> which represents the stationary space within which the application runs. We needed this space to call <code class="docutils literal notranslate"><span class="pre">xrLocateViews</span></code> because this function generates a view matrix for each eye. Recall that a view matrix transforms from a “global” reference frame into one oriented with the eye or camera.</p>
-<p>By using a local space - defined with <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code> - we specify that the views are relative to the XR hardware’s “local” space - either the headset’s starting position or some other world-locked origin.</p>
-<p>Some devices support stage space - <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code> - this implies a roomscale space with its origin on the floor.</p>
-<figure class="align-left" id="id1">
-<img alt="OpenXR Reference Spaces" src="_images/OpenXRSpaces.png" />
-<figcaption>
-<p><span class="caption-text">Reference Spaces in OpenXR</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-<p>How these are actually interpreted is a matter for the OpenXR runtime.</p>
-<p>When we created the reference space, we specified a pose (<code class="docutils literal notranslate"><span class="pre">poseInReferenceSpace</span></code>) of identity:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">referenceSpaceCI.poseInReferenceSpace</span> <span class="pre">=</span> <span class="pre">{{0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">1.0f},</span> <span class="pre">{0.0f,</span> <span class="pre">0.0f,</span> <span class="pre">0.0f}};</span></code></p>
-</div></blockquote>
-<p>i.e. an identity quaternion for the orientation, a position at the origin.</p>
-<p>Had we specified a different pose, the origin of the reference space would have been offset from the runtime’s default.</p>
-<p>Another kind of reference space is view space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code>).
-View space is oriented with the user’s head, and is useful for user-interface and many
-other purposes. We don’t use it to generate view matrices for rendering, because those are often offset from the view space due to stereo rendering.</p>
-<p>See <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html">https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html</a></p>
-</section>
 <section id="creating-actions-and-action-sets">
 <h2>4.2 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Permalink to this heading">¶</a></h2>
 <p>At the end of your application class, add this code:</p>
@@ -481,12 +455,12 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 <h3>Theory and Best Practices for Interaction Profiles<a class="headerlink" href="#theory-and-best-practices-for-interaction-profiles" title="Permalink to this heading">¶</a></h3>
 <p>To get the best results from your app on the end-user’s device, it is important to understand the key principles behind the Interaction Profile system. These are laid out in the OpenXR Guide (<a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md">https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md</a>) but in brief:</p>
 <ul class="simple">
-<li><p>An app written for OpenXR should work without modification on any device/runtime combination, even those created after the app has been written.</p></li>
-<li><p>A device and runtime that support OpenXR should work with any OpenXR-compatible application, even those written after the device has been built.</p></li>
+<li><p>An app written for OpenXR should work without modification on device/runtime combination, even those created after the app has been written.</p></li>
+<li><p>An OpenXR device and runtime should work with any OpenXR application, even those not tested with that device.</p></li>
 </ul>
-<p>The way this is achieved is as follows: usually, each device will have its own “native” profile, and should also support “khr/simple_controller”. As a developer, <em>you should test the devices and runtimes you have</em>, and you should <em>specify profile bindings for each device you have tested</em>. You should <em>not</em> implement profiles you have not tested or try to anticipate profiles or features that have not been implemented. It is the <em>runtime’s responsibility</em> to support non-native runtimes where possible,</p>
+<p>The way this is achieved is as follows: usually, each device will have its own “native” profile, and should also support “khr/simple_controller”. As a developer, <em>you should test the devices and runtimes you have</em>, and you should <em>specify profile bindings for each device you have tested</em>. You should <em>not</em> implement profiles you have not tested. It is the <em>runtime’s responsibility</em> to support non-native profiles where possible, either automatically, or with the aid of user-specified rebinding.</p>
 <p>A device can support any number of interaction profiles, either the nine profiles defined in the OpenXR standard, or an extension profile (see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions</a>).</p>
-<p>See also <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles</a>.</p>
+<p>See also <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles">semantic-path-interaction-profiles</a>.</p>
 </section>
 </section>
 <section id="using-actions-in-the-app">
@@ -518,10 +492,10 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 </div>
 <p>For one pose, this didn’t need to be a lambda, but it will make it easier to add more poses later. Here, we’re creating the XrSpace that represents the left grip pose action. As with the reference space, we use an identity XrPosef to indicate that we’ll take the pose as-is, without offsets.</p>
 <p>For OpenXR hand controllers, we distinguish between a “grip pose”, representing the orientation of the handle of the device, and an “aim pose” - which is oriented where the device “points”. The relative orientations of these will vary between different controller configurations, so again, it’s important to test with the devices you have. Let the runtime worry about adaptating to different devices that you haven’t tested.</p>
-<figure class="align-left" id="id2">
+<figure class="align-left" id="id1">
 <img alt="OpenXR Standard Controller Poses" src="_images/standard-poses.png" />
 <figcaption>
-<p><span class="caption-text">Standard Grip and Aim poses for OpenXR Controllers.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Standard Grip and Aim poses for OpenXR Controllers.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>Finally as far as action setup goes, we will attach the ActionSet to the session. Add this function:</p>
