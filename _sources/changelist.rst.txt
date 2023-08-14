@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 14 Aug** : Some corrections and improvements to section 3.2.2 xrCreateReferenceSpace.
     | **Tue 08 Aug** : Moving 4.1 to ch3
     | **Tue 08 Aug** : Text fixes.
     | **Tue 08 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Tue 25 Jul** : Don't use tabs in clang-format.
     | **Tue 25 Jul** : Merge pull request #16 from dnovillo/patch-1
     | **Tue 25 Jul** : Finished Chapter 3.1 draft text, updated documentation tags in code.
-    | **Tue 25 Jul** : Fixed linking issue in Chapters 2 and 3. Fixed strncpy macros and compilation issue in Chapter3/main.cpp.
