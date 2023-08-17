@@ -29,7 +29,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "linux"; // Set default here.
+		platform = "windows"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -101,7 +101,7 @@
 		if (platform == "windows")
 		{
 			if (graphicsApi == "opengles"||graphicsApi==undefined)
-				newApi="vulkan";
+				newApi="d3d11";
 		}
 		if (platform == "linux")
 		{

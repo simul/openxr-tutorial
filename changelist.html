@@ -30,7 +30,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "linux"; // Set default here.
+		platform = "windows"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -102,7 +102,7 @@
 		if (platform == "windows")
 		{
 			if (graphicsApi == "opengles"||graphicsApi==undefined)
-				newApi="vulkan";
+				newApi="d3d11";
 		}
 		if (platform == "linux")
 		{
@@ -308,7 +308,13 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 14 Aug** : Fixed code-block 3-graphics.rst.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 17 Aug** : Fixed rst warnings in chapter 1 and 3 texts.
+| **Wed 16 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Wed 16 Aug** : Updated tutorial/1-introduction.rst after internal read through.
+| **Wed 16 Aug** : Default to windows platform for development purposes.
+| **Mon 14 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Mon 14 Aug** : Coloured blocks in Chapter 4. Chapter 5 added.
+| **Mon 14 Aug** : Fixed code-block 3-graphics.rst.
 | **Mon 14 Aug** : Some corrections and improvements to section 3.2.2 xrCreateReferenceSpace.
 | **Tue 08 Aug** : Moving 4.1 to ch3
 | **Tue 08 Aug** : Text fixes.
@@ -402,12 +408,6 @@
 | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
 | **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 25 Jul** : Remove hardcoded XR_RUNTIME_JSON putenv.
-| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Tue 25 Jul** : Added code snippets for draft text for Chapter 3.2.
-| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials
-| **Tue 25 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Tue 25 Jul** : Don&#39;t use tabs in clang-format.
-| **Tue 25 Jul** : Merge pull request #16 from dnovillo/patch-1
 </pre></div>
 </div>
 </section>

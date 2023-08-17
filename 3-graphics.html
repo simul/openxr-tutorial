@@ -32,7 +32,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "linux"; // Set default here.
+		platform = "windows"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -104,7 +104,7 @@
 		if (platform == "windows")
 		{
 			if (graphicsApi == "opengles"||graphicsApi==undefined)
-				newApi="vulkan";
+				newApi="d3d11";
 		}
 		if (platform == "linux")
 		{
@@ -345,28 +345,24 @@
 </div>
 <div class='select-graphics-api-container-inline'>
 	<button class="select-graphics-api-inline selectd3d11" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
-		<img src="_static/css/d3d11.png" alt="DirectX 11" />
-		DirectX 11
+		Direct3D 11
 	</button>
 	<button class="select-graphics-api-inline selectd3d12" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
-		<img src="_static/css/d3d12.png" alt="DirectX 12" />
-		DirectX 12
+		Direct3D 12
 	</button>
 	<button class="select-graphics-api-inline selectopengl" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
-		<img src="_static/css/opengl.png" alt="OpenGL" />
 		OpenGL
 	</button>
 	<button class="select-graphics-api-inline selectopengles" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
-		<img src="_static/css/opengles.png" alt="OpenGL ES" />
 		OpenGL ES
 	</button>
 	<button class="select-graphics-api-inline selectvulkan" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
-		<img src="_static/css/vulkan.png" alt="Vulkan" />
 		Vulkan
 	</button>
 </div>
 
 <p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with all the Graphics APIs.</p>
+<p>Download <a class="reference download internal" download="" href="_downloads/7bc8e70c24495d1dd50fde75d030ec5e/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a></p>
 <section id="creating-swapchains">
 <h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
 <p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
@@ -614,7 +610,7 @@
 </pre></div>
 </div>
 <p>The function calls a pure virtual function called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific format us to use.</p>
-<div class="d3d11 docutils container" id="id1">
+<div class="d3d11 docutils container" id="d3d11-id-2">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -626,7 +622,7 @@
 </pre></div>
 </div>
 </div>
-<div class="d3d12 docutils container" id="id2">
+<div class="d3d12 docutils container" id="d3d12-id-2">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -638,7 +634,7 @@
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="id3">
+<div class="opengl docutils container" id="opengl-id-2">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L229-L236</span>
@@ -654,7 +650,7 @@
 </pre></div>
 </div>
 </div>
-<div class="opengles docutils container" id="id4">
+<div class="opengles docutils container" id="opengles-id-2">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengles.cpp#L208-L216</span>
@@ -669,7 +665,7 @@
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="id5">
+<div class="vulkan docutils container" id="vulkan-id-2">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -692,7 +688,7 @@
 </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainImages</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Images.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<div class="d3d11 docutils container" id="id6">
+<div class="d3d11 docutils container" id="d3d11-id-3">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_D3D11::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_D3D11_KHR</span><span class="p">});</span>
@@ -710,7 +706,7 @@
 </div>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D11Texture2D</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="d3d12 docutils container" id="id7">
+<div class="d3d12 docutils container" id="d3d12-id-3">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_D3D12::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_D3D12_KHR</span><span class="p">});</span>
@@ -728,7 +724,7 @@
 </div>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D12Resource</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="opengl docutils container" id="id8">
+<div class="opengl docutils container" id="opengl-id-3">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_OpenGL::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_KHR</span><span class="p">});</span>
@@ -746,7 +742,7 @@
 </div>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="opengles docutils container" id="id9">
+<div class="opengles docutils container" id="opengles-id-3">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_OpenGL_ES::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_ES_KHR</span><span class="p">});</span>
@@ -764,7 +760,7 @@
 </div>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="vulkan docutils container" id="id10">
+<div class="vulkan docutils container" id="vulkan-id-3">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_Vulkan::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR</span><span class="p">});</span>
@@ -803,31 +799,31 @@
 </pre></div>
 </div>
 <p>Each graphics API overrides the virtual function <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetDepthFormat()</span></code>, which return a API-specific image format of type <code class="docutils literal notranslate"><span class="pre">D32_F</span></code>.</p>
-<div class="d3d11 docutils container" id="id11">
+<div class="d3d11 docutils container" id="d3d11-id-4">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="d3d12 docutils container" id="id12">
+<div class="d3d12 docutils container" id="d3d12-id-4">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="id13">
+<div class="opengl docutils container" id="opengl-id-4">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="opengles docutils container" id="id14">
+<div class="opengles docutils container" id="opengles-id-4">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="id15">
+<div class="vulkan docutils container" id="vulkan-id-4">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">VK_FORMAT_D32_SFLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
@@ -863,13 +859,13 @@
 </pre></div>
 </div>
 <p>Each graphics API overrides the virtual function <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSwapchainImage()</span></code>, which return a API-specific handle to the image, which is cast to a <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">*</span></code>.</p>
-<div class="d3d11 docutils container" id="id16">
+<div class="d3d11 docutils container" id="d3d11-id-5">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="d3d12 docutils container" id="id17">
+<div class="d3d12 docutils container" id="d3d12-id-5">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">        </span><span class="n">ID3D12Resource</span><span class="o">*</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span>
@@ -879,19 +875,19 @@
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="id18">
+<div class="opengl docutils container" id="opengl-id-5">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="opengles docutils container" id="id19">
+<div class="opengles docutils container" id="opengles-id-5">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="id20">
+<div class="vulkan docutils container" id="vulkan-id-5">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">VkImage</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span>
@@ -1020,14 +1016,14 @@ level of blending with the real world behind the display.</p></td>
 <p>By using a local space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code>), we specify that the views are relative to the XR hardware’s ‘local’ space - either the headset’s starting position or some other world-locked origin.</p>
 <p>Some devices support stage space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code>); this implies a roomscale space with its origin on the floor.</p>
 <p>See <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html">https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html</a></p>
-<figure class="align-center" id="id21">
+<figure class="align-center" id="id1">
 <img alt="OpenXR Reference Spaces" src="_images/OpenXRSpaces.png" />
 <figcaption>
-<p><span class="caption-text">Reference Spaces in OpenXR</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Reference Spaces in OpenXR</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
-<table class="longtable docutils align-default" id="id22">
-<caption><span class="caption-text">OpenXR Reference Spaces</span><a class="headerlink" href="#id22" title="Permalink to this table">¶</a></caption>
+<table class="longtable docutils align-default" id="id2">
+<caption><span class="caption-text">OpenXR Reference Spaces</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 60.0%" />
@@ -1100,7 +1096,7 @@ level of blending with the real world behind the display.</p></td>
 </div>
 <p>Below is the code needed for rendering a frame in OpenXR. Each frame, we sequence through the three primary functions <code class="docutils literal notranslate"><span class="pre">xrWaitFrame()</span></code>, <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. These functions wrap around our rendering code and communicate to the OpenXR rumtime that we are rendering and that we need to synchronize with the XR compositor’s frame hook.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RenderFrame</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span>
 <span class="w">        </span><span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
 <span class="w">        </span><span class="n">XrFrameWaitInfo</span><span class="w"> </span><span class="n">frameWaitInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_WAIT_INFO</span><span class="p">};</span>
 <span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameWaitInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameState</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for XR Frame.&quot;</span><span class="p">);</span>
@@ -1127,8 +1123,8 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">layers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 <span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layers</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
 <span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameEndInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end the XR Frame.&quot;</span><span class="p">);</span>
+<span class="k">if</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
 </pre></div>
 </div>
 <p>The primary structure in use here is the <code class="docutils literal notranslate"><span class="pre">XrFrameState</span></code>, which contains vital members for timing and rendering such <code class="docutils literal notranslate"><span class="pre">predictedDisplayTime</span></code>, which is the predicted time that the frame will be displayed to the user, and <code class="docutils literal notranslate"><span class="pre">shouldRender</span></code>, which states whether the application should render any graphics. This could occurs when the application is transitioning into or out of a running sesssion or that the system UI is focused and covering the application.</p>
@@ -1270,6 +1266,8 @@ level of blending with the real world behind the display.</p></td>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
+<span class="w">        </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">Viewport</span><span class="w"> </span><span class="n">viewport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">        </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">Rect2D</span><span class="w"> </span><span class="n">scissor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{(</span><span class="kt">int32_t</span><span class="p">)</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="p">)</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">}};</span>
 
 <span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW</span><span class="p">};</span>
 <span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">;</span>
@@ -1285,7 +1283,7 @@ level of blending with the real world behind the display.</p></td>
 
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// VR mode use a background color.</span>
-<span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.22f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.35f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
+<span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// In AR mode make the background color black.</span>
 <span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
@@ -1295,7 +1293,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>
 
 <span class="w">        </span><span class="n">XrSwapchainImageReleaseInfo</span><span class="w"> </span><span class="n">releaseInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO</span><span class="p">};</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Swapchian&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Swapchain&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="w">    </span><span class="n">layerProjection</span><span class="p">.</span><span class="n">layerFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_COMPOSITION_LAYER_BLEND_TEXTURE_SOURCE_ALPHA_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_COMPOSITION_LAYER_CORRECT_CHROMATIC_ABERRATION_BIT</span><span class="p">;</span>
 <span class="w">    </span><span class="n">layerProjection</span><span class="p">.</span><span class="n">space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="p">;</span>
