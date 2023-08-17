@@ -529,6 +529,7 @@ If you want to use OpenGL ES stand-alone, you will need to use EGL to create a v
 <span class="w">        </span><span class="c"># URL https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.27.zip</span>
 <span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
 <span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">DOWNLOAD_EXTRACT_TIMESTAMP</span><span class="w"> </span><span class="s">TRUE</span>
 <span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
@@ -566,13 +567,9 @@ First, create a directory where the code will go, we’ll call this the <em>work
 
 <span class="c"># Optional selected runtime</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">XR_RUNTIME_JSON</span><span class="w"> </span><span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span><span class="w"> </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span><span class="p">)</span>
-<span class="w">	</span>
-<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">tutorial</span><span class="p">)</span>
-<span class="hll"><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
-</span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
-<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter4</span><span class="p">)</span>
-<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter5</span><span class="p">)</span>
-<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">GraphicsAPI_Test</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here, we specify the CMake version, project name and the configurations types, which we limit to just Debug and Release.
@@ -597,6 +594,7 @@ In it, put the following code:</p>
 <span class="w">        </span><span class="c"># URL https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.27.zip</span>
 <span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
 <span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">DOWNLOAD_EXTRACT_TIMESTAMP</span><span class="w"> </span><span class="s">TRUE</span>
 <span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
@@ -864,6 +862,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <span class="w">        </span><span class="c"># URL https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.27.zip</span>
 <span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
 <span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">DOWNLOAD_EXTRACT_TIMESTAMP</span><span class="w"> </span><span class="s">TRUE</span>
 <span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
@@ -1469,16 +1468,14 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <p>Now we will define the main class <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> of the application. It’s just a stub for now, with an empty <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
-
-<span class="k">private</span><span class="o">:</span>
-<span class="w">         </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">         </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -1615,7 +1612,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <section id="build-and-run">
 <h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
 <div class="windows docutils container" id="windows-id-4">
-<p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator.</p>
+<p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally click “Open Project” to open that solution with Visual Studio.</p>
 <p>You can now build and run your program. It should compile and link with no errors or warnings.</p>
 </div>
 <div class="linux docutils container" id="linux-id-4">

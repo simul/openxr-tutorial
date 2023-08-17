@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 17 Aug** : Update OpenXRTutorial class in texts of Chapters 1 and 2.
+    | **Thu 17 Aug** : Added DOWNLOAD_EXTRACT_TIMESTAMP to FetchContent_Declare() in CMake lists. Updated text for Chapter 1 from internal review.
     | **Thu 17 Aug** : Fixed rst warnings in chapter 1 and 3 texts.
     | **Wed 16 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 16 Aug** : Updated tutorial/1-introduction.rst after internal read through.
@@ -100,5 +102,3 @@ Changelist
     | **Tue 25 Jul** : Blend mode and build fixes
     | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.
-    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 25 Jul** : Remove hardcoded XR_RUNTIME_JSON putenv.
