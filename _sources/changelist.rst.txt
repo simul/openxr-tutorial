@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 18 Aug** : Updated text for chapter 2.2.1.
+    | **Fri 18 Aug** : Updated tags in Chapter2/main.cpp. Updated chapter 2 text.
+    | **Fri 18 Aug** : Updated .gitignore to ignore Android shader build outputs. Added <memory> to HelperFunctions.h
+    | **Thu 17 Aug** : Updated chapter 2 text.
+    | **Thu 17 Aug** : Updated Chapter 2 text from internal review.
     | **Thu 17 Aug** : Update OpenXRTutorial class in texts of Chapters 1 and 2.
     | **Thu 17 Aug** : Added DOWNLOAD_EXTRACT_TIMESTAMP to FetchContent_Declare() in CMake lists. Updated text for Chapter 1 from internal review.
     | **Thu 17 Aug** : Fixed rst warnings in chapter 1 and 3 texts.
@@ -97,8 +102,3 @@ Changelist
     | **Tue 25 Jul** : Chapter2 fixups to match later code. XR_RUNTIME_JSON in main CMakeLists.txt Add older tags to Chapter4.
     | **Tue 25 Jul** : Pick better default for env blend mode
     | **Tue 25 Jul** : Chapter 3 fixes
-    | **Tue 25 Jul** : Identation fixes
-    | **Tue 25 Jul** : Merge branch 'main' into rb/blendmode
-    | **Tue 25 Jul** : Blend mode and build fixes
-    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 25 Jul** : Updated error message in GetEnvironmentBlendModes() in Chapter 3 and 4.

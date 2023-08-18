@@ -19,16 +19,12 @@ We will continue to use the ``OpenXRTutorial`` class in ``Chapter2/main.cpp`` th
 Here, we will add the following highlighted text to the ``OpenXRTutorial`` class:
 
 .. code-block:: cpp
-	:emphasize-lines: 4-9, 14-19 , 22-47
+	:emphasize-lines: 10-15 , 18-45
 	
 	class OpenXRTutorial {
 	public:
-		OpenXRTutorial(GraphicsAPI_Type api)
-			: m_apiType(api) {
-			if (!CheckGraphicsAPI_TypeIsValidForPlatform(m_apiType)) {
-				std::cout << "ERROR: The provided Graphics API is not valid for this platform." << std::endl;
-				DEBUG_BREAK;
-			}
+		OpenXRTutorial(GraphicsAPI_Type apiType) 
+		{
 		}
 		~OpenXRTutorial() = default;
 	
@@ -70,12 +66,12 @@ Here, we will add the following highlighted text to the ``OpenXRTutorial`` class
 		XrSystemId m_systemID = {};
 	};
 
-First, we updated the constructor to initialize ``OpenXRTutorial::m_apiType`` and check that the provided ``GraphicsAPI_Type`` is valid for the platform. Next, we updated ``OpenXRTutorial::Run()`` to call the new methods ``CreateInstance()``, ``GetInstanceProperties()``, ``GetSystemID()``and ``DestroyInstance()`` in that order. Finally, we added those methods and the following members to the class within thier separate private sections.
+First, we updated ``OpenXRTutorial::Run()`` to call the new methods ``CreateInstance()``, ``GetInstanceProperties()``, ``GetSystemID()``and ``DestroyInstance()`` in that order. Finally, we added those methods and the following members to the class within thier separate private sections.
 
 2.1.1 XrInstance
 ================
 
-The ``XrInstance`` is the foundational object that we need to create first. The ``XrInstance`` encompasses the application setup state, OpenXR API version and any layers and extensions. So inside the ``CreateInstance()`` method, we will first look at the ``XrApplicationInfo``.
+The ``XrInstance`` is the foundational object that we need to create first. The ``XrInstance`` encompasses the application setup state, OpenXR API version and any layers and extensions. So inside the ``CreateInstance()`` method, we will first add at the code for the ``XrApplicationInfo``.
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
@@ -85,7 +81,7 @@ The ``XrInstance`` is the foundational object that we need to create first. The 
 
 This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the ``XrApplicationInfo::apiVersion``. Here we use the ``XR_CURRENT_API_VERSION`` macro to specific the OpenXR version that we want to run. Also note here the use of ``strncpy()`` to set the applicationName and engineName. If you look at ``XrApplicationInfo::applicationName`` and ``XrApplicationInfo::engineName`` members, they are of type ``char[]``, hence you must copy your string into that ``char[]`` and you must also by aware of the allowable length.
 
-Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease.
+Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the ``CreateInstance()`` method, add the following code:
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
@@ -95,7 +91,7 @@ Similar to Vulkan, OpenXR allows applications to extend functionality past what 
 
 Here, we store in a ``std::vector<std::string>`` the extension names that we would like to use. ``XR_EXT_DEBUG_UTILS_EXTENSION_NAME`` is a macro of a string defined in ``openxr.h``. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in :ref:`Chapter 5.2<5.2 Using xrCreateDebugUtilsMessengerEXT>`. Depending on which ``XR_USE_GRAPHICS_API_...`` macro that you have defined, this code will add the relevant extension.
 
-Not all API layers and extensions are available to use, so we much check which ones can use. We will use ``xrEnumerateApiLayerProperties()`` and ``xrEnumerateInstanceExtensionProperties()`` to check which ones the runtime can provide.
+Not all API layers and extensions are available to use, so we much check which ones can use. We will use ``xrEnumerateApiLayerProperties()`` and ``xrEnumerateInstanceExtensionProperties()`` to check which ones the runtime can provide. We will do this by adding the following code to the ``CreateInstance()`` method.
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
@@ -103,7 +99,11 @@ Not all API layers and extensions are available to use, so we much check which o
 	:end-before: XR_DOCS_TAG_END_find_apiLayer_extension
 	:dedent: 8
 
-These functions are called twice. The first time is to get the count of the API layers or extensions and the second is to fill out the array of structures. Before the second call, we need set ``XrApiLayerProperties::type`` or ``XrExtensionProperties::type`` to the correct value, so that the second call can correctly fill out the data. After we have enumerated the API layers and extensions, we use a nested loop to check to see whether an API layers or extensions is available and add it to the activeAPILayers and/or activeInstanceExtensions respectively. Note the activeAPILayers and activeInstanceExtensions are of type ``std::vector<const char *>``. This will help us when fill out the next structure ``XrInstanceCreateInfo``.
+These functions are called twice. The first time is to get the count of the API layers or extensions and the second is to fill out the array of structures. Before the second call, we need set ``XrApiLayerProperties::type`` or ``XrExtensionProperties::type`` to the correct value, so that the second call can correctly fill out the data. After we have enumerated the API layers and extensions, we use a nested loop to check to see whether an API layers or extensions is available and add it to the ``m_activeAPILayers`` and/or ``m_activeInstanceExtensions`` respectively. 
+
+Note the ``m_activeAPILayers`` and ``m_activeInstanceExtensions`` are of type ``std::vector<const char *>``. This will help us when fill out the next structure ``XrInstanceCreateInfo``.
+
+Now that we have assembled all of the information need we can go ahead and fill out the ``XrInstanceCreateInfo`` structure. Add the following code to the ``CreateInstance()`` method.
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
@@ -111,23 +111,25 @@ These functions are called twice. The first time is to get the count of the API 
 	:end-before: XR_DOCS_TAG_END_XrInstanceCreateInfo
 	:dedent: 8
 
-This section is fairly simple, as we now just collect data from before and assign them to members in the ``XrInstanceCreateInfo`` structure. Finally, we get to call ``xrCreateInstance()`` where we take pointers to the stack ``XrInstanceCreateInfo`` and ``XrInstance`` objects. If the function succeeded, the result will be ``XR_SUCCESS`` and ``XrInstance`` will be non-null.
+This section is fairly simple, as we have used the previously collected data and assigned it to the members in the ``XrInstanceCreateInfo`` structure. Then, we called ``xrCreateInstance()`` where we took pointers to the ``XrInstanceCreateInfo`` and ``XrInstance`` objects. When the function is called, if successful, it will return a value of ``XR_SUCCESS``, and ``XrInstance`` will be non-null.
 
-At the end of the application, we should destroy the ``XrInstance``. This is simple done with the function ``xrDestroyInstance()``.
+At the end of the application, we should destroy the ``XrInstance``. This is simple done with the function ``xrDestroyInstance()``. Add the following code to the ``DestroyInstance()`` method:
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
-	:start-at: void DestroyInstance()
-	:end-at: }
-	:dedent: 4
+	:start-after: void DestroyInstance()
+	:end-before: }
+	:dedent: 8
 
-Whilst we have an ``XrInstance``, let's check its properties. We fill out the type and next members of the structure ``XrInstanceProperties`` and pass it along with the ``XrInstance`` to ``xrGetInstanceProperties()``. This function will fill out the rest of that structure for us to use. Here, we simply log to stdout the runtime's name, and with the use of the ``XR_VERSION_MAJOR``, ``XR_VERSION_MINOR`` and ``XR_VERSION_PATCH`` macros, we parse and log the runtime version.
+Whilst we have an ``XrInstance``, let's check its properties. Add the following code to the ``GetInstanceProperties()`` method:
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
 	:start-after: XR_DOCS_TAG_BEGIN_GetInstanceProperties
 	:end-before: XR_DOCS_TAG_END_GetInstanceProperties
-	:dedent: 4
+	:dedent: 8
+
+Here, we have initialized the ``XrInstanceProperties`` structure with the correct ``XrStructureType`` and passed it along with the ``XrInstance`` to the ``xrGetInstanceProperties()`` function. This function will fill out the rest of that structure for us to use. Next, we have loggod to stdout the runtime's name, and with the use of the ``XR_VERSION_MAJOR``, ``XR_VERSION_MINOR`` and ``XR_VERSION_PATCH`` macros, we have parsed and logged the runtime version.
 
 2.1.2 XrSystemId
 ================
@@ -142,20 +144,28 @@ So, a ``XrSystemId`` could represent VR headset and a pair of controllers, or pe
 	:start-at: typedef enum XrFormFactor {
 	:end-at: } XrFormFactor;
 
-We fill out the ``XrSystemGetInfo`` structure as desired and pass it as a pointer along with the ``XrInstance`` and a pointer to the ``XrSystemId`` to ``xrGetSystem()``. If successful, we should now have a non-null ``XrSystemId``.
+*The above code is an excerpt from openxr/openxr.h*
+
+Add the following code to the ``GetSystemID()`` method:
 
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
 	:start-after: XR_DOCS_TAG_BEGIN_GetSystemID
 	:end-before: XR_DOCS_TAG_END_GetSystemID
-	:dedent: 4
+	:dedent: 8
 
-We can now also get the system's properties. We partially fill out a ``XrSystemProperties`` structure and pass it as a pointer along with the ``XrInstance`` and the ``XrSystemId`` to ``xrGetSystemProperties()``. This function will fill out the rest of the ``XrSystemProperties`` structure; detailing the vendor's ID, system's name and the system's graphics and tracking properties.
+Here, we have filled out the ``XrSystemGetInfo`` structure with the desired ``XrFormFactor`` and pass it as a pointer along with the ``XrInstance`` and a pointer to the ``XrSystemId`` to the ``xrGetSystem()`` function. When the function is called, if successful, ``XrSystemId`` will be non-null.
+
+With the above code, we have also got the system's properties. We partially filled out a ``XrSystemProperties`` structure and passed it as a pointer along with the ``XrInstance`` and the ``XrSystemId`` to the ``xrGetSystemProperties()`` function. This function will fill out the rest of the ``XrSystemProperties`` structure; detailing the vendor's ID, system's name and the system's graphics and tracking properties.
 
 .. literalinclude:: ../build/openxr/include/openxr/openxr.h
 	:language: cpp
 	:start-at: typedef struct XrSystemGraphicsProperties {
 	:end-at: } XrSystemProperties;
+
+*The above code is an excerpt from openxr/openxr.h*
+
+You can now run the application to check that you have a valid ``XrInstnace`` and ``XrSystemId``.
 
 *************************
 2.2 Creating an XrSession
@@ -165,10 +175,10 @@ The next major component of OpenXR that needs to be created in an ``XrSession``.
 
 For now, we are just going to create an ``XrSession``. At this point, you'll need to select which Graphics API you wish to use. Only one Graphics API can be used with an ``XrSession``. This tutorial demonstrates how to use D3D11, D3D12, OpenGL, OpenGL ES and Vulkan in conjunction with OpenXR for the purpose of rendering graphics to the provided views. Ultimately, you will most likely be bringing your own rendering solution to this tutorial, therefore the code examples provided for the Graphics APIs are `placeholders` for you own code base; demonstrating in this sub-chapter what objects are needed from your Graphics API in order to create an ``XrSession``. This tutorial uses polymorphic classes; ``GraphicsAPI_...`` derives from the base ``GraphicsAPI`` class. There are both compile and runtime checks to select the requested Graphics API, and we construct an appropriate derived classes through the use of ``std::unique_ptr<>``. 
 
-Update the Constructor and ``Run()`` method as shown and add the following members:
-``CheckGraphicsAPI_TypeIsValidForPlatform()`` is declared in ``GraphicsAPI.h``.
+Update the constructor of the ``OpenXRTutorial`` class, the ``OpenXRTutorial::Run()`` method and also add in the definitions of the new methods and the members to their separate private sections. All the new code is highlighted code below.
 
 .. code-block:: cpp
+	:emphasize-lines: 4-9, 18-19, 41-46, 58-61
 
 	class OpenXRTutorial {
 	public:
@@ -179,27 +189,53 @@ Update the Constructor and ``Run()`` method as shown and add the following membe
 				DEBUG_BREAK;
 			}
 		}
-		
-		// [...]
+		~OpenXRTutorial() = default;
 
 		void Run() {
 			CreateInstance();
-			CreateDebugMessenger();
-		
+
 			GetInstanceProperties();
 			GetSystemID();
 		
 			CreateSession();
 			DestroySession();
 		
-			DestroyDebugMessenger();
 			DestroyInstance();
 		}
 
-		// [...]
+	private:
+		void CreateInstance()
+		{
+			// [...]
+		}
+		void DestroyInstance()
+		{
+			// [...]
+		}
+		void GetInstanceProperties()
+		{
+			// [...]
+		}
+		void GetSystemID()
+		{
+			// [...]
+		}
+		void CreateSession()
+		{
+		}
+		void DestroySession()
+		{
+		}
 
 	private:
-		// [...]
+		XrInstance m_xrInstance = {};
+		std::vector<const char *> m_activeAPILayers = {};
+		std::vector<const char *> m_activeInstanceExtensions = {};
+		std::vector<std::string> m_apiLayers = {};
+		std::vector<std::string> m_instanceExtensions = {};
+
+		XrFormFactor m_formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY;
+		XrSystemId m_systemID = {};
 
 		GraphicsAPI_Type m_apiType = UNKNOWN;
 		std::unique_ptr<GraphicsAPI> m_graphicsAPI = nullptr;
@@ -210,12 +246,63 @@ Update the Constructor and ``Run()`` method as shown and add the following membe
 2.2.1 XrSession
 ===============
 
+Copy the following code into the ``CreateSession()`` method. Highlighted below is the necessary code for your chosen graphics API. Remove all other graphics API references and amend any ``else if`` statements, also keep the final ``else`` statement.
+
+.. container:: d3d11
+	:name: d3d11-id-0
+
+	.. literalinclude:: ../Chapter2/main.cpp
+		:language: cpp
+		:start-after: XR_DOCS_TAG_BEGIN_CreateSession
+		:end-before: XR_DOCS_TAG_END_CreateSession
+		:emphasize-lines: 3-6
+
+.. container:: d3d12
+	:name: d3d12-id-0
+
+	.. literalinclude:: ../Chapter2/main.cpp
+		:language: cpp
+		:start-after: XR_DOCS_TAG_BEGIN_CreateSession
+		:end-before: XR_DOCS_TAG_END_CreateSession
+		:emphasize-lines: 7-10
+
+.. container:: opengl
+	:name: opengl-id-0
+
+	.. literalinclude:: ../Chapter2/main.cpp
+		:language: cpp
+		:start-after: XR_DOCS_TAG_BEGIN_CreateSession
+		:end-before: XR_DOCS_TAG_END_CreateSession
+		:emphasize-lines: 11-14
+
+.. container:: opengles
+	:name: opengles-id-0
+
+	.. literalinclude:: ../Chapter2/main.cpp
+		:language: cpp
+		:start-after: XR_DOCS_TAG_BEGIN_CreateSession
+		:end-before: XR_DOCS_TAG_END_CreateSession
+		:emphasize-lines: 15-18
+
+.. container:: vulkan
+	:name: vulkan-id-0
+
+	.. literalinclude:: ../Chapter2/main.cpp
+		:language: cpp
+		:start-after: XR_DOCS_TAG_BEGIN_CreateSession
+		:end-before: XR_DOCS_TAG_END_CreateSession
+		:emphasize-lines: 19-22
+
+For the ``DestroySession()`` method, add the following code:
+
 .. literalinclude:: ../Chapter2/main.cpp
 	:language: cpp
-	:start-after: XR_DOCS_TAG_BEGIN_CreateDestroySession
-	:end-before: XR_DOCS_TAG_END_CreateDestroySession
+	:start-after: XR_DOCS_TAG_BEGIN_DestroySession
+	:end-before: XR_DOCS_TAG_END_DestroySession
 
-Above is the code for creating and destroying an ``XrSession``. ``xrDestroySession()`` will destroy the ``XrSession`` when we have finished and shutting down the application. ``xrCreateSession()`` takes the ``XrInstance``, ``XrSessionCreateInfo`` and ``XrSession`` return object. If the function call was successful, ``xrCreateSession()`` will return ``XR_SUCCESS`` and ``XrSession`` will be non-null. The ``XrSessionCreateInfo`` structure is deceptively simple. ``XrSessionCreateInfo::createFlags`` and ``XrSessionCreateInfo::systemId`` are easily filled in, but we need to specify which Graphics APIs we wish to use. This is achieved via the use of the ``XrSessionCreateInfo::next`` void pointer. Following the Vulkan API's style of extensibility, structures for creating objects can be extended to enable extra functionality. In our case, the extension is required and thus ``XrSessionCreateInfo::next`` can not be a nullptr. That pointer must point to 'exactly one graphics API binding structure (a structure whose name begins with "XrGraphicsBinding")' (`XrSessionCreateInfo(3) Manual Page <https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionCreateInfo.html>`_).
+Above is the code for creating and destroying an ``XrSession``. ``xrDestroySession()`` will destroy the ``XrSession`` when we are finished and shutting down the application. ``xrCreateSession()`` takes the ``XrInstance``, ``XrSessionCreateInfo`` and ``XrSession`` return object. If the function call was successful, ``xrCreateSession()`` will return ``XR_SUCCESS`` and ``XrSession`` will be non-null. 
+
+The ``XrSessionCreateInfo`` structure is deceptively simple. ``XrSessionCreateInfo::createFlags`` and ``XrSessionCreateInfo::systemId`` are easily filled in, but we need to specify which Graphics API we wish to use. This is achieved via the use of the ``XrSessionCreateInfo::next`` void pointer. Following Vulkan API's style of extensibility, structures for creating objects can be extended to enable extra functionality. In our case, the extension is required and thus ``XrSessionCreateInfo::next`` can not be a nullptr. That pointer must point to 'exactly one graphics API binding structure (a structure whose name begins with "XrGraphicsBinding")' (`XrSessionCreateInfo(3) Manual Page <https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionCreateInfo.html>`_). We get a pointer to the correct *Graphics Binding* structure by calling ``GraphicsAPI::GetGraphicsBinding();``.
 
 2.2.2 GraphicsAPI
 =================
