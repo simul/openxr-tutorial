@@ -2,6 +2,13 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 21 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Mon 21 Aug** : Updated CMake code-blocks in Chapter 1 and Chapter 2.2.1 texts to be more specific to graphics API. Updated Chapter 2.2 text to qualify code snippets and have better explanations.
+    | **Sat 19 Aug** : Added Chapter5 code for Android.
+    | **Fri 18 Aug** : Tested with D3D11 and D3D12. Updated header to d3d11_1.h. Updated SetBufferData() to use offset. D3D11 use VSSetConstantBuffer1 etc.
+    | **Fri 18 Aug** : Updated Chapter4/main.cpp to have multiple uniforms within a single buffer allocation for VK, GLES and GL. Not tested with D3D... Updated SetBufferData() and added to DescriptorInfo bufferOffset and bufferSize.
+    | **Fri 18 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 18 Aug** : Fixed shaders in GLSL to match HLSL. Modified SDK values in app/build.gradle to equal 27, this fixes the failure to load the runtime in Quest 2.
     | **Fri 18 Aug** : Updated text for chapter 2.2.1.
     | **Fri 18 Aug** : Updated tags in Chapter2/main.cpp. Updated chapter 2 text.
     | **Fri 18 Aug** : Updated .gitignore to ignore Android shader build outputs. Added <memory> to HelperFunctions.h
@@ -95,10 +102,3 @@ Changelist
     | **Tue 25 Jul** : Log debugging layout.html
     | **Tue 25 Jul** : console logging for internal platform choice.
     | **Tue 25 Jul** : Don't highlight inline platform selection, test.
-    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
-    | **Tue 25 Jul** : Remove <p> tags nested in <button>s.
-    | **Tue 25 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 25 Jul** : Chapter2 fixups to match later code. XR_RUNTIME_JSON in main CMakeLists.txt Add older tags to Chapter4.
-    | **Tue 25 Jul** : Pick better default for env blend mode
-    | **Tue 25 Jul** : Chapter 3 fixes

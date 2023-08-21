@@ -602,110 +602,73 @@ In it, put the following code:</p>
 <p>After setting our CMake version, we include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK from Khronos’s GitHub page. Now, we will add to our <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container" id="d3d11-id-1">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-1">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="opengl docutils container" id="opengl-id-3">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>All the files listed above with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. In the next section, you will find the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
-<p>You should remove the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> cpp and header files that do not relate to your chosen graphics API from the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeList.txt</span></code> files. You must keep <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXRDebugUtils.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">SOURCES</span></code> list and also keep <code class="docutils literal notranslate"><span class="pre">DebugOutput.h</span></code>, <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>, <code class="docutils literal notranslate"><span class="pre">OpenXRDebugUtils.h</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code> in the <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code> list.</p>
 <p>At this point, we’ll also create our text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. This will be our main source file, which we will use later in this chapter.</p>
 <p>Now, we will continue with the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeList.txt</span></code>, adding the following code.</p>
 <div class="d3d11 docutils container" id="d3d11-id-2">
@@ -870,53 +833,35 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>After setting our CMake version to 3.22.1 and the project’s name, we include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
 <div class="opengles docutils container" id="opengles-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-6">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;main.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.cpp&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span><span class="w"> </span>
-<span class="w">    </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D11.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_D3D12.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="hll"><span class="w">    </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
-</span><span class="w">    </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="w"> </span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_Vulkan.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1363,7 +1308,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="d3d11 docutils container" id="d3d11-id-5">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
