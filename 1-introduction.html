@@ -671,7 +671,6 @@ In it, put the following code:</p>
 <p>All the files listed above with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. In the next section, you will find the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>At this point, we’ll also create our text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. This will be our main source file, which we will use later in this chapter.</p>
 <p>Now, we will continue with the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeList.txt</span></code>, adding the following code.</p>
-<div class="d3d11 docutils container" id="d3d11-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -679,120 +678,58 @@ In it, put the following code:</p>
 <span class="nb">endif</span><span class="p">()</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="nb">else</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="c"># Fix redirection to a different project&#39;s build folder</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we have set up the project by adding an executable by using <code class="docutils literal notranslate"><span class="pre">add_executable()</span></code> specifying the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We have optionally set a the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> in the debugger environment. We’ve added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory and linked <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> from <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. We didn’t have to add OpenXR as a include directory; as we have specified it to be located in the CMake Build directory under <code class="docutils literal notranslate"><span class="pre">openxr/</span></code> when using <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>, so we’ve only included the OpenXR headers from the CMake Build directory.</p>
+<div class="windows name windows-id-3 docutils container">
+<div class="d3d11 docutils container" id="d3d11-id-2">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-2">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-</span><span class="nb">else</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="c"># Fix redirection to a different project&#39;s build folder</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
 </pre></div>
 </div>
+</div>
+<div class="d3d11 d3d12 docutils container" id="d3d11-d3d12-id-2">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
+</pre></div>
+</div>
+</div>
+<div class="d3d11 docutils container" id="d3d11-id-2-1">
+<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 11 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project.</p>
+</div>
+<div class="d3d12 docutils container" id="d3d12-id-2-1">
+<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 12 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project.</p>
+</div>
+</div>
+<div class="linux docutils container" id="linux-id-3">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+</pre></div>
+</div>
+<p>For Microsoft Windows, we’ve added some compiler pre-processor directives.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="nb">else</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="hll"><span class="c"># Fix redirection to a different project&#39;s build folder</span>
-</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-</span></pre></div>
-</div>
-</div>
-<div class="vulkan docutils container" id="vulkan-id-5">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
-<span class="nb">endif</span><span class="p">()</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
-
-<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span><span class="w"> </span>
-<span class="nb">else</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
-<span class="nb">endif</span><span class="p">()</span>
-
-<span class="hll"><span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
-</span><span class="hll"><span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
-</span><span class="hll"><span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">endif</span><span class="p">()</span>
-</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
 <span class="c"># Fix redirection to a different project&#39;s build folder</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>This CMake code will add gfxwrapper for OpenGL, we’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK.</p>
 </div>
-<p>Now, we have set up the project by adding an executable by using <code class="docutils literal notranslate"><span class="pre">add_executable()</span></code> specifying the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We have optionally set a the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> in the debugger environment. We’ve added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory and linked <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> from <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. We didn’t have to add OpenXR as a include directory; as we have specified it to be located in the CMake Build directory under <code class="docutils literal notranslate"><span class="pre">openxr/</span></code> when using <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>, so we’ve only included the OpenXR headers from the CMake Build directory.</p>
-<p>We have also added the include directories and linkage for the graphics APIs.
-For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code>, <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 11, Direct3D 12 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project.
-If you have the Vulkan SDK installed, this CMake code will try to find that package, add the include directories and link the Vulkan libraries.
-As a default, this CMake has added gfxwrapper for OpenGL, we’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK.</p>
-<p>Note: You can remove or comment out from the above CMake code any references to graphics APIs that are not in use, if you wish to do so. Leaving them in place will not effect your project.</p>
+<div class="vulkan docutils container" id="vulkan-id-5">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
+<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you have the Vulkan SDK installed, this CMake code will try to find that package, add the include directories and link the Vulkan libraries.</p>
+</div>
 <p>That’s all the CMake code that we require for this project.</p>
 </div>
 <div class="android docutils container" id="android-id-2">
@@ -866,55 +803,18 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </div>
 </div>
 <p>Here, we include all the files needed for our project. First, we’ll create our source file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. All files with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
+
+<span class="c"># native_app_glue</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
+<span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now, we can set things up by adding a shared library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory too. Just above that we need to set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> so that <code class="docutils literal notranslate"><span class="pre">ANativeActivity_onCreate()</span></code> is exported for the Java Virtual Machine to call. This is used by a static library called <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, which allows us to interface between the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point.  We add <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling <code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>.</p>
 <div class="opengles docutils container" id="opengles-id-3">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
-
-<span class="c"># native_app_glue</span>
-<span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
-<span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
-
-<span class="c"># vulkan - Found in the NDK</span>
-<span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
-
-<span class="hll"><span class="c"># openxr-gfxwrapper - Manually build from OpenXR for OpenGL ES</span>
-</span><span class="hll"><span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">find_library</span><span class="p">(</span><span class="s">GLES3-lib</span><span class="w"> </span><span class="s">GLESv3</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">find_library</span><span class="p">(</span><span class="s">EGL-lib</span><span class="w"> </span><span class="s">EGL</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">GLES3-lib</span><span class="o">}</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">EGL-lib</span><span class="o">}</span><span class="p">)</span>
-</span><span class="hll">
-</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
-</span>
-<span class="c"># Final link</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span>
-<span class="w">        </span><span class="s">android</span>
-<span class="w">        </span><span class="s">native_app_glue</span>
-<span class="w">        </span><span class="s">openxr_loader</span>
-<span class="w">        </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span>
-<span class="hll"><span class="w">        </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-</span></pre></div>
-</div>
-</div>
-<div class="vulkan docutils container" id="vulkan-id-7">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
-
-<span class="c"># native_app_glue</span>
-<span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
-<span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
-
-<span class="hll"><span class="c"># vulkan - Found in the NDK</span>
-</span><span class="hll"><span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
-</span><span class="hll"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
-</span>
-<span class="c"># openxr-gfxwrapper - Manually build from OpenXR for OpenGL ES</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">GLES3-lib</span><span class="w"> </span><span class="s">GLESv3</span><span class="p">)</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">EGL-lib</span><span class="w"> </span><span class="s">EGL</span><span class="p">)</span>
@@ -923,20 +823,33 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
-
-<span class="c"># Final link</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span>
-<span class="w">        </span><span class="s">android</span>
-<span class="w">        </span><span class="s">native_app_glue</span>
-<span class="w">        </span><span class="s">openxr_loader</span>
-<span class="hll"><span class="w">        </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span>
-</span><span class="w">        </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>We now add a static library called <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which will allow us to use OpenGL ES. We compile the library the C and header file in <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</span></code> and add this <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> as an include directory. Next, we find the <code class="docutils literal notranslate"><span class="pre">GLESv3</span></code> and <code class="docutils literal notranslate"><span class="pre">EGL</span></code> libraries and link them to <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common</span></code> and <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> folder as include directories to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> as well.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span>
+<span class="w">                </span><span class="s">android</span>
+<span class="w">                </span><span class="s">native_app_glue</span>
+<span class="w">                </span><span class="s">openxr_loader</span>
+<span class="w">                </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>Now, we can set things up by adding a shared library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory too. Just above that we need to set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> so that <code class="docutils literal notranslate"><span class="pre">ANativeActivity_onCreate()</span></code> is exported for the Java Virtual Machine to call. This is used by a static library called <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, which allows us to interface between the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point.  We add <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling <code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>.</p>
-<p>Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. We also add a static library called <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which will allow us to use OpenGL ES. We compile the library the C and header file in <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</span></code> and add this <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> as an include directory. Next, we find the <code class="docutils literal notranslate"><span class="pre">GLESv3</span></code> and <code class="docutils literal notranslate"><span class="pre">EGL</span></code> libraries and link them to <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common</span></code> and <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> folder as include directories to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> as well.</p>
-<p>Finally we link the <code class="docutils literal notranslate"><span class="pre">android</span></code>, <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code>, <code class="docutils literal notranslate"><span class="pre">vulkan</span></code> and <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code> libraries to our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> library. Our <code class="docutils literal notranslate"><span class="pre">libOpenXRTutorialChapter2</span> <span class="pre">.so</span></code> will packaged inside our .apk along with any shared libraries that we have linked.</p>
+<p>Finally we link the <code class="docutils literal notranslate"><span class="pre">android</span></code>, <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> and <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code> libraries to our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> library. Our <code class="docutils literal notranslate"><span class="pre">libOpenXRTutorialChapter2</span> <span class="pre">.so</span></code> will packaged inside our .apk along with any shared libraries that we have linked.</p>
+</div>
+<div class="vulkan docutils container" id="vulkan-id-7">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span>
+<span class="w">                </span><span class="s">android</span>
+<span class="w">                </span><span class="s">native_app_glue</span>
+<span class="w">                </span><span class="s">openxr_loader</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally we link the <code class="docutils literal notranslate"><span class="pre">android</span></code>, <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> and <code class="docutils literal notranslate"><span class="pre">vulkan</span></code> libraries to our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> library. Our <code class="docutils literal notranslate"><span class="pre">libOpenXRTutorialChapter2</span> <span class="pre">.so</span></code> will packaged inside our .apk along with any shared libraries that we have linked.</p>
+</div>
 <p class="rubric">AndroidManifest.xml</p>
 <div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\thirdparty\AndroidDefaultApp\app\src\main\AndroidManifest.xml</span>
 <span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter2\app\src\main\AndroidManifest.xml</span>
@@ -1194,7 +1107,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;HelperFunctions.h&quot;</span>
 </pre></div>
 </div>
-<div class="windows docutils container" id="windows-id-3">
+<div class="windows docutils container" id="windows-id-4">
 <div class="d3d11 docutils container" id="d3d11-id-4">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
@@ -1256,7 +1169,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 </div>
 </div>
-<div class="linux docutils container" id="linux-id-3">
+<div class="linux docutils container" id="linux-id-4">
 <div class="opengl docutils container" id="opengl-id-7">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__LINIX__)</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
@@ -1537,11 +1450,11 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </section>
 <section id="build-and-run">
 <h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
-<div class="windows docutils container" id="windows-id-4">
+<div class="windows docutils container" id="windows-id-5">
 <p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally click “Open Project” to open that solution with Visual Studio.</p>
 <p>You can now build and run your program. It should compile and link with no errors or warnings.</p>
 </div>
-<div class="linux docutils container" id="linux-id-4">
+<div class="linux docutils container" id="linux-id-5">
 <p>You now have the files and folders, laid out as follows:</p>
 <figure class="align-default">
 <img alt="Initial files in VS Code" src="_images/linux-vscode-initial-files.png" />
