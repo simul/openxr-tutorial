@@ -1360,50 +1360,31 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DebugOutput.h&quot;</span>
 </pre></div>
 </div>
-<p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the Graphics API code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>. In this tutorial, we include all of them, though you would only be picking one.</p>
+<p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the Graphics API code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
 <div class="d3d11 docutils container" id="d3d11-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
-</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
-<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
-</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengl docutils container" id="opengl-id-9">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
-<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
-</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container" id="opengles-id-7">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
-<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
-</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<span class="c1">// XR_DOCS_TAG_END_include_GraphicsAPIs</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-13">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
-<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
-</span></pre></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// XR_DOCS_TAG_END_include_GraphicsAPIs</span>
+</pre></div>
 </div>
 </div>
 <p>You can also include <code class="docutils literal notranslate"><span class="pre">OpenXRDebugUtils.h</span></code> to help with set up of <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>.</p>

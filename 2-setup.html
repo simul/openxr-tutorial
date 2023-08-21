@@ -704,6 +704,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.cpp</em></p>
 <p>Above is the minimum code needed to create a suitable <code class="docutils literal notranslate"><span class="pre">ID3D11Device</span> <span class="pre">*</span></code>. First, we get the function pointer for <code class="docutils literal notranslate"><span class="pre">xrGetD3D11GraphicsRequirementsKHR</span></code>, which went called fills out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsD3D11KHR</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrGraphicsRequirementsD3D11KHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -713,6 +714,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrGraphicsRequirementsD3D11KHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>From this structure, we used the <code class="docutils literal notranslate"><span class="pre">adapterLuid</span></code> to find the appropriate <code class="docutils literal notranslate"><span class="pre">IDXGIAdapter</span> <span class="pre">*</span></code>. We created a <code class="docutils literal notranslate"><span class="pre">IDXGIFactory1</span> <span class="pre">*</span></code> and then called <code class="docutils literal notranslate"><span class="pre">IDXGIFactory1::EnumAdapters()</span></code> and <code class="docutils literal notranslate"><span class="pre">IDXGIAdapter::GetDesc()</span></code> to get the <code class="docutils literal notranslate"><span class="pre">DXGI_ADAPTER_DESC</span></code>, so that we could compare the <code class="docutils literal notranslate"><span class="pre">adapterLuid</span></code> values.</p>
 <p>Finally, we called <code class="docutils literal notranslate"><span class="pre">D3D11CreateDevice</span></code> with the found adapter and the <code class="docutils literal notranslate"><span class="pre">minFeatureLevel</span></code> from <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsD3D11KHR</span></code>, if successful, the function returned <code class="docutils literal notranslate"><span class="pre">S_OK</span></code> and <code class="docutils literal notranslate"><span class="pre">ID3D11Device</span> <span class="pre">*</span></code> is non-null.</p>
 <p>We also create <code class="docutils literal notranslate"><span class="pre">ID3D11Debug</span></code> and <code class="docutils literal notranslate"><span class="pre">ID3D11InfoQueue</span></code> for debugging.</p>
@@ -723,6 +725,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.cpp</em></p>
 <p>Here, we simply fill out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingD3D11KHR</span></code> structure and return a pointer to the class member, which will be assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionCreateInfo::next</span></code>.</p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-1">
@@ -806,6 +809,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.cpp</em></p>
 <p>Above is the minimum code needed to create a suitable <code class="docutils literal notranslate"><span class="pre">ID3D12Device</span> <span class="pre">*</span></code>  and <code class="docutils literal notranslate"><span class="pre">ID3D12CommandQueue</span> <span class="pre">*</span></code>. First, we get the function pointer for <code class="docutils literal notranslate"><span class="pre">xrGetD3D12GraphicsRequirementsKHR</span></code>, which went called fills out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsD3D12KHR</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrGraphicsRequirementsD3D12KHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -815,6 +819,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrGraphicsRequirementsD3D12KHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>From this structure, we used the <code class="docutils literal notranslate"><span class="pre">adapterLuid</span></code> to find the appropriate <code class="docutils literal notranslate"><span class="pre">IDXGIAdapter1</span> <span class="pre">*</span></code>. We created a <code class="docutils literal notranslate"><span class="pre">IDXGIFactory4</span> <span class="pre">*</span></code> and then called <code class="docutils literal notranslate"><span class="pre">IDXGIFactory4::EnumAdapters1()</span></code> and <code class="docutils literal notranslate"><span class="pre">IDXGIAdapter1::GetDesc()</span></code> to get the <code class="docutils literal notranslate"><span class="pre">DXGI_ADAPTER_DESC</span></code>, so that we could compare the <code class="docutils literal notranslate"><span class="pre">adapterLuid</span></code> values.</p>
 <p>Finally, we called <code class="docutils literal notranslate"><span class="pre">D3D12CreateDevice</span></code> with the found adapter and the <code class="docutils literal notranslate"><span class="pre">minFeatureLevel</span></code> from <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsD3D12KHR</span></code>, if successful, the function returned <code class="docutils literal notranslate"><span class="pre">S_OK</span></code> and <code class="docutils literal notranslate"><span class="pre">ID3D12Device</span> <span class="pre">*</span></code> is non-null. Next, we created a simple a <code class="docutils literal notranslate"><span class="pre">ID3D12CommandQueue</span> <span class="pre">*</span></code> of type <code class="docutils literal notranslate"><span class="pre">D3D12_COMMAND_LIST_TYPE_DIRECT</span></code>.</p>
 <p>We also queried the maximum number of descriptors and set up <code class="docutils literal notranslate"><span class="pre">ID3D12DescriptorHeap</span> <span class="pre">*</span></code> s for use in rendering. There’s also commented out code to enable D3D12 debugging and GPU Based Validation.</p>
@@ -826,6 +831,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.cpp</em></p>
 <p>Here, we simply fill out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingD3D12KHR</span></code> structure and return a pointer to the class member, which will be assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionCreateInfo::next</span></code>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-1">
@@ -870,6 +876,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 <p>Above is the minimum code needed to create a suitable OpenGL context. First, we get the function pointer for <code class="docutils literal notranslate"><span class="pre">xrGetOpenGLGraphicsRequirementsKHR</span></code>, which went called fills out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsOpenGLKHR</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrGraphicsRequirementsOpenGLKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -879,6 +886,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrGraphicsRequirementsOpenGLKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>In this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. Originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> and <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/es/3.1/es_spec_3.1.withchanges.pdf">OpenGL ES 3.1</a> specifications.</p>
 <p>Here, we called <code class="docutils literal notranslate"><span class="pre">ksGpuWindow_Create()</span></code> and passed the required parameters to setup the OpenGL context. Next, we queried the OpenGL version with <code class="docutils literal notranslate"><span class="pre">glGetIntegerv()</span></code> with <code class="docutils literal notranslate"><span class="pre">GL_MAJOR_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">GL_MINOR_VERSION</span></code>. With these values, we constructed an <code class="docutils literal notranslate"><span class="pre">XrVersion</span></code> value to compare with <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsOpenGLKHR::minApiVersionSupported</span></code>.</p>
 <p>We also setup <code class="docutils literal notranslate"><span class="pre">glDebugMessageCallback</span></code> to help with debugging.</p>
@@ -914,6 +922,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 <p>Because OpenGL is very closely integrated with the platform’s windowing system. We have different <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGL[...]KHR</span></code> structures - one per platform. At present, there are four: <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGLXcbKHR</span></code>, <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGLXlibKHR</span></code>, <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGLWaylandKHR</span></code> and <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGLWin32KHR</span></code>. Depending on the platform, this function will fill out the relevant structure and return a pointer to that class member, which will be assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionCreateInfo::next</span></code>.</p>
 </div>
 <div class="opengles docutils container" id="opengles-id-1">
@@ -958,6 +967,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 <p>Above is the minimum code needed to create a suitable OpenGL ES context. First, we get the function pointer for <code class="docutils literal notranslate"><span class="pre">xrGetOpenGLESGraphicsRequirementsKHR</span></code>, which went called fills out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsOpenGLESKHR</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrGraphicsRequirementsOpenGLESKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -967,6 +977,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrGraphicsRequirementsOpenGLESKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>In this tutorial, we are using the ‘gfxwrapper’ for the OpenGL ES API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. Originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> and <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/es/3.1/es_spec_3.1.withchanges.pdf">OpenGL ES 3.1</a> specifications.</p>
 <p>Here, we called <code class="docutils literal notranslate"><span class="pre">ksGpuWindow_Create()</span></code> and passed the required parameters to setup the OpenGL ES context. Next, we query the OpenGL ES version with <code class="docutils literal notranslate"><span class="pre">glGetIntegerv()</span></code> with <code class="docutils literal notranslate"><span class="pre">GL_MAJOR_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">GL_MINOR_VERSION</span></code>. With these values, we constructed an <code class="docutils literal notranslate"><span class="pre">XrVersion</span></code> value to compare with <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsOpenGLESKHR::minApiVersionSupported</span></code>.</p>
 <p>We also setup <code class="docutils literal notranslate"><span class="pre">glDebugMessageCallback</span></code> to help with debugging.</p>
@@ -979,6 +990,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 <p>Here, we simply fill out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingOpenGLESAndroidKHR</span></code> structure and return a pointer to the class member, which will be assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionCreateInfo::next</span></code>. Note: This <code class="docutils literal notranslate"><span class="pre">XrGraphicsBinding...</span></code> structure differs from the others as it specifically tailored to the Android platform.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-1">
@@ -1113,10 +1125,11 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p>Above is the minimum code needed to create a suitable Vulkan Instance and Device. First, we called a helper method that loads in the pointers for the following functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanGraphicsRequirementsKHR</span></code>: Used to fill out a <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsVulkanKHR</span></code> structure containing the minimum and maximum supported API version.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanGraphicsRequirementsKHR</span></code>: Used to fill out an <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsVulkanKHR</span></code> structure containing the minimum and maximum supported API version.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanInstanceExtensionsKHR</span></code>: To retrieve a list of required <code class="docutils literal notranslate"><span class="pre">VkInstance</span></code> extensions.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanDeviceExtensionsKHR</span></code>: To retrieve a list of required <code class="docutils literal notranslate"><span class="pre">VkDevice</span></code> extensions.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanGraphicsDeviceKHR</span></code>:  To get the <code class="docutils literal notranslate"><span class="pre">VkPhysicalDevice</span></code> requested by OpenXR.</p></li>
@@ -1130,6 +1143,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p>We called <code class="docutils literal notranslate"><span class="pre">xrGetVulkanGraphicsRequirementsKHR()</span></code> and fill out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsVulkanKHR</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrGraphicsRequirementsVulkanKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -1139,6 +1153,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrGraphicsRequirementsVulkanKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>Then, we filled out a <code class="docutils literal notranslate"><span class="pre">VkApplicationInfo</span></code> where we assigned <code class="docutils literal notranslate"><span class="pre">VkApplicationInfo::apiVersion</span></code> a value using the retured value in <code class="docutils literal notranslate"><span class="pre">XrGraphicsRequirementsVulkanKHR::minApiVersionSupported</span></code>. We enumerated the Instance extensions and filled out an array of structures. We used nested for-loops to find all the requested extensions and pushed them back into a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;const</span> <span class="pre">char</span> <span class="pre">*&gt;</span></code> called <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">GetInstanceExtensionsForOpenXR()</span></code> is another helper method.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetInstanceExtensionsForOpenXR</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1158,6 +1173,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">xrGetVulkanInstanceExtensionsKHR()</span></code> is called twice, first to get the size of the <code class="docutils literal notranslate"><span class="pre">char</span></code> buffer and the second to fill in the data. We used <code class="docutils literal notranslate"><span class="pre">std::stringstream</span></code> and <code class="docutils literal notranslate"><span class="pre">std::getline()</span></code> with a deliminator of <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> to break up the string and copied that substring to an element in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::string&gt;</span></code>, which we used when setting the instance extensions.</p>
 <p>We filled out the <code class="docutils literal notranslate"><span class="pre">VkInstanceCreateInfo</span></code> structure and called <code class="docutils literal notranslate"><span class="pre">vkCreateInstance()</span></code>, which if successful returned <code class="docutils literal notranslate"><span class="pre">VK_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">VkInstance</span></code> will be non-null.</p>
 <p>Then, we enumerated the <code class="docutils literal notranslate"><span class="pre">VkPhysicalDevice</span></code> s. Once we had an array of all the physical devices in the system, we called <code class="docutils literal notranslate"><span class="pre">xrGetVulkanGraphicsDeviceKHR()</span></code> to get the <code class="docutils literal notranslate"><span class="pre">VkPhysicalDevice</span></code> that OpenXR has requested. We checked the requested physical device against the array of physical devices and selected the correct one.</p>
@@ -1180,6 +1196,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p>Like with <code class="docutils literal notranslate"><span class="pre">xrGetVulkanInstanceExtensionsKHR()</span></code>, <code class="docutils literal notranslate"><span class="pre">xrGetVulkanDeviceExtensionsKHR()</span></code> is called twice, first to get the size of the <code class="docutils literal notranslate"><span class="pre">char</span></code> buffer and the second to fill in the data. We used <code class="docutils literal notranslate"><span class="pre">std::stringstream</span></code> and <code class="docutils literal notranslate"><span class="pre">std::getline()</span></code> with a deliminator of <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> to break up the string and copied that substring into an element in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::string&gt;</span></code>, which we used when setting the device extensions.</p>
 <p>Finally, we got the <code class="docutils literal notranslate"><span class="pre">VkPhysicalDeviceFeatures</span></code> by calling <code class="docutils literal notranslate"><span class="pre">vkGetPhysicalDeviceFeatures()</span></code> and we filled in the <code class="docutils literal notranslate"><span class="pre">VkDeviceCreateInfo</span></code>. We called <code class="docutils literal notranslate"><span class="pre">vkCreateDevice()</span></code>, which if successful returned <code class="docutils literal notranslate"><span class="pre">VK_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">VkDevice</span></code> will be non-null.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_Vulkan::GetGraphicsBinding</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1193,113 +1210,162 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p>Here, we simply fill out the <code class="docutils literal notranslate"><span class="pre">XrGraphicsBindingVulkanKHR</span></code> structure and return a pointer to the class member, which will be assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionCreateInfo::next</span></code>.</p>
 </div>
 </section>
 </section>
 <section id="polling-the-event-loop">
 <h2>2.3 Polling the Event Loop<a class="headerlink" href="#polling-the-event-loop" title="Permalink to this heading">¶</a></h2>
-<p>OpenXR uses an event based system to describes changes with the XR system. It’s the application’s responsibility to poll these events and react to them. The polling of events is done by the function <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code>. The application should continually call this function throughout its lifetime. Within a single XR frame, the application should continuously call <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> until the internal event queue is ‘drained’; multiple events can occurs across the XR frame and the application needs to handle and respond to each accordingly.</p>
-<p>Firstly, we will update the class to add the new methods and members.</p>
+<p>OpenXR uses an event based system to describes changes within the XR system. It’s the application’s responsibility to poll these events and react to them. The polling of events is done by the function <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code>. The application should continually call this function throughout its lifetime. Within a single XR frame, the application should continuously call <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> until the internal event queue is ‘drained’; multiple events can occurs across the XR frame and the application needs to handle and respond to each accordingly.</p>
+<p>Firstly, we will update the class. In the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> method add the highlighted code below. Also add the highlighted code for the new methods and members in their separate private sections.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span>
+<span class="w">                </span><span class="o">:</span><span class="w"> </span><span class="n">apiType</span><span class="p">(</span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CheckGraphicsAPI_TypeIsValidForPlatform</span><span class="p">(</span><span class="n">apiType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: The provided Graphics API is not valid for this platform.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">                        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
-<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
 
 <span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
 <span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+
 <span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
 
-<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
-<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
-<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                                </span><span class="c1">// Draw Frame.</span>
-<span class="w">                        </span><span class="p">}</span>
-<span class="w">                </span><span class="p">}</span>
-
+<span class="hll"><span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+</span><span class="hll"><span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
+</span><span class="hll"><span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="w">                                </span><span class="c1">// Draw Frame.</span>
+</span><span class="hll"><span class="w">                        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">                </span><span class="p">}</span>
+</span>
 <span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
-<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
+
 <span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="p">}</span>
 
 <span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateInstance</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyInstance</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetInstanceProperties</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSession</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySession</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollEvents</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeAPILayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeInstanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">XrViewConfigurationType</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="p">;</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">XrSessionState</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SESSION_STATE_UNKNOWN</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">m_apiType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNKNOWN</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">GraphicsAPI</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="hll"><span class="w">        </span><span class="n">XrSession</span><span class="w"> </span><span class="n">m_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="hll"><span class="w">        </span><span class="n">XrSessionState</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SESSION_STATE_UNKNOWN</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span><span class="hll">
+</span><span class="hll"><span class="w">        </span><span class="n">XrViewConfigurationType</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="p">;</span>
+</span><span class="p">}</span>
 </pre></div>
 </div>
 <section id="xrpollevent">
 <h3>2.3.1 xrPollEvent<a class="headerlink" href="#xrpollevent" title="Permalink to this heading">¶</a></h3>
-<p>Next, we will define the <code class="docutils literal notranslate"><span class="pre">PollEvents()</span></code> method. Here, we use a do-while loop to the check the result of <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> - whilst that function returns <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code>, there are events for us to process. <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> will fill in the <code class="docutils literal notranslate"><span class="pre">XrEventDataBuffer</span></code> structure that we pass to the function call. <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> will update the member variable <code class="docutils literal notranslate"><span class="pre">type</span></code> and from this we can use a switch statement to select the appropriate code path. Depending on the updated type, we can use a <code class="docutils literal notranslate"><span class="pre">reinterpret_cast&lt;&gt;()</span></code> to get the actual data that <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> returned.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">PollEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">XrResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">;</span>
-<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">XrEventDataBuffer</span><span class="w"> </span><span class="n">eventData</span><span class="p">{</span><span class="n">XR_TYPE_EVENT_DATA_BUFFER</span><span class="p">};</span>
-<span class="w">        </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrPollEvent</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<p>Code the following code into the <code class="docutils literal notranslate"><span class="pre">PollEvents()</span></code> method:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="n">PollEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="n">XrResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">;</span>
+<span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrEventDataBuffer</span><span class="w"> </span><span class="n">eventData</span><span class="p">{</span><span class="n">XR_TYPE_EVENT_DATA_BUFFER</span><span class="p">};</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrPollEvent</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
 
-<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">eventData</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_EVENTS_LOST</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*</span><span class="n">eventsLost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Events Lost: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">eventsLost</span><span class="o">-&gt;</span><span class="n">lostEventCount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">eventData</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_EVENTS_LOST</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*</span><span class="n">eventsLost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Events Lost: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">eventsLost</span><span class="o">-&gt;</span><span class="n">lostEventCount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*</span><span class="n">instanceLossPending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Instance Loss Pending at: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceLossPending</span><span class="o">-&gt;</span><span class="n">lossTime</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*</span><span class="n">interactionProfileChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Interaction Profile changed for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">interactionProfileChanged</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*</span><span class="n">referenceSpaceChangePending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Reference Space Change pending for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">referenceSpaceChangePending</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrEventDataSessionStateChanged</span><span class="w"> </span><span class="o">*</span><span class="n">sessionStateChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataSessionStateChanged</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_READY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">XrSessionBeginInfo</span><span class="w"> </span><span class="n">sessionBeginInfo</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_BEGIN_INFO</span><span class="p">};</span>
+<span class="w">            </span><span class="n">sessionBeginInfo</span><span class="p">.</span><span class="n">primaryViewConfigurationType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">;</span>
+<span class="w">            </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrBeginSession</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sessionBeginInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to begin Session.&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*</span><span class="n">instanceLossPending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Instance Loss Pending at: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceLossPending</span><span class="o">-&gt;</span><span class="n">lossTime</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_STOPPING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndSession</span><span class="p">(</span><span class="n">m_session</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end Session.&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_EXITING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">            </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*</span><span class="n">interactionProfileChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Interaction Profile changed for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">interactionProfileChanged</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*</span><span class="n">referenceSpaceChangePending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Reference Space Change pending for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">referenceSpaceChangePending</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">XrEventDataSessionStateChanged</span><span class="w"> </span><span class="o">*</span><span class="n">sessionStateChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataSessionStateChanged</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_READY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">XrSessionBeginInfo</span><span class="w"> </span><span class="n">sessionBeginInfo</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_BEGIN_INFO</span><span class="p">};</span>
-<span class="w">                </span><span class="n">sessionBeginInfo</span><span class="p">.</span><span class="n">primaryViewConfigurationType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">;</span>
-<span class="w">                </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrBeginSession</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sessionBeginInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to begin Session.&quot;</span><span class="p">);</span>
-<span class="w">                </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_STOPPING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndSession</span><span class="p">(</span><span class="n">m_session</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end Session.&quot;</span><span class="p">);</span>
-<span class="w">                </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_EXITING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">                </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">;</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">);</span>
 </pre></div>
 </div>
+<p>Above, we have defined the <code class="docutils literal notranslate"><span class="pre">PollEvents()</span></code> method. Here, we use a do-while loop to the check the result of <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> - whilst that function returns <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code>, there are events for us to process. <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> will fill in the <code class="docutils literal notranslate"><span class="pre">XrEventDataBuffer</span></code> structure that we pass to the function call. <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> will update the member variable <code class="docutils literal notranslate"><span class="pre">type</span></code> and from this we use a switch statement to select the appropriate code path. Depending on the updated type, we use a <code class="docutils literal notranslate"><span class="pre">reinterpret_cast&lt;&gt;()</span></code> to get the actual data that <code class="docutils literal notranslate"><span class="pre">xrPollEvent()</span></code> returned.</p>
 <p>The description of the events come from <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_xrpollevent">2.22.1. Event Polling of the OpenXR specification</a>.</p>
 <table class="docutils align-default">
 <tbody>
@@ -1329,7 +1395,14 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </tr>
 </tbody>
 </table>
-<p>As described in the table above, most event are transparent in their intensions and how the application should react to them. For the <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span></code> state, the application may want to try re-creating the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> in a loop, after the specified <code class="docutils literal notranslate"><span class="pre">lossTime</span></code>, until it can create a new instance successfully. <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span></code> are used for updating how the user interacts with the application and whether a new space change has been detected respectively.</p>
+<p>As described in the table above, most events are transparent in their intensions and how the application should react to them. For the <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span></code> state, the application may want to try re-creating the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> in a loop, after the specified <code class="docutils literal notranslate"><span class="pre">lossTime</span></code>, until it can create a new instance successfully. <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span></code> are used for updating how the user interacts with the application and whether a new space change has been detected respectively.</p>
+<p>For some platforms, we need additional functionality provided via the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method, so that our application can react to any relevant updates from the platform correctly.</p>
+<div class="windows linux docutils container" id="windows-linux-id-1">
+<p>For Windows and Linux, there no relevant system event that we need to be aware of, and thus the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method definition can be left blank.</p>
+</div>
+<div class="android docutils container" id="android-id-1">
+<p>For Android, we have already provided the code for the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method in <a class="reference internal" href="1-introduction.html#openxrtutorial-and-main"><span class="std std-ref">Chapter 1.4.3</span></a>. So its duplicate definition can be removed from the class. This function is outside the scope of OpenXR, but in general polls Android for system events and updates the <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code> and uses the  <code class="docutils literal notranslate"><span class="pre">m_applicationRunning</span></code> and <code class="docutils literal notranslate"><span class="pre">m_sessionRunning</span></code> members.</p>
+</div>
 </section>
 <section id="xrsessionstate">
 <h3>2.3.2 XrSessionState<a class="headerlink" href="#xrsessionstate" title="Permalink to this heading">¶</a></h3>
@@ -1348,6 +1421,8 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="p">}</span><span class="w"> </span><span class="n">XrSessionState</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
+<p>Below is a table describing the nine <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> s:</p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>Event Type</p></td>
@@ -1383,13 +1458,17 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </tbody>
 </table>
 <p>(*) Applications may wish to re-create objects like <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> and <code class="docutils literal notranslate"><span class="pre">XrSession</span></code>, if hardware changes were detected.</p>
-<figure class="align-center" style="width: 99px">
-<img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" /></figure>
+<p>Developers should also be aware of the lifecycle of an <code class="docutils literal notranslate"><span class="pre">XrSession</span></code>. Certain <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> can only lead to certain others under the correct circumstances. Below is a diagram showing lifecycle of an <code class="docutils literal notranslate"><span class="pre">XrSession</span></code> within an OpenXR application.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="_images/openxr-session-life-cycle.svg"><img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" width="99%" /></a>
+<figcaption>
+<p><span class="caption-text">OpenXR Session Life-Cycle</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="xrbeginsession-and-xrendsession">
 <h3>2.3.3 xrBeginSession and xrEndSession<a class="headerlink" href="#xrbeginsession-and-xrendsession" title="Permalink to this heading">¶</a></h3>
-<p>If the <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> is <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_READY</span></code>, the application can call <code class="docutils literal notranslate"><span class="pre">xrBeginSession()</span></code>.
-In the <code class="docutils literal notranslate"><span class="pre">XrSessionBeginInfo</span></code> structure, we assign to <code class="docutils literal notranslate"><span class="pre">XrSessionBeginInfo::primaryViewConfigurationType</span></code> the <code class="docutils literal notranslate"><span class="pre">m_viewConfiguration</span></code> from the class, which in our case is <code class="docutils literal notranslate"><span class="pre">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span></code>. This specifies the view configuration of the form factor’s primary display - For Head Mounted Displays, it is two views (one per eye).</p>
+<p>As the application runs, if the <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> changes to <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_READY</span></code>, the application can call <code class="docutils literal notranslate"><span class="pre">xrBeginSession()</span></code> to begin the session and synchronize the application’s with the runtime’s frame hook.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_READY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrSessionBeginInfo</span><span class="w"> </span><span class="n">sessionBeginInfo</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_BEGIN_INFO</span><span class="p">};</span>
 <span class="w">    </span><span class="n">sessionBeginInfo</span><span class="p">.</span><span class="n">primaryViewConfigurationType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">;</span>
@@ -1398,7 +1477,8 @@ In the <code class="docutils literal notranslate"><span class="pre">XrSessionBeg
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>If the <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> is <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_STOPPING</span></code>, the application should call <code class="docutils literal notranslate"><span class="pre">xrEndSession()</span></code>.</p>
+<p>From the code that we copied in Chpater 2.1.3, we’ve assigned to <code class="docutils literal notranslate"><span class="pre">XrSessionBeginInfo::primaryViewConfigurationType</span></code> the <code class="docutils literal notranslate"><span class="pre">m_viewConfiguration</span></code> from the class, which in the case of this tutorial is <code class="docutils literal notranslate"><span class="pre">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span></code>. This specifies the view configuration of the form factor’s primary display - For Head Mounted Displays, it is two views (one per eye).</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">XrSessionState</span></code> changes to <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_STOPPING</span></code>, the application should call <code class="docutils literal notranslate"><span class="pre">xrEndSession()</span></code>. This means that the runtime has stop the session either from a user’s input or from some other reason, our application should response by ending the session and freeing any resources. Below is a small excerpt from the code that we copied in Chpater 2.1.3.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_STOPPING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndSession</span><span class="p">(</span><span class="n">m_session</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end Session.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
