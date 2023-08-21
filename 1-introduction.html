@@ -708,7 +708,7 @@ In it, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
 </pre></div>
 </div>
-<p>For Microsoft Windows, we’ve added some compiler pre-processor directives.</p>
+<p>For Linux, we’ve added some compiler pre-processor directives.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
@@ -717,7 +717,7 @@ In it, put the following code:</p>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This CMake code will add gfxwrapper for OpenGL, we’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK.</p>
+<p>This CMake code will add gfxwrapper for OpenGL. We’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-5">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
@@ -814,7 +814,8 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </div>
 <p>Now, we can set things up by adding a shared library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory too. Just above that we need to set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> so that <code class="docutils literal notranslate"><span class="pre">ANativeActivity_onCreate()</span></code> is exported for the Java Virtual Machine to call. This is used by a static library called <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, which allows us to interface between the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point.  We add <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling <code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>.</p>
 <div class="opengles docutils container" id="opengles-id-3">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># openxr-gfxwrapper - Manually build from OpenXR for OpenGL ES</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">GLES3-lib</span><span class="w"> </span><span class="s">GLESv3</span><span class="p">)</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">EGL-lib</span><span class="w"> </span><span class="s">EGL</span><span class="p">)</span>
@@ -836,7 +837,8 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>Finally we link the <code class="docutils literal notranslate"><span class="pre">android</span></code>, <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> and <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code> libraries to our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> library. Our <code class="docutils literal notranslate"><span class="pre">libOpenXRTutorialChapter2</span> <span class="pre">.so</span></code> will packaged inside our .apk along with any shared libraries that we have linked.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-7">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanNDK</span>
+<span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">OpenXRTutorialChapter2</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
 </pre></div>
 </div>

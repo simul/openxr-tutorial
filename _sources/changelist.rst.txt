@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 21 Aug** : Minor text revisions to Chapter 1.
     | **Mon 21 Aug** : Updated 4.1 CMake and Project Files text to be more reflective of Platform and Graphics API.
     | **Mon 21 Aug** : Minor text correction in Chapter 2 text.
     | **Mon 21 Aug** : Minor updated to 2.3 text
@@ -101,4 +102,3 @@ Changelist
     | **Tue 25 Jul** : js still fails to iterate the loop. Trying a while loop...
     | **Tue 25 Jul** : Alternative js to remove selected-platform class.
     | **Tue 25 Jul** : Fix incorrect class tag.
-    | **Tue 25 Jul** : Tab buttons: alpha, grayscale, brightness.
