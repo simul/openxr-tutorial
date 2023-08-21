@@ -1308,8 +1308,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <section id="xrpollevent">
 <h3>2.3.1 xrPollEvent<a class="headerlink" href="#xrpollevent" title="Permalink to this heading">¶</a></h3>
 <p>Code the following code into the <code class="docutils literal notranslate"><span class="pre">PollEvents()</span></code> method:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="n">PollEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="n">XrResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">;</span>
 <span class="k">do</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrEventDataBuffer</span><span class="w"> </span><span class="n">eventData</span><span class="p">{</span><span class="n">XR_TYPE_EVENT_DATA_BUFFER</span><span class="p">};</span>
 <span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrPollEvent</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
