@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 22 Aug** : Updated text in 3.1.3.
     | **Tue 22 Aug** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Tue 22 Aug** : Updated chapter 3 text about XrCompositionLayerFlags.
     | **Tue 22 Aug** : Updated doc tags in Chapter2/main.cpp and Chapter3/main.cpp.
@@ -101,4 +102,3 @@ Changelist
     | **Fri 28 Jul** : Updated Android build files for all chapters. Removed activity_main.xml, colors.xml and styles.xml. Updated CMake/Gradle files to use XR 1.0.28.2. Updated build.gradle, app/build.gradle, settings.gradle and AndroidManifest.xml files from comment for commit 7738eb6. Android will need a test walk-through - WIP.
     | **Thu 27 Jul** : Update Chapter 2 to complete Android Project setup walk through. Windows, Linux and Android all ready to be checked for Chapter 2 / Project Setup.
     | **Thu 27 Jul** : Updated gradle.properties in Chapters 2, 3 and 4.
-    | **Thu 27 Jul** : Updated Chapter 2 text for Android upto CMake - WIP.

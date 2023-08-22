@@ -642,7 +642,8 @@ Append the following this code to the <code class="docutils literal notranslate"
 </tbody>
 </table>
 </div>
-<p>Next, we set the values for <code class="docutils literal notranslate"><span class="pre">faceCount</span></code>, <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> and <code class="docutils literal notranslate"><span class="pre">mipCount</span></code>. <code class="docutils literal notranslate"><span class="pre">faceCount</span></code> describes the number of faces in the image and is used for creating cubemap textures. <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> describes the number of layers in an image. Here, we use <code class="docutils literal notranslate"><span class="pre">1</span></code>, as we have separate swapchain per view/eye, but for a stereo view you could pass <code class="docutils literal notranslate"><span class="pre">2</span></code> and have an image 2D array, which is suitable for multiview rendering. <code class="docutils literal notranslate"><span class="pre">mipCount</span></code> describes the number of mips levels, useful when using the swapchain image as a sampled image. Finally, we can set the format. Here, we ask our <code class="docutils literal notranslate"><span class="pre">GraphicsAPIs</span></code> class to pick a suitable format for the swapachain for the enumerated format we acquired early. Here is the code for <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::SelectSwapchainFormat()</span></code>:</p>
+<p>Then, we set the values for <code class="docutils literal notranslate"><span class="pre">faceCount</span></code>, <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> and <code class="docutils literal notranslate"><span class="pre">mipCount</span></code>. <code class="docutils literal notranslate"><span class="pre">faceCount</span></code> describes the number of faces in the image and is used for creating cubemap textures. <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> describes the number of layers in an image. Here, we used <code class="docutils literal notranslate"><span class="pre">1</span></code>, as we have separate swapchains per view/eye, but for a stereo view you could pass <code class="docutils literal notranslate"><span class="pre">2</span></code> and have an image 2D array, which is suitable for multiview rendering. <code class="docutils literal notranslate"><span class="pre">mipCount</span></code> describes the number of mips levels; this is useful when using the swapchain image as a sampled image in a shader. Finally, we set the format. Here, we asked our <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class to pick a suitable format for the swapachain from the enumerated formats we acquired earlier.</p>
+<p>Here is the code for <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::SelectSwapchainFormat()</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GraphicsAPI::SelectSwapchainFormat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formats</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supportSwapchainFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetSupportedSwapchainFormats</span><span class="p">();</span>
 
@@ -658,7 +659,8 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The function calls a pure virtual function called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific format us to use.</p>
+<p><em>The above code is an excerpt from Common/GraphicsAPI.cpp</em></p>
+<p>The function calls a pure virtual mehtod called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific formats for us to use.</p>
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -670,6 +672,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.cpp</em></p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-2">
 <p class="rubric">DirectX 12</p>
@@ -682,6 +685,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.cpp</em></p>
 </div>
 <div class="opengl docutils container" id="opengl-id-2">
 <p class="rubric">OpenGL</p>
@@ -698,6 +702,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 </div>
 <div class="opengles docutils container" id="opengles-id-2">
 <p class="rubric">OpenGL ES</p>
@@ -713,6 +718,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-2">
 <p class="rubric">Vulkan</p>
@@ -725,8 +731,9 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 </div>
-<p>We call <code class="docutils literal notranslate"><span class="pre">xrCreateSwapchain()</span></code> to create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, which, if successful, will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> will be non-null. We copy our swapchain format to our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::swapchainFormat</span></code> for later usage.</p>
+<p>Lastly, we called <code class="docutils literal notranslate"><span class="pre">xrCreateSwapchain()</span></code> to create our <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, which, if successful, returned <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> was non-null. We copied our swapchain format to our <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::swapchainFormat</span></code> for later usage.</p>
 </section>
 <section id="xrenumerateswapchainimages">
 <h3>3.1.4 xrEnumerateSwapchainImages<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
