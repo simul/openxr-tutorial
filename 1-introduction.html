@@ -747,7 +747,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>Create a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory for compatibility with other platforms. We will use this file to specific how our Native C++ code will be built. This <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file will be invoked by Android Studio’s Gradle build system and we will point Gradle to this CMake file.</p>
 <p class="rubric">CMakeLists.txt</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;OpenXRTutorialChapter2&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
 </pre></div>
 </div>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>

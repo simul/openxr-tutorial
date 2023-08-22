@@ -378,7 +378,7 @@
 <section id="creating-swapchains">
 <h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
 <p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
-<p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for an OpenXR application we don’t use the API-specific swapchain, which can be tied closely the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, have multiple views that need to be rendered to create the XR experience. Listed below are a few scenarios with differing view counts:</p>
+<p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for an OpenXR application we don’t use the API-specific swapchain, which can be tied closely the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, have multiple views that need to be rendered to create the XR experience. Listed below are a couple scenarios with differing view counts:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>1 view  - AR viewer on a mobile device.</p></li>
@@ -386,7 +386,7 @@
 </ul>
 </div></blockquote>
 <p>Orthogonal to multiple views is the layering of multiple rendered images or camera feeds. You could, for a example, have a background that is a video pass-through of your environment, a stereo view of rendering graphics and quad overlay of a HUD or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views.</p>
-<p>Firstly, we will update the class to add the new methods and members.</p>
+<p>Firstly, we will update the class to add the new methods and members. Copy the highlighted code.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">// [...] Constructor and Destructor from Chapter 2.</span>
@@ -398,11 +398,11 @@
 <span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
 <span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
 
-<span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
-
+<span class="hll"><span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
+</span>
 <span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
-<span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
-
+<span class="hll"><span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
+</span>
 <span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
 <span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
@@ -411,8 +411,8 @@
 <span class="w">                        </span><span class="p">}</span>
 <span class="w">                </span><span class="p">}</span>
 
-<span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
-<span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
+<span class="hll"><span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
+</span><span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
 
 <span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
 <span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
@@ -421,16 +421,16 @@
 <span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">// [...] Methods from Chapter 2.</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSwapchain</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySwapchain</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="k">private</span><span class="o">:</span>
+<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSwapchain</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySwapchain</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">// [...] Member from Chapter 2.</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
