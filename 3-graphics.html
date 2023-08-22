@@ -471,14 +471,14 @@
 <li><p>The conversion process may not use the same style of gamma encoding/decoding and therefore may result in a loss in color accuracy.</p></li>
 </ol>
 <p>If you’d like more information on color spaces and gamma encoding in computer graphics, Guy Davidson from Creative Assembly has a fantastic video presentation from Meeting C++ 2021 on this topic <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">here</a>.</p>
-<p>Copy the code below into the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> mehtod:</p>
+<p>Copy the code below into the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">formatSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainFormats</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Formats&quot;</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">formats</span><span class="p">(</span><span class="n">formatSize</span><span class="p">);</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainFormats</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formatSize</span><span class="p">,</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Formats&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Next, we do some checks to confirm that the views in the view configuration are the same size and thus suitable for stereo rendering. Append the following code to the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> mehtod:</p>
+<p>Next, we do some checks to confirm that the views in the view configuration are the same size and thus suitable for stereo rendering. Append the following code to the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Check the two views for stereo are the same</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">viewWidthsSame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">recommendedImageRectWidth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
@@ -496,13 +496,13 @@
 <section id="xrcreateswapchain">
 <h3>3.1.3 xrCreateSwapchain<a class="headerlink" href="#xrcreateswapchain" title="Permalink to this heading">¶</a></h3>
 <p>In this tutorial, we will create an <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> for each view in the system. First, we will resize our <code class="docutils literal notranslate"><span class="pre">std::vector&lt;SwapchainAndDepthImage&gt;</span></code> to match the number of views in the system. Next, we set up a for-each loop to iterate through and create the <code class="docutils literal notranslate"><span class="pre">XrSwapachain</span></code> s.
-Append the following this code to the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> mehtod:</p>
+Append the following this code to the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_swapchainAndDepthImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SwapchainAndDepthImage</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Inside the for-each loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> mehtod, add the following code:</p>
+<p>Inside the for-each loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method, add the following code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
@@ -660,7 +660,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI.cpp</em></p>
-<p>The function calls a pure virtual mehtod called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific formats for us to use.</p>
+<p>The function calls a pure virtual method called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific formats for us to use.</p>
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -738,12 +738,14 @@ Append the following this code to the <code class="docutils literal notranslate"
 <section id="xrenumerateswapchainimages">
 <h3>3.1.4 xrEnumerateSwapchainImages<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
 <p>Now that we have created the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>, we need to get access to the all images in the swapchain. We first call <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainImages()</span></code> to get the count of the images in the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. Next, we set up an array of structures to store the images from the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. In this tutorial, this array of structures, which stores the swapchains images, are stored in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class. We do this, because OpenXR will return to the application an array of structures that contain the API-specific handles to the swapchain images. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> is a virtual method implemented by each graphics API, which resizes an API-specific <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImage...KHR&gt;</span></code> and returns a pointer to the first element in that array casting it to a <code class="docutils literal notranslate"><span class="pre">XrSwapchainImageBaseHeader</span> <span class="pre">*</span></code>.</p>
+<p>Copy and append the following code in the for-each loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method. The highlighted code in this block refers only the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> method that was discussed above.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainImages</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Images.&quot;</span><span class="p">);</span>
 <span class="hll"><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="n">swapchainImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">AllocateSwapchainImageData</span><span class="p">(</span><span class="n">swapchainImageCount</span><span class="p">);</span>
 </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateSwapchainImages</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainImageCount</span><span class="p">,</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate Swapchain Images.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
+<p>Below is an excerpt of the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> method and the <code class="docutils literal notranslate"><span class="pre">XrSwapchainImage...KHR</span></code> structure relating to your chosen graphics API.</p>
 <div class="d3d11 docutils container" id="d3d11-id-3">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_D3D11::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -752,6 +754,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.cpp</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">swapchainImages</span></code> is of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImageD3D11KHR&gt;</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainImageD3D11KHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">     </span><span class="n">XrStructureType</span><span class="w">      </span><span class="n">type</span><span class="p">;</span>
@@ -760,6 +763,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainImageD3D11KHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D11Texture2D</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-3">
@@ -770,6 +774,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.cpp</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">swapchainImages</span></code> is of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImageD3D12KHR&gt;</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainImageD3D12KHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">     </span><span class="n">XrStructureType</span><span class="w">      </span><span class="n">type</span><span class="p">;</span>
@@ -778,6 +783,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainImageD3D12KHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D12Resource</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-3">
@@ -788,6 +794,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">swapchainImages</span></code> is of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImageOpenGLKHR&gt;</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainImageOpenGLKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -796,6 +803,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainImageOpenGLKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
 <div class="opengles docutils container" id="opengles-id-3">
@@ -807,6 +815,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">swapchainImages</span></code> is of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImageOpenGLESKHR&gt;</span></code>.</p>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainImageOpenGLESKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
 <span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">XR_MAY_ALIAS</span><span class="w">    </span><span class="n">next</span><span class="p">;</span>
@@ -814,6 +823,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainImageOpenGLESKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-3">
@@ -824,6 +834,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.cpp</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">swapchainImages</span></code> is of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImageVulkanKHR&gt;</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrSwapchainImageVulkanKHR</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">       </span><span class="n">type</span><span class="p">;</span>
@@ -832,12 +843,14 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="p">}</span><span class="w"> </span><span class="n">XrSwapchainImageVulkanKHR</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">VkImage</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
 </section>
 <section id="create-depth-image-and-image-views">
 <h3>3.1.5 Create Depth Image And Image Views<a class="headerlink" href="#create-depth-image-and-image-views" title="Permalink to this heading">¶</a></h3>
 <p>Next, we create a depth image so that we can correctly render 3D perspective graphics to the view. In this tutorial, we have a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ImageCreateInfo</span></code> structure and virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateImage()</span></code> that creates the API-specific objects.</p>
+<p>Append the following code into the for-each loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method. The highlighted code in this block refers only the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetDepthFormat()</span></code>, which we will discuss shortly.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageCreateInfo</span><span class="w"> </span><span class="n">depthImageCI</span><span class="p">;</span>
 <span class="n">depthImageCI</span><span class="p">.</span><span class="n">dimension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="n">depthImageCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
@@ -854,39 +867,45 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateImage</span><span class="p">(</span><span class="n">depthImageCI</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Each graphics API overrides the virtual function <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetDepthFormat()</span></code>, which return a API-specific image format of type <code class="docutils literal notranslate"><span class="pre">D32_F</span></code>.</p>
+<p>Each graphics API overrides the virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetDepthFormat()</span></code>, which return a API-specific image format of type <code class="docutils literal notranslate"><span class="pre">D32_F</span></code>.</p>
 <div class="d3d11 docutils container" id="d3d11-id-4">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.h</em></p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-4">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.h</em></p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.h</em></p>
 </div>
 <div class="opengles docutils container" id="opengles-id-4">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.h</em></p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-4">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">VK_FORMAT_D32_SFLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.h</em></p>
 </div>
 <p>We store our newly created depth image in <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::depthImage</span></code> for later usage when rendering.</p>
 <p>Now, we create the image views: one per image in the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> and an additional one for the depth image. Again in this tutorial, we have a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ImageViewCreateInfo</span></code> structure and virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateImageView()</span></code> that creates the API-specific objects.</p>
+<p>Append the following code into the for-each loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method. We will discuss the highlighted code shortly.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="w"> </span><span class="n">imageViewCI</span><span class="p">;</span>
 <span class="hll"><span class="w">    </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">GetSwapchainImage</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
@@ -920,6 +939,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.h</em></p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-5">
 <p class="rubric">DirectX 12</p>
@@ -930,18 +950,21 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.h</em></p>
 </div>
 <div class="opengl docutils container" id="opengl-id-5">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.h</em></p>
 </div>
 <div class="opengles docutils container" id="opengles-id-5">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.h</em></p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-5">
 <p class="rubric">Vulkan</p>
@@ -952,15 +975,15 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.h</em></p>
 </div>
 <p>For the color image views, we use the previously stored color image format, that we used when creating the swapchain, and for the depth image view, we use the previously created depth image and the same depth format from the graphics API.
 We store our newly created color image views for the swapchain in <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::colorImageViews</span></code> and the depth image view in <code class="docutils literal notranslate"><span class="pre">SwapchainAndDepthImage::depthImageView</span></code> for later usage when rendering.</p>
 </section>
 <section id="xrdestroyswapchain">
 <h3>3.1.6 xrDestroySwapchain<a class="headerlink" href="#xrdestroyswapchain" title="Permalink to this heading">¶</a></h3>
-<p>When the main render loop has finished and the application is shutting down, we need to destroy our created <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. This is done by calling <code class="docutils literal notranslate"><span class="pre">xrDestroySwapchain()</span></code> with the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> and it will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> if successful. At the same time, we destroy the associated depth image and all of the views that the graphics API created. In this tutorial, we use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImageView()</span></code> to destroy those objects.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">DestroySwapchain</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SwapchainAndDepthImage</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<p>When the main render loop has finished and the application is shutting down, we need to destroy our created <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code>. This is done by calling <code class="docutils literal notranslate"><span class="pre">xrDestroySwapchain()</span></code> passing the <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> as a parameter. It will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> if successful. At the same time, we destroy the associated depth image and all of the image views that the graphics API created. In this tutorial, we use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImageView()</span></code> to destroy those objects.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SwapchainAndDepthImage</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyImageView</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImageView</span><span class="p">);</span>
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*&amp;</span><span class="n">colorImageView</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyImageView</span><span class="p">(</span><span class="n">colorImageView</span><span class="p">);</span>
@@ -970,7 +993,6 @@ We store our newly created color image views for the swapchain in <code class="d
 
 <span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroySwapchain</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy Swapchain&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
 </pre></div>
 </div>
 <p>We now have <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> s and a depth images, ready for rendering. Next, we setup the render loop for OpenXR!</p>
@@ -1093,6 +1115,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrEnvironmentBlendMode</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetEnvironmentBlendModes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">,</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
@@ -1126,6 +1149,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrReferenceSpaceType</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateReferenceSpace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrReferenceSpaceCreateInfo</span><span class="w"> </span><span class="n">referenceSpaceCI</span><span class="p">{</span><span class="n">XR_TYPE_REFERENCE_SPACE_CREATE_INFO</span><span class="p">};</span>
 <span class="w">    </span><span class="n">referenceSpaceCI</span><span class="p">.</span><span class="n">referenceSpaceType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_REFERENCE_SPACE_TYPE_LOCAL</span><span class="p">;</span>
@@ -1136,11 +1160,11 @@ level of blending with the real world behind the display.</p></td>
 </div>
 <p>First, we fill out a <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo</span></code> structure. The first member is of type <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceType</span></code>.</p>
 <p>When we create the <em>reference space</em>, we need to specify an <code class="docutils literal notranslate"><span class="pre">XrPosef</span></code>, which we will be the origin transform of the space. For our tutorial, we will set <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo::poseInReferenceSpace</span></code> to an identity, where we use an identity quaternion for the orientation and a position at the origin. If we had specified a different pose, the origin of the reference space would have been offset from the runtime’s default.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
-<span class="n">referenceSpaceCreateInfo</span><span class="p">.</span><span class="n">poseInReferenceSpace</span><span class="p">.</span><span class="n">orientation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">referenceSpaceCreateInfo</span><span class="p">.</span><span class="n">poseInReferenceSpace</span><span class="p">.</span><span class="n">orientation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
 <span class="n">referenceSpaceCreateInfo</span><span class="p">.</span><span class="n">poseInReferenceSpace</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">};</span>
 </pre></div>
 </div>
+<p><em>The above code is an example of an ``XrPosef``.</em></p>
 <p>An <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> is a frame of reference defined not by its instantaneous values, but instead defined semantically by its purpose and relationship to other spaces. The actual, instantaneous position and orientation of an      <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> is called its <em>pose</em>.</p>
 <p>One kind of reference space is view space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code>). View space is oriented with the user’s head, and is useful for user-interface and many other purposes. We don’t use it to generate view matrices for rendering, because those are often offset from the view space due to stereo rendering.</p>
 <p>By using a local space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code>), we specify that the views are relative to the XR hardware’s ‘local’ space - either the headset’s starting position or some other world-locked origin.</p>
@@ -1199,36 +1223,32 @@ level of blending with the real world behind the display.</p></td>
 <section id="renderframe">
 <h3>3.2.3 RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
 <p>Below is the code needed for rendering a frame in OpenXR. Each frame, we sequence through the three primary functions <code class="docutils literal notranslate"><span class="pre">xrWaitFrame()</span></code>, <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. These functions wrap around our rendering code and communicate to the OpenXR rumtime that we are rendering and that we need to synchronize with the XR compositor’s frame hook.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RenderFrame</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span>
-<span class="w">        </span><span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
-<span class="w">        </span><span class="n">XrFrameWaitInfo</span><span class="w"> </span><span class="n">frameWaitInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_WAIT_INFO</span><span class="p">};</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameWaitInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameState</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for XR Frame.&quot;</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
+<span class="w">    </span><span class="n">XrFrameWaitInfo</span><span class="w"> </span><span class="n">frameWaitInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_WAIT_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameWaitInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameState</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for XR Frame.&quot;</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">XrFrameBeginInfo</span><span class="w"> </span><span class="n">frameBeginInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_BEGIN_INFO</span><span class="p">};</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrBeginFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameBeginInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to begin the XR Frame.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XrFrameBeginInfo</span><span class="w"> </span><span class="n">frameBeginInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_BEGIN_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrBeginFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameBeginInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to begin the XR Frame.&quot;</span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">layers</span><span class="p">;</span>
-<span class="w">        </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="n">layerProjection</span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_PROJECTION</span><span class="p">};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">layerProjectionViews</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">layers</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="n">layerProjection</span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_PROJECTION</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">layerProjectionViews</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">sessionActive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_SYNCHRONIZED</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_VISIBLE</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_FOCUSED</span><span class="p">);</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionActive</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">shouldRender</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">layerProjectionViews</span><span class="p">);</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rendered</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">layers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">));</span>
-<span class="w">            </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">sessionActive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_SYNCHRONIZED</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_VISIBLE</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_FOCUSED</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionActive</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">shouldRender</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">layerProjectionViews</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rendered</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">layers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">        </span><span class="n">XrFrameEndInfo</span><span class="w"> </span><span class="n">frameEndInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_END_INFO</span><span class="p">};</span>
-<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">displayTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">;</span>
-<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="p">;</span>
-<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">layers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-<span class="w">        </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layers</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
-<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameEndInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end the XR Frame.&quot;</span><span class="p">);</span>
-<span class="k">if</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">displayTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">;</span>
+<span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="p">;</span>
+<span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">layers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layers</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEndFrame</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameEndInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to end the XR Frame.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>The primary structure in use here is the <code class="docutils literal notranslate"><span class="pre">XrFrameState</span></code>, which contains vital members for timing and rendering such <code class="docutils literal notranslate"><span class="pre">predictedDisplayTime</span></code>, which is the predicted time that the frame will be displayed to the user, and <code class="docutils literal notranslate"><span class="pre">shouldRender</span></code>, which states whether the application should render any graphics. This could occurs when the application is transitioning into or out of a running sesssion or that the system UI is focused and covering the application.</p>
@@ -1241,6 +1261,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrFrameState</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code> should ‘book-end’ all the rendering in the XR frame and thus should be called as a pair. <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> should be called just before excuting any GPU work for the frame. When calling <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>, we need to pass an <code class="docutils literal notranslate"><span class="pre">XrFrameEndInfo</span></code> structure to that function. We assign <code class="docutils literal notranslate"><span class="pre">XrFrameState::predictedDisplayTime</span></code> to <code class="docutils literal notranslate"><span class="pre">XrFrameEndInfo::displayTime</span></code>. It should be noted that we can modify this value during the frame. Next, we assign to <code class="docutils literal notranslate"><span class="pre">XrFrameEndInfo::environmentBlendMode</span></code> our selected environment blend mode. Last, we assign the size of and a pointer to an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerBaseHeader</span> <span class="pre">*&gt;</span></code>. These Composition Layers are used by the OpenXR compositor to create the final image for the views.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XrFrameEndInfo</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">                               </span><span class="n">type</span><span class="p">;</span>
@@ -1252,6 +1273,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrFrameEndInfo</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <p><code class="docutils literal notranslate"><span class="pre">XrCompositionLayerBaseHeader</span></code> is the base structure from which all other <code class="docutils literal notranslate"><span class="pre">XrCompositionLayer...</span></code> types extend. They describe the type of layer to be composited along with the relevant information. If we have rendered any graphics this frame, we cast the memory address our <code class="docutils literal notranslate"><span class="pre">XrCompositionLayer...</span></code> structure to a <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerBaseHeader</span> <span class="pre">*</span></code> and push it back into out <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerBaseHeader</span> <span class="pre">*&gt;</span></code>, which is assigned in our <code class="docutils literal notranslate"><span class="pre">XrFrameEndInfo</span></code> structure.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">XR_MAY_ALIAS</span><span class="w"> </span><span class="n">XrCompositionLayerBaseHeader</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrStructureType</span><span class="w">             </span><span class="n">type</span><span class="p">;</span>
@@ -1261,6 +1283,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrCompositionLayerBaseHeader</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <p>Below is a table of the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayer...</span></code> types provided by OpenXR 1.0 Core Specification and <code class="docutils literal notranslate"><span class="pre">XR_KHR_composition_layer_...</span></code> extensions.</p>
 <table class="docutils align-default">
 <tbody>
@@ -1318,6 +1341,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="p">}</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="p">;</span>
 </pre></div>
 </div>
+<p><em>The above code is an excerpt from openxr/openxr.h</em></p>
 <p>In this tutorial, we use the a single <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjection</span></code>, which describes the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerFlags</span></code>, an <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> and a count and pointer to an array of <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code>.</p>
 <p>The compositing of layers can be set on a per-layer basis through the use of the per-texel alpha channel. This is done throught the use of the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerFlags</span></code> member. Below is a description of these flags.</p>
 <table class="docutils align-default">
@@ -1343,8 +1367,7 @@ level of blending with the real world behind the display.</p></td>
 <section id="renderlayer">
 <h3>3.2.4 RenderLayer<a class="headerlink" href="#renderlayer" title="Permalink to this heading">¶</a></h3>
 <p>From the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> function we call <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>. Here, we locate the views within the reference space, render to our swapachain images and fill out the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjection</span></code> and <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerProjectionView&gt;</span></code> parameters.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">views</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW</span><span class="p">});</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">views</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW</span><span class="p">});</span>
 
 <span class="w">    </span><span class="n">XrViewState</span><span class="w"> </span><span class="n">viewState</span><span class="p">{</span><span class="n">XR_TYPE_VIEW_STATE</span><span class="p">};</span>
 <span class="w">    </span><span class="n">XrViewLocateInfo</span><span class="w"> </span><span class="n">viewLocateInfo</span><span class="p">{</span><span class="n">XR_TYPE_VIEW_LOCATE_INFO</span><span class="p">};</span>
@@ -1405,7 +1428,6 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">    </span><span class="n">layerProjection</span><span class="p">.</span><span class="n">views</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
 </pre></div>
 </div>
 <p>Our first call is to <code class="docutils literal notranslate"><span class="pre">xrLocateViews()</span></code>, which takes a <code class="docutils literal notranslate"><span class="pre">XrViewLocateInfo</span></code> structure and return a <code class="docutils literal notranslate"><span class="pre">XrViewState</span></code> structure and an array of <code class="docutils literal notranslate"><span class="pre">XrView</span></code> s. This functions tells us where the views are in relation to the reference space, as an <code class="docutils literal notranslate"><span class="pre">XrPosef</span></code>, as well as the field of view, as an <code class="docutils literal notranslate"><span class="pre">XrFovf</span></code>, for each view; this information is stored the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrView&gt;</span></code>. The returned <code class="docutils literal notranslate"><span class="pre">XrViewState</span></code> contains a member of type <code class="docutils literal notranslate"><span class="pre">XrViewStateFlags</span></code>, which descibes whether the position and/or orientation is valid and/or tracked.</p>
