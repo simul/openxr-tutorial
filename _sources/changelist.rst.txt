@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 22 Aug** : Updated text in 3.1.3.
+    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 22 Aug** : Fixing matchups in main.cpp between chapters.
     | **Tue 22 Aug** : Updated doc tags and text to include view coherency check in Chapter 3.
     | **Tue 22 Aug** : Update highlighting in code block chapter 3.1.
     | **Tue 22 Aug** : Updated CMake Android project names. Updated and highlighted code block in Chapter 3.1 text.
@@ -98,7 +102,3 @@ Changelist
     | **Thu 27 Jul** : GraphicsAPI and OpenXRTutorial and Main sections in Chapter 2 text updated. Windows run-through is complete - to be checked. Stub class clean up in Chapter 2 and 3 texts. and removed cmake-tutorial2-1.png.
     | **Thu 27 Jul** : Moved GraphicsAPI_Type outside of OpenXRTutorial_Main()
     | **Thu 27 Jul** : Moved strncpy to HelperFunctions.h. Clear up in OpenXRHelper.h and HelperFunctions.h and Chapter main and cmake files. Chapter 2 Project Setup rewrite WIP.
-    | **Thu 27 Jul** : Removed GraphicsAPIs.h as name was confusing, we just include the API-specific headers now.
-    | **Wed 26 Jul** : Revert layout.html
-    | **Wed 26 Jul** : Amended Chapter 1.3 to remove building OpenXR from source. Instead describes using FetchContent_Declare(), Graphics API SDK, CMake and IDE set ups. Chapter now doesn't now follow on correctly. Deleted unneeded images.
-    | **Wed 26 Jul** : Minor updates to Chapter 2 text.

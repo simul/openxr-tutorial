@@ -322,7 +322,7 @@
   <section id="interactions">
 <h1>🕹 4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
 <p>An OpenXR application has interactions with the user which can be user input to the application, or haptic output back to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: spaces, actions, and bindings.</p>
-<p>Download <a class="reference download internal" download="" href="_downloads/de3adf2e49966712553f40eb9f623e44/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a></p>
+<p>Download <a class="reference download internal" download="" href="_downloads/de3adf2e49966712553f40eb9f623e44/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a> for this chapter. This adds shader compilation to the project. Create a “Shaders” folder next to your project folder, and put these files in it:</p>
 <section id="creating-actions-and-action-sets">
 <h2>4.1 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Permalink to this heading">¶</a></h2>
 <p>At the end of your application class, add this code:</p>
@@ -589,6 +589,9 @@ controller’s position.</p>
 </div>
 <p>This provides a simple matrix and vector library for our render code.
 Now insert</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">CreateResources</span><span class="p">();</span>
+</pre></div>
+</div>
 <p>Now, after the code for DestroySession(), add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">CameraConstants</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">viewProj</span><span class="p">;</span>
