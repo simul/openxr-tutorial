@@ -710,7 +710,13 @@ In it, put the following code:</p>
 </div>
 </div>
 <div class="linux docutils container" id="linux-id-3">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">OS_LINUX_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_PLATFORM_WAYLAND=1</span><span class="w"> </span><span class="s">XR_USE_GRAPHICS_API_OPENGL=1</span><span class="w"> </span><span class="s">LINUX=1</span><span class="p">)</span><span class="c">#XR_USE_GRAPHICS_API_VULKAN=1 </span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>f()
+
+lkanSDK
+_package(Vulkan)
+Vulkan_FOUND)
+target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${Vulkan_LIBRARIES})
 </pre></div>
 </div>
 <p>For Linux, we’ve added some compiler pre-processor directives.</p>
@@ -1182,28 +1188,8 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="linux docutils container" id="linux-id-4">
 <div class="opengl docutils container" id="opengl-id-7">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__LINIX__)</span>
-<span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
-</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XCB</span>
-</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
-</span>
-<span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
-</span><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-10">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__LINIX__)</span>
-<span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
-</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XCB</span>
-</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
-</span>
-<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
-<span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
-</span><span class="cp">#endif</span>
-</pre></div>
-</div>
 </div>
 </div>
 <div class="android docutils container" id="android-id-4">
@@ -1247,11 +1233,14 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="opengl docutils container" id="opengl-id-8">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GL/glx.h&gt;</span>
 <span class="c1">// gfxwrapper will redefine these macros</span>
 <span class="cp">#undef XR_USE_PLATFORM_WIN32</span>
 <span class="cp">#undef XR_USE_PLATFORM_XLIB</span>
 <span class="cp">#undef XR_USE_PLATFORM_XCB</span>
 <span class="cp">#undef XR_USE_PLATFORM_WAYLAND</span>
+<span class="cp">#define OS_LINUX_XLIB 1</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;gfxwrapper_opengl.h&quot;</span>
 <span class="cp">#endif</span>
 </pre></div>

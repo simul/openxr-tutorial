@@ -363,8 +363,8 @@
 </pre></div>
 </div>
 <p><cite>Hand</cite> is a simple struct to encapsulate the XrHandTrackerEXT object for each hand, and the joint location structures that we’ll update to track hand motion. Now, in Run(), after the call to AttachActionSet(), add:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span>
-<span class="n">CreateHandTrackers</span><span class="p">();</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span>
+<span class="w">	</span><span class="n">CreateHandTrackers</span><span class="p">();</span>
 </pre></div>
 </div>
 <p>Add this function after the definition of AttachActionSet(). For each of two hands, we’ll call xrCreateHandTrackerEXT() and fill in the m_handTracker object.</p>
@@ -429,7 +429,6 @@
 </pre></div>
 </div>
 <p>Run the app: you’ll now see both hands, rendered as blocks.</p>
-<p>The next thing is to</p>
 </section>
 </section>
 
