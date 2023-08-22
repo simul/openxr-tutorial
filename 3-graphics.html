@@ -23,7 +23,7 @@
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
 	<link rel="next" title="🕹 4 Interactions" href="4-actions.html" >
-	<link rel="prev" title="⚙️ 2 Setup" href="2-setup.html" > 
+	<link rel="prev" title="Setup" href="2-setup.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -233,7 +233,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">Setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">👾 3 Graphics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">3.1 Creating Swapchains</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">3.1.1 XrViewConfigurationView</a></li>
@@ -362,7 +362,19 @@
 </div>
 
 <p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with all the Graphics APIs.</p>
-<p>Download <a class="reference download internal" download="" href="_downloads/7bc8e70c24495d1dd50fde75d030ec5e/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a></p>
+<p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3/</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, you can either copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> and update this line:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or, you can download the updated <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> here.
+<a class="reference download internal" download="" href="_downloads/7bc8e70c24495d1dd50fde75d030ec5e/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">Chapter3/CMakeLists.txt</span></code></a></p>
+<div class="android docutils container" id="android-id-1">
+<p>For Android, you will also need to copy the <code class="docutils literal notranslate"><span class="pre">app/</span></code> and <code class="docutils literal notranslate"><span class="pre">gradle</span></code> folders and the <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code>, <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew.bat</span></code>, <code class="docutils literal notranslate"><span class="pre">local.properties</span></code> and <code class="docutils literal notranslate"><span class="pre">settings.gradle</span></code>. Within those file you must change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code>. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
+</div>
 <section id="creating-swapchains">
 <h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
 <p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create illusion of motion within the image.</p>
@@ -377,7 +389,7 @@
 <p>Firstly, we will update the class to add the new methods and members.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="c1">// [...] Constructor and Destructor from Chapter 2.</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
@@ -391,10 +403,10 @@
 <span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
 <span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
 
-<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
 <span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
-<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                                </span><span class="c1">// Draw Frame.</span>
 <span class="w">                        </span><span class="p">}</span>
 <span class="w">                </span><span class="p">}</span>
@@ -406,22 +418,32 @@
 <span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Methods from Chapter 2.</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">viewConfigurationViews</span><span class="p">;</span>
-<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Member from Chapter 2.</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
 
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SwapchainAndDepthImage</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">XrSwapchain</span><span class="w"> </span><span class="n">swapchain</span><span class="p">{};</span>
+<span class="w">                </span><span class="n">XrSwapchain</span><span class="w"> </span><span class="n">swapchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 <span class="w">                </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">void</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">colorImageViews</span><span class="p">;</span>
-<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImageView</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImageView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">swapchainAndDepthImages</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <section id="xrviewconfigurationview">
@@ -924,6 +946,80 @@ We store our newly created color image views for the swapchain in <code class="d
 <h2>3.2 Building a RenderLoop<a class="headerlink" href="#building-a-renderloop" title="Permalink to this heading">¶</a></h2>
 <p>With the most of the OpenXR objects now set up, we can now turn our attention to rendering graphics. You will likely have your own rendering solution in place with things hooked up to OpenXR and ready to get going. There are two further OpenXR object that need to render; pertaining to where the user is and what the user sees of the external environment around them. Namely, these are the ‘environment blend mode’ and the ‘reference space’.</p>
 <p>Then, with those final pieces in place, we can look to the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLoop()</span></code> code to invoke graphics work on the GPU and present it back to OpenXR and its compositor through the use of composition layers and within the scope of an XR Frame.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Constructor and Destructor from Chapter 2.</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
+
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Methods from Chapter 2.</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderFrame</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Member from Chapter 2.</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SwapchainAndDepthImage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">XrSwapchain</span><span class="w"> </span><span class="n">swapchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">                </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">void</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">colorImageViews</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImageView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_applicationEnvironmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span><span class="p">};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+</pre></div>
+</div>
 <section id="xrenumerateenvironmentblendmodes">
 <h3>3.2.1 xrEnumerateEnvironmentBlendModes<a class="headerlink" href="#xrenumerateenvironmentblendmodes" title="Permalink to this heading">¶</a></h3>
 <p>Environment blend is done at the final stage after the compositor has flatten and blended all the compositing layer passed to OpenXR at the <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. The enum describes how OpenXR should blend the rendering view with the external environment behind the screen(s). The most common usages are as follows:</p>
@@ -1068,32 +1164,6 @@ level of blending with the real world behind the display.</p></td>
 </section>
 <section id="renderframe">
 <h3>3.2.3 RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
-<p>In the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, add the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> methods.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...]</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-
-<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
-<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
-<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
-<span class="w">                        </span><span class="p">}</span>
-<span class="w">                </span><span class="p">}</span>
-
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="c1">// [...]</span>
-
-<span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">RenderLayer</span><span class="p">();</span>
-<span class="w">        </span><span class="c1">// [...]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 <p>Below is the code needed for rendering a frame in OpenXR. Each frame, we sequence through the three primary functions <code class="docutils literal notranslate"><span class="pre">xrWaitFrame()</span></code>, <code class="docutils literal notranslate"><span class="pre">xrBeginFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. These functions wrap around our rendering code and communicate to the OpenXR rumtime that we are rendering and that we need to synchronize with the XR compositor’s frame hook.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RenderFrame</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="n">XR_DOCS_CHAPTER_VERSION</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">XR_DOCS_CHAPTER_3_2</span>
@@ -1321,7 +1391,7 @@ level of blending with the real world behind the display.</p></td>
 						</div>
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="2-setup.html" class="btn btn-neutral float-left" title="⚙️ 2 Setup" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="2-setup.html" class="btn btn-neutral float-left" title="Setup" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="4-actions.html" class="btn btn-neutral float-right" title="🕹 4 Interactions" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

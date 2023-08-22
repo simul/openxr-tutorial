@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>⚙️ 2 Setup &mdash; OpenXR Tutorial  documentation</title>
+	<title>Setup &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
@@ -233,10 +233,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">⚙️ 2 Setup</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-an-xrinstance-xrgetsystem">2.1 Creating an XrInstance / xrGetSystem</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#xrinstance">2.1.1 XrInstance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrsystemid">2.1.2 XrSystemId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xr-ext-debug-utils">2.1.2 XR_EXT_debug_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xrsystemid">2.1.3 XrSystemId</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-an-xrsession">2.2 Creating an XrSession</a><ul>
@@ -269,7 +270,7 @@
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">⚙️ 2 Setup</li>
+      <li class="breadcrumb-item active">Setup</li>
 	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
@@ -327,7 +328,7 @@
 						<div itemprop="articleBody">
 							
   <section id="setup">
-<h1>⚙️ 2 Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
+<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <p>Select your platform, as the instructions are different depending on your selection.</p>
 <div class='select-platform-container-inline'>
 	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
@@ -377,10 +378,12 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="hll"><span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+</span><span class="hll"><span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
 </span><span class="hll">
 </span><span class="hll"><span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
 </span><span class="hll"><span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
 </span><span class="hll">
+</span><span class="hll"><span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
 </span><span class="hll"><span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
 </span><span class="w">        </span><span class="p">}</span>
 
@@ -388,15 +391,18 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateInstance</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
-</span><span class="hll">
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyInstance</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
-</span><span class="hll">
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateDebugMessenger</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyDebugMessenger</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetInstanceProperties</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
-</span><span class="hll">
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
@@ -408,10 +414,12 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span><span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 </span><span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 </span><span class="hll">
+</span><span class="hll"><span class="w">        </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="hll">
 </span><span class="hll"><span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
 </span><span class="hll"><span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-</span><span class="hll"><span class="p">};</span>
-</span></pre></div>
+</span><span class="p">};</span>
+</pre></div>
 </div>
 <p>First, we updated <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> to call the new methods <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetSystemID()``and</span> <span class="pre">``DestroyInstance()</span></code> in that order. Finally, we added those methods and the following members to the class within thier separate private sections.</p>
 <section id="xrinstance">
@@ -426,12 +434,12 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </pre></div>
 </div>
 <p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::apiVersion</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">XR_CURRENT_API_VERSION</span></code> macro to specific the OpenXR version that we want to run. Also note here the use of <code class="docutils literal notranslate"><span class="pre">strncpy()</span></code> to set the applicationName and engineName. If you look at <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::applicationName</span></code> and <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::engineName</span></code> members, they are of type <code class="docutils literal notranslate"><span class="pre">char[]</span></code>, hence you must copy your string into that <code class="docutils literal notranslate"><span class="pre">char[]</span></code> and you must also by aware of the allowable length.</p>
-<p>Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, add the following code:</p>
+<p id="instanceextensions">Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
 <span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>Here, we store in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::string&gt;</span></code> the extension names that we would like to use. <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> is a macro of a string defined in <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code>. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in <a class="reference internal" href="5-extensions.html#using-xrcreatedebugutilsmessengerext"><span class="std std-ref">Chapter 5.2</span></a>. Depending on which <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro that you have defined, this code will add the relevant extension.</p>
+<p>Here, we store in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::string&gt;</span></code> the extension names that we would like to use. <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> is a macro of a string defined in <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code>. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in <a class="reference internal" href="#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>. Depending on which <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro that you have defined, this code will add the relevant extension.</p>
 <p>Not all API layers and extensions are available to use, so we much check which ones can use. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide. We will do this by adding the following code to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">apiLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrApiLayerProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">;</span>
@@ -503,8 +511,137 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </div>
 <p>Here, we have initialized the <code class="docutils literal notranslate"><span class="pre">XrInstanceProperties</span></code> structure with the correct <code class="docutils literal notranslate"><span class="pre">XrStructureType</span></code> and passed it along with the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> to the <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProperties()</span></code> function. This function will fill out the rest of that structure for us to use. Next, we have loggod to stdout the runtime’s name, and with the use of the <code class="docutils literal notranslate"><span class="pre">XR_VERSION_MAJOR</span></code>, <code class="docutils literal notranslate"><span class="pre">XR_VERSION_MINOR</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_VERSION_PATCH</span></code> macros, we have parsed and logged the runtime version.</p>
 </section>
+<section id="xr-ext-debug-utils">
+<h3>2.1.2 XR_EXT_debug_utils<a class="headerlink" href="#xr-ext-debug-utils" title="Permalink to this heading">¶</a></h3>
+<p>XR_EXT_debug_utils is an instance extension for OpenXR, which allows the application to get more information on any errors or warnings etc. raised by the runtime. You can specify which message severities and types will checked. If a debug message raised, it is passed to the callback function, which can optionally use the user data pointer provided in the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure.</p>
+<dl class="simple">
+<dt>Message Severities:</dt><dd><ul class="simple">
+<li><p>Verbose: Output all diagnostic messages.</p></li>
+<li><p>Info: Output information messages helpful in debugging.</p></li>
+<li><p>Warning: Output messages that could suggest an application bug and that need reviewing.</p></li>
+<li><p>Error: Output messages from errors that may cause undefined behavior and/or crashes.</p></li>
+</ul>
+</dd>
+<dt>Message Types:</dt><dd><ul class="simple">
+<li><p>General: An event type for general information.</p></li>
+<li><p>Validation: An event type that may indicate invalid usage of OpenXR.</p></li>
+<li><p>Performance: An event type that may indicate non-optimal usage of OpenXR.</p></li>
+<li><p>Conformance: An event type that indicating a non-conformant OpenXR result from the runtime.</p></li>
+</ul>
+</dd>
+</dl>
+<p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#debug-message-categorization">OpenXR Specification 12.26.3. Debug Message Categorization</a>.</p>
+<p>Copy the following code into <code class="docutils literal notranslate"><span class="pre">CreateDebugMessenger()</span></code> and <code class="docutils literal notranslate"><span class="pre">DestroyDebugMessenger()</span></code> respectively:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">m_activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the code above, we first check that <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;XR_EXT_debug_utils&quot;</span></code> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code>, which we used to create the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>. Next, we call the <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> function.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsStringInVector</span><span class="p">(</span><span class="n">m_activeInstanceExtensions</span><span class="p">,</span><span class="w"> </span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>At the end of the program, we should destroy the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code> by calling <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="nf">CreateOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrDebugUtilsMessengerCreateInfoEXT</span><span class="w"> </span><span class="n">debugUtilsMessengerCI</span><span class="p">{</span><span class="n">XR_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</span><span class="p">};</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageSeverities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">messageTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_CONFORMANCE_BIT_EXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrDebugUtilsMessengerCallbackEXT</span><span class="p">)</span><span class="n">OpenXRMessageCallbackFunction</span><span class="p">;</span>
+<span class="w">    </span><span class="n">debugUtilsMessengerCI</span><span class="p">.</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">PFN_xrCreateDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessengerCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">debugUtilsMessenger</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">PFN_xrDestroyDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyDebugUtilsMessengerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyDebugUtilsMessengerEXT</span><span class="p">(</span><span class="n">debugUtilsMessenger</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy DebugUtilsMessenger.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><em>The above code is an excerpt from Common/OpenXRDebugUtils.cpp</em></p>
+<p>In <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code>, we use a <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure to specify which message severities and types will checked. Next, we set the callback function that we want to use, and it must match the <code class="docutils literal notranslate"><span class="pre">PFN_xrDebugUtilsMessengerCallbackEXT</span></code> signature. Optionally, you can set a <code class="docutils literal notranslate"><span class="pre">userData</span></code> pointer, perhaps to a class, but here we have set it to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> in this example.</p>
+<p>XR_EXT_debug_utils is an extension and as such its functions are not loaded by default by the OpenXR loader. Therefore, we need to get the address of the function through the use of <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProcAddr()</span></code>. We pass the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> and a string of the function we want to get, along with a pointer to a function pointer variable. We need to cast that pointer to a function pointer variable to a <code class="docutils literal notranslate"><span class="pre">PFN_xrVoidFunction*</span></code> type. Once we have the <code class="docutils literal notranslate"><span class="pre">xrCreateDebugUtilsMessengerEXT()</span></code> function, we call it by passing the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, a pointer to our <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerCreateInfoEXT</span></code> structure and a pointer to our <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>. If all is successful, we have set up the DebugUtilsMessenger callback.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger()</span></code>, the <code class="docutils literal notranslate"><span class="pre">xrDestroyDebugUtilsMessengerEXT()</span></code> function also needs to be loaded through the use of <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProcAddr()</span></code>. Once loaded, we can call the function and pass the <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code> and thus destroying it.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrBool32</span><span class="w"> </span><span class="nf">OpenXRMessageCallbackFunction</span><span class="p">(</span><span class="n">XrDebugUtilsMessageSeverityFlagsEXT</span><span class="w"> </span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XrDebugUtilsMessageTypeFlagsEXT</span><span class="w"> </span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XrDebugUtilsMessengerCallbackDataEXT</span><span class="w"> </span><span class="o">*</span><span class="n">pCallbackData</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pUserData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">GetMessageSeverityString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">XrDebugUtilsMessageSeverityFlagsEXT</span><span class="w"> </span><span class="n">messageSeverity</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg_flags</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;VERBOSE&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">                </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;INFO&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">                </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;WARN&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">                </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;ERROR&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">msg_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">GetMessageTypeString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">XrDebugUtilsMessageTypeFlagsEXT</span><span class="w"> </span><span class="n">messageType</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg_flags</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;GEN&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">                </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;SPEC&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">                </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">msg_flags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;PERF&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">msg_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">functionName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">functionName</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">functionName</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">messageSeverityStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetMessageSeverityString</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">messageTypeStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetMessageTypeString</span><span class="p">(</span><span class="n">messageType</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">messageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">messageId</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">messageId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">pCallbackData</span><span class="o">-&gt;</span><span class="n">message</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">errorMessage</span><span class="p">;</span>
+<span class="w">    </span><span class="n">errorMessage</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">functionName</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;(&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">messageSeverityStr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; / &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">messageTypeStr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;): msgNum: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">messageId</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">errorMessage</span><span class="p">.</span><span class="n">str</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">messageSeverity</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">XrBool32</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><em>The above code is an excerpt from Common/OpenXRDebugUtils.cpp</em></p>
+<p>Above is an example of a OpenXR DebugUtilsMessenger Callback function. This function can be completely customised to your liking, but here we simply convert the message’s severity and type to strings, and create a string to log to stdout. We also add a <code class="docutils literal notranslate"><span class="pre">DEBUG_BREAK</span></code> if the severity is an error. Just one thing to note: Applications should always return <code class="docutils literal notranslate"><span class="pre">XR_FALSE</span></code> from this function.</p>
+</section>
 <section id="xrsystemid">
-<h3>2.1.2 XrSystemId<a class="headerlink" href="#xrsystemid" title="Permalink to this heading">¶</a></h3>
+<h3>2.1.3 XrSystemId<a class="headerlink" href="#xrsystemid" title="Permalink to this heading">¶</a></h3>
 <p>The next object that we want to get is the <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code>. OpenXR ‘separates the concept of physical systems of XR devices from the logical objects that applications interact with directly. A system represents a collection of related devices in the runtime, often made up of several individual hardware components working together to enable XR experiences’.
 <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#system">OpenXR Specification 5. System</a>.</p>
 <p>So, a <code class="docutils literal notranslate"><span class="pre">XrSystemId</span></code> could represent VR headset and a pair of controllers, or perhaps mobile device with video pass-through for AR. So we need to decide what type of <code class="docutils literal notranslate"><span class="pre">XrFormFactor</span></code> we are wanting to use, as some runtimes support multiple form factors. Here, we are selecting <code class="docutils literal notranslate"><span class="pre">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span></code>, which is initialised in the class, for a Meta Quest or Pico Neo. OpenXR currently offers two option for the <code class="docutils literal notranslate"><span class="pre">XrFormFactor</span></code>.</p>
@@ -571,6 +708,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
 
 <span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
 <span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
@@ -578,6 +716,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="hll"><span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
 </span><span class="hll"><span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
 </span>
+<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
 <span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -598,6 +737,14 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="c1">// [...]</span>
 <span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateDebugMessenger</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyDebugMessenger</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSession</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
@@ -612,6 +759,8 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
+<span class="w">        </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+
 <span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
 <span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
@@ -619,7 +768,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span><span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">GraphicsAPI</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 </span><span class="hll">
 </span><span class="hll"><span class="w">        </span><span class="n">XrSession</span><span class="w"> </span><span class="n">m_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-</span><span class="p">}</span>
+</span><span class="p">};</span>
 </pre></div>
 </div>
 <section id="xrsession">
@@ -1232,6 +1381,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
 
 <span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
 <span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
@@ -1248,6 +1398,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span>
 <span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
 
+<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
 <span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
 <span class="p">}</span>
 
@@ -1265,6 +1416,14 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">                </span><span class="c1">// [...]</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateDebugMessenger</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyDebugMessenger</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="c1">// [...]</span>
 <span class="w">        </span><span class="p">}</span>
@@ -1290,6 +1449,8 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
+<span class="w">        </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+
 <span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
 <span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
@@ -1302,7 +1463,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span><span class="hll"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 </span><span class="hll">
 </span><span class="hll"><span class="w">        </span><span class="n">XrViewConfigurationType</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="p">;</span>
-</span><span class="p">}</span>
+</span><span class="p">};</span>
 </pre></div>
 </div>
 <section id="xrpollevent">
