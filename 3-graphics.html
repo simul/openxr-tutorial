@@ -951,6 +951,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.h</em></p>
+<p>For DirectX 3D 12, the <code class="docutils literal notranslate"><span class="pre">ID3D12Resource</span> <span class="pre">*</span></code> returned has of its all subresource states in <code class="docutils literal notranslate"><span class="pre">D3D12_RESOURCE_STATE_RENDER_TARGET</span></code>. This is a requirement of the OpenXR 1.0 D3D12 extension. See: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_D3D12_enable">12.13. XR_KHR_D3D12_enable</a>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-5">
 <p class="rubric">OpenGL</p>
@@ -975,6 +976,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
+<p>For Vulkan, the <code class="docutils literal notranslate"><span class="pre">VkImage</span></code> returned has all of its subresource states in <code class="docutils literal notranslate"><span class="pre">VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL</span></code>. This is a requirement of the OpenXR 1.0 Vulkan extension. See: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_vulkan_enable">12.20. XR_KHR_vulkan_enable</a>.</p>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_Vulkan.h</em></p>
 </div>
 <p>For the color image views, we use the previously stored color image format, that we used when creating the swapchain, and for the depth image view, we use the previously created depth image and the same depth format from the graphics API.
@@ -1014,7 +1016,8 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
 
 <span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
-
+<span class="hll"><span class="w">                </span><span class="n">GetEnvironmentBlendModes</span><span class="p">();</span>
+</span>
 <span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
 <span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
 
@@ -1022,8 +1025,8 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
 <span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
 <span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
-<span class="w">                        </span><span class="p">}</span>
+<span class="hll"><span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
+</span><span class="w">                        </span><span class="p">}</span>
 <span class="w">                </span><span class="p">}</span>
 
 <span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
@@ -1048,13 +1051,16 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="c1">// [...]</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderFrame</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="k">private</span><span class="o">:</span>
+<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetEnvironmentBlendModes</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderFrame</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">// [...] Member from Chapter 2.</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
@@ -1068,12 +1074,12 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="w">        </span><span class="p">};</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_applicationEnvironmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span><span class="p">};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="p">};</span>
+<span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_applicationEnvironmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span><span class="p">};</span>
+</span><span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="hll"><span class="w">        </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">;</span>
+</span><span class="hll">
+</span><span class="hll"><span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="p">};</span>
 </pre></div>
 </div>
 <section id="xrenumerateenvironmentblendmodes">
