@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 22 Aug** : Revert header change in tutorial/2-setup.rst.
     | **Tue 22 Aug** : Chapter3/main.cpp removed unused doc tags. Updated Chapter 2 text code block to include m_debugUtilsMessenger. Updated code block in Chapter 3 text and the project files update section at the start.
     | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 22 Aug** : Amended Chapter 1.4 text CMake references. Updated code tags from Chapter 2 in Chapter3/main.cpp.
@@ -101,4 +102,3 @@ Changelist
     | **Wed 26 Jul** : Compile time API choice added to Chapter3/main.cpp.
     | **Wed 26 Jul** : All Chapter classes use 'm_' for members.
     | **Wed 26 Jul** : Updated all GraphicsAPIs to use m_xrInstance for XrInstance parameter for the OPENXR_CHECK macro. OpenXRHelper.h cleared and using m_xrInstance.
-    | **Wed 26 Jul** : Fixed rst header for Chapter 5.
