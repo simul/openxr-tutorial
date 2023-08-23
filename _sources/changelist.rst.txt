@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 23 Aug** : Minor correction for 3.2.2 text/
+    | **Wed 23 Aug** : Updated doc tags in Chapter 3 text. Fixed warning tutorial/1-introduction.rst.
+    | **Wed 23 Aug** : Chapter 3 text updated dedents and minor changes to 3.2.2. Added section XR_EXT_local_floor extension.
     | **Wed 23 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 23 Aug** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Wed 23 Aug** : Chapter 3 text updated.
@@ -99,6 +102,3 @@ Changelist
     | **Mon 31 Jul** : Work-in-progress disclaimer added.
     | **Mon 31 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Mon 31 Jul** : Added GraphicsAPI_Test for testing of GraphicsAPI without OpenXR.
-    | **Mon 31 Jul** : Minor update to Chapter 2 and 3 code.
-    | **Mon 31 Jul** : Shaders for D3D compile.
-    | **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.

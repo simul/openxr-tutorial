@@ -710,16 +710,7 @@ In it, put the following code:</p>
 </div>
 </div>
 <div class="linux docutils container" id="linux-id-3">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>f()
-
-lkanSDK
-_package(Vulkan)
-Vulkan_FOUND)
-target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${Vulkan_LIBRARIES})
-</pre></div>
-</div>
-<p>For Linux, we’ve added some compiler pre-processor directives.</p>
+<p>For Linux, there are no libraries to link against currently.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
@@ -1188,8 +1179,24 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="linux docutils container" id="linux-id-4">
 <div class="opengl docutils container" id="opengl-id-7">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__linux__)</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+</span><span class="hll">
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+</span><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="hll"><span class="cp">#endif</span>
+</span></pre></div>
+</div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-10">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__linux__)</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+</span><span class="hll">
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+</span><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="android docutils container" id="android-id-4">
