@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 23 Aug** : Updated 3.2.4 text.
     | **Wed 23 Aug** : Updated text in 3.2.3.
     | **Wed 23 Aug** : Updated chapter 3.2.2 text.
     | **Wed 23 Aug** : Minor correction for 3.2.2 text/
@@ -101,4 +102,3 @@ Changelist
     | **Tue 01 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 01 Aug** : Updated Chapter 4 now rendering with D3D11. GraphicsAPI_Test/main.cpp renders the same cuboid as Chapter 4. GraphicsAPI_D3D11::SetDescriptor() updated switch statement with breaks.
     | **Mon 31 Jul** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Mon 31 Jul** : Work-in-progress disclaimer added.
