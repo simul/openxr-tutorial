@@ -297,19 +297,19 @@
 
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
-		<img class="api-tab-img" src="_static/css/d3d11.png" alt="DirectX 11" />
+		<img class="api-tab-img" src="_static/css/directx11-logo.jpg" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/d3d12.png" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/directx12-logo.jpg" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
-		<img class="api-tab-img" src="_static/css/opengl.png" alt="OpenGL" />
+		<img class="api-tab-img" src="_static/css/OpenGL_RGB_June16.svg" alt="OpenGL" />
 	</button>
 	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/opengles.png" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGL ES_RGB_Nov19.svg" alt="OpenGL ES" />
 	</button>
 	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
-		<img class="api-tab-img" src="_static/css/vulkan.png" alt="Vulkan" />
+		<img class="api-tab-img" src="_static/css/Vulkan_RGB_Dec16.svg" alt="Vulkan" />
 	</button>
 </div>
 <script>
@@ -1002,11 +1002,12 @@ We store our newly created color image views for the swapchain in <code class="d
 </section>
 <section id="building-a-renderloop">
 <h2>3.2 Building a RenderLoop<a class="headerlink" href="#building-a-renderloop" title="Permalink to this heading">¶</a></h2>
-<p>With the most of the OpenXR objects now set up, we can now turn our attention to rendering graphics. You will likely have your own rendering solution in place with things hooked up to OpenXR and ready to get going. There are two further OpenXR object that need to render; pertaining to where the user is and what the user sees of the external environment around them. Namely, these are the ‘environment blend mode’ and the ‘reference space’.</p>
-<p>Then, with those final pieces in place, we can look to the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLoop()</span></code> code to invoke graphics work on the GPU and present it back to OpenXR and its compositor through the use of composition layers and within the scope of an XR Frame.</p>
+<p>With most of the OpenXR objects now set up, we can now turn our attention to rendering graphics. You will likely have your own rendering solution in place with things hooked up to OpenXR and ready to get going. There are two further OpenXR object that are needed to render; pertaining to where the user is and what the user sees of the external environment around them. Namely, these are the ‘reference space’ and the ‘environment blend mode’ respectively.</p>
+<p>Then, with those final pieces in place, we can look to the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> and <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> code to invoke graphics work on the GPU and present it back to OpenXR and its compositor through the use of the composition layers and within the scope of an XR Frame.</p>
+<p>Update the methods and members in the class. Copy the highlighted code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...] Constructor and Destructor from Chapter 2.</span>
+<span class="w">        </span><span class="c1">// [...] Constructor and Destructor created in previous chapters.</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
@@ -1019,7 +1020,8 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="hll"><span class="w">                </span><span class="n">GetEnvironmentBlendModes</span><span class="p">();</span>
 </span>
 <span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
-<span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
+<span class="hll"><span class="w">                </span><span class="n">CreateReferenceSpace</span><span class="p">();</span>
+</span><span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
 
 <span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
@@ -1037,7 +1039,7 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="w">        </span><span class="p">}</span>
 
 <span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...] Methods from Chapter 2.</span>
+<span class="w">        </span><span class="c1">// [...] Methods created in previous chapters.</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
@@ -1054,6 +1056,9 @@ We store our newly created color image views for the swapchain in <code class="d
 <span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetEnvironmentBlendModes</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateReferenceSpace</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderFrame</span><span class="p">()</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
@@ -1061,7 +1066,7 @@ We store our newly created color image views for the swapchain in <code class="d
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
 </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">// [...] Member from Chapter 2.</span>
+<span class="w">        </span><span class="c1">// [...] Member created in previous chapters.</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
 
@@ -1084,11 +1089,13 @@ We store our newly created color image views for the swapchain in <code class="d
 </div>
 <section id="xrenumerateenvironmentblendmodes">
 <h3>3.2.1 xrEnumerateEnvironmentBlendModes<a class="headerlink" href="#xrenumerateenvironmentblendmodes" title="Permalink to this heading">¶</a></h3>
-<p>Environment blend is done at the final stage after the compositor has flatten and blended all the compositing layer passed to OpenXR at the <code class="docutils literal notranslate"><span class="pre">xrEndFrame()</span></code>. The enum describes how OpenXR should blend the rendering view with the external environment behind the screen(s). The most common usages are as follows:</p>
+<p>Some XR experiences rely on blending the environment and the rendered graphics together. The environment could be compoisited to a screen or passed through optically via lenses and/or mirrors. Choosing the correct environment blend mode is vital for creating immersion in both virtual and augmentated realities.</p>
+<p>Environment blending is done at the final stage after the compositor has flattened and blended all the compositing layers passed to OpenXR at the end of the XR frame.</p>
+<p>The enum describes how OpenXR should blend the rendered view(s) with the external environment behind the screen(s). The most common usages are as follows:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>VR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span></code> is the most common as not all VR HMD have pass through functional either through cameras or optics. VR HMD that do have pass through can suppt other blend modes.</p></li>
-<li><p>AR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span></code> or <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ALPHA_BLEND</span></code> are most common to composite rendering rendered image with external environment.</p></li>
+<li><p>VR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span></code> is the most common as not all VR HMD have pass-through functionality either through cameras or optics. VR HMD that do have pass-through can support other blend modes.</p></li>
+<li><p>AR: <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span></code> or <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_ALPHA_BLEND</span></code> are the most common to composite rendered images with the external environment.</p></li>
 </ul>
 </div></blockquote>
 <table class="docutils align-default">
@@ -1122,8 +1129,8 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from openxr/openxr.h</em></p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetEnvironmentBlendModes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<p>Copy the following code into the <code class="docutils literal notranslate"><span class="pre">GetEnvironmentBlendModes()</span></code> method:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">,</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">environmentBlendModeSize</span><span class="p">);</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">,</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
@@ -1136,10 +1143,9 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">            </span><span class="k">break</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
 </pre></div>
 </div>
-<p>We enumerate the environment blend modes as shown above. This function take a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s as multiple environment blend modes could be available to the system. The runtime will return the array ordered by its preference for the system. After we enumerate all the <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s, we pick the first one as an absolute default, then we loop through all our <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code> to try and find it in <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code>, which was just filled by OpenXR.</p>
+<p>We enumerated the environment blend modes as shown above. This function took a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s as multiple environment blend modes could be available to the system. The runtime returned an array ordered by its preference for the system. After we enumerated all the <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s, we picked the first one as an absolute default, then we looped through all of our <code class="docutils literal notranslate"><span class="pre">m_applicationEnvironmentBlendModes</span></code> to try and find our <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code>.</p>
 </section>
 <section id="xrcreatereferencespace">
 <h3>3.2.2 xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
@@ -1249,7 +1255,7 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">XrFrameEndInfo</span><span class="w"> </span><span class="n">frameEndInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_END_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="n">XrFrameEndInfo</span><span class="w"> </span><span class="n">frameEndInfo</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_END_INFO</span><span class="p">};</span>
 <span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">displayTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">;</span>
 <span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="p">;</span>
 <span class="w">    </span><span class="n">frameEndInfo</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">layers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>

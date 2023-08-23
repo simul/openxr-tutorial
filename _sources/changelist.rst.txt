@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 23 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 23 Aug** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 23 Aug** : Chapter 3 text updated.
+    | **Wed 23 Aug** : Changed Graphics API logos. DirectX ones are still placeholders.
     | **Tue 22 Aug** : Search results now black, not grey.
     | **Tue 22 Aug** : Remove spurious file.
     | **Tue 22 Aug** : Merge branch 'main' of https://github.com/simul/openxr-tutorial-src into main
@@ -98,7 +102,3 @@ Changelist
     | **Mon 31 Jul** : Minor update to Chapter 2 and 3 code.
     | **Mon 31 Jul** : Shaders for D3D compile.
     | **Mon 31 Jul** : Updated graphics requirement checks for all GraphicsAPIs.
-    | **Mon 31 Jul** : Moved Chapter 2 - Project Setup to Chapter 1.4. Fixed rst :ref: links to other section.
-    | **Mon 31 Jul** : Fixes for Chapter 1 and 2 draft texts in relation to comments on commit c3b73f2.
-    | **Mon 31 Jul** : Merge pull request #39 from rpavlik/gradle-fixes
-    | **Fri 28 Jul** : Update tutorial/Outlines.md
