@@ -311,7 +311,14 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 23 Aug** : Updated 3.2.4 text.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 24 Aug** : Chapter 1.4 text updates to explain XR_TUTORIAL_USE_... macros. Other minor changes.
+| **Thu 24 Aug** : Removed find_library() in CMake for OpenGL. This is available through OpenXR SDK anyway.
+| **Thu 24 Aug** : Fixed compilation issues from SetEnv() and GetEnv().
+| **Thu 24 Aug** : Removed SetEnv() and GetEnv().
+| **Thu 24 Aug** : Moved GetEnv() and SetEnv() to HelperFunctions.h. Moved Android File loading to HelperFunctions.h too.
+| **Thu 24 Aug** : Added NOMINMAX a head of all Window.h includes. Fixed GraphicsAPI_Test/CMakeLists.txt and SetEnv in Chapter2/main.cpp.
+| **Thu 24 Aug** : Removed Linux X11 header from OpenXRHelper.h. Updated GraphicsAPI_OpenGL::PresentDesktopSwapchainImage(). Added XR_TUTORIAL_USE_... compiler definition to GraphicsAPI.h and CMake lists.
+| **Wed 23 Aug** : Updated 3.2.4 text.
 | **Wed 23 Aug** : Updated text in 3.2.3.
 | **Wed 23 Aug** : Updated chapter 3.2.2 text.
 | **Wed 23 Aug** : Minor correction for 3.2.2 text/
@@ -404,13 +411,6 @@
 | **Thu 03 Aug** : GraphicsAPI majority of methods are now pure virtual. Vulkan, OpenGL and OpenGL ES added default constructor and swapchain methods. D3D12 renamed member to currentDesktopSwapchainImage. GetSwapchainImage() set the image state in D3D12 and Vulkan. Vulkan updated presentation and image layout transition code. Update GraphicsAPI_Test/main.cpp to quickly switch between APIs.
 | **Wed 02 Aug** : Minor changes to GraphicsAPI_Test/main.cpp.
 | **Wed 02 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Wed 02 Aug** : D3D12 implementation of GraphicsAPI is done for GraphicsAPI_Test. Added DescriptorInfo and formats to PipelineCreateInfo. Minor change to GraphicsAPI_D3D11. Added GraphicsAPI::UpdateDescriptors() and templated Align&lt;&gt;() function.
-| **Tue 01 Aug** : Fixing GraphicsAPI_Test/main.cpp shaders. Reworking Ch4.
-| **Tue 01 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Tue 01 Aug** : Fixed non-rendering D3D11. Fixed colour corruption (passing uints pixel-vertex shader).
-| **Tue 01 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Tue 01 Aug** : Updated Chapter 4 now rendering with D3D11. GraphicsAPI_Test/main.cpp renders the same cuboid as Chapter 4. GraphicsAPI_D3D11::SetDescriptor() updated switch statement with breaks.
-| **Mon 31 Jul** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 </pre></div>
 </div>
 </section>
