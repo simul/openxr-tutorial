@@ -63,7 +63,7 @@ if (ANDROID)
     # VulkanNDK
     find_library(vulkan-lib vulkan)
     if (vulkan-lib)
-        target_include_directories(${PROJECT_NAME} PUBLIC ${ANDROID_NDK}/sources/third_party/vulkan/src/include)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${ANDROID_NDK}/sources/third_party/vulkan/src/include)
         target_compile_definitions(${PROJECT_NAME} PUBLIC XR_TUTORIAL_USE_VULKAN)
     endif()
 
@@ -123,7 +123,7 @@ if (ANDROID)
     endforeach(FILE)
 
 else()
-    set(SHADERS ${GLSL_SHADERS})
+	set(SHADERS ${GLSL_SHADERS})
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${SHADERS})
 
     if(NOT "${XR_RUNTIME_JSON}" STREQUAL "")
@@ -146,7 +146,6 @@ else()
     endif()
 
     # VulkanSDK
-    find_package(Vulkan)
     if (Vulkan_FOUND)
         target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
         target_link_libraries(${PROJECT_NAME} ${Vulkan_LIBRARIES})
@@ -206,7 +205,7 @@ else()
         foreach(FILE ${GLSL_SHADERS})
             get_filename_component(FILE_WE ${FILE} NAME_WE)
             get_source_file_property(shadertype ${FILE} ShaderType)
-            message ("${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} $<$<CONFIG:Debug>:-Od> -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv")
+			message ("${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} $<$<CONFIG:Debug>:-Od> -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv")
             add_custom_command(TARGET ${PROJECT_NAME}
                                COMMAND ${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} -Od -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv
                                MAIN_DEPENDENCY ${FILE}

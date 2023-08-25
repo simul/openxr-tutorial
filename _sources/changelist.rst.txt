@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 25 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 25 Aug** : SVG Handset icon for Chapter 4.
     | **Fri 25 Aug** : Moved set(PROJECT_NAME ...) ahead of Android project() set up. Removed reference to OpenXR 1.0.27 and DOWNLOAD_EXTRACT_TIMESTAMP TRUE in Fetch_Declare(). Updated 1.4 text too.
     | **Fri 25 Aug** : Adjusted text to remove download of Chapter 3 CMakeLists.txt, as this would be incompatible with created CMakeLists.txt.
     | **Fri 25 Aug** : Fixed Linux specific preprocessor definitions in DebugOutput.h and GraphicsAPI.h.
@@ -100,5 +102,3 @@ Changelist
     | **Thu 03 Aug** : Updated SamplerCreateInfo borderColor and D3D11 Sampler.
     | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Thu 03 Aug** : Removed indexBufferUint16 from BufferCreateInfo. SetIndexBuffer() checks the stride is 2 or 4. Vulkan WIP.
-    | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 03 Aug** : Two controllers in Chapter 4. More app-specific action names. Fixed open in new window functionality for links.
