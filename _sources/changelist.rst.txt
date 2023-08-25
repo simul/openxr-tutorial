@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 25 Aug** : Moved set(PROJECT_NAME ...) ahead of Android project() set up. Removed reference to OpenXR 1.0.27 and DOWNLOAD_EXTRACT_TIMESTAMP TRUE in Fetch_Declare(). Updated 1.4 text too.
+    | **Fri 25 Aug** : Adjusted text to remove download of Chapter 3 CMakeLists.txt, as this would be incompatible with created CMakeLists.txt.
+    | **Fri 25 Aug** : Fixed Linux specific preprocessor definitions in DebugOutput.h and GraphicsAPI.h.
     | **Thu 24 Aug** : Chapter 1.4 text updates to explain XR_TUTORIAL_USE_... macros. Other minor changes.
     | **Thu 24 Aug** : Removed find_library() in CMake for OpenGL. This is available through OpenXR SDK anyway.
     | **Thu 24 Aug** : Fixed compilation issues from SetEnv() and GetEnv().
@@ -99,6 +102,3 @@ Changelist
     | **Thu 03 Aug** : Removed indexBufferUint16 from BufferCreateInfo. SetIndexBuffer() checks the stride is 2 or 4. Vulkan WIP.
     | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 03 Aug** : Two controllers in Chapter 4. More app-specific action names. Fixed open in new window functionality for links.
-    | **Thu 03 Aug** : GraphicsAPI majority of methods are now pure virtual. Vulkan, OpenGL and OpenGL ES added default constructor and swapchain methods. D3D12 renamed member to currentDesktopSwapchainImage. GetSwapchainImage() set the image state in D3D12 and Vulkan. Vulkan updated presentation and image layout transition code. Update GraphicsAPI_Test/main.cpp to quickly switch between APIs.
-    | **Wed 02 Aug** : Minor changes to GraphicsAPI_Test/main.cpp.
-    | **Wed 02 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
