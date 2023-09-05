@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 05 Sep** : Update d3d11 logo.
     | **Tue 05 Sep** : New D3D11 logo.
     | **Tue 05 Sep** : Updated timetable.
     | **Tue 05 Sep** : Using updated Tux and Android icons.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 08 Aug** : Removed creation of Viewport and Rect2D scissor in Chapter 3 code as it's not needed.
     | **Tue 08 Aug** : Chapter 3 default API is OpenGL. Updated Chapter 2 text to explain extra code the GraphicsAPI_... constructors. HLSL shaders use nointerpolation to fix rendering bug. D3D12 Frame DescriptorHeaps are created once in the constructor and not each frame. Minor updates to Chapter 3 text.
     | **Tue 08 Aug** : Changed RenderFrame() to use std::vector<XrCompositionLayerBaseHeader *>. Chapter 4 code reviewing - WIP. GraphicsAPI_D3D12::UpdateDescriptors() now correctly updates the CBV_SRV_UAV_DescriptorOffset and SAMPLER_DescriptorOffset across the frame. Minor Chapter 3 and 4 text updates.
-    | **Tue 08 Aug** : Minor updates and fixes for Chapter 2 and 3 texts.
