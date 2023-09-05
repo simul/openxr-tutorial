@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 05 Sep** : Updated timetable.
+    | **Tue 05 Sep** : Using updated Tux and Android icons.
     | **Mon 04 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Mon 04 Sep** : Updated finding Vulkan package in CMakeLists.txt files. XR_RUNTIME_JSON in Chapter2/main.cpp in wrapped behind #ifdef __linux__. Other minor corrections.
     | **Mon 04 Sep** : Added comments to Chapter 5 code.
@@ -100,5 +102,3 @@ Changelist
     | **Tue 08 Aug** : Changed RenderFrame() to use std::vector<XrCompositionLayerBaseHeader *>. Chapter 4 code reviewing - WIP. GraphicsAPI_D3D12::UpdateDescriptors() now correctly updates the CBV_SRV_UAV_DescriptorOffset and SAMPLER_DescriptorOffset across the frame. Minor Chapter 3 and 4 text updates.
     | **Tue 08 Aug** : Minor updates and fixes for Chapter 2 and 3 texts.
     | **Mon 07 Aug** : Added more to Chapter 3.2 text and added temporary images.
-    | **Fri 04 Aug** : Updated SetRenderAttachments() parameter to take pipeline, width and height. Vulkan finished Framebuffer and descriptor sets. All GraphicsAPI are now complete.
-    | **Fri 04 Aug** : Chapter4/CMakeLists.txt updated CMake add_custom_command TARGET to OpenXRTutorialChapter4.
