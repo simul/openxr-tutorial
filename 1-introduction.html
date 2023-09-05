@@ -301,7 +301,7 @@
 		<img class="api-tab-img" src="_static/css/directx11-logo.jpg" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/directx12-logo.jpg" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/directx12-logo.png" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/OpenGL_RGB_June16.svg" alt="OpenGL" />
@@ -669,8 +669,7 @@ In it, put the following code:</p>
 <p>All the files listed above with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. In the next section, you will find the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>At this point, we’ll also create our text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. This will be our main source file, which we will use later in this chapter.</p>
 <p>Now, we will continue with the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeList.txt</span></code>, adding the following code.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-<span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
@@ -723,6 +722,7 @@ In it, put the following code:</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-5">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
 <span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
@@ -841,7 +841,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanNDK</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
 <span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">vulkan-lib</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_VULKAN</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
@@ -1301,6 +1301,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="d3d11 docutils container" id="d3d11-id-5">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
@@ -1396,7 +1397,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <p>Finally, let’s add the main function for the application. It will look slightly different, depending on your
 chosen platform. We first create a ‘pseudo-main function’ called <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>, in which we create an instance of our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, taking a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter, and call the <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> can be changed to suit the graphics API that you have chosen.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w"> </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
 <span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">api</span><span class="p">);</span>
@@ -1432,18 +1433,23 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="w">    </span><span class="n">JNIEnv</span><span class="w"> </span><span class="o">*</span><span class="n">env</span><span class="p">;</span>
 <span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">vm</span><span class="o">-&gt;</span><span class="n">AttachCurrentThread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
 
+<span class="w">    </span><span class="c1">// https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_loader_init</span>
+<span class="w">    </span><span class="c1">// Load xrInitializeLoaderKHR() function pointer. On Android, the loader must be initialised with variables from android_app *.</span>
+<span class="w">    </span><span class="c1">// Without this, there&#39;s is no loader and thus our function calls to OpenXR would fail.</span>
 <span class="w">    </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span><span class="w">  </span><span class="c1">// Dummy XrInstance variable for OPENXR_CHECK macro.</span>
-<span class="w">    </span><span class="n">PFN_xrInitializeLoaderKHR</span><span class="w"> </span><span class="n">xrInitializeLoaderKHR</span><span class="p">;</span>
+<span class="w">    </span><span class="n">PFN_xrInitializeLoaderKHR</span><span class="w"> </span><span class="n">xrInitializeLoaderKHR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">XR_NULL_HANDLE</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrInitializeLoaderKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrInitializeLoaderKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">xrInitializeLoaderKHR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="c1">// Fill out an XrLoaderInitInfoAndroidKHR structure and initialize the loader for Android.</span>
 <span class="w">    </span><span class="n">XrLoaderInitInfoAndroidKHR</span><span class="w"> </span><span class="n">loaderInitializeInfoAndroid</span><span class="p">{</span><span class="n">XR_TYPE_LOADER_INIT_INFO_ANDROID_KHR</span><span class="p">};</span>
 <span class="w">    </span><span class="n">loaderInitializeInfoAndroid</span><span class="p">.</span><span class="n">applicationVM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">vm</span><span class="p">;</span>
 <span class="w">    </span><span class="n">loaderInitializeInfoAndroid</span><span class="p">.</span><span class="n">applicationContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrInitializeLoaderKHR</span><span class="p">((</span><span class="n">XrLoaderInitInfoBaseHeaderKHR</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">loaderInitializeInfoAndroid</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to initialise Loader for Android.&quot;</span><span class="p">);</span>
 
+<span class="w">    </span><span class="c1">// Set userData and Callback for PollSystemEvents().</span>
 <span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidAppState</span><span class="p">;</span>
 <span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">onAppCmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">AndroidAppHandleCmd</span><span class="p">;</span>
 
@@ -1454,8 +1460,10 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </div>
 <p>Android requires a few extra additions to the class. Namely, <code class="docutils literal notranslate"><span class="pre">android_app</span> <span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code> and <code class="docutils literal notranslate"><span class="pre">AndroidAppHandleCmd</span></code>, which are used in getting updates from the Android Operating System and keep our application functioning.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// Stored pointer to the android_app structure from android_main().</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">androidApp</span><span class="p">;</span>
 
+<span class="w">    </span><span class="c1">// Custom data structure that is used by PollSystemEvents().</span>
 <span class="w">    </span><span class="c1">// Modified from https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/d6b6d7a10bdcf8d4fe806b4f415fde3dd5726878/src/tests/hello_xr/main.cpp#L133C1-L189C2</span>
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">AndroidAppState</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">ANativeWindow</span><span class="w"> </span><span class="o">*</span><span class="n">nativeWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
@@ -1463,7 +1471,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="w">    </span><span class="p">};</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">AndroidAppState</span><span class="w"> </span><span class="n">androidAppState</span><span class="p">;</span>
 
-<span class="w">    </span><span class="c1">// Process the next main command.</span>
+<span class="w">    </span><span class="c1">// Processes the next command from the Android OS. It updates AndroidAppState.</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">AndroidAppHandleCmd</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">app</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">AndroidAppState</span><span class="w"> </span><span class="o">*</span><span class="n">appState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">AndroidAppState</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">app</span><span class="o">-&gt;</span><span class="n">userData</span><span class="p">;</span>
 
@@ -1501,13 +1509,16 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 
 <span class="k">private</span><span class="o">:</span>
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Checks whether Android has requested that application should by destroyed.</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">            </span><span class="k">return</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Poll and process the Android OS system events.</span>
 <span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">android_poll_source</span><span class="w"> </span><span class="o">*</span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">// The timeout is depended on whether that applicaion is active.</span>
 <span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeoutMilliseconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">androidAppState</span><span class="p">.</span><span class="n">resumed</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ALooper_pollAll</span><span class="p">(</span><span class="n">timeoutMilliseconds</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">source</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">source</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>

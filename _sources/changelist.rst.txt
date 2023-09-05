@@ -2,6 +2,16 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 04 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Mon 04 Sep** : Updated finding Vulkan package in CMakeLists.txt files. XR_RUNTIME_JSON in Chapter2/main.cpp in wrapped behind #ifdef __linux__. Other minor corrections.
+    | **Mon 04 Sep** : Added comments to Chapter 5 code.
+    | **Mon 04 Sep** : Added comments to Chapter 4 code.
+    | **Mon 04 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Mon 04 Sep** : Added to text for Ch4
+    | **Mon 04 Sep** : Added comments to Chapter 3 code.
+    | **Mon 04 Sep** : Added comments to Chapter 2 code and OpenXRDebugUtils.cpp. Updated Chapter 2 text for m_systemProperties member addition.
+    | **Mon 04 Sep** : Updated header for d3d11.
+    | **Thu 31 Aug** : Chapter 4 text updates.
     | **Fri 25 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Fri 25 Aug** : SVG Handset icon for Chapter 4.
     | **Fri 25 Aug** : Moved set(PROJECT_NAME ...) ahead of Android project() set up. Removed reference to OpenXR 1.0.27 and DOWNLOAD_EXTRACT_TIMESTAMP TRUE in Fetch_Declare(). Updated 1.4 text too.
@@ -92,13 +102,3 @@ Changelist
     | **Mon 07 Aug** : Added more to Chapter 3.2 text and added temporary images.
     | **Fri 04 Aug** : Updated SetRenderAttachments() parameter to take pipeline, width and height. Vulkan finished Framebuffer and descriptor sets. All GraphicsAPI are now complete.
     | **Fri 04 Aug** : Chapter4/CMakeLists.txt updated CMake add_custom_command TARGET to OpenXRTutorialChapter4.
-    | **Fri 04 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Fri 04 Aug** : Removed d3dcompiler from CMake and headers and chapter 1 text. All APIs external build/copy shaders and load them. Check on Windows and Android. GraphicsAPI_Vulkan added shaders and pipeline creation. Added ReadTextFile and ReadBinaryFile - Chapter 4 has the Android variants.
-    | **Fri 04 Aug** : Updated shaders.
-    | **Thu 03 Aug** : Merge branch 'main' of https://github.com/simul/openxr-tutorial-src into main
-    | **Thu 03 Aug** : Fixing Linux build, not yet functional.
-    | **Thu 03 Aug** : Fixing Linux build, not yet functional.
-    | **Thu 03 Aug** : Vulkan: Moved MemoryTypeFromProperties to function (not a lambda). Update DestroyImage() and DestroyImageView(). Added Sampler and Buffer creation. Added SetBufferData() and some rendering functions. WIP.
-    | **Thu 03 Aug** : Updated SamplerCreateInfo borderColor and D3D11 Sampler.
-    | **Thu 03 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Thu 03 Aug** : Removed indexBufferUint16 from BufferCreateInfo. SetIndexBuffer() checks the stride is 2 or 4. Vulkan WIP.
