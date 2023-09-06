@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 06 Sep** : Added black and white versions of the Khronos logos. Removed old D3D logo pngs. Added edit and temporary d3d12 logo to match d3d11.
+    | **Tue 05 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 05 Sep** : Updated Braces on OpenXRDebugUtils.cpp.
     | **Tue 05 Sep** : Update d3d11 logo.
     | **Tue 05 Sep** : New D3D11 logo.
     | **Tue 05 Sep** : Updated timetable.
@@ -99,6 +102,3 @@ Changelist
     | **Tue 08 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 08 Aug** : Added images to Ch4. Added best-practices text to Ch4.
     | **Tue 08 Aug** : Finished Chapter 3.2 text. Minor correction to Chapter 1 text.
-    | **Tue 08 Aug** : Removed creation of Viewport and Rect2D scissor in Chapter 3 code as it's not needed.
-    | **Tue 08 Aug** : Chapter 3 default API is OpenGL. Updated Chapter 2 text to explain extra code the GraphicsAPI_... constructors. HLSL shaders use nointerpolation to fix rendering bug. D3D12 Frame DescriptorHeaps are created once in the constructor and not each frame. Minor updates to Chapter 3 text.
-    | **Tue 08 Aug** : Changed RenderFrame() to use std::vector<XrCompositionLayerBaseHeader *>. Chapter 4 code reviewing - WIP. GraphicsAPI_D3D12::UpdateDescriptors() now correctly updates the CBV_SRV_UAV_DescriptorOffset and SAMPLER_DescriptorOffset across the frame. Minor Chapter 3 and 4 text updates.

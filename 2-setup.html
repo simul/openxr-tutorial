@@ -301,16 +301,16 @@
 		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-11-Logo-wordmark.svg" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/directx12-logo.png" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-12-Logo-wordmark.svg"" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
-		<img class="api-tab-img" src="_static/css/OpenGL_RGB_June16.svg" alt="OpenGL" />
+		<img class="api-tab-img" src="_static/css/OpenGL_Black_June16.svg" alt="OpenGL" />
 	</button>
 	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/OpenGL ES_RGB_Nov19.svg" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Nov19.svg" alt="OpenGL ES" />
 	</button>
 	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
-		<img class="api-tab-img" src="_static/css/Vulkan_RGB_Dec16.svg" alt="Vulkan" />
+		<img class="api-tab-img" src="_static/css/Vulkan_Black_Dec16.svg" alt="Vulkan" />
 	</button>
 </div>
 <script>
@@ -599,20 +599,23 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;INFO&quot;</span><span class="p">;</span>
 <span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;WARN&quot;</span><span class="p">;</span>
 <span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageSeverity</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;ERROR&quot;</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">msgFlags</span><span class="p">;</span>
@@ -627,14 +630,16 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;SPEC&quot;</span><span class="p">;</span>
 <span class="w">            </span><span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">messageType</span><span class="p">,</span><span class="w"> </span><span class="n">XR_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">msgFlags</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot;PERF&quot;</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">msgFlags</span><span class="p">;</span>
