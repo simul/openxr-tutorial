@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 07 Sep** : Fixed resource declaration code sample.
     | **Thu 07 Sep** : Fix syntax error.
     | **Thu 07 Sep** : Separate shader build code for Android and Desktop.
     | **Thu 07 Sep** : Fixed missing PollActions tag.
@@ -101,4 +102,3 @@ Changelist
     | **Thu 17 Aug** : Added DOWNLOAD_EXTRACT_TIMESTAMP to FetchContent_Declare() in CMake lists. Updated text for Chapter 1 from internal review.
     | **Thu 17 Aug** : Fixed rst warnings in chapter 1 and 3 texts.
     | **Wed 16 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 16 Aug** : Updated tutorial/1-introduction.rst after internal read through.

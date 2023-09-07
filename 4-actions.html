@@ -870,7 +870,21 @@ controller’s position.</p>
 <span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mt19937</span><span class="w"> </span><span class="n">pseudo_random_generator</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>So we’ve included the new header and defined some useful functionality for vectors and pseudo-random numbers. Now in <code class="docutils literal notranslate"><span class="pre">Run()</span></code> insert the following after the call to <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code>:</p>
+<p>So we’ve included the new header and defined some useful functionality for vectors and pseudo-random numbers.</p>
+<p>After your declaration of <code class="docutils literal notranslate"><span class="pre">m_localOrStageSpace</span></code> and before <code class="docutils literal notranslate"><span class="pre">XrActionSet</span> <span class="pre">m_actionSet</span></code>, insert these declarations for our API resources:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// In STAGE space, viewHeightM should be 0. In LOCAL space, it should be offset downwards, below the viewer&#39;s initial position.</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_vertexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_indexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_uniformBuffer_Camera</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_uniformBuffer_Normals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now in <code class="docutils literal notranslate"><span class="pre">Run()</span></code> insert the following after the call to <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">CreateResources</span><span class="p">();</span>
 </pre></div>
 </div>
