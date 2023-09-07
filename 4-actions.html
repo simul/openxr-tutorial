@@ -327,20 +327,194 @@
 <h1>4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
 <section id="the-openxr-interaction-system">
 <h2>4.1 The OpenXR Interaction System<a class="headerlink" href="#the-openxr-interaction-system" title="Permalink to this heading">¶</a></h2>
-<p>OpenXR interactions are defined in a two-way system with inputs such as motion-based poses, button presses, analogue controls, and outputs such as haptic controller vibrations. Collectively in OpenXR terminology, these are called Actions. An <em>Action</em> is a semantic object, not necessarily associated with a specific hardware control: for example, you would define a “Select” action, not an action for “press button A”. You would define an action “walk”, not “left analogue stick position”. The specific device input/output that an Action is associated with is the realm of <em>Bindings</em>, which are defined by <em>Interaction Profiles</em> (see below).</p>
-<p>Actions are contextual. They are grouped in <em>Action Sets</em>, which are again semantic and app-specific. For example, you might have an Action Set for “gameplay” and a different Action Set for “pause menu”. In more complex apps, you would create an Action Set for different situations - “driving car” and “walking” could be different Action Sets.</p>
-<p>In this chapter, you’ll learn how to create an Action Set containing multiple Actions of different types. You’ll create a binding for your Actions with a simple controller profile, and optionally, with a profile specific to the device/s you are testing.</p>
+<p>OpenXR interactions are defined in a two-way system with inputs such as motion-based poses, button presses, analogue controls, and outputs such as haptic controller vibrations. Collectively in OpenXR terminology, these are called Actions. An <em>Action</em> is a semantic object, not necessarily associated with a specific hardware control: for example, you would define a “Select” action, not an action for “press button A”. You would define an action “walk”, not “left analogue stick position”. The specific device input or output that an Action is associated with, is in the realm of <em>Bindings</em>, which are defined by <em>Interaction Profiles</em> (see below).</p>
+<p>Actions are contextual. They are grouped within <em>Action Sets</em>, which are again semantic and app-specific. For example, you might have an Action Set for “gameplay” and a different Action Set for “pause menu”. In more complex apps, you would create Action Sets for different situations - “driving car” and “walking” could be different Action Sets.</p>
+<p>In this chapter, you’ll learn how to create an Action Set containing multiple Actions of different types. You’ll create a binding for your Actions with a simple controller profile, and optionally, with a profile specific to the device or devices you are testing.</p>
 </section>
 <section id="creating-actions-and-action-sets">
 <h2>4.2 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Permalink to this heading">¶</a></h2>
-<p>An OpenXR application has interactions with the user which can be user input to the application, or haptic output back to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: spaces, actions, and bindings.</p>
-<p>Download <a class="reference download internal" download="" href="_downloads/de3adf2e49966712553f40eb9f623e44/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a> for this chapter, and place it in a new folder called “Chapter4”. In your root CMakeLists.txt, add the line:</p>
+<p>An OpenXR application has interactions with the user which can be user input to the application, or haptic output to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: Spaces, Actions, and Bindings.</p>
+<p>Copy your CMakeLists.txt from the “Chapter3” folder into a new folder beside that one called “Chapter4”. In your root CMakeLists.txt, add the line:</p>
 <blockquote>
 <div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter4</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
+<p>Now replace the set(PROJECT_NAME) line at the top of your new Chapter4/CMakeLists.txt with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below the set(HEADERS) command, add:</p>
+<div class="d3d11 d3d12 docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">HLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.hlsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.hlsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan opengl docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">GLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.glsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.glsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">ES_GLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader_GLES.glsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader_GLES.glsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="android docutils container">
+<p>Now above <cite>set(CMAKE_SHARED_LINKER_FLAGS)</cite> add:</p>
+<div class="vulkan docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#Shaders</span>
+<span class="w">    </span><span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
+<span class="w">    </span><span class="c">#if (Vulkan_FOUND) #TODO: Use NDK, not Vulkan SDK.</span>
+<span class="w">        </span><span class="c"># GLSL Shaders</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">        </span><span class="c">#Vulkan</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_GLSLANG_VALIDATOR_EXECUTABLE</span><span class="o">}</span><span class="w"> </span><span class="s">-V</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">-e</span><span class="w"> </span><span class="s">main</span><span class="w"> </span><span class="s">-S</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.spv</span>
+<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">    </span><span class="c">#endif()</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL ES</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">ES_GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span>
+<span class="w">                           </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span>
+<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.glsl</span>
+<span class="w">                           </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                           </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">                           </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                           </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="windows linux docutils container">
+<p>Before the line <code class="docutils literal notranslate"><span class="pre">if(NOT</span> <span class="pre">&quot;${XR_RUNTIME_JSON...)</span></code> add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">	</span><span class="nb">set</span><span class="p">(</span><span class="s">SHADERS</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SHADERS</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="windows docutils container">
+<div class="d3d11 d3d12 docutils container">
+<p>And before <code class="docutils literal notranslate"><span class="pre">endif()</span> <span class="pre">#</span> <span class="pre">EOF</span></code> at the end of the file add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#Shaders</span>
+<span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
+<span class="w">	    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+<span class="w">	    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
+<span class="w">	    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;4_0&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="c"># HLSL Shaders</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c"># D3D11</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;5_0&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderModel</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="w"> </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.cso</span><span class="w"> </span><span class="s">/Fd</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.pdb</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
+<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">        </span><span class="c"># D3D12</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;5_1&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderModel</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="w"> </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.cso</span><span class="w"> </span><span class="s">/Fd</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.pdb</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
+<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="windows linux docutils container">
+<div class="vulkan docutils container">
+<p>Before <code class="docutils literal notranslate"><span class="pre">endif()</span> <span class="pre">#</span> <span class="pre">EOF</span></code> at the end of the file add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
+<span class="w">        </span><span class="c"># GLSL Shaders</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">vert</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">frag</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">        </span><span class="c">#Vulkan</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">			</span><span class="nb">message</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} $&lt;$&lt;CONFIG:Debug&gt;:-Od&gt; -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_GLSLANG_VALIDATOR_EXECUTABLE</span><span class="o">}</span><span class="w"> </span><span class="s">-V</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">-e</span><span class="w"> </span><span class="s">main</span><span class="w"> </span><span class="s">-S</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-Od</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.spv</span>
+<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<p>Before <cite>endif() # EOF</cite> at the end of the file add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span>
+<span class="w">                           </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span>
+<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.glsl</span>
+<span class="w">                           </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                           </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">                           </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                           </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now copy your main.cpp from the “Chapter3” folder into “Chapter4”.</p>
 <p>The new subproject adds shader compilation so we can render some 3D objects. Create a “Shaders” folder next to your project folder, and put these files in it:</p>
+<div class="d3d11 d3d12 docutils container">
+<p><a class="reference download internal" download="" href="_downloads/a65e269de9b7a46bfab190cac6b59063/VertexShader.hlsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader.hlsl</span></code></a>
+<a class="reference download internal" download="" href="_downloads/83814fc618efed2eeb17268c1904579f/PixelShader.hlsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader.hlsl</span></code></a></p>
+</div>
+<div class="vulkan opengl docutils container">
+<p><a class="reference download internal" download="" href="_downloads/87f4ebe3fd83fe1bc3cf07b57229857c/VertexShader.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader.glsl</span></code></a>
+<a class="reference download internal" download="" href="_downloads/40bc9855ab807d86043fec89482838b9/PixelShader.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader.glsl</span></code></a></p>
+</div>
+<div class="opengles docutils container">
+<p><a class="reference download internal" download="" href="_downloads/5fd4ad47585372fa55e2527609b9ef94/VertexShader_GLES.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader_GLES.glsl</span></code></a>
+<a class="reference download internal" download="" href="_downloads/84f3eb8cf3b6bf77a2d8904294491a4d/PixelShader_GLES.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader_GLES.glsl</span></code></a></p>
+</div>
 <p>At the end of your application class, add this code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">XrActionSet</span><span class="w"> </span><span class="n">m_actionSet</span><span class="p">;</span>
 <span class="w">    </span><span class="c1">// An action for grabbing blocks.</span>
@@ -349,19 +523,22 @@
 <span class="w">    </span><span class="c1">// The action haptic vibration of the right controller.</span>
 <span class="w">    </span><span class="n">XrAction</span><span class="w"> </span><span class="n">m_buzzAction</span><span class="p">;</span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">buzz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">    </span><span class="c1">// The action for getting the left grip pose.</span>
+<span class="w">    </span><span class="c1">// The action for getting the hand or controller position and orientation.</span>
 <span class="w">    </span><span class="n">XrAction</span><span class="w"> </span><span class="n">m_palmPoseAction</span><span class="p">;</span>
-<span class="w">    </span><span class="c1">// The XrPaths for left and right hand controllers.</span>
+<span class="w">    </span><span class="c1">// The XrPaths for left and right hand hands or controllers.</span>
 <span class="w">    </span><span class="n">XrPath</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">    </span><span class="c1">// The space that represents the left grip pose.</span>
+<span class="w">    </span><span class="c1">// The space that represents the two hand poses.</span>
 <span class="w">    </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_handPoseSpace</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 <span class="w">    </span><span class="n">XrActionStatePose</span><span class="w"> </span><span class="n">m_handPoseState</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="n">XR_TYPE_ACTION_STATE_POSE</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_POSE</span><span class="p">}};</span>
-<span class="w">    </span><span class="c1">// The current left grip pose obtained from the XrSpace.</span>
+<span class="w">    </span><span class="c1">// The current poses obtained from the XrSpace.</span>
 <span class="w">    </span><span class="n">XrPosef</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 </pre></div>
 </div>
-<p>Here, we have defined an Action Set: a group of related actions that are created together. The individual actions, such as selectAction and triggerAction, will belong to this set. For a pose action, we need an XrSpace, so leftGripPoseSpace has been declared. And we’ll keep a copy of the pose itself, leftGripPose, which will change per-frame.</p>
+<p>Here, we have defined an Action Set: a group of related actions that are created together. The individual actions, such as <cite>m_grabAction</cite> and <cite>m_palmPoseAction</cite>, will belong to this set. For a pose action, we need an XrSpace, so <cite>m_handPoseSpace[]</cite> has been declared. And we’ll keep a copy of the pose itself for each hand, which will change per-frame.</p>
 <p>Action Sets are created before the session is initialized, so in Run(), after the call to GetSystemID(), add this line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="n">CreateActionSet</span><span class="p">();</span>
+</pre></div>
+</div>
 <p>After the definition of GetSystemID(), we’ll add these helper functions that convert a string into an XrPath, and vice-versa. Add:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">XrPath</span><span class="w"> </span><span class="nf">CreateXrPath</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path_string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrPath</span><span class="w"> </span><span class="n">xrPath</span><span class="p">;</span>
@@ -384,6 +561,15 @@
 </pre></div>
 </div>
 <p>Now we will define the <cite>CreateActionSet</cite> function:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateActionSet</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrActionSetCreateInfo</span><span class="w"> </span><span class="n">actionSetCI</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_SET_CREATE_INFO</span><span class="p">};</span>
+<span class="w">        </span><span class="c1">// The internal name the runtime uses for this Action Set.</span>
+<span class="w">        </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionSetCI</span><span class="p">.</span><span class="n">actionSetName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;openxr-tutorial-actionset&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_ACTION_SET_NAME_SIZE</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Localized names are required so there is a human-readable action name to show the user if they are rebinding Actions in an options screen.</span>
+<span class="w">        </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionSetCI</span><span class="p">.</span><span class="n">localizedActionSetName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial ActionSet&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateActionSet</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionSetCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_actionSet</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create ActionSet.&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
 <p>An Action Set is a group of actions that apply in a specific context. You might have an Action Set for when your XR game is showing a pause menu or control panel, and a different Action Set for in-game. There might be different Action Sets for different situations in an XR application: rowing in a boat, climbing a cliff, and so on.
 So you can create multiple Action Sets, but we only need one for this example. The Action Set is created with a name, and a localized string for its description. Now add:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">CreateAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="n">XrAction</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrAction</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">XrActionType</span><span class="w"> </span><span class="n">xrActionType</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">subaction_paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">{</span>
@@ -431,6 +617,9 @@ path with three elements: the Profile Path, the User Path, and the Component Pat
 <p>We will set up bindings for the actions. A binding is a <em>suggested</em> correspondence between an action (which is app-defined), and the input/output on the
 user’s devices.</p>
 <p>XrPath is a 64-bit number that hopefully uniquely identifies any given forward-slash-delimited path string, allowing us to refer to paths without putting cumbersome string-handling in our runtime code. After the call to CreateAction Set() in Run(), add the line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">SuggestBindings</span><span class="p">();</span>
+</pre></div>
+</div>
 <p>After the definition of CreateAction Set(), add:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">SuggestBindings</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">SuggestBindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">profile_path</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrActionSuggestedBinding</span><span class="o">&gt;</span><span class="w"> </span><span class="n">bindings</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
@@ -459,6 +648,14 @@ user’s devices.</p>
 <p>Here, we create a proposed match-up between our app-specific actions, and XrPaths which refer to specific controls as interpreted by the Runtime. We call <cite>xrSuggestInteractionProfileBindings()</cite>. If the user’s device supports the given profile ( and “/interaction_profiles/khr/simple_controller” should <em>always</em> be supported in an OpenXR runtime), it will recognize these paths and can map them to its own controls. If the user’s device does not support a profile, the bindings will be ignored.
 The suggested bindings are not guaranteed to be used: that’s up to the runtime. Some runtimes allow users to override the default bindings, and OpenXR expects this.</p>
 <p>The next part depends on what hardware you will be testing on. It’s optional: the Khronos Simple Controller should work on any OpenXR runtime/device combination. But it has limitations - not least that there are no floating-point controls. If you have an Oculus Quest, whether building natively or running on PC VR via a streaming system, the native profile is called “/interaction_profiles/oculus/touch_controller”, and you can insert the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">any_ok</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SuggestBindings</span><span class="p">(</span><span class="s">&quot;/interaction_profiles/oculus/touch_controller&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="n">m_grabAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/squeeze/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                    </span><span class="p">{</span><span class="n">m_grabAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/squeeze/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                    </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                    </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                    </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/output/haptic&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                    </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/output/haptic&quot;</span><span class="p">)}});</span>
+</pre></div>
+</div>
 <p>The main apparent difference is that the grab action is now analogue (“squeeze/value” rather than “select/click”). But you should never assume that the same path means exactly the same behaviour on different profiles. So again, only implement profiles that you can test with their associated hardware, and test every profile that you implement.</p>
 <p>We now close out the function, and add RecordCurrentBindings() to report how the runtime has <em>actually</em> bound your actions to your devices.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">any_ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -534,6 +731,15 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 </figcaption>
 </figure>
 <p>Finally as far as action setup goes, we will attach the Action Set to the session. Add this function:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">AttachActionSet</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Attach the action set we just made to the session. We could attach multiple action sets!</span>
+<span class="w">        </span><span class="n">XrSessionActionSetsAttachInfo</span><span class="w"> </span><span class="n">actionSetAttachInfo</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO</span><span class="p">};</span>
+<span class="w">        </span><span class="n">actionSetAttachInfo</span><span class="p">.</span><span class="n">countActionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">actionSetAttachInfo</span><span class="p">.</span><span class="n">actionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_actionSet</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAttachSessionActionSets</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionSetAttachInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to attach ActionSet to Session.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
 <p>As you can see, it’s possible here to attach multiple Action Sets. But <cite>xrAttachSessionAction Sets</cite> can only be called <em>once</em> per session. You have to know what Action Sets you will be using before the session can start - xrBeginSession() is called from PollEvents() once all setup is complete and the app is ready to proceed.</p>
 <p>Now, we must poll the actions, once per-frame. Add this call in RenderFrame() just before the call to RenderLayer():</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">         </span><span class="c1">// poll actions here because they require a predicted display time</span>
@@ -876,7 +1082,7 @@ Now insert</p>
 <section id="checking-for-connected-controllers">
 <h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Permalink to this heading">¶</a></h2>
 <p>Look again now at the function PollActions().</p>
-<p>We specify which action to look at with the XrActionStateGetInfo struct. Then we use a type-specific call. For our boolean <cite>selectAction</cite>, we call <cite>xrGetActionStateBoolean()</cite> to retrieve an XrActionStateBoolean struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the select button on the controller.
+<p>We specify which action to look at with the XrActionStateGetInfo struct. Then we use a type-specific call. For our boolean Grab Action, we call <cite>xrGetActionStateBoolean()</cite> to retrieve an XrActionStateBoolean struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the select button on the controller.
 However, the struct <cite>XrActionStateBoolean</cite> also has a member called <cite>isActive</cite>, which is true if the state of the action is actually being read. If it’s false, the value of <cite>currentState</cite> is irrelevant - the polling failed.</p>
 <p>Similarly, <cite>XrActionStateFloat</cite> has a floating-point <cite>currentState</cite> value, which is valid if <cite>isActive</cite> is true, it has <cite>lastChangeTime</cite> and <cite>changedSinceLastSync</cite>, and it has <cite>isActive</cite> and <cite>lastChangeTime</cite> and <cite>changedSinceLastSync</cite>.</p>
 <p>The struct has <cite>changedSinceLastSync</cite>, which is true if the value changed between the previous and current calls to xrSync(). And it has <cite>lastChangeTime</cite>, which is the time at which the value last changed. This allows us to be very precise about when the user pressed the button, and how long they held it down for. This could be used to detect “long presses”, or double-clicks.</p>
