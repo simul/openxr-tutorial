@@ -884,6 +884,17 @@ controller’s position.</p>
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 </pre></div>
 </div>
+<p>And we will declare some interactable blocks. Add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Block</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrPosef</span><span class="w"> </span><span class="n">pose</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">colour</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Block</span><span class="o">&gt;</span><span class="w"> </span><span class="n">blocks</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">grabbedBlock</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">nearBlock</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+</pre></div>
+</div>
 <p>Now in <code class="docutils literal notranslate"><span class="pre">Run()</span></code> insert the following after the call to <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">CreateResources</span><span class="p">();</span>
 </pre></div>
