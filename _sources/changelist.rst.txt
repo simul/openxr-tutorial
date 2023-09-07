@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 07 Sep** : Added missing BlockInteraction() call.
     | **Thu 07 Sep** : Declare blocks in ch4
     | **Thu 07 Sep** : Fixed resource declaration code sample.
     | **Thu 07 Sep** : Fix syntax error.
@@ -101,4 +102,3 @@ Changelist
     | **Thu 17 Aug** : Updated Chapter 2 text from internal review.
     | **Thu 17 Aug** : Update OpenXRTutorial class in texts of Chapters 1 and 2.
     | **Thu 17 Aug** : Added DOWNLOAD_EXTRACT_TIMESTAMP to FetchContent_Declare() in CMake lists. Updated text for Chapter 1 from internal review.
-    | **Thu 17 Aug** : Fixed rst warnings in chapter 1 and 3 texts.
