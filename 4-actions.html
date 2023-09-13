@@ -250,6 +250,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-actions-in-the-app">4.4 Using Actions in the app</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rendering-the-controller-position">4.5 Rendering the Controller position</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#checking-for-connected-controllers">4.6 Checking for Connected Controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">4.7 Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a></li>
@@ -845,47 +846,54 @@ controller’s position.</p>
 </pre></div>
 </div>
 <p>Now we’ve completed polling all the actions in the application. We will add two more functions to enable some interaction between the user and the 3D blocks:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">static</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="nf">FixPosition</span><span class="p">(</span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
-<span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
-<span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
-<span class="w">       </span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
-<span class="w">       </span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
-<span class="w">       </span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
-<span class="w">       </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
-<span class="w">   </span><span class="p">}</span>
-<span class="w">   </span><span class="kt">void</span><span class="w"> </span><span class="nf">BlockInteraction</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">           </span><span class="kt">float</span><span class="w"> </span><span class="n">nearest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
-<span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="n">nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
-<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">blocks</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                       </span><span class="k">auto</span><span class="w"> </span><span class="n">block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blocks</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-<span class="w">                       </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">block</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
-<span class="w">                       </span><span class="kt">float</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">z</span><span class="p">)));</span>
-<span class="w">                       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nearest</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                           </span><span class="n">nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
-<span class="w">                           </span><span class="n">nearest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distance</span><span class="p">;</span>
-<span class="w">                       </span><span class="p">}</span>
-<span class="w">                   </span><span class="p">}</span>
-<span class="w">               </span><span class="p">}</span>
-<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">currentState</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                   </span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">                   </span><span class="n">buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
-<span class="w">               </span><span class="p">}</span>
-<span class="w">           </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="n">nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span>
-<span class="w">                   </span><span class="n">blocks</span><span class="p">[</span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
-<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">currentState</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                   </span><span class="n">blocks</span><span class="p">[</span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FixPosition</span><span class="p">(</span><span class="n">blocks</span><span class="p">[</span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">);</span>
-<span class="w">                   </span><span class="n">grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
-<span class="w">                   </span><span class="n">buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">;</span>
-<span class="w">               </span><span class="p">}</span>
-<span class="w">           </span><span class="p">}</span>
-<span class="w">       </span><span class="p">}</span>
-<span class="w">   </span><span class="p">}</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>/ Helper function to snap a 3D position to the nearest 10cm
+   static XrVector3f FixPosition(XrVector3f pos) {
+       int x = int(std::nearbyint(pos.x * 10.f));
+       int y = int(std::nearbyint(pos.y * 10.f));
+       int z = int(std::nearbyint(pos.z * 10.f));
+       pos.x = float(x) / 10.f;
+       pos.y = float(y) / 10.f;
+       pos.z = float(z) / 10.f;
+       return pos;
+   }
+/ Handle the interaction between the user&#39;s hands, the grab action, and the 3D blocks.
+   void BlockInteraction() {
+       // For each hand:
+       for (int i = 0; i &lt; 2; i++) {
+           float nearest = 1.0f;
+           // If not currently holding a block:
+           if (grabbedBlock[i] == -1) {
+               nearBlock[i] = -1;
+               // Only if the pose was detected this frame:
+               if (m_handPoseState[i].isActive) {
+                   // For each block:
+                   for (int j = 0; j &lt; blocks.size(); j++) {
+                       auto block = blocks[j];
+                       // How far is it from the hand to this block?
+                       XrVector3f diff = block.pose.position - m_handPose[i].position;
+                       float distance = std::max(fabs(diff.x), std::max(fabs(diff.y), fabs(diff.z)));
+                       if (distance &lt; 0.1f &amp;&amp; distance &lt; nearest) {
+                           nearBlock[i] = j;
+                           nearest = distance;
+                       }
+                   }
+               }
+               if (nearBlock[i] != -1 &amp;&amp; m_grabState[i].isActive &amp;&amp; m_grabState[i].currentState &gt; 0.5f) {
+                   grabbedBlock[i] = nearBlock[i];
+                   buzz[i] = 1.0f;
+               }
+           } else {
+               nearBlock[i] = grabbedBlock[i];
+               if (m_handPoseState[i].isActive)
+                   blocks[grabbedBlock[i]].pose.position = m_handPose[i].position;
+               if (!m_grabState[i].isActive || m_grabState[i].currentState &lt; 0.5f) {
+                   blocks[grabbedBlock[i]].pose.position = FixPosition(blocks[grabbedBlock[i]].pose.position);
+                   grabbedBlock[i] = -1;
+                   buzz[i] = 0.2f;
+               }
+           }
+       }
+   }
 </pre></div>
 </div>
 </section>
@@ -1196,12 +1204,15 @@ controller’s position.</p>
 <section id="checking-for-connected-controllers">
 <h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Permalink to this heading">¶</a></h2>
 <p>Look again now at the function PollActions().</p>
-<p>We specify which action to look at with the XrActionStateGetInfo struct. Then we use a type-specific call. For our boolean Grab Action, we call <cite>xrGetActionStateBoolean()</cite> to retrieve an XrActionStateBoolean struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the select button on the controller.
-However, the struct <cite>XrActionStateBoolean</cite> also has a member called <cite>isActive</cite>, which is true if the state of the action is actually being read. If it’s false, the value of <cite>currentState</cite> is irrelevant - the polling failed.</p>
-<p>Similarly, <cite>XrActionStateFloat</cite> has a floating-point <cite>currentState</cite> value, which is valid if <cite>isActive</cite> is true, it has <cite>lastChangeTime</cite> and <cite>changedSinceLastSync</cite>, and it has <cite>isActive</cite> and <cite>lastChangeTime</cite> and <cite>changedSinceLastSync</cite>.</p>
-<p>The struct has <cite>changedSinceLastSync</cite>, which is true if the value changed between the previous and current calls to xrSync(). And it has <cite>lastChangeTime</cite>, which is the time at which the value last changed. This allows us to be very precise about when the user pressed the button, and how long they held it down for. This could be used to detect “long presses”, or double-clicks.</p>
+<p>We specify which action to look at with the <code class="docutils literal notranslate"><span class="pre">XrActionStateGetInfo</span></code> struct. Then we use a type-specific call. For our boolean Grab Action, we call <code class="docutils literal notranslate"><span class="pre">xrGetActionStateBoolean()</span></code> to retrieve an <code class="docutils literal notranslate"><span class="pre">XrActionStateBoolean</span></code> struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the specified button on the controller.
+However, the struct <code class="docutils literal notranslate"><span class="pre">XrActionStateBoolean</span></code> also has a member called <code class="docutils literal notranslate"><span class="pre">isActive</span></code>, which is true if the state of the action is actually being read. If it’s false, the value of <code class="docutils literal notranslate"><span class="pre">currentState</span></code> is irrelevant - the polling failed.</p>
+<p>Similarly, <code class="docutils literal notranslate"><span class="pre">XrActionStateFloat</span></code> has a floating-point <code class="docutils literal notranslate"><span class="pre">currentState</span></code> value, which is valid if <code class="docutils literal notranslate"><span class="pre">isActive</span></code> is true. The struct has <code class="docutils literal notranslate"><span class="pre">changedSinceLastSync</span></code>, which is true if the value changed between the previous and current calls to xrSync(). And it has <code class="docutils literal notranslate"><span class="pre">lastChangeTime</span></code>, which is the time at which the value last changed. This allows us to be very precise about when the user pressed the button, and how long they held it down for. This could be used to detect “long presses”, or double-clicks.</p>
 <p>Careful use of this polling metadata will help you to create apps that are responsive and intuitive to use. Bear in mind as well that multiple physical controls could be bound to the same action, and the user could be using more than one controller at once. See the OpenXR spec for more details:</p>
 <p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#multiple_inputs">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#multiple_inputs</a></p>
+</section>
+<section id="summary">
+<h2>4.7 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>In this chapter, you have learned about Actions, Controller Profiles, Bindings.</p>
 </section>
 </section>
 
