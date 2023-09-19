@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>OpenXR Tutorial &mdash; OpenXR Tutorial  documentation</title>
+	<title>6 Next Steps &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
@@ -24,8 +24,7 @@
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
-	<link rel="search" title="Search" href="search.html" >
-	<link rel="next" title="1 Introduction" href="1-introduction.html" > 
+	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -231,7 +230,7 @@
 
           
           
-			<a href="#"  class="" >
+			<a href="index.html"  class="" >
 				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
@@ -263,13 +262,13 @@
 
 	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
 			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-			<a href="#">OpenXR Tutorial</a>
+			<a href="index.html">OpenXR Tutorial</a>
 		</nav>
 
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">OpenXR Tutorial</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">6 Next Steps</li>
 	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
@@ -326,127 +325,17 @@
 					<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
 						<div itemprop="articleBody">
 							
-  <section id="openxr-tutorial">
-<h1>OpenXR Tutorial<a class="headerlink" href="#openxr-tutorial" title="Permalink to this heading">¶</a></h1>
-<p>This tutorial will teach you how to use the OpenXR API.
-OpenXR is an API managed by the Khronos Group which provides a cross-platform
-way for applications to interact with immersive devices. This includes virtual reality (VR)
-headsets, augmented reality (AR) devices, motion controllers and more.</p>
-<p>An API is an application programming interface, a set of rules for how a software system
-can be interfaced-with by other systems. There is no specific library or code that is OpenXR,
-rather, there are multiple implementations (or runtimes), which might be provided by hardware
-manufacturers, by software companies. There are even open source runtimes. But whichever
-runtime you use, if it’s compliant with the OpenXR standard, your OpenXR-compliant code will
-work with it.</p>
-<p>This tutorial introduces programming with OpenXR. If you use a game engine such as Unreal Engine, Unity or Godot,
-you may not need to interact directly with OpenXR: the engine abstracts this away. It may be beneficial
-to learn the underlying concepts however.</p>
-<p>OpenXR is designed to work with various different graphics API’s: Vulkan, Direct3D 11 and 12,
-OpenGL and OpenGL ES are all supported at present. You will need some familiarity with your graphics
-API of choice to get the most out of this tutorial.</p>
-<p>Other prerequisites are:</p>
-<ul class="simple">
-<li><p>A Windows or Linux PC to compile the code</p></li>
-<li><p>An IDE (integrated development environment) that supports your target device: either Visual Studio 2017 or later; or Android Studio.</p></li>
-<li><p>Some XR hardware to run on: either an XR device that connects to your PC, or an Android-based device like a Meta Quest or Pico Neo.</p></li>
-</ul>
-<p>In the latter case, it is possible to use Monado to emulate XR hardware - see Section x.x.</p>
-<section id="tutorial-structure">
-<h2>Tutorial Structure<a class="headerlink" href="#tutorial-structure" title="Permalink to this heading">¶</a></h2>
-<p>The tutorial is divided into several main sections. Each section walks you through
-part of the process of creating an XR program, and assumes that the previous sections have
-been completed.</p>
-<p>At the end of each section is a link to download the full example source code up to that point.</p>
-<p>This code can also be downloaded from the following repository: <a class="reference external" href="https://github.com/simul/openxr-tutorial-src">https://github.com/simul/openxr-tutorial-src</a></p>
-<p>In the Introduction, we describe the basic concepts underpinning OpenXR, and show you how to
-set up a PC or Android development environment to build the code.</p>
-<p>Then in Setup, we show how to initialize OpenXR and connect your program to your XR
-device.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#goal-of-openxr">1.1 Goal of OpenXR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#overview">1.2 Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#environment-setup">1.3 Environment Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#project-setup">1.4 Project Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#cmake-and-project-files">1.4.1 CMake and Project Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#common-files">1.4.2 Common Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#openxrtutorial-and-main">1.4.3 OpenXRTutorial and Main</a></li>
-<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#build-and-run">1.4.4 Build and Run</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrinstance-xrgetsystem">2.1 Creating an XrInstance / xrGetSystem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrinstance">2.1.1 XrInstance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xr-ext-debug-utils">2.1.2 XR_EXT_debug_utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsystemid">2.1.3 XrSystemId</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-xrsession">2.2 Creating an XrSession</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsession">2.2.1 XrSession</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#graphicsapi">2.2.2 GraphicsAPI</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="2-setup.html#polling-the-event-loop">2.3 Polling the Event Loop</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrpollevent">2.3.1 xrPollEvent</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsessionstate">2.3.2 XrSessionState</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrbeginsession-and-xrendsession">2.3.3 xrBeginSession and xrEndSession</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#creating-swapchains">3.1 Creating Swapchains</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrviewconfigurationview">3.1.1 XrViewConfigurationView</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrenumerateswapchainformats">3.1.2 xrEnumerateSwapchainFormats</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrcreateswapchain">3.1.3 xrCreateSwapchain</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrenumerateswapchainimages">3.1.4 xrEnumerateSwapchainImages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#create-depth-image-and-image-views">3.1.5 Create Depth Image And Image Views</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrdestroyswapchain">3.1.6 xrDestroySwapchain</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#building-a-renderloop">3.2 Building a RenderLoop</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrenumerateenvironmentblendmodes">3.2.1 xrEnumerateEnvironmentBlendModes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#xrcreatereferencespace">3.2.2 xrCreateReferenceSpace</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#renderframe">3.2.3 RenderFrame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#renderlayer">3.2.4 RenderLayer</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#the-openxr-interaction-system">4.1 The OpenXR Interaction System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#interaction-profiles-and-bindings">4.3 Interaction Profiles and Bindings</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="4-actions.html#bindings-and-profiles">4.3.1 Bindings and Profiles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="4-actions.html#binding-interactions">4.3.2 Binding Interactions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="4-actions.html#theory-and-best-practices-for-interaction-profiles">Theory and Best Practices for Interaction Profiles</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#using-actions-in-the-app">4.4 Using Actions in the app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#rendering-the-controller-position">4.5 Rendering the Controller position</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#checking-for-connected-controllers">4.6 Checking for Connected Controllers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-actions.html#summary">4.7 Summary</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-extensions.html#hand-tracking">5.1 Hand Tracking</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
+  <section id="next-steps">
+<h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h1>
+<p>Multiview rendering</p>
+<p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.
+OpenGL supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
 </section>
 
 
 						</div>
 					</div>
-					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="1-introduction.html" class="btn btn-neutral float-right" title="1 Introduction" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+					<footer>
 
   <hr>
 

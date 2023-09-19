@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 19 Sep** : Vulkan fixes for Chapter 1.
+    | **Tue 19 Sep** : Added svg icons
     | **Fri 08 Sep** : Updated Chapter2/CMakeLists.txt and 1-introduction.rst to add explanation of "-Wno-cast-calling-convention" for Android.
     | **Thu 07 Sep** : Updated timetable for testing.
     | **Thu 07 Sep** : Fixed some text flow.
@@ -100,5 +102,3 @@ Changelist
     | **Fri 18 Aug** : Fixed shaders in GLSL to match HLSL. Modified SDK values in app/build.gradle to equal 27, this fixes the failure to load the runtime in Quest 2.
     | **Fri 18 Aug** : Updated text for chapter 2.2.1.
     | **Fri 18 Aug** : Updated tags in Chapter2/main.cpp. Updated chapter 2 text.
-    | **Fri 18 Aug** : Updated .gitignore to ignore Android shader build outputs. Added <memory> to HelperFunctions.h
-    | **Thu 17 Aug** : Updated chapter 2 text.

@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>👋 1 Introduction &mdash; OpenXR Tutorial  documentation</title>
+	<title>1 Introduction &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
@@ -35,7 +35,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "windows"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -144,6 +144,22 @@
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
+	function addIconsToToctree()
+	{
+		return;
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","HandsetIcon","toc_extensions","toc_next_steps"];
+		[].forEach.call(toctreeheadings, function(el) {
+			const newNode = document.createElement("img");
+			el.insertBefore(newNode, el.children[0]);
+			newNode.id =heading_ids[i];
+			newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
+			newNode.width = "30"; 
+			i++;
+			console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
 	function updateGraphicsAPI()
 	{
 		var graphicsApi = Cookies.get("graphicsapi")
@@ -208,7 +224,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -235,20 +251,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">👋 1 Introduction</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1 Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1 Goal of OpenXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#overview">1.2 Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up">1.3 Setting Up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">1.3 Environment Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#project-setup">1.4 Project Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cmake-and-project-files">1.4.1 CMake and Project Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#common-files">1.4.2 Common Files</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#debugoutput">DebugOutput</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#helperfunctions">HelperFunctions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#openxrdebugutils">OpenXRDebugUtils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#openxrhelper">OpenXRHelper</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#graphicsapi">GraphicsAPI</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#common-files">1.4.2 Common Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#openxrtutorial-and-main">1.4.3 OpenXRTutorial and Main</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#build-and-run">1.4.4 Build and Run</a></li>
 </ul>
@@ -273,7 +282,7 @@
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">👋 1 Introduction</li>
+      <li class="breadcrumb-item active">1 Introduction</li>
 	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
@@ -331,7 +340,7 @@
 						<div itemprop="articleBody">
 							
   <section id="introduction">
-<h1>👋 1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<h1>1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
 <section id="goal-of-openxr">
 <h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple
@@ -341,10 +350,10 @@ adaptation. Developing a new app for a new platform was even more challenging.</
 <p>In spite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two
 slightly different perspectives. Most had a way to track the user’s head and hands or hand-controllers. Most had buttons,
 many had analogue controls like triggers or joysticks; many had haptic feedback.</p>
-<figure class="align-left" id="id11">
+<figure class="align-left" id="id9">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
-<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
@@ -354,8 +363,8 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 <section id="overview">
 <h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
-<table class="longtable docutils align-default" id="id12">
-<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<table class="longtable docutils align-default" id="id10">
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 16.7%" />
 <col style="width: 83.3%" />
@@ -429,43 +438,10 @@ at a time, if more than one XR device is in use.</p>
 <p>OpenXR supports multiple graphics APIs via its extension functionality. Like in Vulkan, OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality, as bold as it might seem, provides us with the flexibility in choosing the graphics APIs now and in the future. Firstly, OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. Secondly, the extensive nature of OpenXR allows revisions of and any new graphics APIs to be integrated with ease. Already, there are two mutually exclusive extensions in OpenXR for interacting with Vulkan.</p>
 <p>OpenXR recognised that there is vast and ever changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that same application can target difference and newer hardware. The abstraction is done via the concept of an <code class="docutils literal notranslate"><span class="pre">XrAction</span></code>, which acts as handle to interactive elements of the application. Instead of directly querying the state of any one button, joysticks, trigger, touch pad etc., you create an <code class="docutils literal notranslate"><span class="pre">XrAction</span></code> for a specific action such as a “menu_click”. You provide a suggested binding along with an interaction profile so that OpenXR can link that action with the available input hardware at runtime.</p>
 </section>
-<section id="setting-up">
-<h2>1.3 Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this heading">¶</a></h2>
-<p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent.</p>
-<p>You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for
-by clicking a tab, or one of the buttons below.</p>
-<div class='select-platform-container-inline'>
-	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
-		<img src="_static/css/windows-mono.svg" alt="Windows" />
-		Windows
-	</button>
-	<button class="select-platform-inline" id='selectlinux-inline' onclick="choosePlatform('linux')">
-		<img src="_static/css/icons/Tux/Tux-FlatColor.svg" alt="Linux" />
-		Linux
-	</button>
-	<button class="select-platform-inline" id='selectandroid-inline' onclick="choosePlatform('android')">
-		<img src="_static/css/icons/Android/Android_robot.svg" alt="Android" />
-		Android
-	</button>
-</div>
-<div class='select-graphics-api-container-inline'>
-	<button class="select-graphics-api-inline selectd3d11" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
-		Direct3D 11
-	</button>
-	<button class="select-graphics-api-inline selectd3d12" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
-		Direct3D 12
-	</button>
-	<button class="select-graphics-api-inline selectopengl" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
-		OpenGL
-	</button>
-	<button class="select-graphics-api-inline selectopengles" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
-		OpenGL ES
-	</button>
-	<button class="select-graphics-api-inline selectvulkan" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
-		Vulkan
-	</button>
-</div>
-
+<section id="environment-setup">
+<h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">¶</a></h2>
+<p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent. You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for
+by clicking a tab above.</p>
 <div class="windows docutils container" id="windows-id-1">
 <p class="rubric">Visual Studio</p>
 <p>If you’ll be building an OpenXR project for Microsoft Windows PC based devices, we’ll assume you’ll be using Microsoft Visual Studio.
@@ -478,23 +454,26 @@ The free Community edition of Visual Studio is available to download <a class="r
 <p>In both cases, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-1">
-<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan also supports rendering to both eye views with multiview. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p>If you’re using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan supports rendering to both eye views with multiview. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-1">
 <p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. It was originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> specification.
-If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL also supports rendering to both eye views with multiview - <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
+If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL supports rendering to both eye views with multiview - <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
 </div>
 </div>
 <div class="linux docutils container" id="linux-id-1">
-<p class="rubric">Visual Studio Code for Linux</p>
+<p class="rubric">Install Visual Studio Code</p>
 <p>To install Visual Studio Code, go to <a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> and click the “Download for Linux” button.</p>
+<p class="rubric">Install CMake</p>
 <p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake with Visual Studio Code to build the project.</p>
+<p>Now choose which graphics API you want to use, on the second row of tabs at the top of the page. For Linux you can either use OpenGL or Vulkan.</p>
 <div class="vulkan docutils container" id="vulkan-id-2">
-<p>If you’ll be using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p class="rubric">Install the Vulkan SDK</p>
+<p>If you want to use Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-2">
 <p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. It was originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> specification.
-If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - <a class="reference external" href="Tutorial:_OpenGL_3.0_Context_Creation_(GLX)">Tutorial: OpenGL 3.0 Context Creation (GLX)</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
+If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - <a class="reference external" href="Tutorial:_OpenGL_3.0_Context_Creation_(GLX)">Tutorial: OpenGL 3.0 Context Creation (GLX)</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>.</p>
 </div>
 </div>
 <div class="android docutils container" id="android-id-1">
@@ -516,27 +495,6 @@ For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL ES API found
 If you want to use OpenGL ES stand-alone, you will need to use EGL to create a valid OpenGL ES Context for Android - <a class="reference external" href="https://www.khronos.org/egl">EGL Overview</a>. You will also need to use a function loader like GLAD to access functions for OpenGL ES - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL ES also supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL ES Multiview</a>.</p>
 </div>
 </div>
-<p class="rubric">OpenXR SDK</p>
-<p>In this tutorial, we will use CMake <code class="docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code> command in the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> files to get the OpenXR SDK package from Khronos’s OpenXR-SDK-Source GitHub page, as shown below.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
-<span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
-
-<span class="c"># openxr_loader - From github.com/KhronosGroup</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
-<span class="nb">FetchContent_Declare</span><span class="p">(</span>
-<span class="w">        </span><span class="s">OpenXR</span>
-<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
-<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
-<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
-<span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Download <a class="reference download internal" download="" href="_downloads/cd76e933f0032a33ba56954bc3ae053e/CMakeLists.txt"><code class="xref download docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></a></p>
-<p>If you prefer to git clone or download the SDK yourself from <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK">Khronos’s OpenXR-SDK-Source GitHub page</a>. You can either use your preferred command-line or GUI Git tool, or download it as a .zip file.</p>
-<p>With the OpenXR loader and your graphics API selected, you’re ready to start creating your first OpenXR project.</p>
 </section>
 <section id="project-setup">
 <h2>1.4 Project Setup<a class="headerlink" href="#project-setup" title="Permalink to this heading">¶</a></h2>
@@ -555,7 +513,10 @@ First, create a directory where the code will go, we’ll call this the <em>work
 <a class="reference internal image-reference" href="_images/linux-vscode-open-folder.png"><img alt="The File menu of Visual Studio Code is shown, with the command &quot;Open Folder...&quot; selected." src="_images/linux-vscode-open-folder.png" style="width: 391.05px; height: 234.3px;" /></a>
 </figure>
 <p>Select your <em>workspace</em> folder, which is currently empty.</p>
-<p>If you haven’t previously done so, install the CMake extension for Visual Studio Code.</p>
+<p>If you haven’t previously done so, install the CMake extension for Visual Studio Code: select the “Extensions” tab, and type “CMake” in the search box.</p>
+<figure class="align-left">
+<img alt="Selecting the CMake extension in Visual Studio Code." src="_images/VSCodeCMakeLinux.png" />
+</figure>
 </div>
 <div class="windows linux docutils container" id="windows-linux-id-1">
 <p>Now, create a text file in the <em>workspace</em> folder called <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and in it, put the following code:</p>
@@ -569,18 +530,17 @@ First, create a directory where the code will go, we’ll call this the <em>work
 <span class="nb">set</span><span class="p">(</span><span class="s">XR_RUNTIME_JSON</span><span class="w"> </span><span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span><span class="w"> </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Here, we specify the CMake version, project name and the configurations types, and provide a CMake variable called <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> which you can use to point to the runtime you will be using (by default, OpenXR will try to find the default runtime from your hardware vendor). Finally, we specify CMake to continue the build into the Chapter2 directory with <code class="docutils literal notranslate"><span class="pre">add_subdirectory()</span></code>.</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here, we specify the CMake version, project name and the configurations types, which we limit to just Debug and Release.
-You can use <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> to specify an optional runtime. The one provided by your hardware vendor will be automatically used, though this feature is helpful for debugging on different runtimes.
-Finally, we specify CMake to continue the build into the Chapter2 directory with <code class="docutils literal notranslate"><span class="pre">add_subdirectory()</span></code>.</p>
 <p>In the workspace folder, create a folder called <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>, and in it create another <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file.
 In it, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>This sets a minimum CMake version (required for some of the features we use here) and our own CMake variable <code class="docutils literal notranslate"><span class="pre">PROJECT_NAME</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code>. Now add:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
@@ -597,7 +557,7 @@ In it, put the following code:</p>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After setting our CMake version and our own CMake variable <code class="docutils literal notranslate"><span class="pre">PROJECT_NAME</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code>, we include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK from Khronos’s GitHub page. Now, we will add to our <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
+<p>We include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK from Khronos’s GitHub page. Now, we will add to our <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container" id="d3d11-id-1">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
@@ -667,8 +627,7 @@ In it, put the following code:</p>
 </div>
 </div>
 <p>All the files listed above with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. In the next section, you will find the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
-<p>At this point, we’ll also create our text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. This will be our main source file, which we will use later in this chapter.</p>
-<p>Now, we will continue with the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeList.txt</span></code>, adding the following code.</p>
+<p>Now add the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -678,7 +637,7 @@ In it, put the following code:</p>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now, we have set up the project by adding an executable by using <code class="docutils literal notranslate"><span class="pre">add_executable()</span></code> specifying the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We have optionally set a the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> in the debugger environment. We’ve added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory and linked <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> from <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. We didn’t have to add OpenXR as a include directory; as we have specified it to be located in the CMake Build directory under <code class="docutils literal notranslate"><span class="pre">openxr/</span></code> when using <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>, so we’ve only included the OpenXR headers from the CMake Build directory.</p>
+<p>We have used <code class="docutils literal notranslate"><span class="pre">add_executable()</span></code> to create the program we’ll be building, and specified its <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We passed the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> variable on to the debugging environment (Windows only). We’ve added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory and linked the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> which we obtained with <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. This will also add the relevant include directory for the OpenXR headers.</p>
 <div class="windows name windows-id-3 docutils container">
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
@@ -698,17 +657,17 @@ In it, put the following code:</p>
 </div>
 </div>
 <div class="d3d11 docutils container" id="d3d11-id-2-1">
-<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 11 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_D3D11</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d11.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 11 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_D3D11</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-2-1">
-<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 12 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_D3D12</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>For Microsoft Windows, we’ve linked <code class="docutils literal notranslate"><span class="pre">d3d12.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">dxgi.lib</span></code>, so that we can use Direct3D 12 and the DirectX Graphics Infrastructure. The headers for Direct3D are automatically included as part of the Visual Studio project. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_D3D12</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 </div>
 </div>
 <div class="linux docutils container" id="linux-id-3">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_LINUX_XLIB</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For Linux, there are no headers to include or libraries to link against. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_XLIB</span></code> compiler definition to specify which Linux Windowing System should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>. Other options are <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_XCB</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_WAYLAND</span></code>. Wayland uses <em>EGL</em> for its <em>OpenGL ES</em> context and not <em>GLX</em> with <em>OpenGL</em>.</p>
+<p>For Linux, there are no headers to include or libraries to link against. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_XLIB</span></code> compiler definition to specify which Linux Windowing System should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>. Other options are <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_XCB</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_LINUX_WAYLAND</span></code>. Wayland uses <em>EGL</em> for its <em>OpenGL ES</em> context and not <em>GLX</em> with <em>OpenGL</em>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
@@ -718,7 +677,7 @@ In it, put the following code:</p>
 <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This CMake code will add gfxwrapper for OpenGL. We’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_OPENGL</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>This CMake code will add gfxwrapper for OpenGL. We’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_OPENGL</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-5">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
@@ -730,7 +689,7 @@ In it, put the following code:</p>
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>If you have the Vulkan SDK installed, this CMake code will try to find that package, add the include directories and link the Vulkan libraries. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_VULKAN</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>If you have the Vulkan SDK installed, this CMake code will try to find that package, add the include directories and link the Vulkan libraries. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_VULKAN</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 </div>
 <p>That’s all the CMake code that we require for this project.</p>
 </div>
@@ -802,7 +761,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </pre></div>
 </div>
 </div>
-<p>Here, we include all the files needed for our project. First, we’ll create our source file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> directory. All files with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
+<p>Here, we include all the files needed for our project. All files with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
 <span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
@@ -827,7 +786,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We now add a static library called <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which will allow us to use OpenGL ES. We compile the library the C and header file in <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</span></code> and add this <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> as an include directory. Next, we find the <code class="docutils literal notranslate"><span class="pre">GLESv3</span></code> and <code class="docutils literal notranslate"><span class="pre">EGL</span></code> libraries and link them to <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common</span></code> and <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> folder as include directories to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> as well. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_OPENGL_ES</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>We now add a static library called <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which will allow us to use OpenGL ES. We compile the library the C and header file in <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</span></code> and add this <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> as an include directory. Next, we find the <code class="docutils literal notranslate"><span class="pre">GLESv3</span></code> and <code class="docutils literal notranslate"><span class="pre">EGL</span></code> libraries and link them to <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/src/common</span></code> and <code class="docutils literal notranslate"><span class="pre">${openxr_SOURCE_DIR}/external/include</span></code> folder as include directories to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> as well. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_OPENGL_ES</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
 <span class="w">                </span><span class="s">android</span>
 <span class="w">                </span><span class="s">native_app_glue</span>
@@ -847,7 +806,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_VULKAN</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h.</span></code>.</p>
+<p>Next, we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_VULKAN</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
 <span class="w">                </span><span class="s">android</span>
 <span class="w">                </span><span class="s">native_app_glue</span>
@@ -1042,10 +1001,9 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 </section>
 <section id="common-files">
 <h3>1.4.2 Common Files<a class="headerlink" href="#common-files" title="Permalink to this heading">¶</a></h3>
-<p>Now, that we have set up the project and source file. We will create a <code class="docutils literal notranslate"><span class="pre">/Common</span></code> folder with in the <em>workspace</em> directory. In that folder, we will add the following files. Below are all the files available to download:</p>
-<section id="debugoutput">
-<h4>DebugOutput<a class="headerlink" href="#debugoutput" title="Permalink to this heading">¶</a></h4>
-<p><a class="reference download internal" download="" href="_downloads/a668d9f10e44c7f46a041356e11e3d9e/DebugOutput.h"><code class="xref download docutils literal notranslate"><span class="pre">DebugOutput.h</span></code></a></p>
+<p>Now, that we have set up the project and source file. We will create a <code class="docutils literal notranslate"><span class="pre">/Common</span></code> folder with in the <em>workspace</em> directory. Download each of the linked files below and put it in <code class="docutils literal notranslate"><span class="pre">Common</span></code>:</p>
+<p class="rubric">DebugOutput</p>
+<p><a class="reference download internal" download="" href="_downloads/a668d9f10e44c7f46a041356e11e3d9e/DebugOutput.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/DebugOutput.h</span></code></a></p>
 <p><code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> is a class that redirects <code class="docutils literal notranslate"><span class="pre">std::cout</span></code> and <code class="docutils literal notranslate"><span class="pre">std::cerr</span></code> to the output window in your IDE.</p>
 <div class="windows linux docutils container" id="windows-linux-id-2">
 <p><code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> inherites from <code class="docutils literal notranslate"><span class="pre">vsBufferedStringStreamBuf</span></code>, which inherites from <code class="docutils literal notranslate"><span class="pre">std::streambuf</span></code>. <code class="docutils literal notranslate"><span class="pre">vsBufferedStringStreamBuf</span></code> queues the data from the redirected <code class="docutils literal notranslate"><span class="pre">std::streambuf</span></code> and calls <code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">writeString(const</span> <span class="pre">std::string</span> <span class="pre">&amp;)</span></code>, which <code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> inplements as a call to <code class="docutils literal notranslate"><span class="pre">OutputDebugStringA()</span></code>.</p>
@@ -1053,23 +1011,17 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <div class="android docutils container" id="android-id-3">
 <p><code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> inherites from <code class="docutils literal notranslate"><span class="pre">AndroidStreambuf</span></code>, which inherites from <code class="docutils literal notranslate"><span class="pre">std::streambuf</span></code>. <code class="docutils literal notranslate"><span class="pre">vsBufferedStringStreamBuf</span></code> queues the data from the redirected <code class="docutils literal notranslate"><span class="pre">std::streambuf</span></code> and calls <code class="docutils literal notranslate"><span class="pre">__android_log_write()</span></code> to log the message to Android Logcat.</p>
 </div>
-</section>
-<section id="helperfunctions">
-<h4>HelperFunctions<a class="headerlink" href="#helperfunctions" title="Permalink to this heading">¶</a></h4>
-<p><a class="reference download internal" download="" href="_downloads/09fde4dd830aa0c1ae2771d8eff634c4/HelperFunctions.h"><code class="xref download docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code></a></p>
-<p>A simple header file for boilerplate code for the various platforms. It includes various C/C++ standard header, and the code that defines the macro <code class="docutils literal notranslate"><span class="pre">DEBUG_BREAK</span></code>, according to which platform we’re building for. This macro will stop execution of your program when an error occurs, so you can see where it happened and fix it. We use this macro in the <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> function, which is discussed in detail in <a class="reference internal" href="2-setup.html#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>.
+<p class="rubric">HelperFunctions</p>
+<p><a class="reference download internal" download="" href="_downloads/09fde4dd830aa0c1ae2771d8eff634c4/HelperFunctions.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/HelperFunctions.h</span></code></a></p>
+<p>This is a simple header file for boilerplate code for the various platforms. It includes various C/C++ standard header, and the code that defines the macro <code class="docutils literal notranslate"><span class="pre">DEBUG_BREAK</span></code>, according to which platform we’re building for. This macro will stop execution of your program when an error occurs, so you can see where it happened and fix it. We use this macro in the <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> function, which is discussed in detail in <a class="reference internal" href="2-setup.html#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>.
 <code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code> and <code class="docutils literal notranslate"><span class="pre">BitwiseCheck()</span></code> are just simple wrappers over commonly used code. <code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code> checks if a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> is in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;const</span> <span class="pre">char</span> <span class="pre">*&gt;</span></code> by using <code class="docutils literal notranslate"><span class="pre">strcmp()</span></code>, and <code class="docutils literal notranslate"><span class="pre">BitwiseCheck()</span></code> checks if a bit is set in a bitfield.</p>
-</section>
-<section id="openxrdebugutils">
-<h4>OpenXRDebugUtils<a class="headerlink" href="#openxrdebugutils" title="Permalink to this heading">¶</a></h4>
-<p><a class="reference download internal" download="" href="_downloads/25292376df5afce45fe1df04d91fea9f/OpenXRDebugUtils.h"><code class="xref download docutils literal notranslate"><span class="pre">OpenXRDebugUtils.h</span></code></a></p>
-<p><a class="reference download internal" download="" href="_downloads/f206e1c8599e8788f3b84b60d65b3396/OpenXRDebugUtils.cpp"><code class="xref download docutils literal notranslate"><span class="pre">OpenXRDebugUtils.cpp</span></code></a></p>
+<p class="rubric">OpenXRDebugUtils</p>
+<p><a class="reference download internal" download="" href="_downloads/25292376df5afce45fe1df04d91fea9f/OpenXRDebugUtils.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRDebugUtils.h</span></code></a></p>
+<p><a class="reference download internal" download="" href="_downloads/f206e1c8599e8788f3b84b60d65b3396/OpenXRDebugUtils.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRDebugUtils.cpp</span></code></a></p>
 <p>A header and cpp file pair helps in setting up the DebugUtilsMessenger. <code class="docutils literal notranslate"><span class="pre">XR_EXT_debug_utils</span></code> in an OpenXR instance extension that can intercept call made to OpenXR and provide extra information or report warning and errors, if the usage of the API or the current state of OpenXR is not valid. As you go through this tutorial it is highly recommended to have this enable to help with debugging. This is discussed in detail in <a class="reference internal" href="2-setup.html#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>, but in general <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> creates and <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger()</span></code> destroys an <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>. <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> is a called function specified at object creation, which is used to call when OpenXR raises an issue. The header declares the functions and the cpp defines them.</p>
-</section>
-<section id="openxrhelper">
-<h4>OpenXRHelper<a class="headerlink" href="#openxrhelper" title="Permalink to this heading">¶</a></h4>
-<p><a class="reference download internal" download="" href="_downloads/07ed85d64fa8eeb958885d2b14115e3f/OpenXRHelper.h"><code class="xref download docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code></a></p>
-<p>A header for including all the needed header files and helper functions.</p>
+<p class="rubric">OpenXRHelper</p>
+<p><a class="reference download internal" download="" href="_downloads/07ed85d64fa8eeb958885d2b14115e3f/OpenXRHelper.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRHelper.h</span></code></a></p>
+<p>A header for including all the needed header files and helper functions. Looking inside this file, we can see:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define any XR_USE_PLATFORM_... / XR_USE_GRAPHICS_API_... before this header file.</span>
 
 <span class="c1">// OpenXR Headers</span>
@@ -1080,9 +1032,7 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>Here, we include the main OpenXR header file <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code> and the OpenXR platform header file <code class="docutils literal notranslate"><span class="pre">openxr_platform.h</span></code>.
 For the OpenXR platform header file, note the comment about using the preceding <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros. When enabled, we gain access to functionality that interact with the chosen graphics API and/or platform. These macros are automatically set by <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code></p>
 <p>This header also defines the macro <code class="docutils literal notranslate"><span class="pre">OPENXR_CHECK</span></code>. Many OpenXR functions return a <code class="docutils literal notranslate"><span class="pre">XrResult</span></code>. This macro will check if the call has failed and logs a message to <code class="docutils literal notranslate"><span class="pre">std::cerr</span></code>. This can be modified to suit your needs. There are two additional functions <code class="docutils literal notranslate"><span class="pre">GetXRErrorString()</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXRDebugBreak()</span></code>, which are used to convert the <code class="docutils literal notranslate"><span class="pre">XrResult</span></code> to a string and as a breakpoint function respectively.</p>
-</section>
-<section id="graphicsapi">
-<h4>GraphicsAPI<a class="headerlink" href="#graphicsapi" title="Permalink to this heading">¶</a></h4>
+<p class="rubric">GraphicsAPI</p>
 <p><a class="reference download internal" download="" href="_downloads/ee7900b1ff1ef2d947bd578e417c62db/GraphicsAPI.h"><code class="xref download docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code></a></p>
 <p><a class="reference download internal" download="" href="_downloads/c4b96771e22873e9c1d09d729dea1bd2/GraphicsAPI.cpp"><code class="xref download docutils literal notranslate"><span class="pre">GraphicsAPI.cpp</span></code></a></p>
 <div class="d3d11 docutils container" id="d3d11-id-3">
@@ -1110,7 +1060,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <p><a class="reference download internal" download="" href="_downloads/7e1287eebafcf47fda72c8aaf562283d/GraphicsAPI_Vulkan.h"><code class="xref download docutils literal notranslate"><span class="pre">GraphicsAPI_Vulkan.h</span></code></a></p>
 <p><a class="reference download internal" download="" href="_downloads/ac69bef9a1770690c3db93d34147b297/GraphicsAPI_Vulkan.cpp"><code class="xref download docutils literal notranslate"><span class="pre">GraphicsAPI_Vulkan.cpp</span></code></a></p>
 </div>
-<p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific-APIs. It is there solely to have working samples in this tutorial, demonstrate some basic rendering and interaction with OpenXR.</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific APIs. It is there solely to provide working samples in this tutorial, and demonstrate some basic rendering and interaction with OpenXR.</p>
 <p>This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. The derived class is based on your graphics API selection. Include both the header and cpp files for both <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI...</span></code>. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> includes the headers and macros needed to set up your platform and graphics API. Below are code snippets that show how to set up the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros for your platform along with any relevant headers. In the first code block, there’s also reference to <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_...</span></code> which we set up the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> . This tutorial demonstrates all five graphics APIs, you will only need to select one <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> macro and one <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro.</p>
 <p>The code below is an example of how you might implement the inclusion and definition the relevant graphics API header along with the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros. This will already be set up in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> file.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;HelperFunctions.h&quot;</span>
@@ -1343,38 +1293,35 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </pre></div>
 </div>
 </section>
-</section>
 <section id="openxrtutorial-and-main">
 <h3>1.4.3 OpenXRTutorial and Main<a class="headerlink" href="#openxrtutorial-and-main" title="Permalink to this heading">¶</a></h3>
-<p>We can now start adding code to our <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file that we have created in the <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> text file with Visual Studio. We will just use Visual Studio to edit the file and we will later set up the project files with CMake.</p>
-<p>First, we add <code class="docutils literal notranslate"><span class="pre">DebugOutput.h</span></code>:</p>
+<p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DebugOutput.h&quot;</span>
 </pre></div>
 </div>
 <p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the Graphics API code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
 <div class="d3d11 docutils container" id="d3d11-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengl docutils container" id="opengl-id-9">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container" id="opengles-id-7">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
-<span class="c1">// XR_DOCS_TAG_END_include_GraphicsAPIs</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-13">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// XR_DOCS_TAG_END_include_GraphicsAPIs</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -1407,17 +1354,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Then, we create the actual platform specific main function (our entry point to the application), which will call <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code> with our <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter. By default, this tutorial uses <code class="docutils literal notranslate"><span class="pre">OPENGL</span></code> as the parameter to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>. This must be changed to match on your chosen graphics API.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="nc">GraphicsAPI_Type</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">UNKNOWN</span><span class="p">,</span>
-<span class="w">    </span><span class="n">D3D11</span><span class="p">,</span>
-<span class="w">    </span><span class="n">D3D12</span><span class="p">,</span>
-<span class="w">    </span><span class="n">OPENGL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">OPENGL_ES</span><span class="p">,</span>
-<span class="w">    </span><span class="n">VULKAN</span>
-<span class="p">};</span>
-</pre></div>
-</div>
+<p>Then, we create the actual platform specific main function (our entry point to the application), which will call <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code> with our <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter. By default, this tutorial uses <code class="docutils literal notranslate"><span class="pre">OPENGL</span></code> as the parameter to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>. This must be changed to match on your chosen graphics API, one of: <code class="docutils literal notranslate"><span class="pre">D3D11</span></code>,     <code class="docutils literal notranslate"><span class="pre">D3D12</span></code>,     <code class="docutils literal notranslate"><span class="pre">OPENGL</span></code>,    <code class="docutils literal notranslate"><span class="pre">OPENGL_ES</span></code>, or   <code class="docutils literal notranslate"><span class="pre">VULKAN</span></code>.</p>
 <div class="windows linux docutils container" id="windows-linux-id-3">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL</span><span class="p">);</span>

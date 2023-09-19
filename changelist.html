@@ -33,7 +33,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "windows"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -142,6 +142,22 @@
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
+	function addIconsToToctree()
+	{
+		return;
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","HandsetIcon","toc_extensions","toc_next_steps"];
+		[].forEach.call(toctreeheadings, function(el) {
+			const newNode = document.createElement("img");
+			el.insertBefore(newNode, el.children[0]);
+			newNode.id =heading_ids[i];
+			newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
+			newNode.width = "30"; 
+			i++;
+			console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
 	function updateGraphicsAPI()
 	{
 		var graphicsApi = Cookies.get("graphicsapi")
@@ -206,7 +222,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -233,7 +249,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
@@ -311,7 +327,9 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Fri 08 Sep** : Updated Chapter2/CMakeLists.txt and 1-introduction.rst to add explanation of &quot;-Wno-cast-calling-convention&quot; for Android.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 19 Sep** : Vulkan fixes for Chapter 1.
+| **Tue 19 Sep** : Added svg icons
+| **Fri 08 Sep** : Updated Chapter2/CMakeLists.txt and 1-introduction.rst to add explanation of &quot;-Wno-cast-calling-convention&quot; for Android.
 | **Thu 07 Sep** : Updated timetable for testing.
 | **Thu 07 Sep** : Fixed some text flow.
 | **Thu 07 Sep** : Added missing BlockInteraction() call.
@@ -409,8 +427,6 @@
 | **Fri 18 Aug** : Fixed shaders in GLSL to match HLSL. Modified SDK values in app/build.gradle to equal 27, this fixes the failure to load the runtime in Quest 2.
 | **Fri 18 Aug** : Updated text for chapter 2.2.1.
 | **Fri 18 Aug** : Updated tags in Chapter2/main.cpp. Updated chapter 2 text.
-| **Fri 18 Aug** : Updated .gitignore to ignore Android shader build outputs. Added &lt;memory&gt; to HelperFunctions.h
-| **Thu 17 Aug** : Updated chapter 2 text.
 </pre></div>
 </div>
 </section>

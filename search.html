@@ -35,7 +35,7 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "windows"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
@@ -144,6 +144,22 @@
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
+	function addIconsToToctree()
+	{
+		return;
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","HandsetIcon","toc_extensions","toc_next_steps"];
+		[].forEach.call(toctreeheadings, function(el) {
+			const newNode = document.createElement("img");
+			el.insertBefore(newNode, el.children[0]);
+			newNode.id =heading_ids[i];
+			newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
+			newNode.width = "30"; 
+			i++;
+			console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
 	function updateGraphicsAPI()
 	{
 		var graphicsApi = Cookies.get("graphicsapi")
@@ -208,7 +224,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -235,7 +251,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">👋 1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
