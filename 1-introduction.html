@@ -1025,8 +1025,8 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define any XR_USE_PLATFORM_... / XR_USE_GRAPHICS_API_... before this header file.</span>
 
 <span class="c1">// OpenXR Headers</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;openxr/openxr.h&quot;</span>
-<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;openxr/openxr_platform.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;openxr/openxr.h&gt;</span>
+<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;openxr/openxr_platform.h&gt;</span>
 </span></pre></div>
 </div>
 <p>Here, we include the main OpenXR header file <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code> and the OpenXR platform header file <code class="docutils literal notranslate"><span class="pre">openxr_platform.h</span></code>.
@@ -1063,7 +1063,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific APIs. It is there solely to provide working samples in this tutorial, and demonstrate some basic rendering and interaction with OpenXR.</p>
 <p>This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. The derived class is based on your graphics API selection. Include both the header and cpp files for both <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI...</span></code>. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> includes the headers and macros needed to set up your platform and graphics API. Below are code snippets that show how to set up the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros for your platform along with any relevant headers. In the first code block, there’s also reference to <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_...</span></code> which we set up the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> . This tutorial demonstrates all five graphics APIs, you will only need to select one <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> macro and one <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro.</p>
 <p>The code below is an example of how you might implement the inclusion and definition the relevant graphics API header along with the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros. This will already be set up in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> file.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;HelperFunctions.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;HelperFunctions.h&gt;</span>
 </pre></div>
 </div>
 <div class="windows docutils container" id="windows-id-4">
@@ -1071,8 +1071,8 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#define NOMINMAX</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Windows.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;unknwn.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
 </span>
 <span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
@@ -1095,8 +1095,8 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#define NOMINMAX</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Windows.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;unknwn.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
 </span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
@@ -1119,8 +1119,8 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#define NOMINMAX</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Windows.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;unknwn.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
 </span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
@@ -1143,8 +1143,8 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#define NOMINMAX</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Windows.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;unknwn.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
 </span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
@@ -1221,7 +1221,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="android docutils container" id="android-id-4">
 <div class="opengles docutils container" id="opengles-id-5">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__ANDROID__)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;android_native_app_glue.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
 </span>
 <span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
@@ -1236,7 +1236,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="vulkan docutils container" id="vulkan-id-11">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__ANDROID__)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;android_native_app_glue.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
 <span class="hll"><span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
 </span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
@@ -1276,57 +1276,57 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <div class="opengles docutils container" id="opengles-id-6">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;gfxwrapper_opengl.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-12">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;vulkan/vulkan.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vulkan/vulkan.h&gt;</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpenXR</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;OpenXRHelper.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRHelper.h&gt;</span>
 </pre></div>
 </div>
 </section>
 <section id="openxrtutorial-and-main">
 <h3>1.4.3 OpenXRTutorial and Main<a class="headerlink" href="#openxrtutorial-and-main" title="Permalink to this heading">¶</a></h3>
 <p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DebugOutput.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;DebugOutput.h&gt;</span>
 </pre></div>
 </div>
 <p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the Graphics API code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
 <div class="d3d11 docutils container" id="d3d11-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D11.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_D3D11.h&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_D3D12.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_D3D12.h&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengl docutils container" id="opengl-id-9">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_OpenGL.h&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container" id="opengles-id-7">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_OpenGL_ES.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_OpenGL_ES.h&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-13">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;GraphicsAPI_Vulkan.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_Vulkan.h&gt;</span>
 </pre></div>
 </div>
 </div>
 <p>You can also include <code class="docutils literal notranslate"><span class="pre">OpenXRDebugUtils.h</span></code> to help with set up of <code class="docutils literal notranslate"><span class="pre">XrDebugUtilsMessengerEXT</span></code>.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;OpenXRDebugUtils.h&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRDebugUtils.h&gt;</span>
 </pre></div>
 </div>
 <p>Now we will define the main class <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> of the application. It’s just a stub for now, with an empty <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method:</p>

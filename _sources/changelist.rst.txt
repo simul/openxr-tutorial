@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
+    | **Wed 20 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 20 Sep** : Updated code and texts to use #include<> from external sources like GraphicsAPI, OpenXR, OS and C/C++ headers, plus our /Common folder.
+    | **Wed 20 Sep** : Amended spelling in Chapter 2 text.
     | **Tue 19 Sep** : Vulkan fixes for Chapter 1.
     | **Tue 19 Sep** : Added svg icons
     | **Fri 08 Sep** : Updated Chapter2/CMakeLists.txt and 1-introduction.rst to add explanation of "-Wno-cast-calling-convention" for Android.
@@ -98,7 +102,3 @@ Changelist
     | **Sat 19 Aug** : Added Chapter5 code for Android.
     | **Fri 18 Aug** : Tested with D3D11 and D3D12. Updated header to d3d11_1.h. Updated SetBufferData() to use offset. D3D11 use VSSetConstantBuffer1 etc.
     | **Fri 18 Aug** : Updated Chapter4/main.cpp to have multiple uniforms within a single buffer allocation for VK, GLES and GL. Not tested with D3D... Updated SetBufferData() and added to DescriptorInfo bufferOffset and bufferSize.
-    | **Fri 18 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Fri 18 Aug** : Fixed shaders in GLSL to match HLSL. Modified SDK values in app/build.gradle to equal 27, this fixes the failure to load the runtime in Quest 2.
-    | **Fri 18 Aug** : Updated text for chapter 2.2.1.
-    | **Fri 18 Aug** : Updated tags in Chapter2/main.cpp. Updated chapter 2 text.
