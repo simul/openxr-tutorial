@@ -327,7 +327,9 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Fri 22 Sep** : Added XR_SESSION_STATE_LOSS_PENDING checks in PollEvents() to exit the application if the XrSession is lost.
+| **Fri 22 Sep** : Updated license info at the top of all .h and .cpp files. xr_linear_algebra.h: added details on change made for this tutorial. Updated LICENSE to be for Khronos Group.
+| **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
 | **Wed 20 Sep** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Wed 20 Sep** : Updated code and texts to use #include&lt;&gt; from external sources like GraphicsAPI, OpenXR, OS and C/C++ headers, plus our /Common folder.
 | **Wed 20 Sep** : Amended spelling in Chapter 2 text.
@@ -425,8 +427,6 @@
 | **Mon 21 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Mon 21 Aug** : Updated CMake code-blocks in Chapter 1 and Chapter 2.2.1 texts to be more specific to graphics API. Updated Chapter 2.2 text to qualify code snippets and have better explanations.
 | **Sat 19 Aug** : Added Chapter5 code for Android.
-| **Fri 18 Aug** : Tested with D3D11 and D3D12. Updated header to d3d11_1.h. Updated SetBufferData() to use offset. D3D11 use VSSetConstantBuffer1 etc.
-| **Fri 18 Aug** : Updated Chapter4/main.cpp to have multiple uniforms within a single buffer allocation for VK, GLES and GL. Not tested with D3D... Updated SetBufferData() and added to DescriptorInfo bufferOffset and bufferSize.
 </pre></div>
 </div>
 </section>

@@ -1570,6 +1570,12 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">            </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">            </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_LOSS_PENDING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// SessionState is loss pending. Exit the application.</span>
+<span class="w">            </span><span class="c1">// It&#39;s possible to try a reestablish an XrInstance and XrSession, but we will simply exit here.</span>
+<span class="w">            </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">            </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="c1">// Store state for reference across the appplication.</span>
 <span class="w">        </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">;</span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>
