@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 25 Sep** : Fix Chapter2 braces in first code block to use KR convention.
     | **Mon 25 Sep** : Ch2 is OpenXR Setup.
     | **Mon 25 Sep** : Reverted Chapter2/CMakeLists.txt to fix sphinx tags recognition.
     | **Mon 25 Sep** : Renamed TUTORIAL_BUILD_TUTORIAL
@@ -101,4 +102,3 @@ Changelist
     | **Tue 22 Aug** : Fixing matchups in main.cpp between chapters.
     | **Tue 22 Aug** : Updated doc tags and text to include view coherency check in Chapter 3.
     | **Tue 22 Aug** : Update highlighting in code block chapter 3.1.
-    | **Tue 22 Aug** : Updated CMake Android project names. Updated and highlighted code block in Chapter 3.1 text.
