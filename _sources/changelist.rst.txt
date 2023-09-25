@@ -2,8 +2,24 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 25 Sep** : Renamed TUTORIAL_BUILD_TUTORIAL
+    | **Mon 25 Sep** : Updated gitignore.
+    | **Fri 22 Sep** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials
+    | **Fri 22 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 22 Sep** : Added GradleSync.png image, fixed some Android instructions.
+    | **Fri 22 Sep** : Merge pull request #40 from rpavlik/cmake-improvements
     | **Fri 22 Sep** : Added XR_SESSION_STATE_LOSS_PENDING checks in PollEvents() to exit the application if the XrSession is lost.
     | **Fri 22 Sep** : Updated license info at the top of all .h and .cpp files. xr_linear_algebra.h: added details on change made for this tutorial. Updated LICENSE to be for Khronos Group.
+    | **Thu 21 Sep** : Clean up options for the nested build
+    | **Thu 21 Sep** : Fix code Clang complained about that was unclear
+    | **Thu 21 Sep** : Remove outdated workarounds
+    | **Thu 21 Sep** : remove hardcoded runtime
+    | **Thu 21 Sep** : More gitignore
+    | **Thu 21 Sep** : Improve hlsl shader compiling for chapter 5
+    | **Thu 21 Sep** : Do a better job with glsl shaders in chapter 5
+    | **Thu 21 Sep** : CMake cleanup, fix for linux, and update to latest recommended practices.
+    | **Thu 21 Sep** : Initial CMake cleanup
+    | **Thu 21 Sep** : Work on fixing build
     | **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
     | **Wed 20 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 20 Sep** : Updated code and texts to use #include<> from external sources like GraphicsAPI, OpenXR, OS and C/C++ headers, plus our /Common folder.
@@ -86,19 +102,3 @@ Changelist
     | **Tue 22 Aug** : Updated CMake Android project names. Updated and highlighted code block in Chapter 3.1 text.
     | **Tue 22 Aug** : Revert header change in tutorial/2-setup.rst.
     | **Tue 22 Aug** : Chapter3/main.cpp removed unused doc tags. Updated Chapter 2 text code block to include m_debugUtilsMessenger. Updated code block in Chapter 3 text and the project files update section at the start.
-    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 22 Aug** : Amended Chapter 1.4 text CMake references. Updated code tags from Chapter 2 in Chapter3/main.cpp.
-    | **Tue 22 Aug** : Using PROJECT_NAME in CMakeLists.txt for easier diffs.
-    | **Mon 21 Aug** : Fix debug utils cross-references.
-    | **Mon 21 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Mon 21 Aug** : Added Chapter 5 text. Block colour is now part of CameraConstants.
-    | **Mon 21 Aug** : Moved Chapter 5.2 to 2.1.2 XR_EXT_debug_utils. Updated text and highlighting in Chapter 2.
-    | **Mon 21 Aug** : Minor text revisions to Chapter 1.
-    | **Mon 21 Aug** : Updated 4.1 CMake and Project Files text to be more reflective of Platform and Graphics API.
-    | **Mon 21 Aug** : Minor text correction in Chapter 2 text.
-    | **Mon 21 Aug** : Minor updated to 2.3 text
-    | **Mon 21 Aug** : Updated docs tags in Chapter2/main.cpp PollEvents().
-    | **Mon 21 Aug** : Updated GraphicsAPI header include text in Chapter 1. Updated Chapter 2.3 text for flow and clarity - discussed PollSystemEvent() method.
-    | **Mon 21 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Mon 21 Aug** : Updated CMake code-blocks in Chapter 1 and Chapter 2.2.1 texts to be more specific to graphics API. Updated Chapter 2.2 text to qualify code snippets and have better explanations.
-    | **Sat 19 Aug** : Added Chapter5 code for Android.

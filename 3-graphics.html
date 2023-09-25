@@ -4,7 +4,7 @@
 	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>👾 3 Graphics &mdash; OpenXR Tutorial  documentation</title>
+	<title>3 Graphics &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
 	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
@@ -253,7 +253,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">👾 3 Graphics</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3 Graphics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">3.1 Creating Swapchains</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">3.1.1 XrViewConfigurationView</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainformats">3.1.2 xrEnumerateSwapchainFormats</a></li>
@@ -288,7 +288,7 @@
 		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">👾 3 Graphics</li>
+      <li class="breadcrumb-item active">3 Graphics</li>
 	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
@@ -346,7 +346,7 @@
 						<div itemprop="articleBody">
 							
   <section id="graphics">
-<h1>👾 3 Graphics<a class="headerlink" href="#graphics" title="Permalink to this heading">¶</a></h1>
+<h1>3 Graphics<a class="headerlink" href="#graphics" title="Permalink to this heading">¶</a></h1>
 <p>Select your platform, as the instructions are different depending on your selection.</p>
 <div class='select-platform-container-inline'>
 	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
@@ -386,9 +386,6 @@
 </pre></div>
 </div>
 <p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3/</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> and update this line:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter3</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="android docutils container" id="android-id-1">
 <p>For Android, you will also need to copy the <code class="docutils literal notranslate"><span class="pre">app/</span></code> and <code class="docutils literal notranslate"><span class="pre">gradle</span></code> folders and the <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code>, <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew.bat</span></code>, <code class="docutils literal notranslate"><span class="pre">local.properties</span></code> and <code class="docutils literal notranslate"><span class="pre">settings.gradle</span></code>. Within those file you must change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code>. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
 </div>

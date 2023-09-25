@@ -26,7 +26,7 @@
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
 	<link rel="next" title="✨ 5 Extensions" href="5-extensions.html" >
-	<link rel="prev" title="👾 3 Graphics" href="3-graphics.html" > 
+	<link rel="prev" title="3 Graphics" href="3-graphics.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -253,7 +253,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">👾 3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4 Interactions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-openxr-interaction-system">4.1 The OpenXR Interaction System</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
@@ -359,28 +359,24 @@
 </div>
 </div></blockquote>
 <p>Now replace the set(PROJECT_NAME) line at the top of your new Chapter4/CMakeLists.txt with:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter4</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">project</span><span class="p">(</span><span class="s">OpenXRTutorialChapter4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Below the set(HEADERS) command, add:</p>
 <div class="d3d11 d3d12 docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">HLSL_SHADERS</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.hlsl&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.hlsl&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">HLSL_SHADERS</span><span class="w"> </span><span class="s2">&quot;../Shaders/VertexShader.hlsl&quot;</span><span class="w"> </span><span class="s2">&quot;../Shaders/PixelShader.hlsl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="vulkan opengl docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">GLSL_SHADERS</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.glsl&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.glsl&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">GLSL_SHADERS</span><span class="w"> </span><span class="s2">&quot;../Shaders/VertexShader.glsl&quot;</span><span class="w"> </span><span class="s2">&quot;../Shaders/PixelShader.glsl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">ES_GLSL_SHADERS</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader_GLES.glsl&quot;</span>
-<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader_GLES.glsl&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">ES_GLSL_SHADERS</span><span class="w"> </span><span class="s2">&quot;../Shaders/VertexShader_GLES.glsl&quot;</span>
+<span class="w">                    </span><span class="s2">&quot;../Shaders/PixelShader_GLES.glsl&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -388,8 +384,12 @@
 <p>Now above <cite>set(CMAKE_SHARED_LINKER_FLAGS)</cite> add:</p>
 <div class="vulkan docutils container">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># GLSL Shaders</span>
-<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vertex&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;fragment&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">        </span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vertex&quot;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">        </span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;fragment&quot;</span>
+<span class="w">    </span><span class="p">)</span>
 
 <span class="w">    </span><span class="c">#Vulkan</span>
 <span class="w">    </span><span class="nb">file</span><span class="p">(</span><span class="s">GLOB</span><span class="w"> </span><span class="s">glslc-folders</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/shader-tools/*</span><span class="p">)</span>
@@ -397,28 +397,34 @@
 <span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSLC</span><span class="o">}</span><span class="w"> </span><span class="s">-fentry-point=main</span><span class="w"> </span><span class="s">-fshader-stage=</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.spv</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">                           </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">VERBATIM</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMAND</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">GLSLC</span><span class="o">}</span><span class="w"> </span><span class="s">-fentry-point=main</span><span class="w"> </span><span class="s">-fshader-stage=</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.spv</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL ES</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL ES</span>
 <span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">ES_GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span>
-<span class="w">                           </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
-<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span>
-<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.glsl</span>
-<span class="w">                           </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">                           </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">VERBATIM</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMAND</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/app/src/main/assets/shaders/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.glsl</span>
+<span class="w">                </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
 <span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -434,43 +440,57 @@
 <div class="windows docutils container">
 <div class="d3d11 d3d12 docutils container">
 <p>At the end of the file add:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#Shaders</span>
-<span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;4_0&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">if</span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
 
-<span class="w">        </span><span class="c"># HLSL Shaders</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
-<span class="w">        </span>
-<span class="w">        </span><span class="c"># D3D11</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;5_0&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderModel</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="w"> </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.cso</span><span class="w"> </span><span class="s">/Fd</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.pdb</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
-<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
-<span class="w">        </span><span class="c"># D3D12</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderModel</span><span class="w"> </span><span class="s2">&quot;5_1&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderModel</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="w"> </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.cso</span><span class="w"> </span><span class="s">/Fd</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span><span class="s">.pdb</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
-<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="w">    </span><span class="c"># HLSL Shaders</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">        </span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">        </span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c"># D3D11: using shader model 5.0</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="s">5_0</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">        </span><span class="c"># TODO this should be a custom command that creates a source file linked</span>
+<span class="w">        </span><span class="c"># into the executable, the current command is not quite valid</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMAND</span>
+<span class="w">                </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span>
+<span class="w">                </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span><span class="w"> </span><span class="s">/Fd</span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.pdb&quot;</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="w">    </span><span class="c"># D3D12: using shader model 5.1</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="s2">&quot;5_1&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">        </span><span class="c"># TODO this should be a custom command that creates a source file linked</span>
+<span class="w">        </span><span class="c"># into the executable, the current command is not quite valid</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMAND</span>
+<span class="w">                </span><span class="s">fxc.exe</span><span class="w"> </span><span class="s">/nologo</span><span class="w"> </span><span class="s">/Emain</span><span class="w"> </span><span class="s">/T</span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span>
+<span class="w">                </span><span class="o">$&lt;</span><span class="nv">IF:$&lt;CONFIG:DEBUG</span><span class="o">&gt;</span><span class="s">,/Od,/O1&gt;</span><span class="w"> </span><span class="s">/Zi</span><span class="w"> </span><span class="s">/Fo</span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span><span class="w"> </span><span class="s">/Fd</span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.pdb&quot;</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;HLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -479,23 +499,35 @@
 <div class="vulkan docutils container">
 <p>At the end of the file add:</p>
 <blockquote>
-<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
+<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 <span class="w">        </span><span class="c"># GLSL Shaders</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">vert</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">frag</span><span class="p">)</span>
-<span class="w">    </span>
-<span class="w">        </span><span class="c">#Vulkan</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">            </span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">vert</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span>
+<span class="w">            </span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s">frag</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">        </span><span class="c"># Vulkan</span>
 <span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
 <span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">message</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} $&lt;$&lt;CONFIG:Debug&gt;:-Od&gt; -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_GLSLANG_VALIDATOR_EXECUTABLE</span><span class="o">}</span><span class="w"> </span><span class="s">-V</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">-e</span><span class="w"> </span><span class="s">main</span><span class="w"> </span><span class="s">-S</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-Od</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.spv</span>
-<span class="w">                               </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">                               </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                               </span><span class="s">VERBATIM</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">message</span><span class="p">(</span>
+<span class="w">                </span><span class="s2">&quot;${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE} -V ${FILE} -e main -S ${shadertype} $&lt;$&lt;CONFIG:Debug&gt;:-Od&gt; -g -o ${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv&quot;</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">            </span><span class="c"># TODO this should be a custom command that creates a source file linked</span>
+<span class="w">            </span><span class="c"># into the executable, the current command is not quite valid</span>
+<span class="w">            </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">                </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">                </span><span class="s">COMMAND</span>
+<span class="w">                    </span><span class="s2">&quot;${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE}&quot;</span><span class="w"> </span><span class="s">-V</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">-e</span><span class="w"> </span><span class="s">main</span>
+<span class="w">                    </span><span class="s">-S</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="w"> </span><span class="s">-Od</span><span class="w"> </span><span class="s">-g</span><span class="w"> </span><span class="s">-o</span>
+<span class="w">                    </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.spv&quot;</span>
+<span class="w">                </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">                </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">                </span><span class="s">VERBATIM</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">()</span>
 <span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -503,18 +535,19 @@
 </div>
 <div class="opengl docutils container">
 <p>At the end of the file add:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL</span>
 <span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span>
-<span class="w">                           </span><span class="s">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
-<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span>
-<span class="w">                           </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">FILE_WE</span><span class="o">}</span><span class="s">.glsl</span>
-<span class="w">                           </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">                           </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-<span class="w">                           </span><span class="s">VERBATIM</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">            </span><span class="s">COMMAND</span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}.glsl&quot;</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -657,7 +690,7 @@ So you can create multiple Action Sets, but we only need one for this example. T
 <section id="binding-interactions">
 <h3>4.3.2 Binding Interactions<a class="headerlink" href="#binding-interactions" title="Permalink to this heading">¶</a></h3>
 <p>We will set up bindings for the actions. A binding is a <em>suggested</em> correspondence between an action (which is app-defined), and the input/output on the user’s devices.</p>
-<p>An XrPath is a 64-bit number that hopefully uniquely identifies any given forward-slash-delimited path string, allowing us to refer to paths without putting cumbersome string-handling in our runtime code. After the call to <code class="docutils literal notranslate"><span class="pre">CreateActionSet()</span></code> in <code class="docutils literal notranslate"><span class="pre">Run()</span></code>, add the line:</p>
+<p>An XrPath is a 64-bit number that uniquely identifies any given forward-slash-delimited path string, allowing us to refer to paths without putting cumbersome string-handling in our runtime code. After the call to <code class="docutils literal notranslate"><span class="pre">CreateActionSet()</span></code> in <code class="docutils literal notranslate"><span class="pre">Run()</span></code>, add the line:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="n">SuggestBindings</span><span class="p">();</span>
 </pre></div>
 </div>
@@ -1234,7 +1267,7 @@ However, the struct <code class="docutils literal notranslate"><span class="pre"
 						</div>
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="3-graphics.html" class="btn btn-neutral float-left" title="👾 3 Graphics" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="3-graphics.html" class="btn btn-neutral float-left" title="3 Graphics" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="5-extensions.html" class="btn btn-neutral float-right" title="✨ 5 Extensions" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
