@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 25 Sep** : Reverted Chapter2/CMakeLists.txt to fix sphinx tags recognition.
     | **Mon 25 Sep** : Renamed TUTORIAL_BUILD_TUTORIAL
     | **Mon 25 Sep** : Updated gitignore.
     | **Fri 22 Sep** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials
@@ -101,4 +102,3 @@ Changelist
     | **Tue 22 Aug** : Update highlighting in code block chapter 3.1.
     | **Tue 22 Aug** : Updated CMake Android project names. Updated and highlighted code block in Chapter 3.1 text.
     | **Tue 22 Aug** : Revert header change in tutorial/2-setup.rst.
-    | **Tue 22 Aug** : Chapter3/main.cpp removed unused doc tags. Updated Chapter 2 text code block to include m_debugUtilsMessenger. Updated code block in Chapter 3 text and the project files update section at the start.
