@@ -25,7 +25,7 @@
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
-	<link rel="next" title="⚙️ 2 Setup" href="2-setup.html" >
+	<link rel="next" title="2 OpenXR Setup" href="2-setup.html" >
 	<link rel="prev" title="OpenXR Tutorial" href="index.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
@@ -264,7 +264,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="2-setup.html">⚙️ 2 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a></li>
@@ -693,13 +693,13 @@ Open Android Studio, select New Project and choose an Empty Activity. Set the Na
 <img alt="Android Studio - New Project - Empty Activity." src="_images/android-studio-newproject.png" />
 </figure>
 <p class="rubric">CMake</p>
-<p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.
+<p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.</p>
+<p>Then switch to the “Project” view in the “Project” tab (on the top right of the default Android Studio layout).
 Under the <code class="docutils literal notranslate"><span class="pre">app</span></code> folder in <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>, you can delete the <code class="docutils literal notranslate"><span class="pre">libs</span></code> folder, and under the <code class="docutils literal notranslate"><span class="pre">app/src</span></code> you can also delete the <code class="docutils literal notranslate"><span class="pre">androidTest</span></code> and <code class="docutils literal notranslate"><span class="pre">test</span></code> folders. Finally under <code class="docutils literal notranslate"><span class="pre">app/src/main</span></code>, delete the <code class="docutils literal notranslate"><span class="pre">java</span></code> folder. Under the <code class="docutils literal notranslate"><span class="pre">app/src/main/res</span></code>, delete the <code class="docutils literal notranslate"><span class="pre">layout</span></code>, <code class="docutils literal notranslate"><span class="pre">values-night</span></code> and <code class="docutils literal notranslate"><span class="pre">xml</span></code> folders. Under the <code class="docutils literal notranslate"><span class="pre">values</span></code> folder, delete <code class="docutils literal notranslate"><span class="pre">colors.xml</span></code> and <code class="docutils literal notranslate"><span class="pre">themes.xml</span></code></p>
 <p>Now sync the project by selecting “File &gt; Sync Project with Gradle” on the menu.</p>
 <figure class="align-default">
 <img alt="Gradle Sync" src="_images/GradleSync.png" />
 </figure>
-<p>Then switch to the “Project” view in the “Project” tab (on the top right of the default Android Studio layout).</p>
 <p>Create a text file called <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> directory. We will use this file to specific how our Native C++ code will be built. This <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file will be invoked by Android Studio’s Gradle build system and we will point Gradle to this CMake file.</p>
 <p class="rubric">CMakeLists.txt</p>
 <p>Add the following to your new CMakeLists.txt file:</p>
@@ -771,12 +771,14 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>Here, we include all the files needed for our project. All files with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>Add the following to CMakeLists.txt:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
 
-<span class="c"># native_app_glue</span>
+<span class="c"># Add Android native_app_glue.</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
 <span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
+
+<span class="c"># Create the library containing our native code.</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We have set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> with the flag <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">ANativeActivity_onCreate()</span></code> to support C++ native code. This is used by a static library called <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point.  We add <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling <code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>. We have added a library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory too.</p>
@@ -1119,7 +1121,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Finally, let’s add the main function for the application. It will look slightly different, depending on your
+<p>We’ll add the main function for the application. It will look slightly different, depending on your
 chosen platform. We first create a ‘pseudo-main function’ called <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>, in which we create an instance of our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, taking a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter, and call the <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> can be changed to suit the graphics API that you have chosen.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w"> </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
@@ -1175,8 +1177,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </div>
 <p>Before we can use OpenXR for Android, we need to initialise the loader based the application’s context and virtual machine. We retrieve the function pointer to <code class="docutils literal notranslate"><span class="pre">xrInitializeLoaderKHR</span></code>, and with the <code class="docutils literal notranslate"><span class="pre">XrLoaderInitInfoAndroidKHR</span></code> filled out call that function to initialise OpenXR for our use. At this point, we also attach the current thread to the Java Virtual Machine. We assign our <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code> static member and our <code class="docutils literal notranslate"><span class="pre">AndroidAppHandleCmd()</span></code> static method to the <code class="docutils literal notranslate"><span class="pre">android_app</span> <span class="pre">*</span></code> and save it to a static member in the class.</p>
 <p>Android requires a few extra additions to the OpenXRTutorial class. Namely, <code class="docutils literal notranslate"><span class="pre">android_app</span> <span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code> and <code class="docutils literal notranslate"><span class="pre">AndroidAppHandleCmd</span></code>, which are used in getting updates from the Android Operating System and keep our application functioning. Add the following after the definition of <code class="docutils literal notranslate"><span class="pre">Run()</span></code> in your OpenXRTutorial class declaration:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="o">:</span>
-<span class="w">    </span><span class="c1">// Stored pointer to the android_app structure from android_main().</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Stored pointer to the android_app structure from android_main().</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">androidApp</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Custom data structure that is used by PollSystemEvents().</span>
@@ -1302,7 +1303,7 @@ It is also recommended to sync the gradle files too.</p>
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="OpenXR Tutorial" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="2-setup.html" class="btn btn-neutral float-right" title="⚙️ 2 Setup" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="2-setup.html" class="btn btn-neutral float-right" title="2 OpenXR Setup" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr>
