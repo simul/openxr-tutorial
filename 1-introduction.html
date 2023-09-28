@@ -35,187 +35,186 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "linux"; // Set default here.
+	platform = "linux"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
-		$(".windows").show();
-		$(".selectd3d11").disabled = false;
-		$(".selectd3d12").disabled = false;
-		$(".selectopengles").disabled = true;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = false;
+	$(".windows").show();
+	$(".selectd3d11").disabled = false;
+	$(".selectd3d12").disabled = false;
+	$(".selectopengles").disabled = true;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = false;
 	}
 	if (platform == "linux")
 	{
-		$(".linux").show();
-		$(".selectd3d11").disabled = true;
-		$(".selectd3d12").disabled = true;
-		$(".selectopengles").disabled = true;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = false;
+	$(".linux").show();
+	$(".selectd3d11").disabled = true;
+	$(".selectd3d12").disabled = true;
+	$(".selectopengles").disabled = true;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = false;
 	}
 	if (platform == "android")
 	{
-		$(".android").show();
-		$(".selectd3d11").disabled = true;
-		$(".selectd3d12").disabled = true;
-		$(".selectopengles").disabled = false;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = true;
+	$(".android").show();
+	$(".selectd3d11").disabled = true;
+	$(".selectd3d12").disabled = true;
+	$(".selectopengles").disabled = false;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = true;
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
 	console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
-		var el=oldelements.item(0);
-		el.classList.remove('selected-platform');
-		console.log("Removing selected-platform from "+el.id);
-		oldelements = document.querySelectorAll(".selected-platform");
+	var el=oldelements.item(0);
+	el.classList.remove('selected-platform');
+	console.log("Removing selected-platform from "+el.id);
+	oldelements = document.querySelectorAll(".selected-platform");
 	}
 	var element = document.getElementById('select' + platform);
 	if(element)
 	{
-		element.classList.add('selected-platform');
-		console.log("Adding selected-platform to "+element.id);
+	element.classList.add('selected-platform');
+	console.log("Adding selected-platform to "+element.id);
 	}
 	var element2 = document.getElementById('select' + platform + "-inline");
 	if(element2)
 	{
-		element2.classList.add('selected-platform');
-		console.log("Adding selected-platform to "+element2.id);
+	element2.classList.add('selected-platform');
+	console.log("Adding selected-platform to "+element2.id);
 	}
 	else
 	{
-		console.log('select' + platform + "-inline not found");
+	console.log('select' + platform + "-inline not found");
 	}
 	if(limitAPIChoice())
-		updateGraphicsAPI();
+	updateGraphicsAPI();
 	window.updatePlatform=updatePlatform;
 	}
-	
+
 	function limitAPIChoice()
 	{
-		var platform = Cookies.get("platform");
-		var graphicsApi = Cookies.get("graphicsapi")
-		console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
-		window.limitAPIChoice=limitAPIChoice;
-		var newApi=graphicsApi;
-		if (platform == "windows")
-		{
-			if (graphicsApi == "opengles"||graphicsApi==undefined)
-				newApi="d3d11";
-		}
-		if (platform == "linux")
-		{
-			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
-				newApi="vulkan";
-		}
-		if (platform == "android"||graphicsApi==undefined)
-		{
-			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
-				newApi="vulkan";
-		}
-		console.log("newApi = "+newApi);
-		if (newApi != graphicsApi)
-		{
-			console.log("setting graphicsapi = "+newApi);
-			Cookies.set('graphicsapi', newApi,{ expires: 365})
-			graphicsApi=newApi;
-			return true;
-		}
-		return false;
+	var platform = Cookies.get("platform");
+	var graphicsApi = Cookies.get("graphicsapi")
+	console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+	window.limitAPIChoice=limitAPIChoice;
+	var newApi=graphicsApi;
+	if (platform == "windows")
+	{
+	if (graphicsApi == "opengles"||graphicsApi==undefined)
+	newApi="d3d11";
+	}
+	if (platform == "linux")
+	{
+	if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+	newApi="vulkan";
+	}
+	if (platform == "android"||graphicsApi==undefined)
+	{
+	if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+	newApi="vulkan";
+	}
+	console.log("newApi = "+newApi);
+	if (newApi != graphicsApi)
+	{
+	console.log("setting graphicsapi = "+newApi);
+	Cookies.set('graphicsapi', newApi,{ expires: 365})
+	graphicsApi=newApi;
+	return true;
+	}
+	return false;
 	}
 	function makeLinksOpenInNewWindow()
-	{ 
-		console.log("makeLinksOpenInNewWindow ");
-		var download_hrefs = document.getElementsByClassName('reference download internal');
-		[].forEach.call(download_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
-			console.log("Adding target blank to "+el.id);
-		});
-		link_hrefs = document.getElementsByClassName('reference external');
-		[].forEach.call(link_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
-			console.log("Adding target blank to "+el.id);
-		});
-		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	{
+	console.log("makeLinksOpenInNewWindow ");
+	var download_hrefs = document.getElementsByClassName('reference download internal');
+	[].forEach.call(download_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	console.log("Adding target blank to "+el.id);
+	});
+	link_hrefs = document.getElementsByClassName('reference external');
+	[].forEach.call(link_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	console.log("Adding target blank to "+el.id);
+	});
+	window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
 	function addIconsToToctree()
 	{
-		return;
-		var toctreeheadings = document.getElementsByClassName('toctree-l1');
-		var i = 0;
-		const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","HandsetIcon","toc_extensions","toc_next_steps"];
-		[].forEach.call(toctreeheadings, function(el) {
-			const newNode = document.createElement("img");
-			el.insertBefore(newNode, el.children[0]);
-			newNode.id =heading_ids[i];
-			newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
-			newNode.width = "30"; 
-			i++;
-			console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
-		});
+	var toctreeheadings = document.getElementsByClassName('toctree-l1');
+	var i = 0;
+	const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	[].forEach.call(toctreeheadings, function(el) {
+	//const newNode = document.createElement("img");
+	//el.insertBefore(newNode, el.children[0]);
+	el.id =heading_ids[i];
+	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
+	//newNode.width = "30";
+	i++;
+	console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+	});
 	}
 	function updateGraphicsAPI()
 	{
-		var graphicsApi = Cookies.get("graphicsapi")
-		console.log("graphicsapi = " + graphicsApi);
-		if (typeof graphicsApi == 'undefined')
-		{
-			graphicsApi = "vulkan"; // Set default here.
-		}
-		// first, hide all the api's
-		$(".d3d11").hide();
-		$(".d3d12").hide();
-		$(".opengl").hide();
-		$(".opengles").hide();
-		$(".vulkan").hide();
-		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
-		if (graphicsApi == "d3d11") {
-			$(".d3d11").show();
-		}
-		if (graphicsApi == "d3d12") {
-			$(".d3d12").show();
-		}
-		if (graphicsApi == "opengl") {
-			$(".opengl").show();
-		}
-		if (graphicsApi == "opengles") {
-			$(".opengles").show();
-		}
-		if (graphicsApi == "vulkan") {
-			$(".vulkan").show();
-		}
-		var oldelements = document.querySelectorAll(".selected-graphics-api");
-		console.log("selected-platform on "+oldelements.length+" elements.");
-		while (oldelements.length > 0)
-		{
-			var el=oldelements.item(0);
-			el.classList.remove('selected-graphics-api');
-			console.log("Removing selected-graphics-api from "+el.id);
-			oldelements = document.querySelectorAll(".selected-graphics-api");
-		}
-		var element = document.getElementById('select' + graphicsApi);
-		if(element)
-		{
-			element.classList.add('selected-graphics-api');
-		}
-		var element2 = document.getElementById('select' + graphicsApi +"-inline");
-		if (element2)
-		{
-			element2.classList.add('selected-graphics-api');
-		}
-		window.updateGraphicsAPI=updateGraphicsAPI;
+	var graphicsApi = Cookies.get("graphicsapi")
+	console.log("graphicsapi = " + graphicsApi);
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	// first, hide all the api's
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d12").show();
+	}
+	if (graphicsApi == "opengl") {
+	$(".opengl").show();
+	}
+	if (graphicsApi == "opengles") {
+	$(".opengles").show();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".vulkan").show();
+	}
+	var oldelements = document.querySelectorAll(".selected-graphics-api");
+	console.log("selected-platform on "+oldelements.length+" elements.");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-graphics-api');
+	console.log("Removing selected-graphics-api from "+el.id);
+	oldelements = document.querySelectorAll(".selected-graphics-api");
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	if(element)
+	{
+	element.classList.add('selected-graphics-api');
+	}
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	if (element2)
+	{
+	element2.classList.add('selected-graphics-api');
+	}
+	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
 	<script >
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
-		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-		graphicsApi='vulkan';
+	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+	graphicsApi='vulkan';
 	}
 	</script>
 	<style>
@@ -267,7 +266,7 @@
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 </ul>
 
         </div>
@@ -1152,7 +1151,6 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 
 <span class="w">    </span><span class="c1">// https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_loader_init</span>
 <span class="w">    </span><span class="c1">// Load xrInitializeLoaderKHR() function pointer. On Android, the loader must be initialised with variables from android_app *.</span>
-<span class="w">    </span><span class="c1">// Without this, there&#39;s is no loader and thus our function calls to OpenXR would fail.</span>
 <span class="w">    </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span><span class="w">  </span><span class="c1">// Dummy XrInstance variable for OPENXR_CHECK macro.</span>
 <span class="w">    </span><span class="n">PFN_xrInitializeLoaderKHR</span><span class="w"> </span><span class="n">xrInitializeLoaderKHR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">XR_NULL_HANDLE</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrInitializeLoaderKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrInitializeLoaderKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr.&quot;</span><span class="p">);</span>
@@ -1235,7 +1233,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <span class="w">            </span><span class="c1">// Poll and process the Android OS system events.</span>
 <span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">android_poll_source</span><span class="w"> </span><span class="o">*</span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">            </span><span class="c1">// The timeout is depended on whether that applicaion is active.</span>
+<span class="w">            </span><span class="c1">// The timeout depends on whether the application is active.</span>
 <span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeoutMilliseconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">androidAppState</span><span class="p">.</span><span class="n">resumed</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ALooper_pollAll</span><span class="p">(</span><span class="n">timeoutMilliseconds</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">source</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">source</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>

@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 28 Sep** : Fixed vertical alignment of chapter icons. Added jigsaw piece icon for Chapter 5.
     | **Mon 25 Sep** : Fix Chapter2 braces in first code block to use KR convention.
     | **Mon 25 Sep** : Ch2 is OpenXR Setup.
     | **Mon 25 Sep** : Reverted Chapter2/CMakeLists.txt to fix sphinx tags recognition.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 22 Aug** : Fixing matchups in main.cpp between chapters.
     | **Tue 22 Aug** : Updated doc tags and text to include view coherency check in Chapter 3.
-    | **Tue 22 Aug** : Update highlighting in code block chapter 3.1.

@@ -35,187 +35,186 @@
 	console.log("updatePlatform(), platform = " + platform);
 	if (typeof platform == 'undefined')
 	{
-		platform = "linux"; // Set default here.
+	platform = "linux"; // Set default here.
 	}
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
-		$(".windows").show();
-		$(".selectd3d11").disabled = false;
-		$(".selectd3d12").disabled = false;
-		$(".selectopengles").disabled = true;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = false;
+	$(".windows").show();
+	$(".selectd3d11").disabled = false;
+	$(".selectd3d12").disabled = false;
+	$(".selectopengles").disabled = true;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = false;
 	}
 	if (platform == "linux")
 	{
-		$(".linux").show();
-		$(".selectd3d11").disabled = true;
-		$(".selectd3d12").disabled = true;
-		$(".selectopengles").disabled = true;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = false;
+	$(".linux").show();
+	$(".selectd3d11").disabled = true;
+	$(".selectd3d12").disabled = true;
+	$(".selectopengles").disabled = true;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = false;
 	}
 	if (platform == "android")
 	{
-		$(".android").show();
-		$(".selectd3d11").disabled = true;
-		$(".selectd3d12").disabled = true;
-		$(".selectopengles").disabled = false;
-		$(".selectvulkan").disabled = false;
-		$(".selectopengl").disabled = true;
+	$(".android").show();
+	$(".selectd3d11").disabled = true;
+	$(".selectd3d12").disabled = true;
+	$(".selectopengles").disabled = false;
+	$(".selectvulkan").disabled = false;
+	$(".selectopengl").disabled = true;
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
 	console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
-		var el=oldelements.item(0);
-		el.classList.remove('selected-platform');
-		console.log("Removing selected-platform from "+el.id);
-		oldelements = document.querySelectorAll(".selected-platform");
+	var el=oldelements.item(0);
+	el.classList.remove('selected-platform');
+	console.log("Removing selected-platform from "+el.id);
+	oldelements = document.querySelectorAll(".selected-platform");
 	}
 	var element = document.getElementById('select' + platform);
 	if(element)
 	{
-		element.classList.add('selected-platform');
-		console.log("Adding selected-platform to "+element.id);
+	element.classList.add('selected-platform');
+	console.log("Adding selected-platform to "+element.id);
 	}
 	var element2 = document.getElementById('select' + platform + "-inline");
 	if(element2)
 	{
-		element2.classList.add('selected-platform');
-		console.log("Adding selected-platform to "+element2.id);
+	element2.classList.add('selected-platform');
+	console.log("Adding selected-platform to "+element2.id);
 	}
 	else
 	{
-		console.log('select' + platform + "-inline not found");
+	console.log('select' + platform + "-inline not found");
 	}
 	if(limitAPIChoice())
-		updateGraphicsAPI();
+	updateGraphicsAPI();
 	window.updatePlatform=updatePlatform;
 	}
-	
+
 	function limitAPIChoice()
 	{
-		var platform = Cookies.get("platform");
-		var graphicsApi = Cookies.get("graphicsapi")
-		console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
-		window.limitAPIChoice=limitAPIChoice;
-		var newApi=graphicsApi;
-		if (platform == "windows")
-		{
-			if (graphicsApi == "opengles"||graphicsApi==undefined)
-				newApi="d3d11";
-		}
-		if (platform == "linux")
-		{
-			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
-				newApi="vulkan";
-		}
-		if (platform == "android"||graphicsApi==undefined)
-		{
-			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
-				newApi="vulkan";
-		}
-		console.log("newApi = "+newApi);
-		if (newApi != graphicsApi)
-		{
-			console.log("setting graphicsapi = "+newApi);
-			Cookies.set('graphicsapi', newApi,{ expires: 365})
-			graphicsApi=newApi;
-			return true;
-		}
-		return false;
+	var platform = Cookies.get("platform");
+	var graphicsApi = Cookies.get("graphicsapi")
+	console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+	window.limitAPIChoice=limitAPIChoice;
+	var newApi=graphicsApi;
+	if (platform == "windows")
+	{
+	if (graphicsApi == "opengles"||graphicsApi==undefined)
+	newApi="d3d11";
+	}
+	if (platform == "linux")
+	{
+	if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+	newApi="vulkan";
+	}
+	if (platform == "android"||graphicsApi==undefined)
+	{
+	if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+	newApi="vulkan";
+	}
+	console.log("newApi = "+newApi);
+	if (newApi != graphicsApi)
+	{
+	console.log("setting graphicsapi = "+newApi);
+	Cookies.set('graphicsapi', newApi,{ expires: 365})
+	graphicsApi=newApi;
+	return true;
+	}
+	return false;
 	}
 	function makeLinksOpenInNewWindow()
-	{ 
-		console.log("makeLinksOpenInNewWindow ");
-		var download_hrefs = document.getElementsByClassName('reference download internal');
-		[].forEach.call(download_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
-			console.log("Adding target blank to "+el.id);
-		});
-		link_hrefs = document.getElementsByClassName('reference external');
-		[].forEach.call(link_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
-			console.log("Adding target blank to "+el.id);
-		});
-		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	{
+	console.log("makeLinksOpenInNewWindow ");
+	var download_hrefs = document.getElementsByClassName('reference download internal');
+	[].forEach.call(download_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	console.log("Adding target blank to "+el.id);
+	});
+	link_hrefs = document.getElementsByClassName('reference external');
+	[].forEach.call(link_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	console.log("Adding target blank to "+el.id);
+	});
+	window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
 	}
 	function addIconsToToctree()
 	{
-		return;
-		var toctreeheadings = document.getElementsByClassName('toctree-l1');
-		var i = 0;
-		const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","HandsetIcon","toc_extensions","toc_next_steps"];
-		[].forEach.call(toctreeheadings, function(el) {
-			const newNode = document.createElement("img");
-			el.insertBefore(newNode, el.children[0]);
-			newNode.id =heading_ids[i];
-			newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
-			newNode.width = "30"; 
-			i++;
-			console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
-		});
+	var toctreeheadings = document.getElementsByClassName('toctree-l1');
+	var i = 0;
+	const heading_ids = ["Trumpet", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	[].forEach.call(toctreeheadings, function(el) {
+	//const newNode = document.createElement("img");
+	//el.insertBefore(newNode, el.children[0]);
+	el.id =heading_ids[i];
+	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
+	//newNode.width = "30";
+	i++;
+	console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+	});
 	}
 	function updateGraphicsAPI()
 	{
-		var graphicsApi = Cookies.get("graphicsapi")
-		console.log("graphicsapi = " + graphicsApi);
-		if (typeof graphicsApi == 'undefined')
-		{
-			graphicsApi = "vulkan"; // Set default here.
-		}
-		// first, hide all the api's
-		$(".d3d11").hide();
-		$(".d3d12").hide();
-		$(".opengl").hide();
-		$(".opengles").hide();
-		$(".vulkan").hide();
-		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
-		if (graphicsApi == "d3d11") {
-			$(".d3d11").show();
-		}
-		if (graphicsApi == "d3d12") {
-			$(".d3d12").show();
-		}
-		if (graphicsApi == "opengl") {
-			$(".opengl").show();
-		}
-		if (graphicsApi == "opengles") {
-			$(".opengles").show();
-		}
-		if (graphicsApi == "vulkan") {
-			$(".vulkan").show();
-		}
-		var oldelements = document.querySelectorAll(".selected-graphics-api");
-		console.log("selected-platform on "+oldelements.length+" elements.");
-		while (oldelements.length > 0)
-		{
-			var el=oldelements.item(0);
-			el.classList.remove('selected-graphics-api');
-			console.log("Removing selected-graphics-api from "+el.id);
-			oldelements = document.querySelectorAll(".selected-graphics-api");
-		}
-		var element = document.getElementById('select' + graphicsApi);
-		if(element)
-		{
-			element.classList.add('selected-graphics-api');
-		}
-		var element2 = document.getElementById('select' + graphicsApi +"-inline");
-		if (element2)
-		{
-			element2.classList.add('selected-graphics-api');
-		}
-		window.updateGraphicsAPI=updateGraphicsAPI;
+	var graphicsApi = Cookies.get("graphicsapi")
+	console.log("graphicsapi = " + graphicsApi);
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	// first, hide all the api's
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d12").show();
+	}
+	if (graphicsApi == "opengl") {
+	$(".opengl").show();
+	}
+	if (graphicsApi == "opengles") {
+	$(".opengles").show();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".vulkan").show();
+	}
+	var oldelements = document.querySelectorAll(".selected-graphics-api");
+	console.log("selected-platform on "+oldelements.length+" elements.");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-graphics-api');
+	console.log("Removing selected-graphics-api from "+el.id);
+	oldelements = document.querySelectorAll(".selected-graphics-api");
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	if(element)
+	{
+	element.classList.add('selected-graphics-api');
+	}
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	if (element2)
+	{
+	element2.classList.add('selected-graphics-api');
+	}
+	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
 	<script >
 	var graphicsApi = Cookies.get("graphicsapi")
 	if (graphicsApi==undefined) {
-		Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
-		graphicsApi='vulkan';
+	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+	graphicsApi='vulkan';
 	}
 	</script>
 	<style>
@@ -273,7 +272,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">✨ 5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 </ul>
 
         </div>
@@ -347,51 +346,24 @@
 							
   <section id="graphics">
 <h1>3 Graphics<a class="headerlink" href="#graphics" title="Permalink to this heading">¶</a></h1>
-<p>Select your platform, as the instructions are different depending on your selection.</p>
-<div class='select-platform-container-inline'>
-	<button class="select-platform-inline" id='selectwindows-inline' onclick="choosePlatform('windows')">
-		<img src="_static/css/windows-mono.svg" alt="Windows" />
-		Windows
-	</button>
-	<button class="select-platform-inline" id='selectlinux-inline' onclick="choosePlatform('linux')">
-		<img src="_static/css/icons/Tux/Tux-FlatColor.svg" alt="Linux" />
-		Linux
-	</button>
-	<button class="select-platform-inline" id='selectandroid-inline' onclick="choosePlatform('android')">
-		<img src="_static/css/icons/Android/Android_robot.svg" alt="Android" />
-		Android
-	</button>
-</div>
-<div class='select-graphics-api-container-inline'>
-	<button class="select-graphics-api-inline selectd3d11" id='selectd3d11-inline' onclick="chooseGraphicsAPI('d3d11')">
-		Direct3D 11
-	</button>
-	<button class="select-graphics-api-inline selectd3d12" id='selectd3d12-inline' onclick="chooseGraphicsAPI('d3d12')">
-		Direct3D 12
-	</button>
-	<button class="select-graphics-api-inline selectopengl" id='selectopengl-inline' onclick="chooseGraphicsAPI('opengl')">
-		OpenGL
-	</button>
-	<button class="select-graphics-api-inline selectopengles" id='selectopengles-inline' onclick="chooseGraphicsAPI('opengles')">
-		OpenGL ES
-	</button>
-	<button class="select-graphics-api-inline selectvulkan" id='selectvulkan-inline' onclick="chooseGraphicsAPI('vulkan')">
-		Vulkan
-	</button>
-</div>
-
-<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with all the Graphics APIs.</p>
+<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with the Graphics APIs.</p>
+<div class="windows linux docutils container">
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3/</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> and update this line:</p>
+<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2/</span></code> and update this line:</p>
+</div>
+<div class="android docutils container">
+<p>a <cite>Chapter3</cite> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <cite>Chapter2</cite> to it. In CMakeLists.txt, update this line:</p>
+</div>
 <div class="android docutils container" id="android-id-1">
-<p>For Android, you will also need to copy the <code class="docutils literal notranslate"><span class="pre">app/</span></code> and <code class="docutils literal notranslate"><span class="pre">gradle</span></code> folders and the <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code>, <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew</span></code>, <code class="docutils literal notranslate"><span class="pre">gradlew.bat</span></code>, <code class="docutils literal notranslate"><span class="pre">local.properties</span></code> and <code class="docutils literal notranslate"><span class="pre">settings.gradle</span></code>. Within those file you must change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code>. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
+<p>For Android, you will also need to change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code> in app/build.gradle, settings.gradle and app/src/main/AndroidManifest.xml. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
+<p>Load your new project in Android Studio.</p>
 </div>
 <section id="creating-swapchains">
 <h2>3.1 Creating Swapchains<a class="headerlink" href="#creating-swapchains" title="Permalink to this heading">¶</a></h2>
-<p>As with rendering graphics to a 2D display, OpenXR has the concept of swapchains. It’s a series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create the illusion of motion within the image.</p>
+<p>As with rendering graphics to a 2D display, OpenXR uses the concept of swapchains. It’s a series of images that are used to present the rendered graphics to display/window/view. There are usually 2 or 3 images in the swapchain to allow the platform to present them smoothly to the user in order to create the illusion of motion within the image.</p>
 <p>All graphics APIs have this concept of a swapchain with differing levels of transparency to the programmer, but for OpenXR applications we don’t use the API-specific swapchain, which can be tied closely the platform’s windowing system. Instead, we use OpenXR’s swapchain and the OpenXR compositor to present rendered graphics to the views. XR applications are unique in that often, but not always, they have multiple views that need to be rendered to create the XR experience. Listed below are a couple scenarios with differing view counts:</p>
 <blockquote>
 <div><ul class="simple">
