@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 02 Oct** : Adjust grey tab colours, #d0d4da is better.
+    | **Mon 02 Oct** : Fixed layout issues, ensured footer is visible. Responsive behaviour for API tab sizes. API logos are aligned on their baselines.
+    | **Mon 02 Oct** : Added Cog.svg
     | **Mon 02 Oct** : Fixed(?) subsection anchor link positioning.
     | **Thu 28 Sep** : Fixed vertical alignment of chapter icons. Added jigsaw piece icon for Chapter 5.
     | **Mon 25 Sep** : Fix Chapter2 braces in first code block to use KR convention.
@@ -99,6 +102,3 @@ Changelist
     | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 22 Aug** : Added copybutton for source.
     | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 22 Aug** : Updated text in 3.1.3.
-    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 22 Aug** : Fixing matchups in main.cpp between chapters.

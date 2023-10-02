@@ -268,17 +268,16 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Changelist</li>
-	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
-		<img class="platform-tab-img" src="_static/css/windows-colour.svg" alt="Windows" />
+		<img class="platform-tab-img" src="_static/css/windows-mono.svg" alt="Windows" />
 	</button>
 	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
-		<img class="platform-tab-img" src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+		<img class="platform-tab-img" src="_static/css/tux-mono.svg" alt="Linux" />
 	</button>
 	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
-		<img class="platform-tab-img" src="_static/css/android-colour.svg" alt="Android" />
+		<img class="platform-tab-img" src="_static/css/android-mono.svg" alt="Android" />
 	</button>
 </div>
 <script>
@@ -292,19 +291,19 @@
 
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
-		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-11-Logo-wordmark.svg" alt="DirectX 11" />
+		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-12-Logo-wordmark.svg"" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
-		<img class="api-tab-img" src="_static/css/OpenGL_Black_June16.svg" alt="OpenGL" />
+		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
 	</button>
 	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Nov19.svg" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
 	</button>
 	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
-		<img class="api-tab-img" src="_static/css/Vulkan_Black_Dec16.svg" alt="Vulkan" />
+		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
 </div>
 <script>
@@ -326,7 +325,10 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 02 Oct** : Fixed(?) subsection anchor link positioning.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 02 Oct** : Adjust grey tab colours, #d0d4da is better.
+| **Mon 02 Oct** : Fixed layout issues, ensured footer is visible. Responsive behaviour for API tab sizes. API logos are aligned on their baselines.
+| **Mon 02 Oct** : Added Cog.svg
+| **Mon 02 Oct** : Fixed(?) subsection anchor link positioning.
 | **Thu 28 Sep** : Fixed vertical alignment of chapter icons. Added jigsaw piece icon for Chapter 5.
 | **Mon 25 Sep** : Fix Chapter2 braces in first code block to use KR convention.
 | **Mon 25 Sep** : Ch2 is OpenXR Setup.
@@ -423,9 +425,6 @@
 | **Tue 22 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 22 Aug** : Added copybutton for source.
 | **Tue 22 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Tue 22 Aug** : Updated text in 3.1.3.
-| **Tue 22 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Tue 22 Aug** : Fixing matchups in main.cpp between chapters.
 </pre></div>
 </div>
 </section>

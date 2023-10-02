@@ -282,17 +282,16 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">1 Introduction</li>
-	  <li class="disclaimer">Disclaimer: Work in Progress. This site is in progress and is not ready for use.</li>
 	  <li class="wy-breadcrumbs-aside">
 		  <div id='selectplatform'>
 	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
-		<img class="platform-tab-img" src="_static/css/windows-colour.svg" alt="Windows" />
+		<img class="platform-tab-img" src="_static/css/windows-mono.svg" alt="Windows" />
 	</button>
 	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
-		<img class="platform-tab-img" src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux" />
+		<img class="platform-tab-img" src="_static/css/tux-mono.svg" alt="Linux" />
 	</button>
 	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
-		<img class="platform-tab-img" src="_static/css/android-colour.svg" alt="Android" />
+		<img class="platform-tab-img" src="_static/css/android-mono.svg" alt="Android" />
 	</button>
 </div>
 <script>
@@ -306,19 +305,19 @@
 
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
-		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-11-Logo-wordmark.svg" alt="DirectX 11" />
+		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
 	</button>
 	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/Microsoft-DirectX-12-Logo-wordmark.svg"" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
 	</button>
 	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
-		<img class="api-tab-img" src="_static/css/OpenGL_Black_June16.svg" alt="OpenGL" />
+		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
 	</button>
 	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Nov19.svg" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
 	</button>
 	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
-		<img class="api-tab-img" src="_static/css/Vulkan_Black_Dec16.svg" alt="Vulkan" />
+		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
 </div>
 <script>
@@ -452,11 +451,11 @@ The free Community edition of Visual Studio is available to download <a class="r
 <p>In both cases, download and install the latest <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/">Windows SDK</a>.</p>
 </div>
 <div class="vulkan docutils container" id="vulkan-id-1">
-<p>If you’re using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>. Vulkan supports rendering to both eye views with multiview. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+<p>If you’re using Vulkan, download and install the latest <a class="reference external" href="https://www.lunarg.com/vulkan-sdk/">Vulkan SDK</a>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-1">
 <p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>. It was originally developed by Oculus VR, LLC and The Brenwill Workshop Ltd.; this wrapper is written against the <a class="reference external" href="https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf">OpenGL 4.3</a> specification.
-If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>. OpenGL supports rendering to both eye views with multiview - <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
+If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>.</p>
 </div>
 </div>
 <div class="linux docutils container" id="linux-id-1">
