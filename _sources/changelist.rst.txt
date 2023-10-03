@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 03 Oct** : Removed all references to com.simul... in Android build files.
+    | **Tue 03 Oct** : Renamed TUTORIAL_BUILD_TUTORIAL to TUTORIAL_BUILD_DOCUMENTATION. Minor clean ups in Chapter2/CMakeLists.txt and tutorial/3-graphics.rst.
+    | **Tue 03 Oct** : Removed thirdparty/AndroidDefaultApp/ as it is no longer needed for diffs in the texts.
     | **Mon 02 Oct** : Adjust grey tab colours, #d0d4da is better.
     | **Mon 02 Oct** : Fixed layout issues, ensured footer is visible. Responsive behaviour for API tab sizes. API logos are aligned on their baselines.
     | **Mon 02 Oct** : Added Cog.svg
@@ -99,6 +102,3 @@ Changelist
     | **Tue 22 Aug** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Tue 22 Aug** : Updated chapter 3 text about XrCompositionLayerFlags.
     | **Tue 22 Aug** : Updated doc tags in Chapter2/main.cpp and Chapter3/main.cpp.
-    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Tue 22 Aug** : Added copybutton for source.
-    | **Tue 22 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
