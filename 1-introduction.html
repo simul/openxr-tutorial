@@ -528,22 +528,14 @@ In it, put the following code:</p>
 
 <span class="c"># openxr_loader - From github.com/KhronosGroup</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span>
-<span class="w">    </span><span class="s">OFF</span>
-<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span>
-<span class="w">    </span><span class="s">OFF</span>
-<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
 <span class="nb">FetchContent_Declare</span><span class="p">(</span>
-<span class="w">    </span><span class="s">OpenXR</span>
-<span class="w">    </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
-<span class="w">    </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
-<span class="w">        </span><span class="s">SOURCE_DIR</span>
-<span class="w">        </span><span class="s">openxr</span>
-<span class="p">)</span>
+<span class="w">        </span><span class="s">OpenXR</span>
+<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
+<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -672,7 +664,7 @@ In it, put the following code:</p>
 <div class="vulkan docutils container" id="vulkan-id-5">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
-<span class="nb">if</span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
+<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">Vulkan_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_VULKAN</span><span class="p">)</span>
@@ -712,22 +704,14 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 
 <span class="c"># openxr_loader - From github.com/KhronosGroup</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span>
-<span class="w">    </span><span class="s">OFF</span>
-<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span>
-<span class="w">    </span><span class="s">OFF</span>
-<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span>
-<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
 <span class="nb">FetchContent_Declare</span><span class="p">(</span>
-<span class="w">    </span><span class="s">OpenXR</span>
-<span class="w">    </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
-<span class="w">    </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
-<span class="w">        </span><span class="s">SOURCE_DIR</span>
-<span class="w">        </span><span class="s">openxr</span>
-<span class="p">)</span>
+<span class="w">        </span><span class="s">OpenXR</span>
+<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
+<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -769,14 +753,12 @@ Under the <code class="docutils literal notranslate"><span class="pre">app</span
 <p>Here, we include all the files needed for our project. All files with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>Add the following to CMakeLists.txt:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
-
-<span class="c"># Add Android native_app_glue.</span>
-<span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
-<span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
-
-<span class="c"># Create the library containing our native code.</span>
 <span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
+
+<span class="c"># native_app_glue</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
+<span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We have set the <code class="docutils literal notranslate"><span class="pre">CMAKE_SHARED_LINKER_FLAGS</span></code> with the flag <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">ANativeActivity_onCreate()</span></code> to support C++ native code. This is used by a static library called <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">android_main(struct</span> <span class="pre">android_app*)</span></code> entry point.  We add <code class="docutils literal notranslate"><span class="pre">native_app_glue</span></code> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling <code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>. We have added a library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We add the <code class="docutils literal notranslate"><span class="pre">../Common</span></code> folder as an include directory too.</p>

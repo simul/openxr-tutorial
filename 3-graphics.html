@@ -356,6 +356,9 @@
 <div class="android docutils container">
 <p>Add a <cite>Chapter3</cite> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <cite>Chapter2</cite> to it. In CMakeLists.txt, update this line:</p>
 </div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter3</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="android docutils container" id="android-id-1">
 <p>For Android, you will also need to change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code> in app/build.gradle, settings.gradle and app/src/main/AndroidManifest.xml. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
 <p>Load your new project in Android Studio.</p>
