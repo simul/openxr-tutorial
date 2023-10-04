@@ -519,17 +519,18 @@ First, create a directory where the code will go, we’ll call this the <em>work
 <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CONFIGURATION_TYPES</span><span class="w"> </span><span class="s2">&quot;Debug;Release&quot;</span><span class="p">)</span>
 
 <span class="nb">option</span><span class="p">(</span><span class="s">TUTORIAL_BUILD_DOCUMENTATION</span><span class="w"> </span><span class="s2">&quot;Build the tutorial documentation?&quot;</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
+<span class="nb">option</span><span class="p">(</span><span class="s">TUTORIAL_BUILD_PROJECTS</span><span class="w"> </span><span class="s2">&quot;Build the tutorial projects?&quot;</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
 
 <span class="c"># Optional override runtime</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">XR_RUNTIME_JSON</span>
 <span class="w">    </span><span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span>
 <span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span>
-<span class="w">          </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span>
+<span class="w">        </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Here, we specify the CMake version, project name and the configurations types, and provide a CMake variable called <cite>XR_RUNTIME_JSON</cite> which you can use to point to the runtime you will be using (by default, OpenXR will try to find the standard runtime from your hardware vendor). Finally, we specify CMake to continue the build into the Chapter2 directory with <cite>add_subdirectory()</cite>.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the workspace folder, create a folder called <cite>Chapter2</cite>, and in it create another <cite>CMakeLists.txt</cite> file.
@@ -544,15 +545,21 @@ In it, put the following code:</p>
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
 <span class="c"># openxr_loader - From github.com/KhronosGroup</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span>
+<span class="w">    </span><span class="s">OFF</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span>
+<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span>
+<span class="w">    </span><span class="s">ON</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span>
+<span class="p">)</span>
 <span class="nb">FetchContent_Declare</span><span class="p">(</span>
-<span class="w">        </span><span class="s">OpenXR</span>
-<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
-<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
-<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
+<span class="w">    </span><span class="s">OpenXR</span>
+<span class="w">    </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
+<span class="w">    </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span>
+<span class="w">        </span><span class="s">openxr</span>
+<span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -632,7 +639,16 @@ In it, put the following code:</p>
 <span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
+
+<span class="nb">target_include_directories</span><span class="p">(</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">    </span><span class="s">PRIVATE</span><span class="w"> </span>
+<span class="w">        </span><span class="c"># In this repo</span>
+<span class="w">        </span><span class="s">../Common/</span>
+<span class="w">        </span><span class="c"># From OpenXR repo</span>
+<span class="w">        </span><span class="s2">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span>
+<span class="w">        </span><span class="s2">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span>
+<span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -640,14 +656,14 @@ In it, put the following code:</p>
 <div class="windows name windows-id-3 docutils container">
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D11</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span><span class="w"> </span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;d3d11.lib&quot;</span><span class="p">)</span>
 <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_D3D11</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container" id="d3d12-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D12</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span><span class="w"> </span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;d3d12.lib&quot;</span><span class="p">)</span>
 <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_D3D12</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -673,10 +689,11 @@ In it, put the following code:</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="c"># OpenGL</span>
-<span class="w">   </span><span class="c"># Fix redirection to a different project&#39;s build folder</span>
-<span class="w">   </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/../Chapter2/openxr/src/common</span><span class="p">)</span>
-<span class="w">   </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="w">   </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
+<span class="w">   </span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
+<span class="w">   </span><span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">       </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">       </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
+<span class="w">   </span><span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This CMake code will add gfxwrapper for OpenGL. We’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
@@ -723,15 +740,21 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
 <span class="c"># openxr_loader - From github.com/KhronosGroup</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_ALL_EXTENSIONS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build loader and layers with all extensions&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_CONFORMANCE_TESTS</span><span class="w"> </span><span class="s">OFF</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build conformance tests&quot;</span><span class="p">)</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span>
+<span class="w">    </span><span class="s">OFF</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span>
+<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span>
+<span class="w">    </span><span class="s">ON</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span>
+<span class="p">)</span>
 <span class="nb">FetchContent_Declare</span><span class="p">(</span>
-<span class="w">        </span><span class="s">OpenXR</span>
-<span class="w">        </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
-<span class="w">        </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
-<span class="w">        </span><span class="s">SOURCE_DIR</span><span class="w"> </span><span class="s">openxr</span><span class="p">)</span>
+<span class="w">    </span><span class="s">OpenXR</span>
+<span class="w">    </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
+<span class="w">    </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span>
+<span class="w">        </span><span class="s">openxr</span>
+<span class="p">)</span>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -772,28 +795,31 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 </div>
 <p>Here, we include all the files needed for our project. All files with <cite>../Common/*.*</cite> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>Add the following to CMakeLists.txt:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LINKER_FLAGS</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># export ANativeActivity_onCreate for java to call.</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
+
+<span class="c"># export ANativeActivity_onCreate for java to call.</span>
+<span class="nb">set_property</span><span class="p">(</span>
+<span class="w">    </span><span class="s">TARGET</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="w">    </span><span class="s">APPEND_STRING</span>
+<span class="w">    </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">LINK_FLAGS</span><span class="w"> </span><span class="s2">&quot; -u ANativeActivity_onCreate&quot;</span>
+<span class="p">)</span>
 
 <span class="c"># native_app_glue</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">AndroidNdkModules</span><span class="p">)</span>
 <span class="nb">android_ndk_import_module_native_app_glue</span><span class="p">()</span>
+
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">android</span><span class="w"> </span><span class="s">native_app_glue</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
+<span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We have set the <cite>CMAKE_SHARED_LINKER_FLAGS</cite> with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>. We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We add the <cite>../Common</cite> folder as an include directory too.</p>
 <div class="opengles docutils container" id="opengles-id-3">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># openxr-gfxwrapper - Manually build from OpenXR for OpenGL ES</span>
-<span class="nb">add_library</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.c</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common/gfxwrapper_opengl.h</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
-<span class="nb">find_library</span><span class="p">(</span><span class="s">GLES3-lib</span><span class="w"> </span><span class="s">GLESv3</span><span class="p">)</span>
-<span class="nb">find_library</span><span class="p">(</span><span class="s">EGL-lib</span><span class="w"> </span><span class="s">EGL</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">GLES3-lib</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openxr-gfxwrapper</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">EGL-lib</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL_ES</span><span class="p">)</span>
-
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/common</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">openxr_SOURCE_DIR</span><span class="o">}</span><span class="s">/external/include</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL_ES</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We now add a static library called <cite>openxr-gfxwrapper</cite>, which will allow us to use OpenGL ES. We compile the library the C and header file in <cite>${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</cite> and add this <cite>${openxr_SOURCE_DIR}/external/include</cite> as an include directory. Next, we find the <cite>GLESv3</cite> and <cite>EGL</cite> libraries and link them to <cite>openxr-gfxwrapper</cite>. We add the <cite>${openxr_SOURCE_DIR}/src/common</cite> and <cite>${openxr_SOURCE_DIR}/external/include</cite> folder as include directories to <cite>OpenXRTutorialChapter2</cite> as well. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL_ES</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
@@ -813,6 +839,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
 <span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">vulkan-lib</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ANDROID_NDK</span><span class="o">}</span><span class="s">/sources/third_party/vulkan/src/include</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_VULKAN</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
@@ -1018,7 +1045,8 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 </div>
 <p>Before we can use OpenXR for Android, we need to initialise the loader based the application’s context and virtual machine. We retrieve the function pointer to <cite>xrInitializeLoaderKHR</cite>, and with the <cite>XrLoaderInitInfoAndroidKHR</cite> filled out call that function to initialise OpenXR for our use. At this point, we also attach the current thread to the Java Virtual Machine. We assign our <cite>AndroidAppState</cite> static member and our <cite>AndroidAppHandleCmd()</cite> static method to the <cite>android_app *</cite> and save it to a static member in the class.</p>
 <p>Android requires a few extra additions to the OpenXRTutorial class. Namely, <cite>android_app *</cite>, <cite>AndroidAppState</cite> and <cite>AndroidAppHandleCmd</cite>, which are used in getting updates from the Android Operating System and keep our application functioning. Add the following after the definition of <cite>Run()</cite> in your OpenXRTutorial class declaration:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Stored pointer to the android_app structure from android_main().</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// Stored pointer to the android_app structure from android_main().</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">android_app</span><span class="w"> </span><span class="o">*</span><span class="n">androidApp</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Custom data structure that is used by PollSystemEvents().</span>

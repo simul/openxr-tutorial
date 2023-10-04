@@ -394,8 +394,8 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </span><span class="hll"><span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
 </span><span class="hll"><span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 </span><span class="hll"><span class="w">        </span><span class="n">XrSystemProperties</span><span class="w"> </span><span class="n">m_systemProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_PROPERTIES</span><span class="p">};</span>
-</span><span class="hll"><span class="p">};</span>
-</span></pre></div>
+</span><span class="p">};</span>
+</pre></div>
 </div>
 <p>First, we updated <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> to call the new methods <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetSystemID()</span></code> and <code class="docutils literal notranslate"><span class="pre">DestroyInstance()</span></code> in that order. Finally, we added those methods and the following members to the class within thier separate private sections.</p>
 <section id="xrinstance">
@@ -893,27 +893,21 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>Event Type</p></td>
-<td><p>Event Structure Type</p></td>
 <td><p>Description</p></td>
 </tr>
 <tr class="row-even"><td><p>XR_TYPE_EVENT_DATA_EVENTS_LOST</p></td>
-<td><p>XrEventDataEventsLost</p></td>
 <td><p>The event queue has overflowed and some events were lost.</p></td>
 </tr>
 <tr class="row-odd"><td><p>XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</p></td>
-<td><p>XrEventDataInstanceLossPending</p></td>
 <td><p>The application is about to lose the instance.</p></td>
 </tr>
 <tr class="row-even"><td><p>XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</p></td>
-<td><p>XrEventDataInteractionProfileChanged</p></td>
 <td><p>The active input form factor for one or more top level user paths has changed.</p></td>
 </tr>
 <tr class="row-odd"><td><p>XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</p></td>
-<td><p>XrEventDataReferenceSpaceChangePending</p></td>
 <td><p>The runtime will begin operating with updated space bounds.</p></td>
 </tr>
 <tr class="row-even"><td><p>XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED</p></td>
-<td><p>XrEventDataSessionStateChanged</p></td>
 <td><p>The application has changed its lifecycle state.</p></td>
 </tr>
 </tbody>
@@ -925,7 +919,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </div>
 <div class="android docutils container" id="android-id-1">
 <p><code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">don't</span> <span class="pre">say</span> <span class="pre">this.</span></code>
-For Android, we have already provided the code for the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method in <span class="xref std std-ref">Chapter 1.4.3</span>. So its duplicate definition must be removed from the class. This function is outside the scope of OpenXR, but in general it polls Android for system events,updates and uses the <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code>, <code class="docutils literal notranslate"><span class="pre">m_applicationRunning</span></code> and <code class="docutils literal notranslate"><span class="pre">m_sessionRunning</span></code> members.</p>
+For Android, we have already provided the code for the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method in <a class="reference internal" href="1-introduction.html#the-main-cpp-file-and-the-openxrtutorial-class"><span class="std std-ref">Chapter 1.4.3</span></a>. So its duplicate definition must be removed from the class. This function is outside the scope of OpenXR, but in general it polls Android for system events, updates and uses the <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code>, <code class="docutils literal notranslate"><span class="pre">m_applicationRunning</span></code> and <code class="docutils literal notranslate"><span class="pre">m_sessionRunning</span></code> members.</p>
 </div>
 </section>
 <section id="xrsessionstate">
