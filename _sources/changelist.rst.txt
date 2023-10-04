@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 03 Oct** : Added m_changeColorAction and m_spawnCubeAction to Chapter4 code.
     | **Tue 03 Oct** : Revert CMakeLists.txt files to fix merge issues. Will be remerged later.
     | **Tue 03 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 03 Oct** : New chapter icons.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 22 Aug** : Linux working in GL and Vulkan.
     | **Tue 22 Aug** : Added highlighting to code block in Chapter 3.2. Resource state explanation in GetSwapchainImages() section for D3D12 and Vulkan.
     | **Tue 22 Aug** : Updated doc tags in Chapter3/main.cpp. Updated chapter 3.1 text with code clarifications.
-    | **Tue 22 Aug** : Updated text in 3.1.3.

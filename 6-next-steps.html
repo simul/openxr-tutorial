@@ -328,6 +328,179 @@
 <p>Multiview rendering</p>
 <p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.
 OpenGL supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
+<section id="graphics-api">
+<h2>Graphics API<a class="headerlink" href="#graphics-api" title="Permalink to this heading">¶</a></h2>
+<p class="rubric">GraphicsAPI</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific APIs. It is there solely to provide working samples in this tutorial, and demonstrate some basic rendering and interaction with OpenXR.</p>
+<p>This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. The derived class is based on your graphics API selection. Include both the header and cpp files for both <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI...</span></code>. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> includes the headers and macros needed to set up your platform and graphics API. Below are code snippets that show how to set up the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros for your platform along with any relevant headers. In the first code block, there’s also reference to <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_...</span></code> which we set up the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> . This tutorial demonstrates all five graphics APIs, you will only need to select one <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> macro and one <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro.</p>
+<p>The code below is an example of how you might implement the inclusion and definition the relevant graphics API header along with the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros. This will already be set up in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> file.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;HelperFunctions.h&gt;</span>
+</pre></div>
+</div>
+<div class="windows docutils container" id="windows-id-4">
+<div class="d3d11 docutils container" id="d3d11-id-4">
+</div>
+<div class="d3d12 docutils container" id="d3d12-id-4">
+</div>
+<div class="opengl docutils container" id="opengl-id-6">
+</div>
+<div class="vulkan docutils container" id="vulkan-id-9">
+</div>
+</div>
+<div class="linux docutils container" id="linux-id-4">
+<div class="opengl docutils container" id="opengl-id-7">
+</div>
+<div class="vulkan docutils container" id="vulkan-id-10">
+</div>
+</div>
+<div class="android docutils container" id="android-id-4">
+<div class="opengles docutils container" id="opengles-id-5">
+</div>
+<div class="vulkan docutils container" id="vulkan-id-11">
+</div>
+</div>
+<div class="d3d11 docutils container" id="d3d11-id-5">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container" id="d3d12-id-5">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d12.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container" id="opengl-id-8">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
+<span class="cp">#if defined(XR_USE_PLATFORM_XLIB)</span>
+<span class="cp">#define OS_LINUX_XLIB 1</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container" id="opengles-id-6">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container" id="vulkan-id-12">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vulkan/vulkan.h&gt;</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpenXR Tutorial for Khronos Group</span>
+
+<span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;HelperFunctions.h&gt;</span>
+
+<span class="c1">// Platform headers</span>
+<span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#define NOMINMAX</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
+<span class="cp">#define XR_USE_PLATFORM_WIN32</span>
+
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D12</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif  </span><span class="c1">// _WIN32</span>
+
+<span class="cp">#if defined(__linux__) &amp;&amp; !defined(__ANDROID__)</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XLIB)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span>
+<span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XCB)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xcb/xcb.h&gt;</span>
+<span class="cp">#define XR_USE_PLATFORM_XCB</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_WAYLAND)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;wayland-client.h&gt;</span>
+<span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif  </span><span class="c1">// __linux__</span>
+
+<span class="cp">#if defined(__ANDROID__)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
+<span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
+
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL_ES</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif  </span><span class="c1">// __ANDROID__</span>
+
+<span class="c1">// Graphic APIs headers</span>
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d12.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
+<span class="cp">#if defined(XR_USE_PLATFORM_XLIB)</span>
+<span class="cp">#define OS_LINUX_XLIB 1</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_USE_PLATFORM_XCB)</span>
+<span class="cp">#define OS_LINUX_XCB 1</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_USE_PLATFORM_WAYLAND)</span>
+<span class="cp">#define OS_LINUX_WAYLAND 1</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// gfxwrapper will redefine these macros</span>
+<span class="cp">#undef XR_USE_PLATFORM_WIN32</span>
+<span class="cp">#undef XR_USE_PLATFORM_XLIB</span>
+<span class="cp">#undef XR_USE_PLATFORM_XCB</span>
+<span class="cp">#undef XR_USE_PLATFORM_WAYLAND</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vulkan/vulkan.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// OpenXR</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRHelper.h&gt;</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
