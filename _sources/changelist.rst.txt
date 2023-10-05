@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 05 Oct** : CMakeLists.txt files: Updated target_include_directories for project. Updated tutorial/1-introduction.rst to reflect CMake changes.
     | **Wed 04 Oct** : Updated 2.3.1 xrPollEvent and rst literalinclude referencing the OpenXR headers.
     | **Wed 04 Oct** : Merged and edited CMake file from PR #40. Added TUTORIAL_BUILD_PROJECTS to toggle building all projects. fxc_shader() has OUTPUT_PDB and ENTRY_POINT args, and glsl_spv_shader() has ENTRY_POINT arg. gfxwrapper.cmake: Added include directory - ${openxr_SOURCE_DIR}/external/include and switched to ${OpenGLES_V3_LIBRARY} due CMake generation errors.
     | **Tue 03 Oct** : Added m_changeColorAction and m_spawnCubeAction to Chapter4 code.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 22 Aug** : Search results now black, not grey.
     | **Tue 22 Aug** : Remove spurious file.
     | **Tue 22 Aug** : Merge branch 'main' of https://github.com/simul/openxr-tutorial-src into main
-    | **Tue 22 Aug** : Linux working in GL and Vulkan.

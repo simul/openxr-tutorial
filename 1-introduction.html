@@ -511,6 +511,16 @@ First, create a directory where the code will go, we’ll call this the <em>work
 </figure>
 </div>
 <div class="windows linux docutils container" id="windows-linux-id-1">
+<p>First, Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<div class="d3d11 d3d12 docutils container" id="d3d11-d3d12-id-2">
+<p><a class="reference download internal" download="" href="_downloads/5057d1a0bef87efb08cacc48dc445510/fxc_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">fxc_shader.cmake</span></code></a></p>
+</div>
+<div class="opengl docutils container" id="opengl-id-3">
+<p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a></p>
+</div>
+<div class="vulkan docutils container" id="vulkan-id-4">
+<p><a class="reference download internal" download="" href="_downloads/873a1884f399251a093874b50e73432c/glsl_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">glsl_shader.cmake</span></code></a></p>
+</div>
 <p>Now, create a text file in the <em>workspace</em> folder called <cite>CMakeLists.txt</cite> and in it, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.16</span><span class="p">)</span>
 
@@ -530,7 +540,7 @@ First, create a directory where the code will go, we’ll call this the <em>work
 </pre></div>
 </div>
 <p>Here, we specify the CMake version, project name and the configurations types, and provide a CMake variable called <cite>XR_RUNTIME_JSON</cite> which you can use to point to the runtime you will be using (by default, OpenXR will try to find the standard runtime from your hardware vendor). Finally, we specify CMake to continue the build into the Chapter2 directory with <cite>add_subdirectory()</cite>.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the workspace folder, create a folder called <cite>Chapter2</cite>, and in it create another <cite>CMakeLists.txt</cite> file.
@@ -541,6 +551,10 @@ In it, put the following code:</p>
 </pre></div>
 </div>
 <p>This sets a minimum CMake version (required for some of the features we use here) and our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite>. Now add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Additional Directories for find_package() to search within.</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">CMAKE_MODULE_PATH</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../cmake&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
@@ -563,7 +577,8 @@ In it, put the following code:</p>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page. Now, we will add to our <cite>CMakeLists.txt</cite> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
+<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within. Next, we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
+<p>Now, we will add to our <cite>CMakeLists.txt</cite> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container" id="d3d11-id-1">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
@@ -598,7 +613,7 @@ In it, put the following code:</p>
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="opengl-id-3">
+<div class="opengl docutils container" id="opengl-id-4">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
 <span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
@@ -615,7 +630,7 @@ In it, put the following code:</p>
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-4">
+<div class="vulkan docutils container" id="vulkan-id-5">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
 <span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
@@ -640,19 +655,17 @@ In it, put the following code:</p>
 <span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 
-<span class="nb">target_include_directories</span><span class="p">(</span>
-<span class="w">    </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">    </span><span class="s">PRIVATE</span><span class="w"> </span>
-<span class="w">        </span><span class="c"># In this repo</span>
-<span class="w">        </span><span class="s">../Common/</span>
-<span class="w">        </span><span class="c"># From OpenXR repo</span>
-<span class="w">        </span><span class="s2">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span>
-<span class="w">        </span><span class="s2">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># In this repo</span>
+<span class="w">    </span><span class="s">../Common/</span>
+<span class="w">    </span><span class="c"># From OpenXR repo</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span>
 <span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We have used <cite>add_executable()</cite> to create the program we’ll be building, and specified its <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We passed the <cite>XR_RUNTIME_JSON</cite> variable on to the debugging environment (Windows only). We’ve added the <cite>../Common</cite> folder as an include directory and linked the <cite>openxr_loader</cite> which we obtained with <cite>FetchContent</cite>. This will also add the include directory for the OpenXR headers.</p>
+<p>We have used <cite>add_executable()</cite> to create the program we’ll be building, and specified its <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We passed the <cite>XR_RUNTIME_JSON</cite> variable on to the debugging environment (Windows only). We’ve added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as an include directory and linked the <cite>openxr_loader</cite> which we obtained with <cite>FetchContent</cite>. This will also add the include directory for the OpenXR headers.</p>
 <div class="windows name windows-id-3 docutils container">
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D11</span>
@@ -668,7 +681,7 @@ In it, put the following code:</p>
 </pre></div>
 </div>
 </div>
-<div class="d3d11 d3d12 docutils container" id="d3d11-d3d12-id-2">
+<div class="d3d11 d3d12 docutils container" id="d3d11-d3d12-id-3">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D11 / D3D12</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;dxgi.lib&quot;</span><span class="p">)</span>
 </pre></div>
@@ -687,18 +700,18 @@ In it, put the following code:</p>
 </div>
 <p>For Linux, there are no headers to include or libraries to link against. We’ve added the <cite>XR_TUTORIAL_USE_LINUX_XLIB</cite> compiler definition to specify which Linux Windowing System should be supported and have their headers included in <cite>GraphicsAPI.h</cite>. Other options are <cite>XR_TUTORIAL_USE_LINUX_XCB</cite> and <cite>XR_TUTORIAL_USE_LINUX_WAYLAND</cite>. Wayland uses <em>EGL</em> for its <em>OpenGL ES</em> context and not <em>GLX</em> with <em>OpenGL</em>.</p>
 </div>
-<div class="opengl docutils container" id="opengl-id-4">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="c"># OpenGL</span>
-<span class="w">   </span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
-<span class="w">   </span><span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="w">       </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="w">       </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
-<span class="w">   </span><span class="nb">endif</span><span class="p">()</span>
+<div class="opengl docutils container" id="opengl-id-5">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL</span>
+<span class="w">    </span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This CMake code will add gfxwrapper for OpenGL. We’ve added the include directories and linked the gfxwrapper libraries from the OpenXR-SDK. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
+<p>We include the <cite>gfxwrapper.cmake</cite> from our <cite>cmake</cite> folder in the <em>workspace</em> directory. This file creates a static library called <cite>openxr-gfxwrapper</cite>, which will allow us to use OpenGL. We link against <cite>openxr-gfxwrapper</cite>, which also provide us with the needed include directories. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-5">
+<div class="vulkan docutils container" id="vulkan-id-6">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanSDK</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">Vulkan</span><span class="p">)</span>
 <span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
@@ -727,6 +740,15 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <figure class="align-default">
 <img alt="Gradle Sync" src="_images/GradleSync.png" />
 </figure>
+<p>First, Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<div class="opengles docutils container" id="opengles-id-2">
+<p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a>
+<a class="reference download internal" download="" href="_downloads/89eb289f84bcf399649e6363229fe702/FindEGL.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindEGL.cmake</span></code></a>
+<a class="reference download internal" download="" href="_downloads/ff2de0272f6a69e9d334910d356b7cc5/FindOpenGLES.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindOpenGLES.cmake</span></code></a></p>
+</div>
+<div class="vulkan docutils container" id="vulkan-id-7">
+<p><a class="reference download internal" download="" href="_downloads/873a1884f399251a093874b50e73432c/glsl_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">glsl_shader.cmake</span></code></a></p>
+</div>
 <p>Create a text file called <cite>CMakeLists.txt</cite> in the <cite>Chapter2</cite> directory. We will use this file to specific how our Native C++ code will be built. This <cite>CMakeLists.txt</cite> file will be invoked by Android Studio’s Gradle build system and we will point Gradle to this CMake file.</p>
 <p class="rubric">CMakeLists.txt</p>
 <p>Add the following to your new CMakeLists.txt file:</p>
@@ -736,6 +758,10 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 </pre></div>
 </div>
 <p>Here we have declared our tutorial project. At least CMake 3.22.1 is needed to use all the features in the tutorial. Now add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Additional Directories for find_package() to search within.</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">CMAKE_MODULE_PATH</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../cmake&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
@@ -758,8 +784,8 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
-<div class="opengles docutils container" id="opengles-id-2">
+<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within. Next, we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
+<div class="opengles docutils container" id="opengles-id-3">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
 <span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
@@ -776,7 +802,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-6">
+<div class="vulkan docutils container" id="vulkan-id-8">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
 <span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
@@ -796,7 +822,13 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <p>Here, we include all the files needed for our project. All files with <cite>../Common/*.*</cite> are available to download from this tutorial website. Below are the links and discussion of their usage within this tutorial and with OpenXR. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files pertaining to your graphics API choice.</p>
 <p>Add the following to CMakeLists.txt:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">SHARED</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s2">&quot;../Common/&quot;</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># In this repo</span>
+<span class="w">    </span><span class="s">../Common/</span>
+<span class="w">    </span><span class="c"># From OpenXR repo</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span>
+<span class="p">)</span>
 
 <span class="c"># export ANativeActivity_onCreate for java to call.</span>
 <span class="nb">set_property</span><span class="p">(</span>
@@ -813,8 +845,10 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We have set the <cite>CMAKE_SHARED_LINKER_FLAGS</cite> with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>. We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We add the <cite>../Common</cite> folder as an include directory too.</p>
-<div class="opengles docutils container" id="opengles-id-3">
+<p>We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite> and have added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as an include directory. We have set the <cite>LINK_FLAGS</cite> for our <cite>OpenXRTutorialChapter2</cite> project with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>.</p>
+<p>Now, we link the <cite>android</cite>, <cite>native_app_glue</cite> and <cite>openxr_loader</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked. We also add <cite>-Wno-cast-calling-convention</cite> to the compiler option to allow the casting of calling conversions for function pointers.</p>
+<div class="opengles docutils container" id="opengles-id-4">
+<p>Now, add:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
 <span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
@@ -822,18 +856,9 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>We now add a static library called <cite>openxr-gfxwrapper</cite>, which will allow us to use OpenGL ES. We compile the library the C and header file in <cite>${openxr_SOURCE_DIR}/src/common/gfxwrapper_opengl.*</cite> and add this <cite>${openxr_SOURCE_DIR}/external/include</cite> as an include directory. Next, we find the <cite>GLESv3</cite> and <cite>EGL</cite> libraries and link them to <cite>openxr-gfxwrapper</cite>. We add the <cite>${openxr_SOURCE_DIR}/src/common</cite> and <cite>${openxr_SOURCE_DIR}/external/include</cite> folder as include directories to <cite>OpenXRTutorialChapter2</cite> as well. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL_ES</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                </span><span class="s">android</span>
-<span class="w">                </span><span class="s">native_app_glue</span>
-<span class="w">                </span><span class="s">openxr_loader</span>
-<span class="w">                </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
-</pre></div>
+<p>We include the <cite>gfxwrapper.cmake</cite> from our <cite>cmake</cite> folder in the <em>workspace</em> directory. This file creates a static library called <cite>openxr-gfxwrapper</cite>, which will allow us to use OpenGL ES. We link against <cite>openxr-gfxwrapper</cite>, which also provides us with the needed include directories. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL_ES</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
 </div>
-<p>Finally we link the <cite>android</cite>, <cite>native_app_glue</cite>, <cite>openxr_loader</cite> and <cite>openxr-gfxwrapper</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked. We also add <cite>-Wno-cast-calling-convention</cite> to the compiler option to allow the casting of calling conversions for function pointers.</p>
-</div>
-<div class="vulkan docutils container" id="vulkan-id-7">
+<div class="vulkan docutils container" id="vulkan-id-9">
 <p>Now, add:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># VulkanNDK</span>
 <span class="nb">find_library</span><span class="p">(</span><span class="s">vulkan-lib</span><span class="w"> </span><span class="s">vulkan</span><span class="p">)</span>
@@ -844,16 +869,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Here we find the Vulkan library in the NDK and include the directory to the Android Vulkan headers. We’ve added the <cite>XR_TUTORIAL_USE_VULKAN</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>. After this add:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
-<span class="w">                </span><span class="s">android</span>
-<span class="w">                </span><span class="s">native_app_glue</span>
-<span class="w">                </span><span class="s">openxr_loader</span>
-<span class="w">                </span><span class="o">${</span><span class="nv">vulkan-lib</span><span class="o">}</span><span class="p">)</span>
-<span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Finally we have linked the <cite>android</cite>, <cite>native_app_glue</cite>, <cite>openxr_loader</cite> and <cite>vulkan</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked.  We also add <cite>-Wno-cast-calling-convention</cite> to the compiler option to allow the casting of calling conversions for function pointers.</p>
+<p>Here we find the Vulkan library in the NDK. We include the directory to the Android Vulkan headers and link against the <cite>libvulkan.so</cite> library. We’ve added the <cite>XR_TUTORIAL_USE_VULKAN</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
 </div>
 <p class="rubric">AndroidManifest.xml</p>
 <p>Replace the file ‘app/src/main/AndroidManifest.xml’ with the following:</p>
@@ -894,19 +910,19 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <li><p><a class="reference download internal" download="" href="_downloads/e083cc61d81b06c1405b149812da5240/GraphicsAPI_D3D12.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_D3D12.cpp</span></code></a></p></li>
 </ul>
 </div>
-<div class="opengl docutils container" id="opengl-id-5">
+<div class="opengl docutils container" id="opengl-id-6">
 <ul class="simple">
 <li><p><a class="reference download internal" download="" href="_downloads/6ecf914e43c32a3fbf68265b4c70d1b6/GraphicsAPI_OpenGL.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL.h</span></code></a></p></li>
 <li><p><a class="reference download internal" download="" href="_downloads/4ab2a28ab4cc788086acc7ac599bcbe3/GraphicsAPI_OpenGL.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL.cpp</span></code></a></p></li>
 </ul>
 </div>
-<div class="opengles docutils container" id="opengles-id-4">
+<div class="opengles docutils container" id="opengles-id-5">
 <ul class="simple">
 <li><p><a class="reference download internal" download="" href="_downloads/18dfa0ecf88e53b145e4bf884b70ce69/GraphicsAPI_OpenGL_ES.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL_ES.h</span></code></a></p></li>
 <li><p><a class="reference download internal" download="" href="_downloads/15d84956ee41d048b0020d480a776d56/GraphicsAPI_OpenGL_ES.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL_ES.cpp</span></code></a></p></li>
 </ul>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-8">
+<div class="vulkan docutils container" id="vulkan-id-10">
 <ul class="simple">
 <li><p><a class="reference download internal" download="" href="_downloads/7e1287eebafcf47fda72c8aaf562283d/GraphicsAPI_Vulkan.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_Vulkan.h</span></code></a></p></li>
 <li><p><a class="reference download internal" download="" href="_downloads/ac69bef9a1770690c3db93d34147b297/GraphicsAPI_Vulkan.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_Vulkan.cpp</span></code></a></p></li>
@@ -955,17 +971,17 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="opengl-id-9">
+<div class="opengl docutils container" id="opengl-id-7">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_OpenGL.h&gt;</span>
 </pre></div>
 </div>
 </div>
-<div class="opengles docutils container" id="opengles-id-7">
+<div class="opengles docutils container" id="opengles-id-6">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_OpenGL_ES.h&gt;</span>
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-13">
+<div class="vulkan docutils container" id="vulkan-id-11">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_Vulkan.h&gt;</span>
 </pre></div>
 </div>
