@@ -577,7 +577,7 @@ In it, put the following code:</p>
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within. Next, we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
+<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within and we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
 <p>Now, we will add to our <cite>CMakeLists.txt</cite> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container" id="d3d11-id-1">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
@@ -665,7 +665,7 @@ In it, put the following code:</p>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We have used <cite>add_executable()</cite> to create the program we’ll be building, and specified its <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We passed the <cite>XR_RUNTIME_JSON</cite> variable on to the debugging environment (Windows only). We’ve added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as an include directory and linked the <cite>openxr_loader</cite> which we obtained with <cite>FetchContent</cite>. This will also add the include directory for the OpenXR headers.</p>
+<p>We have used <cite>add_executable()</cite> to create the program we’ll be building, and specified its <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite>. We passed the <cite>XR_RUNTIME_JSON</cite> variable on to the debugging environment (Windows only). We’ve added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as include directories and linked the <cite>openxr_loader</cite> which we obtained with <cite>FetchContent</cite>. This will also add the include directory for the OpenXR headers.</p>
 <div class="windows name windows-id-3 docutils container">
 <div class="d3d11 docutils container" id="d3d11-id-2">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D11</span>
@@ -701,12 +701,12 @@ In it, put the following code:</p>
 <p>For Linux, there are no headers to include or libraries to link against. We’ve added the <cite>XR_TUTORIAL_USE_LINUX_XLIB</cite> compiler definition to specify which Linux Windowing System should be supported and have their headers included in <cite>GraphicsAPI.h</cite>. Other options are <cite>XR_TUTORIAL_USE_LINUX_XCB</cite> and <cite>XR_TUTORIAL_USE_LINUX_WAYLAND</cite>. Wayland uses <em>EGL</em> for its <em>OpenGL ES</em> context and not <em>GLX</em> with <em>OpenGL</em>.</p>
 </div>
 <div class="opengl docutils container" id="opengl-id-5">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL</span>
-<span class="w">    </span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We include the <cite>gfxwrapper.cmake</cite> from our <cite>cmake</cite> folder in the <em>workspace</em> directory. This file creates a static library called <cite>openxr-gfxwrapper</cite>, which will allow us to use OpenGL. We link against <cite>openxr-gfxwrapper</cite>, which also provide us with the needed include directories. We’ve added the <cite>XR_TUTORIAL_USE_OPENGL</cite> compiler definition to specify which graphics APIs should be supported and have their headers included in <cite>GraphicsAPI.h</cite>.</p>
@@ -784,7 +784,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within. Next, we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
+<p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within and we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
 <div class="opengles docutils container" id="opengles-id-3">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
@@ -845,7 +845,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite> and have added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as an include directory. We have set the <cite>LINK_FLAGS</cite> for our <cite>OpenXRTutorialChapter2</cite> project with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>.</p>
+<p>We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite> and have added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as include directories. We have set the <cite>LINK_FLAGS</cite> for our <cite>OpenXRTutorialChapter2</cite> project with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>.</p>
 <p>Now, we link the <cite>android</cite>, <cite>native_app_glue</cite> and <cite>openxr_loader</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked. We also add <cite>-Wno-cast-calling-convention</cite> to the compiler option to allow the casting of calling conversions for function pointers.</p>
 <div class="opengles docutils container" id="opengles-id-4">
 <p>Now, add:</p>
