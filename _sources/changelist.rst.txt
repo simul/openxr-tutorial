@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 06 Oct** : Updated tags in coded chapters 3/4/5 to fix text error in Chapter 3.2 and 3.3. Fix rst container and dedent errors. Corrections to chapter 3 text.
     | **Fri 06 Oct** : Removed :name: from rst containers. Using US English spelling of color in GraphicsAPI. Updated Chapter 3.3 and 4 text as cuboid rendering has moved to chapter 3.3. Chapter 4/5 code: updated tags and code.
     | **Thu 05 Oct** : Added Chapter 3 text - WIP. Chapter minor updates - will need updating.
     | **Thu 05 Oct** : Unifying changes across main.cpp files. Added Chapter 3.3 code.
@@ -101,4 +102,3 @@ Changelist
     | **Wed 23 Aug** : Minor correction for 3.2.2 text/
     | **Wed 23 Aug** : Updated doc tags in Chapter 3 text. Fixed warning tutorial/1-introduction.rst.
     | **Wed 23 Aug** : Chapter 3 text updated dedents and minor changes to 3.2.2. Added section XR_EXT_local_floor extension.
-    | **Wed 23 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main

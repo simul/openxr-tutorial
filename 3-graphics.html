@@ -349,7 +349,7 @@
 <p>The goal of this chapter is to build an application that creates and clears color and depth buffers and draws some geometry to the views within the scope of OpenXR render loop and to demonstrate its interaction with the Graphics APIs.</p>
 <div class="windows linux docutils container">
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> and update this line:</p>
@@ -404,91 +404,42 @@
 </div>
 </div>
 <p>Underneath section where specify your Graphics API, add the following CMake code:</p>
-<div class="window docutils container">
+<div class="windows docutils container">
 <div class="d3d11 d3d12 docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># D3D11 and D3D12 HLSL</span>
-<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">include</span><span class="p">(</span><span class="s">fxc_shader</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_property</span><span class="p">(</span><span class="s">SOURCE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">VS_SETTINGS</span><span class="w"> </span><span class="s2">&quot;ExcludedFromBuild=true&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># D3D11 and D3D12 HLSL</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">include</span><span class="p">(</span><span class="s">fxc_shader</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_property</span><span class="p">(</span><span class="s">SOURCE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">VS_SETTINGS</span><span class="w"> </span><span class="s2">&quot;ExcludedFromBuild=true&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
 
-<span class="w">        </span><span class="c"># D3D11: Using Shader Model 5.0</span>
-<span class="w">        </span><span class="c"># D3D12: Using Shader Model 5.1</span>
-<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="s">5_0</span><span class="w"> </span><span class="s">5_1</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">                </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">                </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">                </span><span class="nb">fxc_shader</span><span class="p">(</span>
-<span class="w">                    </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
-<span class="w">                    </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span>
-<span class="w">                    </span><span class="s">OUTPUT_PDB</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.pdb&quot;</span>
-<span class="w">                    </span><span class="s">PROFILE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span>
-<span class="w">                    </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
-<span class="w">                </span><span class="p">)</span>
-<span class="w">                </span><span class="c"># Make our project depend on these files</span>
-<span class="w">                </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">endforeach</span><span class="p">()</span>
-<span class="w">        </span><span class="nb">endforeach</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="window linux docutils container">
-<div class="vulkan docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># Vulkan GLSL</span>
-<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">include</span><span class="p">(</span><span class="s">glsl_shader</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
-
-<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="c"># D3D11: Using Shader Model 5.0</span>
+<span class="w">    </span><span class="c"># D3D12: Using Shader Model 5.1</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="s">5_0</span><span class="w"> </span><span class="s">5_1</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
 <span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
-<span class="w">            </span><span class="nb">glsl_spv_shader</span><span class="p">(</span>
-<span class="w">               </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
-<span class="w">               </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span>
-<span class="w">               </span><span class="s">STAGE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span>
-<span class="w">               </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
-<span class="w">               </span><span class="s">TARGET_ENV</span><span class="w"> </span><span class="s">vulkan1.0</span>
+<span class="w">            </span><span class="nb">fxc_shader</span><span class="p">(</span>
+<span class="w">                </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">                </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span>
+<span class="w">                </span><span class="s">OUTPUT_PDB</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.pdb&quot;</span>
+<span class="w">                </span><span class="s">PROFILE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span>
+<span class="w">                </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
 <span class="w">            </span><span class="p">)</span>
 <span class="w">            </span><span class="c"># Make our project depend on these files</span>
-<span class="w">            </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">endforeach</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="opengl docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL GLSL</span>
-<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
-<span class="w">            </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
-<span class="w">            </span><span class="s">COMMAND</span><span class="w"> </span>
-<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
-<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
-<span class="w">                </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
-<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">            </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
-<span class="w">            </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
-<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
-<span class="w">            </span><span class="s">VERBATIM</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="c"># Make our project depend on these files</span>
-<span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="android docutils container">
+<div class="windows linux docutils container">
 <div class="vulkan docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># Vulkan GLSL</span>
-<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Vulkan GLSL</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">include</span><span class="p">(</span><span class="s">glsl_shader</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
@@ -506,29 +457,78 @@
 <span class="w">        </span><span class="c"># Make our project depend on these files</span>
 <span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL GLSL</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">        </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">        </span><span class="s">COMMAND</span><span class="w"> </span>
+<span class="w">            </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">            </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">            </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">        </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">        </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">        </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">        </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">        </span><span class="s">VERBATIM</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="c"># Make our project depend on these files</span>
+<span class="w">    </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
+<span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="android docutils container">
+<div class="vulkan docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Vulkan GLSL</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">glsl_shader</span><span class="p">)</span>
+<span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
+<span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
+
+<span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">glsl_spv_shader</span><span class="p">(</span>
+<span class="w">       </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">       </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span>
+<span class="w">       </span><span class="s">STAGE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span>
+<span class="w">       </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
+<span class="w">       </span><span class="s">TARGET_ENV</span><span class="w"> </span><span class="s">vulkan1.0</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="c"># Make our project depend on these files</span>
+<span class="w">    </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
+<span class="nb">endforeach</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container">
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL ES GLSL</span>
-<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">ES_GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
-<span class="w">            </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
-<span class="w">            </span><span class="s">COMMAND</span><span class="w"> </span>
-<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
-<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
-<span class="w">                </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
-<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
-<span class="w">            </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
-<span class="w">            </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
-<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
-<span class="w">            </span><span class="s">VERBATIM</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="c"># Make our project depend on these files</span>
-<span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c">#OpenGL ES GLSL</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
+<span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">ES_GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">        </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">        </span><span class="s">COMMAND</span><span class="w"> </span>
+<span class="w">            </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">            </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">            </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">        </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">        </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">        </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">        </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">        </span><span class="s">VERBATIM</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="c"># Make our project depend on these files</span>
+<span class="w">    </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
+<span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1589,33 +1589,9 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
-
-<span class="w">        </span><span class="c1">// XR_DOCS_TAG_BEGIN_SetupFrameRendering</span>
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetViewports</span><span class="p">(</span><span class="o">&amp;</span><span class="n">viewport</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetScissors</span><span class="p">(</span><span class="o">&amp;</span><span class="n">scissor</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-
-<span class="w">        </span><span class="c1">// Compute the view-projection transform.</span>
-<span class="w">        </span><span class="c1">// All matrices (including OpenXR&#39;s) are column-major, right-handed.</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">proj</span><span class="p">;</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f_CreateProjectionFov</span><span class="p">(</span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">,</span><span class="w"> </span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fov</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05f</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">);</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">toView</span><span class="p">;</span>
-<span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale1m</span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f_CreateTranslationRotationScale</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toView</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scale1m</span><span class="p">);</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f_InvertRigidBody</span><span class="p">(</span><span class="o">&amp;</span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">toView</span><span class="p">);</span>
-<span class="w">        </span><span class="n">XrMatrix4x4f_Multiply</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">viewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">view</span><span class="p">);</span>
-<span class="w">        </span><span class="c1">// XR_DOCS_TAG_END_SetupFrameRendering</span>
-
-<span class="w">        </span><span class="c1">// XR_DOCS_TAG_BEGIN_CallRenderCuboid</span>
-<span class="w">        </span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">        </span><span class="c1">// Draw a floor. Scale it by 2 in the X and Z, and 0.1 in the Y,</span>
-<span class="w">        </span><span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">2.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.4f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">});</span>
-<span class="w">        </span><span class="c1">// Draw a &quot;table&quot;.</span>
-<span class="w">        </span><span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.9f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.7f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4f</span><span class="p">});</span>
-<span class="w">        </span><span class="c1">// XR_DOCS_TAG_END_CallRenderCuboid</span>
-
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Give the swapchain image back to OpenXR, allowing the compositor to use the image.</span>
 <span class="w">        </span><span class="n">XrSwapchainImageReleaseInfo</span><span class="w"> </span><span class="n">releaseInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO</span><span class="p">};</span>
@@ -1719,7 +1695,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="c1">// [...]</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">XrPosef</span><span class="w"> </span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">colour</span><span class="p">)</span>
+<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">XrPosef</span><span class="w"> </span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">color</span><span class="p">)</span>
 </span><span class="hll"><span class="w">        </span><span class="p">{</span>
 </span><span class="hll"><span class="w">        </span><span class="p">}</span>
 </span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateResources</span><span class="p">()</span>
@@ -1760,9 +1736,9 @@ If we specify a different pose, the origin received when we poll the space would
 </span><span class="p">};</span>
 </pre></div>
 </div>
-<p>To draw our geometry, we will need a simple mathematics library for vectors, matrices and the like. Download this header file and place in it in the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder under the <em>workspace</em> directory:</p>
+<p>To draw our geometry, we will need a simple mathematics library for vectors, matrices and the like. Download this header file and place it in the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder under the <em>workspace</em> directory:</p>
 <p><a class="reference download internal" download="" href="_downloads/f4aef9ec726fccc71e105bc0830d4ff3/xr_linear_algebra.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/xr_linear_algebra.h</span></code></a></p>
-<p>In <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>, add the following code under the header include statements:</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>, add the following code under the current header include statements:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// include xr linear algebra for XrVector and XrMatrix classes.</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xr_linear_algebra.h&gt;</span>
 <span class="c1">// Declare some useful operators for vectors:</span>
@@ -1774,8 +1750,8 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Now, we will need to set up all of our rendering resource for our scene. This consists of a vertex/index buffer pair that hold the vertex data for a cube and uniform buffer large enough to hold multiple instants of our <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> struct. We use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateBuffer()</span></code> to create and upload our data to the GPU.</p>
-<p>Above <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">CreateResources()</span></code> add the following defining <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> and an array of <code class="docutils literal notranslate"><span class="pre">XrVector4f</span></code> normals:</p>
+<p>Now, we will need to set up all of our rendering resource for our scene. This consists of a vertex/index buffer-pair that holds the geometry data for a cube and uniform/constant buffer large enough to hold multiple instances of our <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> struct. We use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateBuffer()</span></code> to create and upload our data to the GPU.</p>
+<p>Above <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">CreateResources()</span></code> add the following code defining <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> and an array of <code class="docutils literal notranslate"><span class="pre">XrVector4f</span></code> normals:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">CameraConstants</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">viewProj</span><span class="p">;</span>
 <span class="w">    </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">;</span>
@@ -1836,7 +1812,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="w">        </span><span class="n">m_uniformBuffer_Normals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">normals</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">normals</span><span class="p">});</span>
 </pre></div>
 </div>
-<p>Now, we will add the code to load and create our shaders:</p>
+<p>Now, we will add the code to load and create our shaders with <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateShader()</span></code>:</p>
 <div class="opengl docutils container">
 <p>For OpenGL, we will use GLSL version 450. Add this code to define our vertex and pixel shaders, and to create a shader program:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1904,7 +1880,7 @@ If we specify a different pose, the origin received when we poll the space would
 </pre></div>
 </div>
 </div>
-<p>Now we’ll combine the shaders, the vertex input layout, and the rendering state for drawing a solid cube, into a pipeline object. Add the following code to <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code>:</p>
+<p>Now we’ll combine the shaders, the vertex input layout, and the rendering state for drawing a solid cube, into a pipeline object using <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreatePipeline()</span></code>. Add the following code to <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PipelineCreateInfo</span><span class="w"> </span><span class="n">pipelineCI</span><span class="p">;</span>
 <span class="n">pipelineCI</span><span class="p">.</span><span class="n">shaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">m_vertexShader</span><span class="p">,</span><span class="w"> </span><span class="n">m_fragmentShader</span><span class="p">};</span>
 <span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">VertexType</span><span class="o">::</span><span class="n">VEC4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TEXCOORD&quot;</span><span class="p">}};</span>
@@ -1922,7 +1898,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreatePipeline</span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>To destroy the resources when a session has ended, add this code into <code class="docutils literal notranslate"><span class="pre">DestroyResources()</span></code>:</p>
+<p>To destroy the resources, add this code into <code class="docutils literal notranslate"><span class="pre">DestroyResources()</span></code>, which use the corresponding <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::Destroy...()</span></code> methods:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyPipeline</span><span class="p">(</span><span class="n">m_pipeline</span><span class="p">);</span>
 <span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyShader</span><span class="p">(</span><span class="n">m_fragmentShader</span><span class="p">);</span>
 <span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyShader</span><span class="p">(</span><span class="n">m_vertexShader</span><span class="p">);</span>
@@ -1933,7 +1909,7 @@ If we specify a different pose, the origin received when we poll the space would
 </pre></div>
 </div>
 <p>With our rendering resources now set up, we can add in the code needed for rendering the cuboids. We will set up the <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> method, which is little helper method that renders a cuboid. It also tracks the number of rendered cuboid with <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code>. This is used so that we can correctly index into the right section of the uniform/constant buffer for positioning the cuboid and camera.</p>
-<p>Above <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code>, add the following code:</p>
+<p>Above <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">RenderCuboid()</span></code>, add the following code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">size_t</span><span class="w"> </span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -1959,8 +1935,8 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="n">renderCuboidIndex</span><span class="o">++</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>From the passed-in pose and scale, we create the <code class="docutils literal notranslate"><span class="pre">model</span></code> matrix, and multiply that with <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code> to obtain <code class="docutils literal notranslate"><span class="pre">CameraConstants::modelViewProj</span></code>, the matrix that transforms from vertices in our unit cube into projection space. We apply our “pipeline” - the shader and render states. We update two uniform buffers, one containing cameraConstants for the vertex shader, the other containing the normals for the cuboid. We assign our vertex and index buffers and draw 36 indices.</p>
-<p>Now moving to <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> and under the section where we clear the color and depth image vies, add the following code:</p>
+<p>From the passed-in pose and scale, we create the <code class="docutils literal notranslate"><span class="pre">model</span></code> matrix, and multiply that with <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code> to obtain <code class="docutils literal notranslate"><span class="pre">CameraConstants::modelViewProj</span></code>, the matrix that transforms the vertices in our unit cube from model space into projection space. We apply our <code class="docutils literal notranslate"><span class="pre">pipeline</span></code>, which contains the shaders and render states. We update the two uniform buffers, one containing cameraConstants for the vertex shader, the other containing the normals for the cuboid. We assign our vertex and index buffers and draw 36 indices.</p>
+<p>Now moving to the <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> method and under the section where we clear the color and depth image views, add the following code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
 <span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetViewports</span><span class="p">(</span><span class="o">&amp;</span><span class="n">viewport</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 <span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetScissors</span><span class="p">(</span><span class="o">&amp;</span><span class="n">scissor</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
@@ -1977,7 +1953,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="n">XrMatrix4x4f_Multiply</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">viewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">view</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>The section sets the color and depth image views as rendering attachments for the output merger/color blend stage to write to. We also set the viewport for the rasterizer to transform from normalized device coordinates to texel space and we set the scissor for the rasterizer to the cut in texel space. Next, we compute projection and view matrices and we multiply them together to create a view-projection matrix for <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code>. Now, add the following code:</p>
+<p>The section sets the color and depth image views as rendering attachments for the output merger/color blend stage to write to. We also set the viewport for the rasterizer to transform from normalized device coordinates to texel space and we set the scissor for the rasterizer to the cut in texel space. Our viewport and scissor cover the whole render area. Next, we compute projection and view matrices and we multiply them together to create a view-projection matrix for <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code>. Now, add the following code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="c1">// Draw a floor. Scale it by 2 in the X and Z, and 0.1 in the Y,</span>
 <span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">2.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.4f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">});</span>
@@ -1985,7 +1961,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.9f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.7f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4f</span><span class="p">});</span>
 </pre></div>
 </div>
-<p>Finally, we set <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> and call <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> twice drawing two cuboids. The first is offset by our (arbitrary) view height, so as to represent a “floor”. We scale it by 2 metres in the horizontal directions and 0.1m in the vertical, so it’s flat. With that, we should now have a clear color and two cuboid rendered to each view in your XR system.</p>
+<p>Finally, we set <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> and call <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> twice drawing two cuboids. The first is offset by our (arbitrary) view height, so as to represent a “floor”. We scale it by 2 meters in the horizontal directions and 0.1 meter in the vertical, so it’s flat. With that, we should now have a clear color and two cuboid rendered to each view in your XR system.</p>
 <p>In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
 </section>
 </section>
