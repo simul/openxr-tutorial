@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 06 Oct** : Updated tags in code for chapters 4 and 5. Correction for chapter 4 text: rst dedents, CMake changes, usage of app/application and code includes.
     | **Fri 06 Oct** : Updated tags in coded chapters 3/4/5 to fix text error in Chapter 3.2 and 3.3. Fix rst container and dedent errors. Corrections to chapter 3 text.
     | **Fri 06 Oct** : Removed :name: from rst containers. Using US English spelling of color in GraphicsAPI. Updated Chapter 3.3 and 4 text as cuboid rendering has moved to chapter 3.3. Chapter 4/5 code: updated tags and code.
     | **Thu 05 Oct** : Added Chapter 3 text - WIP. Chapter minor updates - will need updating.
@@ -101,4 +102,3 @@ Changelist
     | **Wed 23 Aug** : Updated chapter 3.2.2 text.
     | **Wed 23 Aug** : Minor correction for 3.2.2 text/
     | **Wed 23 Aug** : Updated doc tags in Chapter 3 text. Fixed warning tutorial/1-introduction.rst.
-    | **Wed 23 Aug** : Chapter 3 text updated dedents and minor changes to 3.2.2. Added section XR_EXT_local_floor extension.
