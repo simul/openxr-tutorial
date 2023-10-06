@@ -269,6 +269,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#renderlayer">3.2.4 RenderLayer</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#rendering-cuboids">3.3 Rendering Cuboids</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
@@ -345,7 +346,7 @@
 							
   <section id="graphics">
 <h1>3 Graphics<a class="headerlink" href="#graphics" title="Permalink to this heading">¶</a></h1>
-<p>The goal of this chapter is to build an application that creates and clears color and depth buffers within the scope of OpenXR render loop and to demonstrate its interaction with the Graphics APIs.</p>
+<p>The goal of this chapter is to build an application that creates and clears color and depth buffers and draws some geometry to the views within the scope of OpenXR render loop and to demonstrate its interaction with the Graphics APIs.</p>
 <div class="windows linux docutils container">
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
@@ -361,7 +362,178 @@
 <span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
 </pre></div>
 </div>
-<div class="android docutils container" id="android-id-1">
+<p>Create a <code class="docutils literal notranslate"><span class="pre">Shaders</span></code> folder next to your project folder, download and put these files in it:</p>
+<div class="d3d11 d3d12 docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/a65e269de9b7a46bfab190cac6b59063/VertexShader.hlsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader.hlsl</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/83814fc618efed2eeb17268c1904579f/PixelShader.hlsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader.hlsl</span></code></a></p></li>
+</ul>
+</div>
+<div class="vulkan opengl docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/87f4ebe3fd83fe1bc3cf07b57229857c/VertexShader.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader.glsl</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/40bc9855ab807d86043fec89482838b9/PixelShader.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader.glsl</span></code></a></p></li>
+</ul>
+</div>
+<div class="opengles docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/5fd4ad47585372fa55e2527609b9ef94/VertexShader_GLES.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/VertexShader_GLES.glsl</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/84f3eb8cf3b6bf77a2d8904294491a4d/PixelShader_GLES.glsl"><code class="xref download docutils literal notranslate"><span class="pre">Shaders/PixelShader_GLES.glsl</span></code></a></p></li>
+</ul>
+</div>
+<p>Underneath <code class="docutils literal notranslate"><span class="pre">SOURCES</span></code> <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code> section, add the following CMake code specifying the location of the shaders:</p>
+<div class="d3d11 d3d12 docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">HLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.hlsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.hlsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl vulkan docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">GLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader.glsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader.glsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">ES_GLSL_SHADERS</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/VertexShader_GLES.glsl&quot;</span>
+<span class="w">    </span><span class="s2">&quot;../Shaders/PixelShader_GLES.glsl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Underneath section where specify your Graphics API, add the following CMake code:</p>
+<div class="window docutils container">
+<div class="d3d11 d3d12 docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># D3D11 and D3D12 HLSL</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">include</span><span class="p">(</span><span class="s">fxc_shader</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_property</span><span class="p">(</span><span class="s">SOURCE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">VS_SETTINGS</span><span class="w"> </span><span class="s2">&quot;ExcludedFromBuild=true&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.hlsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;ps&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="c"># D3D11: Using Shader Model 5.0</span>
+<span class="w">        </span><span class="c"># D3D12: Using Shader Model 5.1</span>
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">shadermodel</span><span class="w"> </span><span class="s">5_0</span><span class="w"> </span><span class="s">5_1</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">HLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">                </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">                </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">                </span><span class="nb">fxc_shader</span><span class="p">(</span>
+<span class="w">                    </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">                    </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span>
+<span class="w">                    </span><span class="s">OUTPUT_PDB</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.pdb&quot;</span>
+<span class="w">                    </span><span class="s">PROFILE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span><span class="s">_</span><span class="o">${</span><span class="nv">shadermodel</span><span class="o">}</span>
+<span class="w">                    </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
+<span class="w">                </span><span class="p">)</span>
+<span class="w">                </span><span class="c"># Make our project depend on these files</span>
+<span class="w">                </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}/${FILE_WE}_${shadermodel}.cso&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="window linux docutils container">
+<div class="vulkan docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># Vulkan GLSL</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s">Vulkan_FOUND</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">include</span><span class="p">(</span><span class="s">glsl_shader</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">            </span><span class="nb">glsl_spv_shader</span><span class="p">(</span>
+<span class="w">               </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">               </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span>
+<span class="w">               </span><span class="s">STAGE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span>
+<span class="w">               </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
+<span class="w">               </span><span class="s">TARGET_ENV</span><span class="w"> </span><span class="s">vulkan1.0</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">            </span><span class="c"># Make our project depend on these files</span>
+<span class="w">            </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">endforeach</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># OpenGL GLSL</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">            </span><span class="s">COMMAND</span><span class="w"> </span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">                </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">            </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">        </span><span class="c"># Make our project depend on these files</span>
+<span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="android docutils container">
+<div class="vulkan docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c"># Vulkan GLSL</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">include</span><span class="p">(</span><span class="s">glsl_shader</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/VertexShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;vert&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">../Shaders/PixelShader.glsl</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">ShaderType</span><span class="w"> </span><span class="s2">&quot;frag&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_source_file_property</span><span class="p">(</span><span class="s">shadertype</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">ShaderType</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">glsl_spv_shader</span><span class="p">(</span>
+<span class="w">           </span><span class="s">INPUT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">           </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span>
+<span class="w">           </span><span class="s">STAGE</span><span class="w"> </span><span class="o">${</span><span class="nv">shadertype</span><span class="o">}</span>
+<span class="w">           </span><span class="s">ENTRY_POINT</span><span class="w"> </span><span class="s">main</span>
+<span class="w">           </span><span class="s">TARGET_ENV</span><span class="w"> </span><span class="s">vulkan1.0</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">        </span><span class="c"># Make our project depend on these files</span>
+<span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.spv&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c">#OpenGL ES GLSL</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">SHADER_DEST</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/app/src/main/assets/shaders&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">foreach</span><span class="p">(</span><span class="s">FILE</span><span class="w"> </span><span class="o">${</span><span class="nv">ES_GLSL_SHADERS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FILE_WE</span><span class="w"> </span><span class="o">${</span><span class="nv">FILE</span><span class="o">}</span><span class="w"> </span><span class="s">NAME_WE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_custom_command</span><span class="p">(</span>
+<span class="w">            </span><span class="s">OUTPUT</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">            </span><span class="s">COMMAND</span><span class="w"> </span>
+<span class="w">                </span><span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="s">-E</span><span class="w"> </span><span class="s">copy</span><span class="w"> </span>
+<span class="w">                </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/${FILE}&quot;</span>
+<span class="w">                </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span>
+<span class="w">            </span><span class="s">COMMENT</span><span class="w"> </span><span class="s2">&quot;GLSL ${FILE}&quot;</span>
+<span class="w">            </span><span class="s">MAIN_DEPENDENCY</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">            </span><span class="s">DEPEND</span><span class="w"> </span><span class="s2">&quot;${FILE}&quot;</span>
+<span class="w">            </span><span class="s">WORKING_DIRECTORY</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;</span>
+<span class="w">            </span><span class="s">VERBATIM</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">        </span><span class="c"># Make our project depend on these files</span>
+<span class="w">        </span><span class="nb">target_sources</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s2">&quot;${SHADER_DEST}/${FILE_WE}.glsl&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endforeach</span><span class="p">(</span><span class="s">FILE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="android docutils container">
 <p>For Android, you will also need to change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code> in app/build.gradle, settings.gradle and app/src/main/AndroidManifest.xml. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
 <p>Load your new project in Android Studio.</p>
 </div>
@@ -486,19 +658,19 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
-<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w"> </span><span class="c1">// Use GraphicsAPI to select the first compatible format.</span>
-<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w"> </span><span class="c1">// Use the recommended values from the XrViewConfigurationView.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">               </span><span class="c1">// Use GraphicsAPI to select the first compatible format.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w">  </span><span class="c1">// Use the recommended values from the XrViewConfigurationView.</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">faceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">arraySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">mipCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateSwapchain</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Swapchain&quot;</span><span class="p">);</span>
-<span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="p">;</span><span class="w"> </span><span class="c1">// Save the swapchain format for later use.</span>
+<span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="p">;</span><span class="w">  </span><span class="c1">// Save the swapchain format for later use.</span>
 </pre></div>
 </div>
 <p>Here, we filled out the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo</span></code> structure. The <code class="docutils literal notranslate"><span class="pre">sampleCount</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> members were assigned from the <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. We set the <code class="docutils literal notranslate"><span class="pre">createFlags</span></code> to 0 as we require no constraints or additional functionality. We set the <code class="docutils literal notranslate"><span class="pre">usageFlags</span></code> to <code class="docutils literal notranslate"><span class="pre">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span> <span class="pre">|</span> <span class="pre">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span></code> requesting that the images are suitable to be read in a shader and to be used as a render target/color attachment.</p>
-<div class="d3d11 docutils container" id="d3d11-id-1">
+<div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
 <table class="docutils align-default">
 <tbody>
@@ -532,7 +704,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </tbody>
 </table>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-1">
+<div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
 <table class="docutils align-default">
 <tbody>
@@ -566,15 +738,15 @@ Append the following this code to the <code class="docutils literal notranslate"
 </tbody>
 </table>
 </div>
-<div class="opengl docutils container" id="opengl-id-1">
+<div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
 <p>All <code class="docutils literal notranslate"><span class="pre">XrSwapchainUsageFlags</span></code> are ignored as OpenGL can’t specify usage of an image.</p>
 </div>
-<div class="opengles docutils container" id="opengles-id-1">
+<div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
 <p>All <code class="docutils literal notranslate"><span class="pre">XrSwapchainUsageFlags</span></code> are ignored as OpenGL ES can’t specify usage of an image.</p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-1">
+<div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
 <table class="docutils align-default">
 <tbody>
@@ -627,7 +799,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI.cpp</em></p>
 <p>The function calls a pure virtual method called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific formats that the GraphicsAPI library supports.</p>
-<div class="d3d11 docutils container" id="d3d11-id-2">
+<div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -640,7 +812,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.cpp</em></p>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-2">
+<div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -653,7 +825,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.cpp</em></p>
 </div>
-<div class="opengl docutils container" id="opengl-id-2">
+<div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L229-L236</span>
@@ -670,7 +842,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 </div>
-<div class="opengles docutils container" id="opengles-id-2">
+<div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengles.cpp#L208-L216</span>
@@ -686,7 +858,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-2">
+<div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
@@ -713,7 +885,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p>Below is an excerpt of the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> method and the <code class="docutils literal notranslate"><span class="pre">XrSwapchainImage...KHR</span></code> structure relating to your chosen graphics API.</p>
-<div class="d3d11 docutils container" id="d3d11-id-3">
+<div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_D3D11::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_D3D11_KHR</span><span class="p">});</span>
@@ -733,7 +905,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D11Texture2D</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-3">
+<div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_D3D12::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_D3D12_KHR</span><span class="p">});</span>
@@ -753,7 +925,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">ID3D12Resource</span> <span class="pre">*</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="opengl docutils container" id="opengl-id-3">
+<div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_OpenGL::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_KHR</span><span class="p">});</span>
@@ -773,7 +945,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="opengles docutils container" id="opengles-id-3">
+<div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_OpenGL_ES::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_ES_KHR</span><span class="p">});</span>
@@ -793,7 +965,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p><em>The above code is an excerpt from openxr/openxr_platform.h</em></p>
 <p>The structure contains a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> member that is the handle to one of the images in the swapchain.</p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-3">
+<div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainImageBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="nf">GraphicsAPI_Vulkan::AllocateSwapchainImageData</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">swapchainImages</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR</span><span class="p">});</span>
@@ -836,35 +1008,35 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p>Each graphics API overrides the virtual method <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetDepthFormat()</span></code>, which return a API-specific image format of type <code class="docutils literal notranslate"><span class="pre">D32_F</span></code>.</p>
-<div class="d3d11 docutils container" id="d3d11-id-4">
+<div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.h</em></p>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-4">
+<div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.h</em></p>
 </div>
-<div class="opengl docutils container" id="opengl-id-4">
+<div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.h</em></p>
 </div>
-<div class="opengles docutils container" id="opengles-id-4">
+<div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.h</em></p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-4">
+<div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GetDepthFormat</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">VK_FORMAT_D32_SFLOAT</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
@@ -904,14 +1076,14 @@ Append the following this code to the <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p>Each graphics API overrides the virtual function <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSwapchainImage()</span></code>, which return a API-specific handle to the image, which is cast to a <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">*</span></code>.</p>
-<div class="d3d11 docutils container" id="d3d11-id-5">
+<div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D11.h</em></p>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-5">
+<div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">    </span><span class="n">ID3D12Resource</span><span class="o">*</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">texture</span><span class="p">;</span>
@@ -923,21 +1095,21 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p><em>The above code is an excerpt from Common/GraphicsAPI_D3D12.h</em></p>
 <p>For DirectX 3D 12, the <code class="docutils literal notranslate"><span class="pre">ID3D12Resource</span> <span class="pre">*</span></code> returned has of its all subresource states in <code class="docutils literal notranslate"><span class="pre">D3D12_RESOURCE_STATE_RENDER_TARGET</span></code>. This is a requirement of the OpenXR 1.0 D3D12 extension. See: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_D3D12_enable">12.13. XR_KHR_D3D12_enable</a>.</p>
 </div>
-<div class="opengl docutils container" id="opengl-id-5">
+<div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.h</em></p>
 </div>
-<div class="opengles docutils container" id="opengles-id-5">
+<div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.h</em></p>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-5">
+<div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">GetSwapchainImage</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">VkImage</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainImages</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">image</span><span class="p">;</span>
@@ -1061,7 +1233,7 @@ We store our newly created color image views for the swapchain in <code class="d
 </span><span class="hll"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 </span><span class="hll"><span class="w">        </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">;</span>
 </span><span class="hll">
-</span><span class="hll"><span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="hll"><span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span>
 </span><span class="p">};</span>
 </pre></div>
 </div>
@@ -1114,7 +1286,6 @@ level of blending with the real world behind the display.</p></td>
 <span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">environmentBlendModeSize</span><span class="p">);</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrEnumerateEnvironmentBlendModes</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">,</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">,</span><span class="w"> </span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendModeSize</span><span class="p">,</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate EnvironmentBlend Modes.&quot;</span><span class="p">);</span>
 
-<span class="c1">// Select the first Environment Blend Mode as our default.</span>
 <span class="c1">// Pick the first application supported blend mode supported by the hardware.</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="o">&amp;</span><span class="n">environmentBlendMode</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_applicationEnvironmentBlendModes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">environmentBlendMode</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
@@ -1122,14 +1293,13 @@ level of blending with the real world behind the display.</p></td>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="n">m_environmentBlendMode</span><span class="o">==</span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="o">&lt;&lt;</span><span class="s">&quot;Failed to find a compatible blend mode. Defaulting to XR_ENVIRONMENT_BLEND_MODE_OPAQUE.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to find a compatible blend mode. Defaulting to XR_ENVIRONMENT_BLEND_MODE_OPAQUE.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>We enumerated the environment blend modes as shown above. This function took a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s as multiple environment blend modes could be available to the system. The runtime returned an array ordered by its preference for the system. After we enumerated all the <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s, we picked the first one as an absolute default, then we looped through all of our <code class="docutils literal notranslate"><span class="pre">m_applicationEnvironmentBlendModes</span></code> to try and find our <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code>.</p>
+<p>We enumerated the environment blend modes as shown above. This function took a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s as multiple environment blend modes could be available to the system. The runtime returned an array ordered by its preference for the system. After we enumerated all the <code class="docutils literal notranslate"><span class="pre">XrEnvironmentBlendMode</span></code> s,  we looped through all of our <code class="docutils literal notranslate"><span class="pre">m_applicationEnvironmentBlendModes</span></code> to try and find one in our <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code>, if we can’t find one, we default to <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span></code>, assigning the result to <code class="docutils literal notranslate"><span class="pre">m_environmentBlendMode</span></code>.</p>
 </section>
 <section id="xrcreatereferencespace">
 <h3>3.2.2 xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
@@ -1362,7 +1532,7 @@ If we specify a different pose, the origin received when we poll the space would
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Locate the views from the view configuration with in the (reference) space at the display time.</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">views</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW</span><span class="p">});</span>
 
-<span class="w">    </span><span class="n">XrViewState</span><span class="w"> </span><span class="n">viewState</span><span class="p">{</span><span class="n">XR_TYPE_VIEW_STATE</span><span class="p">};</span><span class="w"> </span><span class="c1">//Will contain information on whether the position and/or orientation is valid and/or tracked.</span>
+<span class="w">    </span><span class="n">XrViewState</span><span class="w"> </span><span class="n">viewState</span><span class="p">{</span><span class="n">XR_TYPE_VIEW_STATE</span><span class="p">};</span><span class="w">  </span><span class="c1">// Will contain information on whether the position and/or orientation is valid and/or tracked.</span>
 <span class="w">    </span><span class="n">XrViewLocateInfo</span><span class="w"> </span><span class="n">viewLocateInfo</span><span class="p">{</span><span class="n">XR_TYPE_VIEW_LOCATE_INFO</span><span class="p">};</span>
 <span class="w">    </span><span class="n">viewLocateInfo</span><span class="p">.</span><span class="n">viewConfigurationType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="p">;</span>
 <span class="w">    </span><span class="n">viewLocateInfo</span><span class="p">.</span><span class="n">displayTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">predictedDisplayTime</span><span class="p">;</span>
@@ -1376,7 +1546,7 @@ If we specify a different pose, the origin received when we poll the space would
 
 <span class="w">    </span><span class="c1">// Resize the layer projection views to match the view count. The layer projection views are used in the layer projection.</span>
 <span class="w">    </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewCount</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW</span><span class="p">});</span>
-<span class="w">    </span>
+
 <span class="w">    </span><span class="c1">// Per view in the view configuration:</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">viewCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Acquire and wait for an image from the swapchain.</span>
@@ -1406,7 +1576,7 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">offset</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">width</span><span class="p">);</span>
 <span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
-<span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Useful for multiview rendering.</span>
+<span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// Useful for multiview rendering.</span>
 
 <span class="w">        </span><span class="c1">// Rendering code to clear the color and depth image views.</span>
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">BeginRendering</span><span class="p">();</span>
@@ -1419,6 +1589,31 @@ If we specify a different pose, the origin received when we poll the space would
 <span class="w">            </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// XR_DOCS_TAG_BEGIN_SetupFrameRendering</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetViewports</span><span class="p">(</span><span class="o">&amp;</span><span class="n">viewport</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetScissors</span><span class="p">(</span><span class="o">&amp;</span><span class="n">scissor</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Compute the view-projection transform.</span>
+<span class="w">        </span><span class="c1">// All matrices (including OpenXR&#39;s) are column-major, right-handed.</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">proj</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f_CreateProjectionFov</span><span class="p">(</span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">,</span><span class="w"> </span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fov</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05f</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">);</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">toView</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale1m</span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f_CreateTranslationRotationScale</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toView</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scale1m</span><span class="p">);</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f_InvertRigidBody</span><span class="p">(</span><span class="o">&amp;</span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">toView</span><span class="p">);</span>
+<span class="w">        </span><span class="n">XrMatrix4x4f_Multiply</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">viewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">view</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// XR_DOCS_TAG_END_SetupFrameRendering</span>
+
+<span class="w">        </span><span class="c1">// XR_DOCS_TAG_BEGIN_CallRenderCuboid</span>
+<span class="w">        </span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// Draw a floor. Scale it by 2 in the X and Z, and 0.1 in the Y,</span>
+<span class="w">        </span><span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">2.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.4f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">});</span>
+<span class="w">        </span><span class="c1">// Draw a &quot;table&quot;.</span>
+<span class="w">        </span><span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.9f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.7f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4f</span><span class="p">});</span>
+<span class="w">        </span><span class="c1">// XR_DOCS_TAG_END_CallRenderCuboid</span>
 
 <span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>
 
@@ -1446,8 +1641,352 @@ If we specify a different pose, the origin received when we poll the space would
 <p>After filling out the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code> structure, we can use this tutorial’s <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> to clear the images as a very simple test. We first call <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::BeginRendering()</span></code> to setup any API-specific objects needed for rendering. Next, we call <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ClearColor()</span></code> taking the created color image view for the swapchain image; note here that we use different clear colors depending on whether our environment blend mode is opaque or otherwise. We also clear our depth image view with <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::ClearDepth()</span></code>. Finally, we call <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::EndRendering()</span></code> to finish the rendering. This function will submit the work to the GPU and wait for it to be completed.</p>
 <p>Now, we have rendered both views and exited the loop.</p>
 <p>We fill out the <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjection</span></code> structure, we assign our compositing flags of <code class="docutils literal notranslate"><span class="pre">XR_COMPOSITION_LAYER_BLEND_TEXTURE_SOURCE_ALPHA_BIT</span> <span class="pre">|</span> <span class="pre">XR_COMPOSITION_LAYER_CORRECT_CHROMATIC_ABERRATION_BIT</span></code> and assign our reference space. We assign to the member <code class="docutils literal notranslate"><span class="pre">viewCount</span></code> the size of the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerProjectionView&gt;</span></code> and to the member <code class="docutils literal notranslate"><span class="pre">views</span></code> a pointer to the first element in the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerProjectionView&gt;</span></code>. Finally, we return <code class="docutils literal notranslate"><span class="pre">true</span></code> from the function to state that we have successfully completed our rendering.</p>
-<p>We should now have clear colors rendered to each view in your XR system. From here, you can easily expand the graphical complexity of the scene. In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
+<p>We should now have clear colors rendered to each view in your XR system. From here, you can easily expand the graphical complexity of the scene.</p>
 </section>
+</section>
+<section id="rendering-cuboids">
+<h2>3.3 Rendering Cuboids<a class="headerlink" href="#rendering-cuboids" title="Permalink to this heading">¶</a></h2>
+<p>Now that we have a clear color and depth working, we can now start to render geometry in our scene. We will use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> to create vertex, index and uniform/constant buffers along with shaders and a pipeline to render some cuboid representing the floor and a table surface.</p>
+<p>Update the methods and members in the class. Copy the highlighted code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Constructor and Destructor created in previous chapters.</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">GetViewConfigurationViews</span><span class="p">();</span>
+<span class="w">                </span><span class="n">GetEnvironmentBlendModes</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateReferenceSpace</span><span class="p">();</span>
+<span class="w">                </span><span class="n">CreateSwapchain</span><span class="p">();</span>
+<span class="hll"><span class="w">                </span><span class="n">CreateResources</span><span class="p">();</span>
+</span>
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="n">RenderFrame</span><span class="p">();</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="hll"><span class="w">                </span><span class="n">DestroyResources</span><span class="p">();</span>
+</span><span class="w">                </span><span class="n">DestroySwapchain</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroyReferenceSpace</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
+
+<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
+<span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Methods created in previous chapters.</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetViewConfigurationViews</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySwapchain</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetEnvironmentBlendModes</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateReferenceSpace</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyReferenceSpace</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderFrame</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">RenderLayer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XrTime</span><span class="w"> </span><span class="o">&amp;</span><span class="n">predictedDisplayTime</span><span class="p">,</span><span class="w"> </span><span class="n">XrCompositionLayerProjection</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjection</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerProjectionView</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProjectionViews</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// [...]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">XrPosef</span><span class="w"> </span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">colour</span><span class="p">)</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateResources</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyResources</span><span class="p">()</span>
+</span><span class="hll"><span class="w">        </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// [...] Members created in previous chapters.</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrViewConfigurationView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SwapchainAndDepthImage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">XrSwapchain</span><span class="w"> </span><span class="n">swapchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">swapchainFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">void</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">colorImageViews</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">depthImageView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SwapchainAndDepthImage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_applicationEnvironmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_ADDITIVE</span><span class="p">};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrEnvironmentBlendMode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_environmentBlendModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">XrEnvironmentBlendMode</span><span class="w"> </span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_MAX_ENUM</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">m_localOrStageSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span>
+
+<span class="hll"><span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">;</span>
+</span><span class="hll">
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_vertexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_indexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_uniformBuffer_Camera</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_uniformBuffer_Normals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>To draw our geometry, we will need a simple mathematics library for vectors, matrices and the like. Download this header file and place in it in the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder under the <em>workspace</em> directory:</p>
+<p><a class="reference download internal" download="" href="_downloads/f4aef9ec726fccc71e105bc0830d4ff3/xr_linear_algebra.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/xr_linear_algebra.h</span></code></a></p>
+<p>In <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>, add the following code under the header include statements:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// include xr linear algebra for XrVector and XrMatrix classes.</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xr_linear_algebra.h&gt;</span>
+<span class="c1">// Declare some useful operators for vectors:</span>
+<span class="n">XrVector3f</span><span class="w"> </span><span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">z</span><span class="p">};</span>
+<span class="p">}</span>
+<span class="n">XrVector3f</span><span class="w"> </span><span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now, we will need to set up all of our rendering resource for our scene. This consists of a vertex/index buffer pair that hold the vertex data for a cube and uniform buffer large enough to hold multiple instants of our <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> struct. We use <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::CreateBuffer()</span></code> to create and upload our data to the GPU.</p>
+<p>Above <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">CreateResources()</span></code> add the following defining <code class="docutils literal notranslate"><span class="pre">CameraConstants</span></code> and an array of <code class="docutils literal notranslate"><span class="pre">XrVector4f</span></code> normals:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">CameraConstants</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">viewProj</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">CameraConstants</span><span class="w"> </span><span class="n">cameraConstants</span><span class="p">;</span>
+<span class="n">XrVector4f</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">1.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">-1.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.00f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}};</span>
+</pre></div>
+</div>
+<p>Copy the following code into <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Vertices for a 1x1x1 meter cube. (Left/Right, Top/Bottom, Front/Back)</span>
+<span class="w">        </span><span class="k">constexpr</span><span class="w"> </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">vertexPositions</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">{</span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">}};</span>
+
+<span class="cp">#define CUBE_FACE(V1, V2, V3, V4, V5, V6) vertexPositions[V1], vertexPositions[V2], vertexPositions[V3], vertexPositions[V4], vertexPositions[V5], vertexPositions[V6],</span>
+
+<span class="w">        </span><span class="n">XrVector4f</span><span class="w"> </span><span class="n">cubeVertices</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="c1">// -X</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">  </span><span class="c1">// +X</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">  </span><span class="c1">// -Y</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">  </span><span class="c1">// +Y</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="c1">// -Z</span>
+<span class="w">            </span><span class="n">CUBE_FACE</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// +Z</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">cubeIndices</span><span class="p">[</span><span class="mi">36</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">        </span><span class="c1">// -X</span>
+<span class="w">            </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">      </span><span class="c1">// +X</span>
+<span class="w">            </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Y</span>
+<span class="w">            </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Y</span>
+<span class="w">            </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w">  </span><span class="c1">// -Z</span>
+<span class="w">            </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">  </span><span class="c1">// +Z</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">m_vertexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeVertices</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cubeVertices</span><span class="p">});</span>
+
+<span class="w">        </span><span class="n">m_indexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">INDEX</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cubeIndices</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cubeIndices</span><span class="p">});</span>
+
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">numberOfCuboids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="n">m_uniformBuffer_Camera</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">numberOfCuboids</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">});</span>
+<span class="w">        </span><span class="n">m_uniformBuffer_Normals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateBuffer</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BufferCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">UNIFORM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">normals</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">normals</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>Now, we will add the code to load and create our shaders:</p>
+<div class="opengl docutils container">
+<p>For OpenGL, we will use GLSL version 450. Add this code to define our vertex and pixel shaders, and to create a shader program:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;VertexShader.glsl&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;PixelShader.glsl&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="windows linux docutils container">
+<p>For Vulkan, we will use GLSL version 450. Add this code to define our vertex and pixel shaders:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader.spv&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader.spv&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="android docutils container">
+<p>For Vulkan, we will use GLSL version 450. Add this code to define our vertex and pixel shaders:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VULKAN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;shaders/VertexShader.spv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;shaders/PixelShader.spv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="opengles docutils container">
+<p>For OpenGL ES, we will use GLSL version 310 es. Add this code to define our vertex and pixel shaders:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">OPENGL_ES</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;shaders/VertexShader_GLES.glsl&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadTextFile</span><span class="p">(</span><span class="s">&quot;shaders/PixelShader_GLES.glsl&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">assetManager</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d11 d3d12 docutils container">
+<p>For Direct 3D, add this code to define our vertex and pixel shaders:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D11</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader_5_0.cso&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader_5_0.cso&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_apiType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">D3D12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;VertexShader_5_1.cso&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">vertexSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fragmentSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadBinaryFile</span><span class="p">(</span><span class="s">&quot;PixelShader_5_1.cso&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateShader</span><span class="p">({</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ShaderCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">,</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fragmentSource</span><span class="p">.</span><span class="n">size</span><span class="p">()});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Now we’ll combine the shaders, the vertex input layout, and the rendering state for drawing a solid cube, into a pipeline object. Add the following code to <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PipelineCreateInfo</span><span class="w"> </span><span class="n">pipelineCI</span><span class="p">;</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">shaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">m_vertexShader</span><span class="p">,</span><span class="w"> </span><span class="n">m_fragmentShader</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">VertexType</span><span class="o">::</span><span class="n">VEC4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TEXCOORD&quot;</span><span class="p">}};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">vertexInputState</span><span class="p">.</span><span class="n">bindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)}};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">inputAssemblyState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PrimitiveTopology</span><span class="o">::</span><span class="n">TRIANGLE_LIST</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">rasterisationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">PolygonMode</span><span class="o">::</span><span class="n">FILL</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CullMode</span><span class="o">::</span><span class="n">BACK</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">FrontFace</span><span class="o">::</span><span class="n">COUNTER_CLOCKWISE</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">multisampleState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthStencilState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">CompareOp</span><span class="o">::</span><span class="n">LESS_OR_EQUAL</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">colorBlendState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">LogicOp</span><span class="o">::</span><span class="n">NO_OP</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE_MINUS_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ONE</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendFactor</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">BlendOp</span><span class="o">::</span><span class="n">ADD</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ColorComponentBit</span><span class="p">)</span><span class="mi">15</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">colorFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">swapchainFormat</span><span class="p">};</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">depthFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">GetDepthFormat</span><span class="p">();</span>
+<span class="n">pipelineCI</span><span class="p">.</span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">BUFFER</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Stage</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">},</span>
+<span class="w">                     </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">BUFFER</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Stage</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">},</span>
+<span class="w">                     </span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">BUFFER</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Stage</span><span class="o">::</span><span class="n">FRAGMENT</span><span class="p">}};</span>
+<span class="n">m_pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreatePipeline</span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>To destroy the resources when a session has ended, add this code into <code class="docutils literal notranslate"><span class="pre">DestroyResources()</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyPipeline</span><span class="p">(</span><span class="n">m_pipeline</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyShader</span><span class="p">(</span><span class="n">m_fragmentShader</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyShader</span><span class="p">(</span><span class="n">m_vertexShader</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyBuffer</span><span class="p">(</span><span class="n">m_uniformBuffer_Camera</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyBuffer</span><span class="p">(</span><span class="n">m_uniformBuffer_Normals</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyBuffer</span><span class="p">(</span><span class="n">m_indexBuffer</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DestroyBuffer</span><span class="p">(</span><span class="n">m_vertexBuffer</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>With our rendering resources now set up, we can add in the code needed for rendering the cuboids. We will set up the <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> method, which is little helper method that renders a cuboid. It also tracks the number of rendered cuboid with <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code>. This is used so that we can correctly index into the right section of the uniform/constant buffer for positioning the cuboid and camera.</p>
+<p>Above <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code>, add the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">size_t</span><span class="w"> </span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Inside <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code>, add the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrMatrix4x4f_CreateTranslationRotationScale</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scale</span><span class="p">);</span>
+
+<span class="n">XrMatrix4x4f_Multiply</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">modelViewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">viewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">model</span><span class="p">);</span>
+<span class="n">cameraConstants</span><span class="p">.</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">color</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">};</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">offsetCameraUB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">renderCuboidIndex</span><span class="p">;</span>
+
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetPipeline</span><span class="p">(</span><span class="n">m_pipeline</span><span class="p">);</span>
+
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetBufferData</span><span class="p">(</span><span class="n">m_uniformBuffer_Camera</span><span class="p">,</span><span class="w"> </span><span class="n">offsetCameraUB</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetDescriptor</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">m_uniformBuffer_Camera</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">BUFFER</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Stage</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">offsetCameraUB</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">CameraConstants</span><span class="p">)});</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetDescriptor</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_uniformBuffer_Normals</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">BUFFER</span><span class="p">,</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">DescriptorInfo</span><span class="o">::</span><span class="n">Stage</span><span class="o">::</span><span class="n">VERTEX</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">normals</span><span class="p">)});</span>
+
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">UpdateDescriptors</span><span class="p">();</span>
+
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetVertexBuffers</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_vertexBuffer</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetIndexBuffer</span><span class="p">(</span><span class="n">m_indexBuffer</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">DrawIndexed</span><span class="p">(</span><span class="mi">36</span><span class="p">);</span>
+
+<span class="n">renderCuboidIndex</span><span class="o">++</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>From the passed-in pose and scale, we create the <code class="docutils literal notranslate"><span class="pre">model</span></code> matrix, and multiply that with <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code> to obtain <code class="docutils literal notranslate"><span class="pre">CameraConstants::modelViewProj</span></code>, the matrix that transforms from vertices in our unit cube into projection space. We apply our “pipeline” - the shader and render states. We update two uniform buffers, one containing cameraConstants for the vertex shader, the other containing the normals for the cuboid. We assign our vertex and index buffers and draw 36 indices.</p>
+<p>Now moving to <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> and under the section where we clear the color and depth image vies, add the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetViewports</span><span class="p">(</span><span class="o">&amp;</span><span class="n">viewport</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetScissors</span><span class="p">(</span><span class="o">&amp;</span><span class="n">scissor</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// Compute the view-projection transform.</span>
+<span class="c1">// All matrices (including OpenXR&#39;s) are column-major, right-handed.</span>
+<span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">proj</span><span class="p">;</span>
+<span class="n">XrMatrix4x4f_CreateProjectionFov</span><span class="p">(</span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">,</span><span class="w"> </span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fov</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05f</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">);</span>
+<span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">toView</span><span class="p">;</span>
+<span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale1m</span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="n">XrMatrix4x4f_CreateTranslationRotationScale</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toView</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">views</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scale1m</span><span class="p">);</span>
+<span class="n">XrMatrix4x4f</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
+<span class="n">XrMatrix4x4f_InvertRigidBody</span><span class="p">(</span><span class="o">&amp;</span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">toView</span><span class="p">);</span>
+<span class="n">XrMatrix4x4f_Multiply</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cameraConstants</span><span class="p">.</span><span class="n">viewProj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">proj</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">view</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The section sets the color and depth image views as rendering attachments for the output merger/color blend stage to write to. We also set the viewport for the rasterizer to transform from normalized device coordinates to texel space and we set the scissor for the rasterizer to the cut in texel space. Next, we compute projection and view matrices and we multiply them together to create a view-projection matrix for <code class="docutils literal notranslate"><span class="pre">CameraConstants::viewProj</span></code>. Now, add the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">renderCuboidIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="c1">// Draw a floor. Scale it by 2 in the X and Z, and 0.1 in the Y,</span>
+<span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">2.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.4f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">});</span>
+<span class="c1">// Draw a &quot;table&quot;.</span>
+<span class="n">RenderCuboid</span><span class="p">({{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.9f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.7f</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4f</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>Finally, we set <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> and call <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> twice drawing two cuboids. The first is offset by our (arbitrary) view height, so as to represent a “floor”. We scale it by 2 metres in the horizontal directions and 0.1m in the vertical, so it’s flat. With that, we should now have a clear color and two cuboid rendered to each view in your XR system.</p>
+<p>In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
 </section>
 </section>
 

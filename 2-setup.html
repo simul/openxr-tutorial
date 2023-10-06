@@ -412,6 +412,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::apiVersion</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">XR_CURRENT_API_VERSION</span></code> macro to specific the OpenXR version that we want to run. Also note here the use of <code class="docutils literal notranslate"><span class="pre">strncpy()</span></code> to set the applicationName and engineName. If you look at <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::applicationName</span></code> and <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::engineName</span></code> members, they are of type <code class="docutils literal notranslate"><span class="pre">char[]</span></code>, hence you must copy your string into that <code class="docutils literal notranslate"><span class="pre">char[]</span></code> and you must also by aware of the allowable length.</p>
 <p id="instanceextensions">Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
+<span class="c1">// TODO make sure this is already defined when we add this line.</span>
 <span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
 </pre></div>
 </div>
@@ -428,7 +429,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">requestLayer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layerProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// strcmp returns 0 if the strings match.</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestLayer</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">layerProperty</span><span class="p">.</span><span class="n">layerName</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestLayer</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">layerProperty</span><span class="p">.</span><span class="n">layerName</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">continue</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">m_activeAPILayers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestLayer</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
@@ -451,7 +452,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">extensionProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// strcmp returns 0 if the strings match.</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestedInstanceExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">extensionName</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestedInstanceExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">extensionName</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">continue</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">m_activeInstanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestedInstanceExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
@@ -460,7 +461,7 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to find OpenXR instance extension: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requestedInstanceExtension</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to find OpenXR instance extension: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requestedInstanceExtension</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -669,27 +670,27 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSessionCreateInfo</span><span class="w"> </span><span class="n">sessionCI</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_CREATE_INFO</span><span class="p">};</span>
 </pre></div>
 </div>
-<div class="d3d11 docutils container" id="d3d11-id-0">
+<div class="d3d11 docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GraphicsAPI_D3D11</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-<div class="d3d12 docutils container" id="d3d12-id-0">
+<div class="d3d12 docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GraphicsAPI_D3D12</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-<div class="opengl docutils container" id="opengl-id-0">
+<div class="opengl docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GraphicsAPI_OpenGL</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-<div class="opengles docutils container" id="opengles-id-0">
+<div class="opengles docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-<div class="vulkan docutils container" id="vulkan-id-0">
+<div class="vulkan docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GraphicsAPI_Vulkan</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_systemID</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -914,10 +915,10 @@ The goal of this chapter is to create an <code class="docutils literal notransla
 </table>
 <p>As described in the table above, most events are transparent in their intensions and how the application should react to them. For the <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span></code> state, the application may want to try re-creating the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> in a loop, and after the specified <code class="docutils literal notranslate"><span class="pre">lossTime</span></code>, until it can create a new instance successfully. <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span></code> are used for updating how the user interacts with the application and whether a new space change has been detected respectively.</p>
 <p>For some platforms, we need additional functionality provided via the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method, so that our application can react to any relevant updates from the platform correctly.</p>
-<div class="windows linux docutils container" id="windows-linux-id-1">
+<div class="windows linux docutils container">
 <p>For Windows and Linux, there no relevant system event that we need to be aware of, and thus the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method definition can be left blank.</p>
 </div>
-<div class="android docutils container" id="android-id-1">
+<div class="android docutils container">
 <p><code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">don't</span> <span class="pre">say</span> <span class="pre">this.</span></code>
 For Android, we have already provided the code for the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method in <a class="reference internal" href="1-introduction.html#the-main-cpp-file-and-the-openxrtutorial-class"><span class="std std-ref">Chapter 1.4.3</span></a>. So its duplicate definition must be removed from the class. This function is outside the scope of OpenXR, but in general it polls Android for system events, updates and uses the <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code>, <code class="docutils literal notranslate"><span class="pre">m_applicationRunning</span></code> and <code class="docutils literal notranslate"><span class="pre">m_sessionRunning</span></code> members.</p>
 </div>

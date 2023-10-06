@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 06 Oct** : Removed :name: from rst containers. Using US English spelling of color in GraphicsAPI. Updated Chapter 3.3 and 4 text as cuboid rendering has moved to chapter 3.3. Chapter 4/5 code: updated tags and code.
+    | **Thu 05 Oct** : Added Chapter 3 text - WIP. Chapter minor updates - will need updating.
+    | **Thu 05 Oct** : Unifying changes across main.cpp files. Added Chapter 3.3 code.
+    | **Thu 05 Oct** : Added shaders to Chapter 3 CMake. Other minor clean in Chapter 4/5 & Main CMake.
+    | **Thu 05 Oct** : White space / minor clean up and corrections in shaders.
     | **Thu 05 Oct** : Minor corrections to tutorial/1-introduction.rst.
     | **Thu 05 Oct** : CMakeLists.txt files: Updated target_include_directories for project. Updated tutorial/1-introduction.rst to reflect CMake changes.
     | **Wed 04 Oct** : Updated 2.3.1 xrPollEvent and rst literalinclude referencing the OpenXR headers.
@@ -97,8 +102,3 @@ Changelist
     | **Wed 23 Aug** : Updated doc tags in Chapter 3 text. Fixed warning tutorial/1-introduction.rst.
     | **Wed 23 Aug** : Chapter 3 text updated dedents and minor changes to 3.2.2. Added section XR_EXT_local_floor extension.
     | **Wed 23 Aug** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 23 Aug** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Wed 23 Aug** : Chapter 3 text updated.
-    | **Wed 23 Aug** : Changed Graphics API logos. DirectX ones are still placeholders.
-    | **Tue 22 Aug** : Search results now black, not grey.
-    | **Tue 22 Aug** : Remove spurious file.
