@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 10 Oct** : Updated path to reuse executable. Not reliant on PATH.
     | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 10 Oct** : Added initial implementation of reuse, which check licenses at CMake configure.
     | **Mon 09 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Thu 24 Aug** : Fixed compilation issues from SetEnv() and GetEnv().
     | **Thu 24 Aug** : Removed SetEnv() and GetEnv().
     | **Thu 24 Aug** : Moved GetEnv() and SetEnv() to HelperFunctions.h. Moved Android File loading to HelperFunctions.h too.
-    | **Thu 24 Aug** : Added NOMINMAX a head of all Window.h includes. Fixed GraphicsAPI_Test/CMakeLists.txt and SetEnv in Chapter2/main.cpp.
