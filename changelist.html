@@ -325,11 +325,23 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 10 Oct** : Updated path to reuse executable. Not reliant on PATH.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 12 Oct** : Added LICENSES folder for reuse. Project is compliant with version 3.0 of the REUSE Specification.
+| **Thu 12 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Thu 12 Oct** : Added .reuse/dep5 for bulk license attributions. Updated Shaders and CMakeLists.txt files to added licensing comment headers.
+| **Wed 11 Oct** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials
+| **Wed 11 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Wed 11 Oct** : Fixed Hamburger menu.
+| **Tue 10 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 10 Oct** : Updated path to reuse executable. Not reliant on PATH.
+| **Tue 10 Oct** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
 | **Tue 10 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Tue 10 Oct** : Added initial implementation of reuse, which check licenses at CMake configure.
 | **Mon 09 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Mon 09 Oct** : Added ViewSpace.png
+| **Fri 06 Oct** : Merge pull request #64 from rbessems/main
+| **Fri 06 Oct** : Fix URL to repo
+| **Fri 06 Oct** : Merge pull request #63 from rbessems/main
+| **Fri 06 Oct** : Add site build github action workflow.
 | **Fri 06 Oct** : Updated shader files in Android Shader output directories.
 | **Fri 06 Oct** : Updated dedent in chapter 4 text.
 | **Fri 06 Oct** : Updated tags in code for chapters 4 and 5. Correction for chapter 4 text: rst dedents, CMake changes, usage of app/application and code includes.
@@ -413,18 +425,6 @@
 | **Mon 04 Sep** : Added to text for Ch4
 | **Mon 04 Sep** : Added comments to Chapter 3 code.
 | **Mon 04 Sep** : Added comments to Chapter 2 code and OpenXRDebugUtils.cpp. Updated Chapter 2 text for m_systemProperties member addition.
-| **Mon 04 Sep** : Updated header for d3d11.
-| **Thu 31 Aug** : Chapter 4 text updates.
-| **Fri 25 Aug** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Fri 25 Aug** : SVG Handset icon for Chapter 4.
-| **Fri 25 Aug** : Moved set(PROJECT_NAME ...) ahead of Android project() set up. Removed reference to OpenXR 1.0.27 and DOWNLOAD_EXTRACT_TIMESTAMP TRUE in Fetch_Declare(). Updated 1.4 text too.
-| **Fri 25 Aug** : Adjusted text to remove download of Chapter 3 CMakeLists.txt, as this would be incompatible with created CMakeLists.txt.
-| **Fri 25 Aug** : Fixed Linux specific preprocessor definitions in DebugOutput.h and GraphicsAPI.h.
-| **Thu 24 Aug** : Chapter 1.4 text updates to explain XR_TUTORIAL_USE_... macros. Other minor changes.
-| **Thu 24 Aug** : Removed find_library() in CMake for OpenGL. This is available through OpenXR SDK anyway.
-| **Thu 24 Aug** : Fixed compilation issues from SetEnv() and GetEnv().
-| **Thu 24 Aug** : Removed SetEnv() and GetEnv().
-| **Thu 24 Aug** : Moved GetEnv() and SetEnv() to HelperFunctions.h. Moved Android File loading to HelperFunctions.h too.
 </pre></div>
 </div>
 </section>
@@ -445,7 +445,11 @@
 			</div>
 		</div>
 	</div>
-  <script></script> 
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
 </body>
 </html>
