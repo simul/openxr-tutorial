@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 13 Oct** : Updated text for 3.1.2.
+    | **Fri 13 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Fri 13 Oct** : Added support for multiple XrSwapchains for 5.2. Comment clean up in shaders. Text and tags amending in 3-graphics.rst
     | **Thu 12 Oct** : Fix spacing to the left of contents menu.
     | **Thu 12 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 12 Oct** : Update graphics and handset icons.
@@ -99,6 +102,3 @@ Changelist
     | **Tue 05 Sep** : Using updated Tux and Android icons.
     | **Mon 04 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Mon 04 Sep** : Updated finding Vulkan package in CMakeLists.txt files. XR_RUNTIME_JSON in Chapter2/main.cpp in wrapped behind #ifdef __linux__. Other minor corrections.
-    | **Mon 04 Sep** : Added comments to Chapter 5 code.
-    | **Mon 04 Sep** : Added comments to Chapter 4 code.
-    | **Mon 04 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
