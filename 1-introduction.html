@@ -700,9 +700,14 @@ In it, put the following code:</p>
 <div class="android docutils container">
 <p>Here, We’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
 First, we will create a <em>workspace</em> folder and in that folder create a subdirectory called <cite>/Chapter2</cite>.
-Open Android Studio, select New Project and choose an Empty View Activity (Android Studio 22+) or an Empty Activity (Android Studio up to version 21). Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘org.khronos.openxrtutorialchapter2’ and save location to that <cite>/Chapter2</cite> folder. The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat) or higher. Click “Finish” to complete the set up.</p>
+Open Android Studio, select New Project and choose an Empty View Activity (Android Studio 22+) or an Empty Activity (Android Studio up to version 21).</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="_images/android-studio-newproject.png"><img alt="Android Studio - New Project - Empty Activity." src="_images/android-studio-newproject.png" style="width: 700.1500000000001px; height: 608.85px;" /></a>
+<a class="reference internal image-reference" href="_images/android-studio-newproject.png"><img alt="Android Studio - New Project - Empty View Activity." src="_images/android-studio-newproject.png" style="width: 488.95000000000005px; height: 380.05px;" /></a>
+</figure>
+<p class="rubric">CMake</p>
+<p>Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘org.khronos.openxrtutorialchapter2’ and save location to that <cite>/Chapter2</cite> folder.     The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat) or higher. If a “Build Configuration Language” option is shown, set this to “Groovy DSL (build.gradle)”. Click “Finish” to complete the set up.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/android-studio-newproject-options.png"><img alt="Android Studio - New Project - options." src="_images/android-studio-newproject-options.png" style="width: 501.6px; height: 377.85px;" /></a>
 </figure>
 <p class="rubric">CMake</p>
 <p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.</p>
@@ -849,9 +854,13 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <p>Thing to note are:</p>
 <ul class="simple">
 <li><p>We added a <cite>&lt;uses-feature&gt;</cite> to require OpenGL ES 3.2 and Vulkan 1.0.3 support.</p></li>
-<li><p>Next, we added <cite>&lt;uses-feature android:name=”android.hardware.vr.headtracking” android:required=”false” /&gt;</cite> to specify that the application works with 3DOF or 6DOF and on devices that are not all-in-ones. It’s set to false so as to allow greater compatibility across devices.</p></li>
-<li><p>Finally, we updated the <cite>&lt;intent-filter&gt;</cite> to tell the application that it should take over rendering when active, rather than appearing in a window. Set <cite>&lt;category android:name=”org.khronos.openxr.intent.category.IMMERSIVE_HMD” /&gt;</cite>. Note: not all devices yet support this <cite>&lt;category&gt;</cite>. For example, for Meta Quest devices you will need <cite>&lt;category android:name=”com.oculus.intent.category.VR” /&gt;</cite> for the same purpose. The code shows both the ‘Standard Khronos OpenXR’ and ‘Meta Quest-specific non-standard’ ways of setting the <cite>&lt;intent-filter&gt;</cite>.</p></li>
+<li><p>Next, we added <cite>android.hardware.vr.headtracking</cite> to specify that the application works with 3DOF or 6DOF and on devices that are not all-in-ones. It’s set to false so as to allow greater compatibility across devices.</p></li>
+<li><p>Finally, we updated the <cite>&lt;intent-filter&gt;</cite> to tell the application that it should take over rendering when active, rather than appearing in a window. We set:</p></li>
 </ul>
+<p><cite>&lt;category android:name=”org.khronos.openxr.intent.category.IMMERSIVE_HMD” /&gt;</cite></p>
+<p>Note: not all devices yet support this category. For example, for Meta Quest devices you will need</p>
+<p><cite>&lt;category android:name=”com.oculus.intent.category.VR” /&gt;</cite></p>
+<p>for the same purpose. The code shows both the ‘Standard Khronos OpenXR’ and ‘Meta Quest-specific non-standard’ ways of setting the intent filter.</p>
 <p class="rubric">Gradle</p>
 <p>Now we will replace the file <cite>app/build.gradle</cite>. Download <a class="reference download internal" download="" href="_downloads/c4db202a67b23c0133445cae801a9425/build.gradle"><code class="xref download docutils literal notranslate"><span class="pre">app/build.gradle</span></code></a> and copy it over the existing file in <cite>app</cite>.</p>
 <p>In the <cite>dependencies {}</cite> section we have added <cite>implementation ‘org.khronos.openxr:openxr_loader_for_android:…’</cite>. This provides an <cite>AndroidManifest.xml</cite> that will be merged into our own, setting some required properties for the package and application. We are still required to add to our own <cite>AndroidManifest.xml</cite> file the relevant intent filters, such as <cite>&lt;category android:name=”org.khronos.openxr.intent.category.IMMERSIVE_HMD” /&gt;</cite>. It also provides the OpenXR headers and library binaries in a format that the Android Gradle Plugin will expose to CMake.</p>
@@ -975,6 +984,9 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -991,10 +1003,33 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 </div>
 <p>Then, we create the actual platform specific main function (our entry point to the application), which will call <cite>OpenXRTutorial_Main()</cite> with our <cite>GraphicsAPI_Type</cite> parameter. By default, this tutorial uses <cite>OPENGL</cite> as the parameter to <cite>OpenXRTutorial_Main()</cite>. This must be changed to match on your chosen graphics API, one of: <cite>D3D11</cite>,     <cite>D3D12</cite>,     <cite>OPENGL</cite>,    <cite>OPENGL_ES</cite>, or   <cite>VULKAN</cite>.</p>
 <div class="windows linux docutils container">
+<div class="opengl docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">VULKAN</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d11 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">D3D11</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">D3D12</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="android docutils container">
@@ -1028,9 +1063,20 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 <span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">onAppCmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">AndroidAppHandleCmd</span><span class="p">;</span>
 
 <span class="w">    </span><span class="n">OpenXRTutorial</span><span class="o">::</span><span class="n">androidApp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
-<span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL_ES</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>And we will initialize the app with your chosen API:</p>
+<div class="opengl-es docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL_ES</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">VULKAN</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 <p>Before we can use OpenXR for Android, we need to initialise the loader based the application’s context and virtual machine. We retrieve the function pointer to <cite>xrInitializeLoaderKHR</cite>, and with the <cite>XrLoaderInitInfoAndroidKHR</cite> filled out call that function to initialise OpenXR for our use. At this point, we also attach the current thread to the Java Virtual Machine. We assign our <cite>AndroidAppState</cite> static member and our <cite>AndroidAppHandleCmd()</cite> static method to the <cite>android_app *</cite> and save it to a static member in the class.</p>
 <p>Android requires a few extra additions to the OpenXRTutorial class. Namely, <cite>android_app *</cite>, <cite>AndroidAppState</cite> and <cite>AndroidAppHandleCmd</cite>, which are used in getting updates from the Android Operating System and keep our application functioning. Add the following after the definition of <cite>Run()</cite> in your OpenXRTutorial class declaration:</p>
@@ -1112,7 +1158,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 <h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
 <div class="windows docutils container">
 <p>In the <em>workspace</em> directory, create a <cite>build/</cite> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <cite>CMakeLists.txt</cite> is located. Point the “Where to build the binaries” box to a subdirectory called <cite>build</cite>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally click “Open Project” to open that solution with Visual Studio.</p>
-<p>You can now build and run your program. It should compile and link with no errors or warnings.</p>
+<p>You can now build and run your program. It should compile and link with no errors or warnings, but it won’t run correctly yet.</p>
 </div>
 <div class="linux docutils container">
 <p>You now have the files and folders, laid out as follows:</p>

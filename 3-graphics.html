@@ -654,7 +654,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
-<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">               </span><span class="c1">// Use GraphicsAPI to select the first compatible format.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectColorSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">          </span><span class="c1">// Use GraphicsAPI to select the first compatible format.</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w">  </span><span class="c1">// Use the recommended values from the XrViewConfigurationView.</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
@@ -778,13 +778,27 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <p>Then, we set the values for <code class="docutils literal notranslate"><span class="pre">faceCount</span></code>, <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> and <code class="docutils literal notranslate"><span class="pre">mipCount</span></code>. <code class="docutils literal notranslate"><span class="pre">faceCount</span></code> describes the number of faces in the image and is used for creating cubemap textures. <code class="docutils literal notranslate"><span class="pre">arraySize</span></code> describes the number of layers in an image. Here, we used <code class="docutils literal notranslate"><span class="pre">1</span></code>, as we have separate swapchains per view/eye, but for a stereo view you could pass <code class="docutils literal notranslate"><span class="pre">2</span></code> and have an image 2D array, which is suitable for multiview rendering. <code class="docutils literal notranslate"><span class="pre">mipCount</span></code> describes the number of mips levels; this is useful when using the swapchain image as a sampled image in a shader. Finally, we set the format. Here, we asked our <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class to pick a suitable format for the swapchain from the enumerated formats we acquired earlier.</p>
 <p>Here is the code for <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::SelectSwapchainFormat()</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GraphicsAPI::SelectSwapchainFormat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formats</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supportSwapchainFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetSupportedSwapchainFormats</span><span class="p">();</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">GraphicsAPI::SelectColorSwapchainFormat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formats</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supportSwapchainFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">();</span>
 
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;::</span><span class="n">const_iterator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find_first_of</span><span class="p">(</span><span class="n">formats</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
 <span class="w">                                                                                       </span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">));</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: Unable to find supported Swapchain Format&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: Unable to find supported Color Swapchain Format&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">swapchainFormatIt</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int64_t</span><span class="w"> </span><span class="nf">GraphicsAPI::SelectDepthSwapchainFormat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">formats</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supportSwapchainFormats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;::</span><span class="n">const_iterator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find_first_of</span><span class="p">(</span><span class="n">formats</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+<span class="w">                                                                                       </span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">supportSwapchainFormats</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">swapchainFormatIt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">formats</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: Unable to find supported Depth Swapchain Format&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -797,12 +811,17 @@ Append the following this code to the <code class="docutils literal notranslate"
 <p>The function calls a pure virtual method called <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::GetSupportedSwapchainFormats()</span></code>, which each class implements. It returns an array of API-specific formats that the GraphicsAPI library supports.</p>
 <div class="d3d11 docutils container">
 <p class="rubric">DirectX 11</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM_SRGB</span><span class="p">};</span>
+<span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_D16_UNORM</span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -810,12 +829,17 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <div class="d3d12 docutils container">
 <p class="rubric">DirectX 12</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span><span class="p">,</span>
 <span class="w">        </span><span class="n">DXGI_FORMAT_B8G8R8A8_UNORM_SRGB</span><span class="p">};</span>
+<span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_D32_FLOAT</span><span class="p">,</span>
+<span class="w">        </span><span class="n">DXGI_FORMAT_D16_UNORM</span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -823,7 +847,7 @@ Append the following this code to the <code class="docutils literal notranslate"
 </div>
 <div class="opengl docutils container">
 <p class="rubric">OpenGL</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L229-L236</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">GL_RGB10_A2</span><span class="p">,</span>
@@ -834,13 +858,20 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="w">        </span><span class="n">GL_RGBA8_SNORM</span><span class="p">,</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT32</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT24</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT16</span><span class="p">};</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL.cpp</em></p>
 </div>
 <div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengles.cpp#L208-L216</span>
 <span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MAJOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMajorVersion</span><span class="p">);</span>
@@ -850,18 +881,29 @@ Append the following this code to the <code class="docutils literal notranslate"
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">GL_RGBA8</span><span class="p">,</span><span class="w"> </span><span class="n">GL_RGBA8_SNORM</span><span class="p">};</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT32F</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT24</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GL_DEPTH_COMPONENT16</span><span class="p">};</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p><em>The above code is an excerpt from Common/GraphicsAPI_OpenGL_ES.cpp</em></p>
 </div>
 <div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedColorSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">VK_FORMAT_B8G8R8A8_SRGB</span><span class="p">,</span>
 <span class="w">        </span><span class="n">VK_FORMAT_R8G8B8A8_SRGB</span><span class="p">,</span>
 <span class="w">        </span><span class="n">VK_FORMAT_B8G8R8A8_UNORM</span><span class="p">,</span>
 <span class="w">        </span><span class="n">VK_FORMAT_R8G8B8A8_UNORM</span><span class="p">};</span>
+<span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetSupportedDepthSwapchainFormats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">VK_FORMAT_D32_SFLOAT</span><span class="p">,</span>
+<span class="w">        </span><span class="n">VK_FORMAT_D16_UNORM</span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
 </div>

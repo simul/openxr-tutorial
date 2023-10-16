@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 16 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Mon 16 Oct** : Fixed compilation issue in Chapter5/main.cpp for swapchains.
+    | **Mon 16 Oct** : Split SelectSwapchainFormat() to SelectColorSwapchainFormat() and SelectDepthSwapchainFormat().
+    | **Mon 16 Oct** : Separate int main() lines for the different API's. Added android-studio-newproject-options.png figure.
+    | **Mon 16 Oct** : Added android-studio-newproject-options.png
     | **Mon 16 Oct** : Fixed 1.5 text.
     | **Mon 16 Oct** : Updated images and placement. Android Studio 22 calles "Empty Activity" "Empty Views Activity", and has something different now called "Empty Activity".
     | **Mon 16 Oct** : Add ext hand interactions to Ch5. Not well-supported.
@@ -97,8 +102,3 @@ Changelist
     | **Thu 07 Sep** : Fixed misnamed shader downloads.
     | **Thu 07 Sep** : Corrected some comments.
     | **Thu 07 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 07 Sep** : Fix Chapter 4 code references.
-    | **Wed 06 Sep** : Added black and white versions of the Khronos logos. Removed old D3D logo pngs. Added edit and temporary d3d12 logo to match d3d11.
-    | **Tue 05 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 05 Sep** : Updated Braces on OpenXRDebugUtils.cpp.
-    | **Tue 05 Sep** : Update d3d11 logo.
