@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 16 Oct** : Fixed 1.5 text.
     | **Mon 16 Oct** : Updated images and placement. Android Studio 22 calles "Empty Activity" "Empty Views Activity", and has something different now called "Empty Activity".
     | **Mon 16 Oct** : Add ext hand interactions to Ch5. Not well-supported.
     | **Mon 16 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Tue 05 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 05 Sep** : Updated Braces on OpenXRDebugUtils.cpp.
     | **Tue 05 Sep** : Update d3d11 logo.
-    | **Tue 05 Sep** : New D3D11 logo.
