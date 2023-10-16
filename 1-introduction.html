@@ -261,6 +261,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#build-and-run">1.4.4 Build and Run</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">1.5 Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
@@ -380,51 +381,22 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 <td><p>The Application is your program, called an “app” for short.</p></td>
 </tr>
 <tr class="row-even"><td><p>Runtime</p></td>
-<td><dl class="simple">
-<dt>A Runtime is a specific implementation of the OpenXR functionality. It might be provided by a</dt><dd><p>hardware vendor, as part of a device’s operating system; it might be supplied by a software vendor
-to enable OpenXR support with a specific range of hardware. The Loader finds the appropriate Runtime
-and loads it when OpenXR is initialized.</p>
-</dd>
-</dl>
-</td>
+<td><p>A Runtime is a specific implementation of the OpenXR functionality. It might be provided by a hardware vendor, as part of a device’s operating system; it might be supplied by a software vendor to enable OpenXR support with a specific range of hardware. The Loader finds the appropriate Runtime       and loads it when OpenXR is initialized.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Loader</p></td>
-<td><dl class="simple">
-<dt>The OpenXR loader is a special library that connects your app to whichever OpenXR runtime</dt><dd><p>you’re using. The loader’s job is to find the Runtime and initialize it, then allow your app to access
-the Runtime’s version of the API. Some devices can have multiple Runtimes available, but only one can
-be active at any given time.</p>
-</dd>
-</dl>
-</td>
+<td><p>The OpenXR loader is a special library that connects your app to whichever OpenXR runtime you’re using. The loader’s job is to find the Runtime and initialize it, then allow your app to access the Runtime’s version of the API. Some devices can have multiple Runtimes available, but only one can be active at any given time.</p></td>
 </tr>
 <tr class="row-even"><td><p>Layers</p></td>
-<td><dl class="simple">
-<dt>API layers are optional components that augment an OpenXR system. A Layer might help with debugging,</dt><dd><p>or filter information between the app and the Runtime. API layers are enabled when the OpenXR Instance
-is created.</p>
-</dd>
-</dl>
-</td>
+<td><p>API layers are optional components that augment an OpenXR system. A Layer might help with debugging, or filter information between the app and the Runtime. API layers are enabled when the OpenXR Instance is created.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Instance</p></td>
-<td><dl class="simple">
-<dt>The Instance is an object that allows your app to communicate with a Runtime. You’ll ask OpenXR to create an Instance</dt><dd><p>when initializing XR support in your app.</p>
-</dd>
-</dl>
-</td>
+<td><p>The Instance is an object that allows your app to communicate with a Runtime. You’ll ask OpenXR to create an Instance when initializing XR support in your app.</p></td>
 </tr>
 <tr class="row-even"><td><p>Graphics</p></td>
-<td><dl class="simple">
-<dt>OpenXR usually needs to connect to a graphics API, in order to permit rendering of headset views for example.</dt><dd><p>Which Graphics API’s are supported depends on the Runtime.</p>
-</dd>
-</dl>
-</td>
+<td><p>OpenXR usually needs to connect to a graphics API, in order to permit rendering of headset views for example. Which Graphics API’s are supported depends on the Runtime.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Input</p></td>
-<td><dl class="simple">
-<dt>The OpenXR Input System allows apps to query what inputs are available. These can then be bound</dt><dd><p>to Actions or Poses, so the app knows what the user is doing.</p>
-</dd>
-</dl>
-</td>
+<td><p>The OpenXR Input System allows apps to query what inputs are available. These can then be bound to Actions or Poses, so the app knows what the user is doing.</p></td>
 </tr>
 </tbody>
 </table>
@@ -495,23 +467,23 @@ If you want to use OpenGL ES stand-alone, you will need to use EGL to create a v
 <h3>1.4.1 CMake and Project Files<a class="headerlink" href="#cmake-and-project-files" title="Permalink to this heading">¶</a></h3>
 <div class="windows docutils container">
 <p>For the Microsoft Windows OpenXR project, we’ll use CMake to create the solution and project files for Visual Studio.
-First, create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
+Create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
 </div>
 <div class="linux docutils container">
 <p>You are free to use any code editor and/or compiler; this tutorial will use Visual Studio Code.
 For the Linux OpenXR project, we’ll use CMake alongside Visual Studio Code to build the project.
-First, create a directory where the code will go, we’ll call this the <em>workspace</em> directory. Open Visual Studio Code and from the File menu, select “Open Folder…”</p>
+Create a directory where the code will go, we’ll call this the <em>workspace</em> directory. Open Visual Studio Code and from the File menu, select “Open Folder…”</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/linux-vscode-open-folder.png"><img alt="The File menu of Visual Studio Code is shown, with the command &quot;Open Folder...&quot; selected." src="_images/linux-vscode-open-folder.png" style="width: 391.05px; height: 234.3px;" /></a>
 </figure>
 <p>Select your <em>workspace</em> folder, which is currently empty.</p>
 <p>If you haven’t previously done so, install the CMake extension for Visual Studio Code: select the “Extensions” tab, and type “CMake” in the search box.</p>
 <figure class="align-left">
-<img alt="Selecting the CMake extension in Visual Studio Code." src="_images/VSCodeCMakeLinux.png" />
+<a class="reference internal image-reference" href="_images/VSCodeCMakeLinux.png"><img alt="Selecting the CMake extension in Visual Studio Code." src="_images/VSCodeCMakeLinux.png" style="width: 960.85px; height: 254.65000000000003px;" /></a>
 </figure>
 </div>
 <div class="windows linux docutils container">
-<p>First, Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <div class="d3d11 d3d12 docutils container">
 <p><a class="reference download internal" download="" href="_downloads/5057d1a0bef87efb08cacc48dc445510/fxc_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">fxc_shader.cmake</span></code></a></p>
 </div>
@@ -728,9 +700,9 @@ In it, put the following code:</p>
 <div class="android docutils container">
 <p>Here, We’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
 First, we will create a <em>workspace</em> folder and in that folder create a subdirectory called <cite>/Chapter2</cite>.
-Open Android Studio, select New Project and choose an Empty Activity. Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘org.khronos.openxrtutorialchapter2’ and save location to that <cite>/Chapter2</cite> folder. The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat) or higher. Click “Finish” to complete the set up.</p>
-<figure class="align-left">
-<img alt="Android Studio - New Project - Empty Activity." src="_images/android-studio-newproject.png" />
+Open Android Studio, select New Project and choose an Empty View Activity (Android Studio 22+) or an Empty Activity (Android Studio up to version 21). Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘org.khronos.openxrtutorialchapter2’ and save location to that <cite>/Chapter2</cite> folder. The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat) or higher. Click “Finish” to complete the set up.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/android-studio-newproject.png"><img alt="Android Studio - New Project - Empty Activity." src="_images/android-studio-newproject.png" style="width: 700.1500000000001px; height: 608.85px;" /></a>
 </figure>
 <p class="rubric">CMake</p>
 <p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.</p>
@@ -738,9 +710,9 @@ Open Android Studio, select New Project and choose an Empty Activity. Set the Na
 Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <cite>libs</cite> folder, and under the <cite>app/src</cite> you can also delete the <cite>androidTest</cite> and <cite>test</cite> folders. Finally under <cite>app/src/main</cite>, delete the <cite>java</cite> folder. Under the <cite>app/src/main/res</cite>, delete the <cite>layout</cite>, <cite>values-night</cite> and <cite>xml</cite> folders. Under the <cite>values</cite> folder, delete <cite>colors.xml</cite> and <cite>themes.xml</cite></p>
 <p>Now sync the project by selecting “File &gt; Sync Project with Gradle” on the menu.</p>
 <figure class="align-default">
-<img alt="Gradle Sync" src="_images/GradleSync.png" />
+<a class="reference internal image-reference" href="_images/GradleSync.png"><img alt="Gradle Sync" src="_images/GradleSync.png" style="width: 282.70000000000005px; height: 366.3px;" /></a>
 </figure>
-<p>First, Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <div class="opengles docutils container">
 <p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a>
 <a class="reference download internal" download="" href="_downloads/89eb289f84bcf399649e6363229fe702/FindEGL.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindEGL.cmake</span></code></a>
@@ -1145,11 +1117,11 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 <div class="linux docutils container">
 <p>You now have the files and folders, laid out as follows:</p>
 <figure class="align-default">
-<img alt="Initial files in VS Code" src="_images/linux-vscode-initial-files.png" />
+<a class="reference internal image-reference" href="_images/linux-vscode-initial-files.png"><img alt="Initial files in VS Code" src="_images/linux-vscode-initial-files.png" style="width: 322.0px; height: 403.0px;" /></a>
 </figure>
 <p>Having installed the CMake extension for VS Code, you can now right-click on the main <cite>CMakeLists.txt</cite> file (the one in the root <em>workspace</em> folder). We can select “Configure and Build All” from the right-click menu of the main <cite>CMakeLists.txt</cite> file.</p>
 <figure class="align-default">
-<img alt="Select" src="_images/linux-vscode-cmake-configure.png" />
+<a class="reference internal image-reference" href="_images/linux-vscode-cmake-configure.png"><img alt="Select" src="_images/linux-vscode-cmake-configure.png" style="width: 523.6px; height: 679.8000000000001px;" /></a>
 </figure>
 <p>If you haven’t previously done so, install the gdb extension for VS Code: select the “Extensions” tab, and type “gdb” in the search box. To enable debugging, select the Run/Debug panel in Visual Studio Code. You will now need to create a debugging configuration.
 Click the link “create a launch.json file” to and enter the following in launch.json:</p>
@@ -1174,12 +1146,16 @@ It is also recommended to sync the gradle files too.</p>
 <p>Next to the green hammer icon is the Run/Debug configuration dropdown menu. If that isn’t populated, create a configuration called app.</p>
 <p>Turn on and connect your Android device. Set up any requirements for USB debugging and adb. You device should appear in the dropdown. Here, I am using a Oculus Quest 2.</p>
 <figure class="align-default">
-<img alt="Build/Run Toolbar" src="_images/android-studio-build-run-toolbar.png" />
+<a class="reference internal image-reference" href="_images/android-studio-build-run-toolbar.png"><img alt="Build/Run Toolbar" src="_images/android-studio-build-run-toolbar.png" style="width: 256.85px; height: 18.150000000000002px;" /></a>
 </figure>
 <p>To debug/run the application click the green bug icon.</p>
 </div>
-<p>Now that we have a basic application up and running with the OpenXR header files and libraries, we can start to set up the core aspects of OpenXR. As a modern Khronos API, the OpenXR is heavily influenced by the Vulkan API. So those who are familiar with the style of the Vulkan API will find OpenXR easy to follow.</p>
 </section>
+</section>
+<section id="summary">
+<h2>1.5 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>In this chapter, you learned about the fundamental concepts of OpenXR, and created
+Now that we have a basic application up and running with the OpenXR header files and libraries, we can start to set up the core aspects of OpenXR. As a modern Khronos API, the OpenXR is heavily influenced by the Vulkan API. So those who are familiar with the style of the Vulkan API will find OpenXR easy to follow.</p>
 </section>
 </section>
 
