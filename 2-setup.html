@@ -352,7 +352,7 @@
 <p>Here, we will add the following highlighted text to the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
@@ -409,18 +409,18 @@
 <span class="n">AI</span><span class="p">.</span><span class="n">apiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_CURRENT_API_VERSION</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::apiVersion</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">XR_CURRENT_API_VERSION</span></code> macro to specific the OpenXR version that we want to run. Also note here the use of <code class="docutils literal notranslate"><span class="pre">strncpy()</span></code> to set the applicationName and engineName. If you look at <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::applicationName</span></code> and <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::engineName</span></code> members, they are of type <code class="docutils literal notranslate"><span class="pre">char[]</span></code>, hence you must copy your string into that <code class="docutils literal notranslate"><span class="pre">char[]</span></code> and you must also by aware of the allowable length.</p>
+<p>This structure allows you specify both the name and the version for your application and engine. These members are solely for your use as the application developer. The main member here is the <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::apiVersion</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">XR_CURRENT_API_VERSION</span></code> macro to specific the OpenXR version that we want to run. Also note here the use of <code class="docutils literal notranslate"><span class="pre">strncpy()</span></code> to set the name strings. If you look at <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::applicationName</span></code> and <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo::engineName</span></code> members, they are of type <code class="docutils literal notranslate"><span class="pre">char[]</span></code>, so you must copy your string into that buffer. Also be aware of the allowable length.</p>
 <div class="vulkan docutils container">
-<p>Note the slight difference in approach the OpenXR API takes compared to the Vulkan API. Name strings are explicitly copied into structures like <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo</span></code>, which contain fixed-size string buffers, whereas in Vulkan, structures such as <code class="docutils literal notranslate"><span class="pre">VkApplicationInfo</span></code> take pointers to C strings of arbitrary size.</p>
+<p>Note the slight difference in approach the OpenXR API takes compared to the Vulkan API. In OpenXR, name strings are explicitly copied into structures like <code class="docutils literal notranslate"><span class="pre">XrApplicationInfo</span></code>, which contain fixed-size string buffers, whereas in Vulkan, structures such as <code class="docutils literal notranslate"><span class="pre">VkApplicationInfo</span></code> take pointers to C strings of arbitrary size.</p>
 </div>
-<p id="instanceextensions">Similar to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, add the following:</p>
+<p id="instanceextensions">Similarly to Vulkan, OpenXR allows applications to extend functionality past what is provided by the core specification. The added functionality could be hardware/vendor specific. Most vital of course is which Graphics API to use with OpenXR. OpenXR supports D3D11, D3D12, Vulkan, OpenGL and OpenGL ES. Due the extensible nature of specification, it allows newer Graphics APIs and hardware functionality to be added with ease. Following on from the previous code in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
 <span class="c1">// TODO make sure this is already defined when we add this line.</span>
 <span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
 </pre></div>
 </div>
 <p>Here, we store in a vector of strings the extension names that we would like to use. <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> is a macro of a string defined in <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code>. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in <a class="reference internal" href="#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>. Depending on which <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro you defined, this code will add the relevant extension.</p>
-<p>Not all API layers and extensions are available to use, so we much check which ones can use. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide. We will do this by adding the following code to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method.</p>
+<p>Not all API layers and extensions are available to use, so we much check which ones are available when OpenXR is initialized. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide. Let’s do this now by adding the following code to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Get all the API Layers from the OpenXR runtime.</span>
 <span class="kt">uint32_t</span><span class="w"> </span><span class="n">apiLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrApiLayerProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">;</span>
@@ -474,7 +474,7 @@
 <p>There is a subtle difference here from the two-call idiom in the Vulkan API. In OpenXR, we provide an explicit capacity in the first argument, which provides an additional layer of memory-safety.</p>
 </div>
 <p>Note the <code class="docutils literal notranslate"><span class="pre">m_activeAPILayers</span></code> and <code class="docutils literal notranslate"><span class="pre">m_activeInstanceExtensions</span></code> are of type <code class="docutils literal notranslate"><span class="pre">std::vector&lt;const</span> <span class="pre">char</span> <span class="pre">*&gt;</span></code>. This will help us when fill out the next structure <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code>.</p>
-<p>Now we have assembled all of the information needed we will fill the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure. Add the following to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method.</p>
+<p>Now that we’ve assembled all of the information needed we will fill the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure, add the following to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrInstanceCreateInfo</span><span class="w"> </span><span class="n">instanceCI</span><span class="p">{</span><span class="n">XR_TYPE_INSTANCE_CREATE_INFO</span><span class="p">};</span>
 <span class="n">instanceCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">instanceCI</span><span class="p">.</span><span class="n">applicationInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AI</span><span class="p">;</span>
@@ -485,12 +485,12 @@
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateInstance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instanceCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_xrInstance</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Instance.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>This section is fairly simple, as we have used the previously collected data and assigned it to the members in the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure. Then, we called <code class="docutils literal notranslate"><span class="pre">xrCreateInstance()</span></code> where we took pointers to the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> objects. When the function is called, if successful, it returns <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> will be non-null.</p>
-<p>At the end of the application, we should destroy the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>. This is simple done with the function <code class="docutils literal notranslate"><span class="pre">xrDestroyInstance()</span></code>. Add the following to the <code class="docutils literal notranslate"><span class="pre">DestroyInstance()</span></code> method:</p>
+<p>This section is fairly simple: we have used the previously collected data and assigned it to the members in the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure. Then, we called <code class="docutils literal notranslate"><span class="pre">xrCreateInstance()</span></code> where we took pointers to the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> objects. When the function is called, if successful, it returns <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> will be non-null (i.e. not equal to <code class="docutils literal notranslate"><span class="pre">XR_NULL_HANDLE</span></code>).</p>
+<p>At the end of the app, we should destroy the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code> with <code class="docutils literal notranslate"><span class="pre">xrDestroyInstance()</span></code>. Add the following to the <code class="docutils literal notranslate"><span class="pre">DestroyInstance()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrDestroyInstance</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to destroy Instance.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Whilst we have an <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, let’s check its properties. Add the following code to the <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code> method:</p>
+<p>While we do have an <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, let’s check its properties. Add the following code to the <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrInstanceProperties</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">{</span><span class="n">XR_TYPE_INSTANCE_PROPERTIES</span><span class="p">};</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProperties</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instanceProperties</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProperties.&quot;</span><span class="p">);</span>
 
@@ -596,8 +596,8 @@
 <p>Update the constructor of the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> method and also add in the definitions of the new methods and the members to their separate private sections. All the new code is highlighted code below.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span>
-<span class="hll"><span class="w">                </span><span class="o">:</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">(</span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span>
+<span class="hll"><span class="w">                </span><span class="o">:</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">(</span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span class="hll"><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CheckGraphicsAPI_TypeIsValidForPlatform</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 </span><span class="hll"><span class="w">                        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: The provided Graphics API is not valid for this platform.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span><span class="hll"><span class="w">                        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
@@ -723,101 +723,101 @@
 <p>Firstly, we will update the class. In the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> method add the highlighted code below. Also add the highlighted code for the new methods and members in their separate private sections.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span>
-<span class="w">                </span><span class="o">:</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">(</span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CheckGraphicsAPI_TypeIsValidForPlatform</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: The provided Graphics API is not valid for this platform.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">                        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
-<span class="w">                </span><span class="p">}</span>
+<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">m_apiType</span><span class="p">(</span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CheckGraphicsAPI_TypeIsValidForPlatform</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">             </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: The provided Graphics API is not valid for this platform.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">CreateInstance</span><span class="p">();</span>
-<span class="w">                </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">CreateInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">CreateDebugMessenger</span><span class="p">();</span>
 
-<span class="w">                </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
-<span class="w">                </span><span class="n">GetSystemID</span><span class="p">();</span>
+<span class="w">        </span><span class="n">GetInstanceProperties</span><span class="p">();</span>
+<span class="w">        </span><span class="n">GetSystemID</span><span class="p">();</span>
 
-<span class="w">                </span><span class="n">CreateSession</span><span class="p">();</span>
+<span class="w">        </span><span class="n">CreateSession</span><span class="p">();</span>
 
-<span class="hll"><span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span class="hll"><span class="w">                        </span><span class="n">PollSystemEvents</span><span class="p">();</span>
-</span><span class="hll"><span class="w">                        </span><span class="n">PollEvents</span><span class="p">();</span>
-</span><span class="hll"><span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span class="hll"><span class="w">                                </span><span class="c1">// Draw Frame.</span>
-</span><span class="hll"><span class="w">                        </span><span class="p">}</span>
-</span><span class="hll"><span class="w">                </span><span class="p">}</span>
+<span class="hll"><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">m_applicationRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="w">            </span><span class="n">PollSystemEvents</span><span class="p">();</span>
+</span><span class="hll"><span class="w">            </span><span class="n">PollEvents</span><span class="p">();</span>
+</span><span class="hll"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_sessionRunning</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="w">                </span><span class="c1">// Draw Frame.</span>
+</span><span class="hll"><span class="w">            </span><span class="p">}</span>
+</span><span class="hll"><span class="w">        </span><span class="p">}</span>
 </span>
-<span class="w">                </span><span class="n">DestroySession</span><span class="p">();</span>
+<span class="w">        </span><span class="n">DestroySession</span><span class="p">();</span>
 
-<span class="w">                </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
-<span class="w">                </span><span class="n">DestroyInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">DestroyDebugMessenger</span><span class="p">();</span>
+<span class="w">        </span><span class="n">DestroyInstance</span><span class="p">();</span>
 <span class="p">}</span>
 
 <span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateInstance</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyInstance</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetInstanceProperties</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateDebugMessenger</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyDebugMessenger</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSession</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySession</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// [...]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="hll"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollEvents</span><span class="p">()</span>
-</span><span class="hll"><span class="w">        </span><span class="p">{</span>
-</span><span class="hll"><span class="w">        </span><span class="p">}</span>
-</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateInstance</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyInstance</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">GetInstanceProperties</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">GetSystemID</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateDebugMessenger</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroyDebugMessenger</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">CreateSession</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">DestroySession</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// [...]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="hll"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">PollEvents</span><span class="p">()</span>
+</span><span class="hll"><span class="w">    </span><span class="p">{</span>
+</span><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeAPILayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeInstanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeAPILayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">m_activeInstanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_apiLayers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_instanceExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">XrDebugUtilsMessengerEXT</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
-<span class="w">        </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">XrSystemProperties</span><span class="w"> </span><span class="n">m_systemProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_PROPERTIES</span><span class="p">};</span>
+<span class="w">    </span><span class="n">XrFormFactor</span><span class="w"> </span><span class="n">m_formFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">m_systemID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">XrSystemProperties</span><span class="w"> </span><span class="n">m_systemProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_PROPERTIES</span><span class="p">};</span>
 
-<span class="w">        </span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">m_apiType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNKNOWN</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">GraphicsAPI</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">m_apiType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNKNOWN</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">GraphicsAPI</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">XrSession</span><span class="w"> </span><span class="n">m_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="n">XrSessionState</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SESSION_STATE_UNKNOWN</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrSession</span><span class="w"> </span><span class="n">m_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">;</span>
+<span class="hll"><span class="w">    </span><span class="n">XrSessionState</span><span class="w"> </span><span class="n">m_sessionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SESSION_STATE_UNKNOWN</span><span class="p">;</span>
 </span><span class="hll">
-</span><span class="hll"><span class="w">        </span><span class="n">XrViewConfigurationType</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="p">;</span>
+</span><span class="hll"><span class="w">    </span><span class="n">XrViewConfigurationType</span><span class="w"> </span><span class="n">m_viewConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO</span><span class="p">;</span>
 </span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>

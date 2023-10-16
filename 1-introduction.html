@@ -409,8 +409,7 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 </section>
 <section id="environment-setup">
 <h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">¶</a></h2>
-<p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent. You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for
-by clicking a tab above.</p>
+<p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent. You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking a tab above.</p>
 <div class="windows docutils container">
 <p class="rubric">Visual Studio</p>
 <p>If you’ll be building an OpenXR project for Microsoft Windows PC based devices, we’ll assume you’ll be using Microsoft Visual Studio.
@@ -434,7 +433,7 @@ If you want to use OpenGL stand-alone, you will need to use WGL to create a vali
 <p class="rubric">Install Visual Studio Code</p>
 <p>To install Visual Studio Code, go to <a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> and click the “Download for Linux” button.</p>
 <p class="rubric">Install CMake</p>
-<p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake with Visual Studio Code to build the project.</p>
+<p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake with Visual Studio Code to build the project. At least CMake 3.22.1 will be needed, so follow the instructions on the CMake download page to ensure that you have an up-to-date version.</p>
 <p>Now choose which graphics API you want to use, on the second row of tabs at the top of the page. For Linux you can either use OpenGL or Vulkan.</p>
 <div class="vulkan docutils container">
 <p class="rubric">Install the Vulkan SDK</p>
@@ -446,12 +445,12 @@ If you want to use OpenGL stand-alone, you will need to use GLX to create a vali
 </div>
 </div>
 <div class="android docutils container">
+<p>When building for Android, you can use Microsoft Windows, Linux or Apple macOS as the host platform.</p>
 <p class="rubric">Android Studio</p>
 <p>Install Android studio from this location: <a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>.</p>
 <div class="vulkan docutils container">
 <p class="rubric">Vulkan</p>
-<p>Vulkan is recommended for Android for its modern, low-level API and extension.
-Vulkan is included as part of the NDK provided by Google and is supported on Android 7.0 (Nougat), API level 24 or higher (see <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>).</p>
+<p>Vulkan is included as part of the NDK provided by Google and is supported on Android 7.0 (Nougat), API level 24 or higher (see <a class="reference external" href="https://developer.android.com/ndk/guides/graphics">https://developer.android.com/ndk/guides/graphics</a>).</p>
 </div>
 <div class="opengles docutils container">
 <p class="rubric">OpenGL ES</p>
@@ -470,8 +469,8 @@ If you want to use OpenGL ES stand-alone, you will need to use EGL to create a v
 Create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
 </div>
 <div class="linux docutils container">
-<p>You are free to use any code editor and/or compiler; this tutorial will use Visual Studio Code.
-For the Linux OpenXR project, we’ll use CMake alongside Visual Studio Code to build the project.
+<p>You can use any code editor and/or compiler with OpenXR; this tutorial will use Visual Studio Code as an example.
+For the Linux OpenXR project, we’ll use CMake alongside VS Code to build the project.
 Create a directory where the code will go, we’ll call this the <em>workspace</em> directory. Open Visual Studio Code and from the File menu, select “Open Folder…”</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/linux-vscode-open-folder.png"><img alt="The File menu of Visual Studio Code is shown, with the command &quot;Open Folder...&quot; selected." src="_images/linux-vscode-open-folder.png" style="width: 391.05px; height: 234.3px;" /></a>
@@ -483,7 +482,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 </figure>
 </div>
 <div class="windows linux docutils container">
-<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked file below and put it in <cite>cmake</cite>. This will be used in our <cite>CMakeLists.txt</cite> to help build our project.</p>
 <div class="d3d11 d3d12 docutils container">
 <p><a class="reference download internal" download="" href="_downloads/5057d1a0bef87efb08cacc48dc445510/fxc_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">fxc_shader.cmake</span></code></a></p>
 </div>
@@ -705,28 +704,29 @@ Open Android Studio, select New Project and choose an Empty View Activity (Andro
 <a class="reference internal image-reference" href="_images/android-studio-newproject.png"><img alt="Android Studio - New Project - Empty View Activity." src="_images/android-studio-newproject.png" style="width: 488.95000000000005px; height: 380.05px;" /></a>
 </figure>
 <p class="rubric">CMake</p>
-<p>Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘org.khronos.openxrtutorialchapter2’ and save location to that <cite>/Chapter2</cite> folder.     The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0(Nougat) or higher. If a “Build Configuration Language” option is shown, set this to “Groovy DSL (build.gradle)”. Click “Finish” to complete the set up.</p>
+<p>Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘<cite>org.khronos.openxrtutorialchapter2`</cite> and save location to that <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder.  The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0 (Nougat) or higher. If a “Build Configuration Language” option is shown, set this to <code class="docutils literal notranslate"><span class="pre">Groovy</span> <span class="pre">DSL</span> <span class="pre">(build.gradle)</span></code>. Click “Finish” to complete the set up.</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/android-studio-newproject-options.png"><img alt="Android Studio - New Project - options." src="_images/android-studio-newproject-options.png" style="width: 501.6px; height: 377.85px;" /></a>
 </figure>
 <p class="rubric">CMake</p>
-<p>With the Android Studio project now set up, we need to modify some of the files and folders so as to set up the project to support the C++ Native Activity.</p>
+<p>With the Android Studio project now set up, we need to modify some of the files and folders to support the C++ Native Activity.</p>
 <p>Then switch to the “Project” view in the “Project” tab (on the top right of the default Android Studio layout).
 Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <cite>libs</cite> folder, and under the <cite>app/src</cite> you can also delete the <cite>androidTest</cite> and <cite>test</cite> folders. Finally under <cite>app/src/main</cite>, delete the <cite>java</cite> folder. Under the <cite>app/src/main/res</cite>, delete the <cite>layout</cite>, <cite>values-night</cite> and <cite>xml</cite> folders. Under the <cite>values</cite> folder, delete <cite>colors.xml</cite> and <cite>themes.xml</cite></p>
 <p>Now sync the project by selecting “File &gt; Sync Project with Gradle” on the menu.</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/GradleSync.png"><img alt="Gradle Sync" src="_images/GradleSync.png" style="width: 282.70000000000005px; height: 366.3px;" /></a>
 </figure>
-<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download each of the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <div class="opengles docutils container">
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a>
 <a class="reference download internal" download="" href="_downloads/89eb289f84bcf399649e6363229fe702/FindEGL.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindEGL.cmake</span></code></a>
 <a class="reference download internal" download="" href="_downloads/ff2de0272f6a69e9d334910d356b7cc5/FindOpenGLES.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindOpenGLES.cmake</span></code></a></p>
 </div>
 <div class="vulkan docutils container">
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked file below and put it in <cite>cmake</cite>. This will be used in later chapters in our <cite>CMakeLists.txt</cite> to help build our project.</p>
 <p><a class="reference download internal" download="" href="_downloads/873a1884f399251a093874b50e73432c/glsl_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">glsl_shader.cmake</span></code></a></p>
 </div>
-<p>Create a text file called <cite>CMakeLists.txt</cite> in the <cite>Chapter2</cite> directory. We will use this file to specific how our Native C++ code will be built. This <cite>CMakeLists.txt</cite> file will be invoked by Android Studio’s Gradle build system and we will point Gradle to this CMake file.</p>
+<p>Create a text file called <cite>CMakeLists.txt</cite> in the <cite>Chapter2</cite> directory. We will use this file to specific how our Native C++ code will be built. This file will be invoked by Android Studio’s Gradle build system.</p>
 <p class="rubric">CMakeLists.txt</p>
 <p>Add the following to your new CMakeLists.txt file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
@@ -822,8 +822,9 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wno-cast-calling-convention</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We have added a library with the <cite>${SOURCES}</cite> and <cite>${HEADERS}</cite> and have added the <cite>../Common</cite>, <cite>“${openxr_SOURCE_DIR}/src/common”</cite> and <cite>“${openxr_SOURCE_DIR}/external/include”</cite> folders as include directories. We have set the <cite>LINK_FLAGS</cite> for our <cite>OpenXRTutorialChapter2</cite> project with the flag <cite>-u ANativeActivity_onCreate()</cite> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <cite>void android_main(struct android_app*)</cite> entry point.  We add <cite>native_app_glue</cite> to our project by including <cite>AndroidNdkModules</cite> and calling <cite>android_ndk_import_module_native_app_glue()</cite>.</p>
-<p>Now, we link the <cite>android</cite>, <cite>native_app_glue</cite> and <cite>openxr_loader</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked. We also add <cite>-Wno-cast-calling-convention</cite> to the compiler option to allow the casting of calling conversions for function pointers.</p>
+<p>We have added a library with the <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code> and have added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span></code> folders as include directories. We have set the <code class="docutils literal notranslate"><span class="pre">LINK_FLAGS</span></code> for our project with the flag <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">ANativeActivity_onCreate()</span></code> to support C++ native code. This is used by a static library called <cite>native_app_glue</cite>, which connects the Java Virtual Machine and our C++ code. Ultimately, it allows us to use the <code class="docutils literal notranslate"><span class="pre">android_main()</span></code> entry point.  We add <cite>native_app_glue</cite> to our project by including <code class="docutils literal notranslate"><span class="pre">AndroidNdkModules</span></code> and calling:</p>
+<p><code class="docutils literal notranslate"><span class="pre">android_ndk_import_module_native_app_glue()</span></code>.</p>
+<p>Now, we link the <cite>android</cite>, <cite>native_app_glue</cite> and <cite>openxr_loader</cite> libraries to our <cite>OpenXRTutorialChapter2</cite> library. Our <cite>libOpenXRTutorialChapter2 .so</cite> will be packaged inside our .apk along with any shared libraries that we have linked. We also add <code class="docutils literal notranslate"><span class="pre">-Wno-cast-calling-convention</span></code> to the compiler option to allow the casting of calling conversions for function pointers.</p>
 <div class="opengles docutils container">
 <p>Now, add:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
@@ -850,20 +851,21 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 </div>
 <p class="rubric">AndroidManifest.xml</p>
 <p>Replace the file ‘app/src/main/AndroidManifest.xml’ with the following:</p>
-<p>Download <a class="reference download internal" download="" href="_downloads/bddcfa7bd35c1ebeced195d715c62d91/AndroidManifest.xml"><code class="xref download docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code></a></p>
-<p>Thing to note are:</p>
+<p>Download <a class="reference download internal" download="" href="_downloads/bddcfa7bd35c1ebeced195d715c62d91/AndroidManifest.xml"><code class="xref download docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code></a>, and open the file. You don’t need to edit it, but note:</p>
 <ul class="simple">
 <li><p>We added a <cite>&lt;uses-feature&gt;</cite> to require OpenGL ES 3.2 and Vulkan 1.0.3 support.</p></li>
 <li><p>Next, we added <cite>android.hardware.vr.headtracking</cite> to specify that the application works with 3DOF or 6DOF and on devices that are not all-in-ones. It’s set to false so as to allow greater compatibility across devices.</p></li>
 <li><p>Finally, we updated the <cite>&lt;intent-filter&gt;</cite> to tell the application that it should take over rendering when active, rather than appearing in a window. We set:</p></li>
 </ul>
-<p><cite>&lt;category android:name=”org.khronos.openxr.intent.category.IMMERSIVE_HMD” /&gt;</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;org.khronos.openxr.intent.category.IMMERSIVE_HMD&quot;</span> <span class="pre">/&gt;</span></code></p>
 <p>Note: not all devices yet support this category. For example, for Meta Quest devices you will need</p>
-<p><cite>&lt;category android:name=”com.oculus.intent.category.VR” /&gt;</cite></p>
-<p>for the same purpose. The code shows both the ‘Standard Khronos OpenXR’ and ‘Meta Quest-specific non-standard’ ways of setting the intent filter.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;category</span> <span class="pre">android:name=&quot;com.oculus.intent.category.VR&quot;</span> <span class="pre">/&gt;</span></code></p>
+<p>for the same purpose. The code shows both the ‘Standard Khronos OpenXR’ and ‘Meta Quest-specific non-standard’ ways of setting the intent filter. If you’re building for another Android-based XR device which does not support all of the standard commands used here, you may need to look up the appropriate commands and modify the manifest.</p>
 <p class="rubric">Gradle</p>
-<p>Now we will replace the file <cite>app/build.gradle</cite>. Download <a class="reference download internal" download="" href="_downloads/c4db202a67b23c0133445cae801a9425/build.gradle"><code class="xref download docutils literal notranslate"><span class="pre">app/build.gradle</span></code></a> and copy it over the existing file in <cite>app</cite>.</p>
-<p>In the <cite>dependencies {}</cite> section we have added <cite>implementation ‘org.khronos.openxr:openxr_loader_for_android:…’</cite>. This provides an <cite>AndroidManifest.xml</cite> that will be merged into our own, setting some required properties for the package and application. We are still required to add to our own <cite>AndroidManifest.xml</cite> file the relevant intent filters, such as <cite>&lt;category android:name=”org.khronos.openxr.intent.category.IMMERSIVE_HMD” /&gt;</cite>. It also provides the OpenXR headers and library binaries in a format that the Android Gradle Plugin will expose to CMake.</p>
+<p>Now download <a class="reference download internal" download="" href="_downloads/c4db202a67b23c0133445cae801a9425/build.gradle"><code class="xref download docutils literal notranslate"><span class="pre">app/build.gradle</span></code></a> and copy it over the existing file <cite>app/build.gradle</cite>.</p>
+<p>In the <cite>dependencies</cite> section we have added:</p>
+<p><code class="docutils literal notranslate"><span class="pre">implementation</span> <span class="pre">'org.khronos.openxr:openxr_loader_for_android:...'</span></code></p>
+<p>This provides an <cite>AndroidManifest.xml</cite> that will be merged into our own, setting some required properties for the package and application. We are still required to add to our own <cite>AndroidManifest.xml</cite> file with relevant intent filters, such as <code class="docutils literal notranslate"><span class="pre">org.khronos.openxr.intent.category.IMMERSIVE_HMD</span></code>. It also provides the OpenXR headers and library binaries in a format that the Android Gradle Plugin will expose to CMake.</p>
 <p>Now download <a class="reference download internal" download="" href="_downloads/6f652dc898f3db4673cc2200f318d022/build.gradle"><code class="xref download docutils literal notranslate"><span class="pre">build.gradle</span></code></a> and place it in your “Chapter2” folder.</p>
 </div>
 </section>
@@ -992,15 +994,6 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <p>We’ll add the main function for the application. It will look slightly different, depending on your
 chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenXRTutorial_Main()</cite>, in which we create an instance of our <cite>OpenXRTutorial</cite> class, taking a <cite>GraphicsAPI_Type</cite> parameter, and call the <cite>Run()</cite> method. <cite>GraphicsAPI_Type</cite> can be changed to suit the graphics API that you have chosen.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">api</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w"> </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">api</span><span class="p">);</span>
-<span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 <p>Then, we create the actual platform specific main function (our entry point to the application), which will call <cite>OpenXRTutorial_Main()</cite> with our <cite>GraphicsAPI_Type</cite> parameter. By default, this tutorial uses <cite>OPENGL</cite> as the parameter to <cite>OpenXRTutorial_Main()</cite>. This must be changed to match on your chosen graphics API, one of: <cite>D3D11</cite>,     <cite>D3D12</cite>,     <cite>OPENGL</cite>,    <cite>OPENGL_ES</cite>, or   <cite>VULKAN</cite>.</p>
 <div class="windows linux docutils container">
 <div class="opengl docutils container">
@@ -1066,7 +1059,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 </pre></div>
 </div>
 <p>And we will initialize the app with your chosen API:</p>
-<div class="opengl-es docutils container">
+<div class="opengles docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL_ES</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
@@ -1190,9 +1183,9 @@ Click the link “create a launch.json file” to and enter the following in lau
 <p>With all the source and build systems set up, we can now build the Android project. In upper right of Android Studio, you should find the toolbar below. Click the green hammer icon to build the project, if all is successful you should see “BUILD SUCCESSFUL in […]s” in the Build Output window.
 It is also recommended to sync the gradle files too.</p>
 <p>Next to the green hammer icon is the Run/Debug configuration dropdown menu. If that isn’t populated, create a configuration called app.</p>
-<p>Turn on and connect your Android device. Set up any requirements for USB debugging and adb. You device should appear in the dropdown. Here, I am using a Oculus Quest 2.</p>
+<p>Turn on and connect your Android device. Set up any requirements for USB debugging and adb. You device should appear in the dropdown. Here, we are using a Meta Quest 2:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="_images/android-studio-build-run-toolbar.png"><img alt="Build/Run Toolbar" src="_images/android-studio-build-run-toolbar.png" style="width: 256.85px; height: 18.150000000000002px;" /></a>
+<img alt="Build/Run Toolbar" src="_images/android-studio-build-run-toolbar.png" />
 </figure>
 <p>To debug/run the application click the green bug icon.</p>
 </div>

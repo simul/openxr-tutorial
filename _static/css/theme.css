@@ -772,7 +772,7 @@ big, small
 
 .fa-download:before, .rst-content code.download span:first-child:before, .rst-content tt.download span:first-child:before
 {
-    content: ""
+    content: ""
 }
 
 .fa-arrow-circle-o-down:before
@@ -2117,7 +2117,7 @@ big, small
 
 .fa-minus-square-o:before, .wy-menu-vertical li.current > a button.toctree-expand:before, .wy-menu-vertical li.on a button.toctree-expand:before
 {
-    content: ""
+    content: ""
 }
 
 .fa-level-up:before
@@ -2487,7 +2487,7 @@ big, small
 
 .fa-plus-square-o:before, .wy-menu-vertical li button.toctree-expand:before
 {
-    content: ""
+    content: ""
 }
 
 .fa-space-shuttle:before

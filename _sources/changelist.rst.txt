@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Mon 16 Oct** : Don't show "+" box behind icons.
+    | **Mon 16 Oct** : Improve language in Ch2 and 3.
+    | **Mon 16 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Mon 16 Oct** : Fixed bad text and figures.
     | **Mon 16 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Mon 16 Oct** : Fixed compilation issue in Chapter5/main.cpp for swapchains.
     | **Mon 16 Oct** : Split SelectSwapchainFormat() to SelectColorSwapchainFormat() and SelectDepthSwapchainFormat().
@@ -98,7 +102,3 @@ Changelist
     | **Thu 07 Sep** : Fixed missing PollActions tag.
     | **Thu 07 Sep** : Improve Ch4 flow.
     | **Thu 07 Sep** : Remove references to endif() #EOF
-    | **Thu 07 Sep** : Chapter4 instructions on modifying CMakeLists.txt.
-    | **Thu 07 Sep** : Fixed misnamed shader downloads.
-    | **Thu 07 Sep** : Corrected some comments.
-    | **Thu 07 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
