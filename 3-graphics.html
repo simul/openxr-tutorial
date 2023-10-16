@@ -254,9 +254,9 @@
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3 Graphics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-swapchains">3.1 Creating Swapchains</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#xrviewconfigurationview">3.1.1 XrViewConfigurationView</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainformats">3.1.2 xrEnumerateSwapchainFormats</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrcreateswapchain">3.1.3 xrCreateSwapchain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-configurations">3.1.1 View Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerate-the-swapchain-formats">3.1.2 Enumerate the Swapchain Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-swapchains">3.1.3 Create the Swapchains</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainimages">3.1.4 xrEnumerateSwapchainImages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#create-depth-image-and-image-views">3.1.5 Create Depth Image And Image Views</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#xrdestroyswapchain">3.1.6 xrDestroySwapchain</a></li>
@@ -610,8 +610,8 @@
 </pre></div>
 </div>
 <p>We will explore the added methods in the sub chapters below.</p>
-<section id="xrviewconfigurationview">
-<h3>3.1.1 XrViewConfigurationView<a class="headerlink" href="#xrviewconfigurationview" title="Permalink to this heading">¶</a></h3>
+<section id="view-configurations">
+<h3>3.1.1 View Configurations<a class="headerlink" href="#view-configurations" title="Permalink to this heading">¶</a></h3>
 <p>The first thing we need to do is get all of the views available to our view configuration. It is worth just parsing the name of this type: <code class="docutils literal notranslate"><span class="pre">XrViewConfigurationView</span></code>. We can break the typename up as follow “XrViewConfiguration” - “View”, where it relates to one view in the view configuration, which may contain multiple views. We call <code class="docutils literal notranslate"><span class="pre">xrEnumerateViewConfigurationViews()</span></code> twice, first to get the count of the views in the view configuration, and second to fill in the data to the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrViewConfigurationView&gt;</span></code>.</p>
 <p>Add the following code to the <code class="docutils literal notranslate"><span class="pre">GetViewConfigurationViews()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Gets the View Configuration Views. The first call gets the size of the array that will be returned. The next call fills out the array.</span>
@@ -622,8 +622,8 @@
 </pre></div>
 </div>
 </section>
-<section id="xrenumerateswapchainformats">
-<h3>3.1.2 xrEnumerateSwapchainFormats<a class="headerlink" href="#xrenumerateswapchainformats" title="Permalink to this heading">¶</a></h3>
+<section id="enumerate-the-swapchain-formats">
+<h3>3.1.2 Enumerate the Swapchain Formats<a class="headerlink" href="#enumerate-the-swapchain-formats" title="Permalink to this heading">¶</a></h3>
 <p>For each runtime, the OpenXR compositor has certain preferred image formats that should be used by the swapchain. When calling <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code>, the <code class="docutils literal notranslate"><span class="pre">XrSession</span></code> and alongwith the Graphics API will return an array of API-specific formats ordered by preference. <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainFormats()</span></code> takes a pointer to the first element in an array of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> values. The use of <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> is a simple type cast from a <code class="docutils literal notranslate"><span class="pre">DXGI_FORMAT</span></code>, <code class="docutils literal notranslate"><span class="pre">GLenum</span></code> or a <code class="docutils literal notranslate"><span class="pre">VkFormat</span></code>. The runtime “should support <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span></code> and <code class="docutils literal notranslate"><span class="pre">R8G8B8A8</span> <span class="pre">sRGB</span></code> formats if possible” (<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#swapchain-image-management">OpenXR Specification 10.1. Swapchain Image Management</a>).</p>
 <p>Both Linear and sRGB color spaces are supported and one may have preference over the other. In cases where you are compositing multiple layers, you may wish to use linear color spaces only, as OpenXR’s compositor will perform all blend operations in a linear color space for correctness. For certain runtimes, systems and/or applications, sRGB maybe preferred especially if there’s just a single opaque layer to composite.</p>
 <p>If you wish to use an sRGB color format, you <em>must</em> use an API-specific sRGB color format such as <code class="docutils literal notranslate"><span class="pre">DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</span></code>, <code class="docutils literal notranslate"><span class="pre">GL_SRGB8_ALPHA8</span></code> or <code class="docutils literal notranslate"><span class="pre">VK_FORMAT_R8G8B8A8_SRGB</span></code> for the OpenXR runtime to automatically do sRGB-to-linear color space conversions when reading the image.</p>
@@ -636,8 +636,8 @@
 </pre></div>
 </div>
 </section>
-<section id="xrcreateswapchain">
-<h3>3.1.3 xrCreateSwapchain<a class="headerlink" href="#xrcreateswapchain" title="Permalink to this heading">¶</a></h3>
+<section id="create-the-swapchains">
+<h3>3.1.3 Create the Swapchains<a class="headerlink" href="#create-the-swapchains" title="Permalink to this heading">¶</a></h3>
 <p>Append the following code to the <code class="docutils literal notranslate"><span class="pre">CreateSwapchain()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">XrViewConfigurationView</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewConfigurationView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 </pre></div>
@@ -1328,57 +1328,29 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 <p>We fill out a <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo</span></code> structure. The first member is of type <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceType</span></code>, which we will discuss shortly.</p>
-<p>When we create the <em>reference space</em>, we need to specify an <code class="docutils literal notranslate"><span class="pre">XrPosef</span></code>, which we will be the origin transform of the space. For our tutorial, we will set <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo::poseInReferenceSpace</span></code> to an identity, where we use an identity quaternion for the orientation and a position at the origin.
-If we specify a different pose, the origin received when we poll the space would be offset from the reference space’s origin.</p>
+<p>When we create the <em>reference space</em>, we need to specify an <code class="docutils literal notranslate"><span class="pre">XrPosef</span></code>, which will be the origin transform of the space. In this case we will set <code class="docutils literal notranslate"><span class="pre">XrReferenceSpaceCreateInfo::poseInReferenceSpace</span></code> to an “identity” pose - an identity quaternion and a zero position.</p>
+<p>If we specify a different pose, the origin received when we poll the space would be offset from the default origin the runtime defines for that space type.</p>
 <p>An <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> is a frame of reference defined not by its instantaneous values, but semantically by its purpose and relationship to other spaces. The actual, instantaneous position and orientation of an <code class="docutils literal notranslate"><span class="pre">XrSpace</span></code> is called its <em>pose</em>.</p>
+<p class="rubric">View Space</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ViewSpace.png"><img alt="OpenXR Reference Space View" src="_images/ViewSpace.png" style="width: 60%;" /></a>
+</figure>
 <p>One kind of reference space is view space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code>), which is oriented with the user’s head, and is useful for user-interfaces and many other purposes. We don’t use it to generate view matrices for rendering, because those are often offset from the view space due to stereo rendering.</p>
+<p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the space. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD (Head-up display).</p>
+<p class="rubric">Local Space</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="images/LocalSpace.png"><img alt="OpenXR Reference Space Local" src="images/LocalSpace.png" style="width: 60%;" /></a>
+</figure>
 <p>By using <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code> we specify that the views are relative to the XR hardware’s ‘local’ space - either the headset’s starting position or some other world-locked origin.</p>
+<p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the space. +Y is up,+X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at pplication start up or from a calibrated origin point.</p>
+<p>It may be used for rendering seated-scale experiences such as driving or aircraft simulation, where a virtual floor is not required. When recentering, the runtime will queue a <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to process.</p>
+<p class="rubric">Stage Space</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/OpenXR-ReferenceSpace-Stage.png"><img alt="OpenXR Reference Space Stage" src="_images/OpenXR-ReferenceSpace-Stage.png" style="width: 60%;" /></a>
+</figure>
 <p>Some devices support stage space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code>); this implies a roomscale space, e.g. with its origin on the floor.</p>
-<p>See <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html">https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html</a></p>
-<figure class="align-center" id="id1">
-<img alt="OpenXR Reference Spaces" src="_images/OpenXRSpaces.png" />
-<figcaption>
-<p><span class="caption-text">Reference Spaces in OpenXR</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-<table class="longtable docutils align-default" id="id2">
-<caption><span class="caption-text">OpenXR Reference Spaces</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
-<colgroup>
-<col style="width: 33.3%" />
-<col style="width: 33.3%" />
-<col style="width: 33.3%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>XrReferenceSpaceType</p></th>
-<th class="head"><p>Diagram</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code></p></td>
-<td><figure class="align-center">
-<img alt="OpenXR Reference Space View" src="_images/OpenXR-ReferenceSpace-View.png" />
-</figure>
-</td>
-<td><p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the space. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD (Head-up display).</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code></p></td>
-<td><figure class="align-center">
-<img alt="OpenXR Reference Space Local" src="_images/OpenXR-ReferenceSpace-Local.png" />
-</figure>
-</td>
-<td><p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the space. +Y is up, +X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at application start up or from a calibrated origin point. <code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">break</span> <span class="pre">between</span> <span class="pre">spec</span> <span class="pre">and</span> <span class="pre">opinion.</span></code> It is typically used for rendering seated-scale experiences such as car racing or aircraft cockpits, where a physical floor is not required. When recentering, the runtime will queue a <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to process.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code></p></td>
-<td><figure class="align-center">
-<img alt="OpenXR Reference Space Stage" src="_images/OpenXR-ReferenceSpace-Stage.png" />
-</figure>
-</td>
-<td><p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is define to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is axis-aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or room-scale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue a <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to process.</p></td>
-</tr>
-</tbody>
-</table>
-<p>For more information on reference see the OpenXR 1.0 Specification here: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#reference-spaces">7.1. Reference Spaces</a>.</p>
+<p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is define to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is axis-aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or room-scale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue a <code class="docutils literal notranslate"><span class="pre">XrEventDataReferenceSpaceChangePending</span></code> structure for the application to process.</p>
+<p>For more information on reference spaces see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#reference-spaces">the OpenXR Specification</a>.</p>
 <figure class="align-left">
 <a class="reference internal image-reference" href="_images/OpenXR-Coordinate-System.png"><img alt="OpenXR Default Coordinate System" src="_images/OpenXR-Coordinate-System.png" style="width: 100%;" /></a>
 </figure>

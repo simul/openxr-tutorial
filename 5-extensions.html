@@ -352,6 +352,7 @@
 </pre></div>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">         </span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_HAND_TRACKING_EXTENSION_NAME</span><span class="p">);</span>
+<span class="w">         </span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_HAND_INTERACTION_EXTENSION_NAME</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>It happens that XR_EXT_HAND_TRACKING is an official extension, so its name and function prototypes are provided in openxr.h. This won’t be the case for every extension!</p>
@@ -369,7 +370,7 @@
 </div>
 <p>These calls require an XrInstance, so we must initialize these after XrCreateInstance() has successfully returned. If hand tracking is not supported (or not enabled), we’ll get a warning, and these functions will be null. You can run your app now to check this.</p>
 <p>At the end of your OpenXRTutorial application class, declare the following:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="n">XrSystemHandTrackingPropertiesEXT</span><span class="w"> </span><span class="n">handTrackingSystemProperties</span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_HAND_TRACKING_PROPERTIES_EXT</span><span class="p">};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="n">XrSystemHandTrackingPropertiesEXT</span><span class="w"> </span><span class="n">handTrackingSystemProperties</span><span class="o">=</span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_HAND_TRACKING_PROPERTIES_EXT</span><span class="p">};</span>
 <span class="w">   </span><span class="k">struct</span><span class="w"> </span><span class="nc">Hand</span><span class="w"> </span><span class="p">{</span>
 <span class="w">       </span><span class="n">XrHandJointLocationEXT</span><span class="w"> </span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="p">];</span>
 <span class="w">       </span><span class="n">XrHandTrackerEXT</span><span class="w"> </span><span class="n">m_handTracker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -402,7 +403,6 @@
 </div>
 <p>Hands should be polled once per frame. At the end of PollActions(), we’ll poll each hand. We’ll assume to begin with that the user isn’t holding the controller, so we’ll use the XR_HAND_JOINTS_MOTION_RANGE_UNOBSTRUCTED_EXT motion range.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">XrActionStateBoolean</span><span class="w"> </span><span class="n">state</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_BOOLEAN</span><span class="p">};</span>
 <span class="w">          </span><span class="n">XrActionStateGetInfo</span><span class="w"> </span><span class="n">getInfo</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_GET_INFO</span><span class="p">};</span>
 <span class="w">          </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">              </span><span class="kt">bool</span><span class="w"> </span><span class="n">Unobstructed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
