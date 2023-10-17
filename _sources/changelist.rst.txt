@@ -2,6 +2,12 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 17 Oct** : Added Multiview explanation text in 6.1. Removed comments from GLES shaders.
+    | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 17 Oct** : Fix anchorlinks of top-level headings in sidebar toctree.
+    | **Tue 17 Oct** : Minor rst fix ups. Added Chapter 5.2 text, no code. Added 6-next-steps.rst to octree.
+    | **Tue 17 Oct** : Copied main() function variants from Chapter 2 to 3/4/5. Corrections for the spelling of color.
     | **Mon 16 Oct** : Don't show "+" box behind icons.
     | **Mon 16 Oct** : Improve language in Ch2 and 3.
     | **Mon 16 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -96,9 +102,3 @@ Changelist
     | **Thu 07 Sep** : Fixed some text flow.
     | **Thu 07 Sep** : Added missing BlockInteraction() call.
     | **Thu 07 Sep** : Declare blocks in ch4
-    | **Thu 07 Sep** : Fixed resource declaration code sample.
-    | **Thu 07 Sep** : Fix syntax error.
-    | **Thu 07 Sep** : Separate shader build code for Android and Desktop.
-    | **Thu 07 Sep** : Fixed missing PollActions tag.
-    | **Thu 07 Sep** : Improve Ch4 flow.
-    | **Thu 07 Sep** : Remove references to endif() #EOF

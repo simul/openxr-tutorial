@@ -147,10 +147,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -253,6 +255,7 @@
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
@@ -325,7 +328,13 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 16 Oct** : Don&#39;t show &quot;+&quot; box behind icons.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 17 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 17 Oct** : Added Multiview explanation text in 6.1. Removed comments from GLES shaders.
+| **Tue 17 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 17 Oct** : Fix anchorlinks of top-level headings in sidebar toctree.
+| **Tue 17 Oct** : Minor rst fix ups. Added Chapter 5.2 text, no code. Added 6-next-steps.rst to octree.
+| **Tue 17 Oct** : Copied main() function variants from Chapter 2 to 3/4/5. Corrections for the spelling of color.
+| **Mon 16 Oct** : Don&#39;t show &quot;+&quot; box behind icons.
 | **Mon 16 Oct** : Improve language in Ch2 and 3.
 | **Mon 16 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Mon 16 Oct** : Fixed bad text and figures.
@@ -419,12 +428,6 @@
 | **Thu 07 Sep** : Fixed some text flow.
 | **Thu 07 Sep** : Added missing BlockInteraction() call.
 | **Thu 07 Sep** : Declare blocks in ch4
-| **Thu 07 Sep** : Fixed resource declaration code sample.
-| **Thu 07 Sep** : Fix syntax error.
-| **Thu 07 Sep** : Separate shader build code for Android and Desktop.
-| **Thu 07 Sep** : Fixed missing PollActions tag.
-| **Thu 07 Sep** : Improve Ch4 flow.
-| **Thu 07 Sep** : Remove references to endif() #EOF
 </pre></div>
 </div>
 </section>

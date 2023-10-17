@@ -149,10 +149,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -274,6 +276,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
@@ -1371,7 +1374,7 @@ level of blending with the real world behind the display.</p></td>
 <p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the space. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD (Head-up display).</p>
 <p class="rubric">Local Space</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="images/LocalSpace.png"><img alt="OpenXR Reference Space Local" src="images/LocalSpace.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="_images/LocalSpace.png"><img alt="OpenXR Reference Space Local" src="_images/LocalSpace.png" style="width: 60%;" /></a>
 </figure>
 <p>By using <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code> we specify that the views are relative to the XR hardware’s ‘local’ space - either the headset’s starting position or some other world-locked origin.</p>
 <p>The Local Reference Space uses an initial location to establish a world-locked, gravity aligned point as the origin of the space. +Y is up,+X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at pplication start up or from a calibrated origin point.</p>

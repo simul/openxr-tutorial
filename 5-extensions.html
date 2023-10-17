@@ -25,6 +25,7 @@
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
 	<link rel="search" title="Search" href="search.html" >
+	<link rel="next" title="6 Next Steps" href="6-next-steps.html" >
 	<link rel="prev" title="4 Interactions" href="4-actions.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
@@ -148,10 +149,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -258,6 +261,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#composition-layer-depth">5.2 Composition Layer Depth</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
@@ -431,11 +435,11 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span>
 <span class="w">             </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                 </span><span class="k">auto</span><span class="w"> </span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">                 </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">hand_colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.f</span><span class="p">};</span>
+<span class="w">                 </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">hand_color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.f</span><span class="p">};</span>
 <span class="w">                 </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                     </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5f</span><span class="p">};</span>
 <span class="w">                     </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">radius</span><span class="p">;</span>
-<span class="w">                     </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">,</span><span class="w"> </span><span class="n">hand_colour</span><span class="p">);</span>
+<span class="w">                     </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">,</span><span class="w"> </span><span class="n">hand_color</span><span class="p">);</span>
 <span class="w">                 </span><span class="p">}</span>
 <span class="w">             </span><span class="p">}</span>
 </pre></div>
@@ -444,6 +448,11 @@
 </section>
 <section id="composition-layer-depth">
 <h2>5.2 Composition Layer Depth<a class="headerlink" href="#composition-layer-depth" title="Permalink to this heading">¶</a></h2>
+<p>Composition Layer Depth is truly important for AR use cases as it allows applications to submit to the runtime a depth image that can be used in the accurate compostion of rendered graphics with in the real world. Without a submitted depth image, runtimes would be unable to composite rendered objects that are occluded by real world objects e.g. a rendering a cube partially occluded by a door frame.</p>
+<p>This functionality is provided to OpenXR via the use of the XR_KHR_composition_layer_depth extension (<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_composition_layer_depth">OpenXR Specification 12.8. XR_KHR_composition_layer_depth</a>). The extension allows depth images from a swapchain to be submitted alongside the color images. This extension works in conjunction with projection layer type.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjection</span></code> structure contains a pointer an array of <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code> structures. Each of these structures refer to a single view in the XR system and a single image subresource from a swapchain. To submit a depth image, we employ the use of a <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerDepthInfoKHR</span></code> structure. Like with <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code>, <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerDepthInfoKHR</span></code> refers to a single view in the XR system and a single image subresource from a swapchain. These structures are ‘chained’ together via the use of the <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">void*</span> <span class="pre">next</span></code> member in <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code>. We assigned the memory address of  a <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerDepthInfoKHR</span></code> structure that we want to chain together. The runtime time will read the <code class="docutils literal notranslate"><span class="pre">next</span></code> pointer and associate the structure and ultimately the color and depth images togehter for compositing. This is same style of extensiblity used in the Vulkan API.</p>
+<p>One thing is now very clear to the programmer - we need a depth swapchain! Seldom used in windowed graphics, but required here to allow smooth rendering of the depth image and not lock either runtime or application waiting on a single depth image to be passed back and forth between the two. In most windowed graphics application, the depth image is discarded at the end of the frame and doesn’t interact with the windowing system at all.</p>
+<p>When creating a depth swapchain, we must check that the system supports a depth format for swapchain creation. You can check this with <code class="docutils literal notranslate"><span class="pre">xrEnumerateSwapchainImages()</span></code>. Unfortunately, there are no guarantees with in the OpenXR 1.0 core specification or the XR_KHR_composition_layer_depth extension revision 6 that runtimes must support depth format for swapchains.</p>
 </section>
 </section>
 
@@ -452,6 +461,7 @@
 					</div>
 					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="4-actions.html" class="btn btn-neutral float-left" title="4 Interactions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="6-next-steps.html" class="btn btn-neutral float-right" title="6 Next Steps" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr>

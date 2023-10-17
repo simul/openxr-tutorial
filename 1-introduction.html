@@ -149,10 +149,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -268,6 +270,7 @@
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
@@ -994,6 +997,15 @@ For the OpenXR platform header file, note the comment about using the preceding 
 </div>
 <p>We’ll add the main function for the application. It will look slightly different, depending on your
 chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenXRTutorial_Main()</cite>, in which we create an instance of our <cite>OpenXRTutorial</cite> class, taking a <cite>GraphicsAPI_Type</cite> parameter, and call the <cite>Run()</cite> method. <cite>GraphicsAPI_Type</cite> can be changed to suit the graphics API that you have chosen.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w">  </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">apiType</span><span class="p">);</span>
+<span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>Then, we create the actual platform specific main function (our entry point to the application), which will call <cite>OpenXRTutorial_Main()</cite> with our <cite>GraphicsAPI_Type</cite> parameter. By default, this tutorial uses <cite>OPENGL</cite> as the parameter to <cite>OpenXRTutorial_Main()</cite>. This must be changed to match on your chosen graphics API, one of: <cite>D3D11</cite>,     <cite>D3D12</cite>,     <cite>OPENGL</cite>,    <cite>OPENGL_ES</cite>, or   <cite>VULKAN</cite>.</p>
 <div class="windows linux docutils container">
 <div class="opengl docutils container">

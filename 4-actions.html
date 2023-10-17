@@ -149,10 +149,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -269,6 +271,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>

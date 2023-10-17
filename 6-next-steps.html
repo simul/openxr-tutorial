@@ -24,7 +24,8 @@
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
-	<link rel="search" title="Search" href="search.html" > 
+	<link rel="search" title="Search" href="search.html" >
+	<link rel="prev" title="5 Extensions" href="5-extensions.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
 	function updatePlatform()
@@ -147,10 +148,12 @@
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	//const newNode = document.createElement("img");
 	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
 	//newNode.width = "30";
 	i++;
@@ -247,12 +250,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6 Next Steps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#multiview-rendering">6.1 Multiview rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graphics-api">6.2 Graphics API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#color-science">6.3 Color Science</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -325,11 +334,331 @@
 							
   <section id="next-steps">
 <h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h1>
-<p>Multiview rendering</p>
-<p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.
-OpenGL supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p>
+<section id="multiview-rendering">
+<h2>6.1 Multiview rendering<a class="headerlink" href="#multiview-rendering" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>D3D11 supports rendering to a Texture2DArray RenderTarget, but requires the use of instanced rendering to render to multiviews in the same draw call.</p></li>
+<li><p>D3D12 supports rendering to both eye views with View Instancing, which simplifies the rendering code. <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">D3D12 View Instancing</a>.</p></li>
+<li><p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p></li>
+<li><p>OpenGL supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p></li>
+</ul>
+<p>View Instancing/Multiview can be used for stereo rendering by creating one <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> with 2D array images. This is done by setting the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo::arraySize</span></code> to <code class="docutils literal notranslate"><span class="pre">2</span></code>; similarly we also create image views that compasses the two subresources one for each eye view.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectColorSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">          </span><span class="c1">// Use        GraphicsAPI to select the first compatible format.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w">  </span><span class="c1">// Use the    recommended values from the XrViewConfigurationView.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">faceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="hll"><span class="n">swapchainCI</span><span class="p">.</span><span class="n">arraySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">mipCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateSwapchain</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Swapchain&quot;</span><span class="p">);</span>
+
+<span class="c1">// [...]</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="w"> </span><span class="n">imageViewCI</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">GetSwapchainImage</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">RTV</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">View</span><span class="o">::</span><span class="n">TYPE_2D</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">aspect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">Aspect</span><span class="o">::</span><span class="n">COLOR_BIT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">baseMipLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">levelCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">baseArrayLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span class="w">        </span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateImageView</span><span class="p">(</span><span class="n">imageViewCI</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When setting up the rendering code in <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>, there’s no need to repeat rendering code per eye view; instead we call <code class="docutils literal notranslate"><span class="pre">xrAcquireSwapchainImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrWaitSwapchainImage()</span></code> to get the next 2D array from the swapchain. We are still required to submit an <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code> struct for each view in the system, but in the <code class="docutils literal notranslate"><span class="pre">XrSwapchainSubImage</span></code> we can set the <code class="docutils literal notranslate"><span class="pre">imageArrayIndex</span></code> to specify which layer of the swapchain image we wish to associate with that view; so in the case of stereo rendering it would be <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. We attach our 2D array image as an render target/color attachment for the pixel/fragment shader to write to.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Acquire and wait for an image from the swapchain.</span>
+<span class="c1">// Get the image index of an image in the swapchain.</span>
+<span class="c1">// The timeout is infinite.</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">imageIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="hll"><span class="n">XrSwapchainImageAcquireInfo</span><span class="w"> </span><span class="n">acquireInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_ACQUIRE_INFO</span><span class="p">};</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAcquireSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">acquireInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">imageIndex</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to acquire Image from the Swapchian&quot;</span><span class="p">);</span>
+</span><span class="hll">
+</span><span class="hll"><span class="n">XrSwapchainImageWaitInfo</span><span class="w"> </span><span class="n">waitInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_WAIT_INFO</span><span class="p">};</span>
+</span><span class="hll"><span class="n">waitInfo</span><span class="p">.</span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_INFINITE_DURATION</span><span class="p">;</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">waitInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for Image from the Swapchain&quot;</span><span class="p">);</span>
+</span>
+<span class="c1">// Get the width and height and construct the viewport and scissors.</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
+<span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">Viewport</span><span class="w"> </span><span class="n">viewport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">Rect2D</span><span class="w"> </span><span class="n">scissor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{(</span><span class="kt">int32_t</span><span class="p">)</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="p">)</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">}};</span>
+
+<span class="hll"><span class="c1">// Fill out the XrCompositionLayerProjectionView structure specifying the pose and fov from the view.</span>
+</span><span class="hll"><span class="c1">// This also associates the swapchain image with this layer projection view.</span>
+</span><span class="hll"><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">viewCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW</span><span class="p">};</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">pose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">views</span><span class="p">.</span><span class="n">pose</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">fov</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">views</span><span class="p">.</span><span class="n">fov</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">swapchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_swapchainAndDepthImages</span><span class="p">.</span><span class="n">swapchain</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">offset</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">offset</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">width</span><span class="p">);</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
+</span><span class="hll"><span class="w">        </span><span class="n">layerProjectionViews</span><span class="p">.</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w">  </span><span class="c1">// Select the layer for this view. Left = 0, Right = 1.</span>
+</span><span class="hll"><span class="p">}</span>
+</span>
+<span class="c1">// Rendering code to clear the color and depth image views.</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">BeginRendering</span><span class="p">();</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// VR mode use a background color.</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// In AR mode make the background color black.</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+
+<span class="hll"><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">eight</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
+</span>
+<span class="c1">// [...]</span>
+
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">EndRendering</span><span class="p">();</span>
+
+<span class="c1">// Give the swapchain image back to OpenXR, allowing the compositor to use the image.</span>
+<span class="n">XrSwapchainImageReleaseInfo</span><span class="w"> </span><span class="n">releaseInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO</span><span class="p">};</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Swapchain&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Shaders and Pipelines will need to be modified to support multiview rendering.</p>
+<div class="d3d11 docutils container">
+<p>Here we use the vertex shader to write to the <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> System-Value Semantics. Note that this is only supported when <code class="docutils literal notranslate"><span class="pre">D3D11_FEATURE_DATA_D3D11_OPTIONS3::VPAndRTArrayIndexFromAnyShaderFeedingRasterizer</span></code> is set to true. Otherwise, you would need to use a geometry shader. <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a>.
+Also see this example from Microsoft’s OpenXR-MixedReality GitHub repository <cite>here &lt;https://github.com/microsoft/OpenXR-MixedReality/blob/a46ea22a396a38725043fea91166c6d5b1a49dfc/samples/BasicXrApp/CubeGraphics.cpp&gt;_</cite>.</p>
+<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
+<span class="k">cbuffer</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">cbuffer</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="n">VS_IN</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">vertexId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_VertexId</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">instanceId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_InstanceId</span><span class="p">;</span>
+</span><span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">a_Positions</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="n">VS_OUT</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">o_Position</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_Position</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">viewId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_RenderTargetArrayIndex</span><span class="p">;</span>
+</span><span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Color</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">VS_OUT</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="n">VS_IN</span><span class="w"> </span><span class="n">IN</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">VS_OUT</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">modelViewProj</span><span class="p">[</span><span class="n">IN</span><span class="p">.</span><span class="n">instanceId</span><span class="p">],</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">a_Positions</span><span class="p">);</span>
+</span><span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">viewId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">instanceId</span><span class="p">;</span>
+</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">vertexId</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float2</span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">face</span><span class="p">),</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">mul</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">])).</span><span class="n">xyz</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container">
+<p>Set up the <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_DESC</span></code> and <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCE_LOCATION</span></code> for the <code class="docutils literal notranslate"><span class="pre">ID3D12Pipeline</span></code>.
+Set the RenderTargetArrayIndex to <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. We don’t need to write to SV_RenderTargetArrayIndex in the shader.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">D3D12_VIEW_INSTANCING_DESC</span><span class="w"> </span><span class="n">viewInstancingDesc</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">D3D12_VIEW_INSTANCE_LOCATION</span><span class="o">&gt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">;</span>
+
+<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">RenderTargetArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">UINT</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">ViewportArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">pViewInstanceLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">Flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_VIEW_INSTANCING_FLAG_ENABLE_VIEW_INSTANCE_MASKING</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> and use shader model 6.1.
+See <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a> for the usage of <code class="docutils literal notranslate"><span class="pre">SV_ViewId</span></code>.</p>
+<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
+<span class="k">cbuffer</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">cbuffer</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="n">VS_IN</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">vertexId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_VertexId</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">viewId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_ViewId</span>
+</span><span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">a_Positions</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="n">VS_OUT</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">o_Position</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_Position</span><span class="p">;</span>
+<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Color</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">VS_OUT</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="n">VS_IN</span><span class="w"> </span><span class="n">IN</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="n">VS_OUT</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">modelViewProj</span><span class="p">[</span><span class="n">IN</span><span class="p">.</span><span class="n">viewId</span><span class="p">],</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">a_Positions</span><span class="p">);</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">vertexId</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+</span><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float2</span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">face</span><span class="p">),</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">mul</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">])).</span><span class="n">xyz</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<p>TODO: Check this!</p>
+<p>Enusre you have support for GL_OVR_multiview  and have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function. You will use this to create a framebuffer to render to.
+Also see this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension.</p>
+<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
+<span class="cp">#version 450</span>
+<span class="cp">#extension GL_KHR_vulkan_glsl : enable</span>
+<span class="hll"><span class="cp">#extension GL_OVR_multiview : enable</span>
+</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Color</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewIndex_OVR</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexIndex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<p>Enusre you have support for GL_OVR_multiview  and have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function. You will use this to create a framebuffer to render to.
+Also see this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension.</p>
+<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="cp">#version 310 es</span>
+<span class="hll"><span class="cp">#extension GL_OVR_multiview : enable</span>
+</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">colour</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">highp</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">highp</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Colour</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewID_OVR</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexID</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_Colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colour</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<p>Add <code class="docutils literal notranslate"><span class="pre">VkRenderPassMultiviewCreateInfo</span></code> to the <code class="docutils literal notranslate"><span class="pre">VkRenderPassCreateInfo</span></code> when creating the <code class="docutils literal notranslate"><span class="pre">VkPipeline</span></code>. Note that there is similar functionality for Vulkan 1.3 - Dynamic Rendering.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">VkRenderPassCreateInfo</span><span class="w"> </span><span class="n">renderPassCI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="c1">// [...]</span>
+
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewMask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mb">0b11</span><span class="p">;</span><span class="w"> </span><span class="c1">//Render to layers 0 and 1</span>
+
+<span class="n">VkRenderPassMultiviewCreateInfo</span><span class="w"> </span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">subpassCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewMask</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">dependencyCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewOffsets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">correlationMaskCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pCorrelationMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewMask</span><span class="p">;</span>
+<span class="n">renderPassCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex</span></code> and the GL_EXT_multiview GLSL extension.</p>
+<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
+<span class="cp">#version 450</span>
+<span class="cp">#extension GL_KHR_vulkan_glsl : enable</span>
+<span class="hll"><span class="cp">#extension GL_EXT_multiview : enable</span>
+</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Color</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewIndex</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
+</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexIndex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
 <section id="graphics-api">
-<h2>Graphics API<a class="headerlink" href="#graphics-api" title="Permalink to this heading">¶</a></h2>
+<h2>6.2 Graphics API<a class="headerlink" href="#graphics-api" title="Permalink to this heading">¶</a></h2>
 <p class="rubric">GraphicsAPI</p>
 <p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific APIs. It is there solely to provide working samples in this tutorial, and demonstrate some basic rendering and interaction with OpenXR.</p>
 <p>This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. The derived class is based on your graphics API selection. Include both the header and cpp files for both <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI...</span></code>. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> includes the headers and macros needed to set up your platform and graphics API. Below are code snippets that show how to set up the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros for your platform along with any relevant headers. In the first code block, there’s also reference to <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_...</span></code> which we set up the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> . This tutorial demonstrates all five graphics APIs, you will only need to select one <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> macro and one <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro.</p>
@@ -337,83 +666,19 @@ OpenGL supports rendering to both eye views with multiview, which simplifies the
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;HelperFunctions.h&gt;</span>
 </pre></div>
 </div>
-<div class="windows docutils container" id="windows-id-4">
-<div class="d3d11 docutils container" id="d3d11-id-4">
-</div>
-<div class="d3d12 docutils container" id="d3d12-id-4">
-</div>
-<div class="opengl docutils container" id="opengl-id-6">
-</div>
-<div class="vulkan docutils container" id="vulkan-id-9">
-</div>
-</div>
-<div class="linux docutils container" id="linux-id-4">
-<div class="opengl docutils container" id="opengl-id-7">
-</div>
-<div class="vulkan docutils container" id="vulkan-id-10">
-</div>
-</div>
-<div class="android docutils container" id="android-id-4">
-<div class="opengles docutils container" id="opengles-id-5">
-</div>
-<div class="vulkan docutils container" id="vulkan-id-11">
-</div>
-</div>
-<div class="d3d11 docutils container" id="d3d11-id-5">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
-</div>
-<div class="d3d12 docutils container" id="d3d12-id-5">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d12.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
-</div>
-<div class="opengl docutils container" id="opengl-id-8">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
-<span class="cp">#if defined(XR_USE_PLATFORM_XLIB)</span>
-<span class="cp">#define OS_LINUX_XLIB 1</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
-</div>
-<div class="opengles docutils container" id="opengles-id-6">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
-</div>
-<div class="vulkan docutils container" id="vulkan-id-12">
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vulkan/vulkan.h&gt;</span>
-<span class="cp">#endif</span>
-</pre></div>
-</div>
-</div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpenXR Tutorial for Khronos Group</span>
-
-<span class="cp">#pragma once</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;HelperFunctions.h&gt;</span>
-
-<span class="c1">// Platform headers</span>
-<span class="cp">#if defined(_WIN32)</span>
+<div class="windows docutils container">
+<div class="d3d11 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#define NOMINMAX</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
-<span class="cp">#define XR_USE_PLATFORM_WIN32</span>
-
-<span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
-<span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
-<span class="cp">#endif</span>
-<span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
+</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
 <span class="cp">#define XR_USE_GRAPHICS_API_D3D12</span>
 <span class="cp">#endif</span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
@@ -423,83 +688,585 @@ OpenGL supports rendering to both eye views with multiview, which simplifies the
 <span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
 <span class="cp">#endif</span>
 <span class="cp">#endif  </span><span class="c1">// _WIN32</span>
-
-<span class="cp">#if defined(__linux__) &amp;&amp; !defined(__ANDROID__)</span>
-<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XLIB)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span>
-<span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#define NOMINMAX</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
+</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
 <span class="cp">#endif</span>
-<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XCB)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xcb/xcb.h&gt;</span>
-<span class="cp">#define XR_USE_PLATFORM_XCB</span>
-<span class="cp">#endif</span>
-<span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_WAYLAND)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;wayland-client.h&gt;</span>
-<span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_D3D12</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
 <span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
 <span class="cp">#endif</span>
 <span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
 <span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
 <span class="cp">#endif</span>
-<span class="cp">#endif  </span><span class="c1">// __linux__</span>
-
-<span class="cp">#if defined(__ANDROID__)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
-<span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
-
-<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
-<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL_ES</span>
+<span class="cp">#endif  </span><span class="c1">// _WIN32</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#define NOMINMAX</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
+</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
 <span class="cp">#endif</span>
-<span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D12</span>
+<span class="cp">#endif</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif  </span><span class="c1">// _WIN32</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(_WIN32)</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#define NOMINMAX</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Windows.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unknwn.h&gt;</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_WIN32</span>
+</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D11)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D11</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_D3D12)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_D3D12</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+<span class="cp">#endif</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#endif  </span><span class="c1">// _WIN32</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="linux docutils container">
+<div class="opengl docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__linux__) &amp;&amp; !defined(__ANDROID__)</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XLIB)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XCB)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xcb/xcb.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XCB</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_WAYLAND)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;wayland-client.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif  </span><span class="c1">// __linux__</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__linux__) &amp;&amp; !defined(__ANDROID__)</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XLIB)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XLIB</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_XCB)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;xcb/xcb.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_XCB</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_LINUX_WAYLAND)</span>
+</span><span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;wayland-client.h&gt;</span>
+</span><span class="hll"><span class="cp">#define XR_USE_PLATFORM_WAYLAND</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL</span>
+<span class="cp">#endif</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#endif  </span><span class="c1">// __linux__</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="android docutils container">
+<div class="opengles docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__ANDROID__)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
+</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_OPENGL_ES</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
 <span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
 <span class="cp">#endif</span>
 <span class="cp">#endif  </span><span class="c1">// __ANDROID__</span>
-
-<span class="c1">// Graphic APIs headers</span>
-<span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__ANDROID__)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;android_native_app_glue.h&gt;</span>
+<span class="hll"><span class="cp">#define XR_USE_PLATFORM_ANDROID</span>
+</span>
+<span class="cp">#if defined(XR_TUTORIAL_USE_OPENGL_ES)</span>
+<span class="cp">#define XR_USE_GRAPHICS_API_OPENGL_ES</span>
+<span class="cp">#endif</span>
+<span class="hll"><span class="cp">#if defined(XR_TUTORIAL_USE_VULKAN)</span>
+</span><span class="hll"><span class="cp">#define XR_USE_GRAPHICS_API_VULKAN</span>
+</span><span class="hll"><span class="cp">#endif</span>
+</span><span class="cp">#endif  </span><span class="c1">// __ANDROID__</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="d3d11 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D11)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d11_1.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
 <span class="cp">#endif</span>
-
-<span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_D3D12)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;d3d12.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dxgi1_6.h&gt;</span>
 <span class="cp">#endif</span>
-
-<span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL)</span>
 <span class="cp">#if defined(XR_USE_PLATFORM_XLIB)</span>
 <span class="cp">#define OS_LINUX_XLIB 1</span>
 <span class="cp">#endif</span>
-<span class="cp">#if defined(XR_USE_PLATFORM_XCB)</span>
-<span class="cp">#define OS_LINUX_XCB 1</span>
-<span class="cp">#endif</span>
-<span class="cp">#if defined(XR_USE_PLATFORM_WAYLAND)</span>
-<span class="cp">#define OS_LINUX_WAYLAND 1</span>
-<span class="cp">#endif</span>
-
-<span class="c1">// gfxwrapper will redefine these macros</span>
-<span class="cp">#undef XR_USE_PLATFORM_WIN32</span>
-<span class="cp">#undef XR_USE_PLATFORM_XLIB</span>
-<span class="cp">#undef XR_USE_PLATFORM_XCB</span>
-<span class="cp">#undef XR_USE_PLATFORM_WAYLAND</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
 <span class="cp">#endif</span>
-
-<span class="cp">#if defined(XR_USE_GRAPHICS_API_OPENGL_ES)</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;gfxwrapper_opengl.h&gt;</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(XR_USE_GRAPHICS_API_VULKAN)</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vulkan/vulkan.h&gt;</span>
 <span class="cp">#endif</span>
-
-<span class="c1">// OpenXR</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpenXR Helper</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRHelper.h&gt;</span>
 </pre></div>
 </div>
+<p>When setting up the graphics API core obejcts, there are things that we need to know from OpenXR in order to create the objects correctly. These could include the version of the graphics API required, referencing a specific GPU, required instance and/r device extension etc. Below are code examples showing how to setup your graphics for OpenXR.</p>
+<div class="d3d11 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI_D3D11</span><span class="o">::</span><span class="n">GraphicsAPI_D3D11</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetD3D11GraphicsRequirementsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetD3D11GraphicsRequirementsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr xrGetD3D11GraphicsRequirementsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XrGraphicsRequirementsD3D11KHR</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">{</span><span class="n">XR_TYPE_GRAPHICS_REQUIREMENTS_D3D11_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetD3D11GraphicsRequirementsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Requirements for D3D11.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">D3D11_CHECK</span><span class="p">(</span><span class="n">CreateDXGIFactory1</span><span class="p">(</span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">factory</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create DXGI factory.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">UINT</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">IDXGIAdapter</span><span class="w"> </span><span class="o">*</span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DXGI_ADAPTER_DESC</span><span class="w"> </span><span class="n">adapterDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">factory</span><span class="o">-&gt;</span><span class="n">EnumAdapters</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adapter</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">DXGI_ERROR_NOT_FOUND</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">GetDesc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">adapterDesc</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">adapterLuid</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adapterDesc</span><span class="p">.</span><span class="n">AdapterLuid</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">LUID</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w">  </span><span class="c1">// We have the matching adapter that OpenXR wants.</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">D3D11_CHECK</span><span class="p">(</span><span class="n">D3D11CreateDevice</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span><span class="w"> </span><span class="n">D3D_DRIVER_TYPE_UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">D3D11_CREATE_DEVICE_DEBUG</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minFeatureLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">D3D11_SDK_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">immediateContext</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create D3D11 Device.&quot;</span><span class="p">);</span>
+
+<span class="w">	</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">QueryInterface</span><span class="p">(</span><span class="w"> </span><span class="n">__uuidof</span><span class="p">(</span><span class="n">ID3D11Debug</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">d3dDebug</span><span class="w"> </span><span class="p">);</span>
+<span class="w">	</span><span class="n">d3dDebug</span><span class="o">-&gt;</span><span class="n">QueryInterface</span><span class="p">(</span><span class="w"> </span><span class="n">__uuidof</span><span class="p">(</span><span class="n">ID3D11InfoQueue</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">infoQueue</span><span class="w"> </span><span class="p">);</span>
+<span class="w">	</span><span class="n">infoQueue</span><span class="o">-&gt;</span><span class="n">SetBreakOnSeverity</span><span class="p">(</span><span class="n">D3D11_MESSAGE_SEVERITY_WARNING</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">	</span><span class="n">infoQueue</span><span class="o">-&gt;</span><span class="n">SetBreakOnSeverity</span><span class="p">(</span><span class="n">D3D11_MESSAGE_SEVERITY_ERROR</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">GraphicsAPI_D3D11</span><span class="o">::~</span><span class="n">GraphicsAPI_D3D11</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">D3D11_SAFE_RELEASE</span><span class="p">(</span><span class="n">immediateContext</span><span class="p">);</span>
+<span class="w">    </span><span class="n">D3D11_SAFE_RELEASE</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
+<span class="w">    </span><span class="n">D3D11_SAFE_RELEASE</span><span class="p">(</span><span class="n">factory</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="d3d12 docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI_D3D12</span><span class="o">::</span><span class="n">GraphicsAPI_D3D12</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetD3D12GraphicsRequirementsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetD3D12GraphicsRequirementsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetD3D12GraphicsRequirementsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XrGraphicsRequirementsD3D12KHR</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">{</span><span class="n">XR_TYPE_GRAPHICS_REQUIREMENTS_D3D12_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetD3D12GraphicsRequirementsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Requirements for D3D12.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">debugAPI</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">D3D12GetDebugInterface</span><span class="p">(</span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">debug</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to get DebugInterface.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">debug</span><span class="o">-&gt;</span><span class="n">EnableDebugLayer</span><span class="p">();</span>
+<span class="w">        </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">ID3D12Debug1</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">SetEnableGPUBasedValidation</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">CreateDXGIFactory2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">factory</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create DXGI factory.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">UINT</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">IDXGIAdapter1</span><span class="w"> </span><span class="o">*</span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DXGI_ADAPTER_DESC</span><span class="w"> </span><span class="n">adapterDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">factory</span><span class="o">-&gt;</span><span class="n">EnumAdapters1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adapter</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">DXGI_ERROR_NOT_FOUND</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">GetDesc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">adapterDesc</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">adapterLuid</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adapterDesc</span><span class="p">.</span><span class="n">AdapterLuid</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">LUID</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w">  </span><span class="c1">// We have the matching adapter that OpenXR wants.</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">D3D12CreateDevice</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minFeatureLevel</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">device</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create D3D12 Device.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">D3D12_COMMAND_QUEUE_DESC</span><span class="w"> </span><span class="n">commandQueueDesc</span><span class="p">;</span>
+<span class="w">    </span><span class="n">commandQueueDesc</span><span class="p">.</span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_COMMAND_LIST_TYPE_DIRECT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">commandQueueDesc</span><span class="p">.</span><span class="n">Priority</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">commandQueueDesc</span><span class="p">.</span><span class="n">Flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_COMMAND_QUEUE_FLAG_NONE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">commandQueueDesc</span><span class="p">.</span><span class="n">NodeMask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">CreateCommandQueue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">commandQueueDesc</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create D3D12 Command Queue.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">D3D12_FEATURE_DATA_D3D12_OPTIONS</span><span class="w"> </span><span class="n">d3d12Options</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">CheckFeatureSupport</span><span class="p">(</span><span class="n">D3D12_FEATURE_D3D12_OPTIONS</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">d3d12Options</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">d3d12Options</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Unable to CheckFeatureSupport for D3D12_FEATURE_D3D12_OPTIONS.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ResourceBindingCapabilities</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxDescriptorCount</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxCBVsPerStage</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxSRVsPerStage</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxUAVsPerStage</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxSamplersPerStage</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxSamplerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2048</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">resourceBindingCapabilities</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">d3d12Options</span><span class="p">.</span><span class="n">ResourceBindingTier</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">D3D12_RESOURCE_BINDING_TIER_3</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">resourceBindingCapabilities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">};</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">D3D12_RESOURCE_BINDING_TIER_2</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">resourceBindingCapabilities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">};</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">D3D12_RESOURCE_BINDING_TIER_1</span><span class="p">:</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxUAVsPerStage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/*D3D_FEATURE_LEVEL_11_0*/</span><span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span>
+<span class="w">        </span><span class="n">resourceBindingCapabilities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000000</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">maxUAVsPerStage</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">};</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">D3D12_DESCRIPTOR_HEAP_DESC</span><span class="w"> </span><span class="n">DescriptorHeapDesc</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">NumDescriptors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resourceBindingCapabilities</span><span class="p">.</span><span class="n">maxDescriptorCount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">Flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">NodeMask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">device</span><span class="o">-&gt;</span><span class="n">CreateDescriptorHeap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DescriptorHeapDesc</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">CBV_SRV_UAV_DescriptorHeap</span><span class="p">));</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">DescriptorHeapDesc</span><span class="p">.</span><span class="n">NumDescriptors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resourceBindingCapabilities</span><span class="p">.</span><span class="n">maxSamplerCount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">device</span><span class="o">-&gt;</span><span class="n">CreateDescriptorHeap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DescriptorHeapDesc</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">SAMPLER_DescriptorHeap</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="n">GraphicsAPI_D3D12</span><span class="w"> </span><span class="o">::~</span><span class="n">GraphicsAPI_D3D12</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">D3D12_SAFE_RELEASE</span><span class="p">(</span><span class="n">SAMPLER_DescriptorHeap</span><span class="p">);</span>
+<span class="w">    </span><span class="n">D3D12_SAFE_RELEASE</span><span class="p">(</span><span class="n">CBV_SRV_UAV_DescriptorHeap</span><span class="p">);</span>
+<span class="w">    </span><span class="n">D3D12_SAFE_RELEASE</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span>
+<span class="w">    </span><span class="n">D3D12_SAFE_RELEASE</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengl docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI_OpenGL</span><span class="o">::</span><span class="n">GraphicsAPI_OpenGL</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetOpenGLGraphicsRequirementsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetOpenGLGraphicsRequirementsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetOpenGLGraphicsRequirementsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XrGraphicsRequirementsOpenGLKHR</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">{</span><span class="n">XR_TYPE_GRAPHICS_REQUIREMENTS_OPENGL_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetOpenGLGraphicsRequirementsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Requirements for OpenGL.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengl.cpp#L103-L121</span>
+<span class="w">    </span><span class="c1">// Initialize the gl extensions. Note we have to open a window.</span>
+<span class="w">    </span><span class="n">ksDriverInstance</span><span class="w"> </span><span class="n">driverInstance</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">ksGpuQueueInfo</span><span class="w"> </span><span class="n">queueInfo</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">ksGpuSurfaceColorFormat</span><span class="w"> </span><span class="n">colorFormat</span><span class="p">{</span><span class="n">KS_GPU_SURFACE_COLOR_FORMAT_B8G8R8A8</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ksGpuSurfaceDepthFormat</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">{</span><span class="n">KS_GPU_SURFACE_DEPTH_FORMAT_D24</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ksGpuSampleCount</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">{</span><span class="n">KS_GPU_SAMPLE_COUNT_1</span><span class="p">};</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ksGpuWindow_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">driverInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">queueInfo</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">colorFormat</span><span class="p">,</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">,</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">,</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: Failed to create Context.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MAJOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMajorVersion</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMinorVersion</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrVersion</span><span class="w"> </span><span class="n">glApiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MAKE_VERSION</span><span class="p">(</span><span class="n">glMajorVersion</span><span class="p">,</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL: The created OpenGL version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; doesn&#39;t meet the minimum required API version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT_SYNCHRONOUS</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageCallback</span><span class="p">(</span><span class="n">GLDebugCallback</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_FALSE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DEBUG_TYPE_ERROR</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_TRUE</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">GraphicsAPI_OpenGL</span><span class="o">::~</span><span class="n">GraphicsAPI_OpenGL</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ksGpuWindow_Destroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="opengles docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::</span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetOpenGLESGraphicsRequirementsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetOpenGLESGraphicsRequirementsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetOpenGLESGraphicsRequirementsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XrGraphicsRequirementsOpenGLESKHR</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">{</span><span class="n">XR_TYPE_GRAPHICS_REQUIREMENTS_OPENGL_ES_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetOpenGLESGraphicsRequirementsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Requirements for OpenGLES.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/f122f9f1fc729e2dc82e12c3ce73efa875182854/src/tests/hello_xr/graphicsplugin_opengles.cpp#L101-L119</span>
+<span class="w">    </span><span class="c1">// Initialize the gl extensions. Note we have to open a window.</span>
+<span class="w">    </span><span class="n">ksDriverInstance</span><span class="w"> </span><span class="n">driverInstance</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">ksGpuQueueInfo</span><span class="w"> </span><span class="n">queueInfo</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">ksGpuSurfaceColorFormat</span><span class="w"> </span><span class="n">colorFormat</span><span class="p">{</span><span class="n">KS_GPU_SURFACE_COLOR_FORMAT_B8G8R8A8</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ksGpuSurfaceDepthFormat</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">{</span><span class="n">KS_GPU_SURFACE_DEPTH_FORMAT_D24</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ksGpuSampleCount</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">{</span><span class="n">KS_GPU_SAMPLE_COUNT_1</span><span class="p">};</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ksGpuWindow_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">driverInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">queueInfo</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">colorFormat</span><span class="p">,</span><span class="w"> </span><span class="n">depthFormat</span><span class="p">,</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">,</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL ES: Failed to create Context.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GLint</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MAJOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMajorVersion</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">glMinorVersion</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XrVersion</span><span class="w"> </span><span class="n">glApiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MAKE_VERSION</span><span class="p">(</span><span class="n">glMajorVersion</span><span class="p">,</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">glApiVersion</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: OPENGL ES: The created OpenGL ES version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">glMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; doesn&#39;t meet the minimum required API version &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMajorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requiredMinorVersion</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEBUG_OUTPUT_SYNCHRONOUS</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageCallback</span><span class="p">(</span><span class="n">GLDebugCallback</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_FALSE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glDebugMessageControl</span><span class="p">(</span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DEBUG_TYPE_ERROR</span><span class="p">,</span><span class="w"> </span><span class="n">GL_DONT_CARE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">GL_TRUE</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">GraphicsAPI_OpenGL_ES</span><span class="o">::~</span><span class="n">GraphicsAPI_OpenGL_ES</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ksGpuWindow_Destroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="vulkan docutils container">
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GraphicsAPI_Vulkan</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Instance</span>
+<span class="w">    </span><span class="n">LoadPFN_XrFunctions</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">XrGraphicsRequirementsVulkanKHR</span><span class="w"> </span><span class="n">graphicsRequirements</span><span class="p">{</span><span class="n">XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanGraphicsRequirementsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">graphicsRequirements</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Requirements for Vulkan.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">VkApplicationInfo</span><span class="w"> </span><span class="n">ai</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_APPLICATION_INFO</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">pApplicationName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial - Vulkan&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">applicationVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">pEngineName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial - Vulkan Engine&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">engineVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ai</span><span class="p">.</span><span class="n">apiVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_MAKE_API_VERSION</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">),</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">graphicsRequirements</span><span class="p">.</span><span class="n">minApiVersionSupported</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">instanceExtensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumerateInstanceExtensionProperties</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instanceExtensionCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate InstanceExtensionProperties.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkExtensionProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">instanceExtensionProperties</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceExtensionProperties</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">instanceExtensionCount</span><span class="p">);</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumerateInstanceExtensionProperties</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instanceExtensionCount</span><span class="p">,</span><span class="w"> </span><span class="n">instanceExtensionProperties</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate InstanceExtensionProperties.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">openXrInstanceExtensionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetInstanceExtensionsForOpenXR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">requestExtension</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">openXrInstanceExtensionNames</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VkExtensionProperties</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">instanceExtensionProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">extensionName</span><span class="p">))</span>
+<span class="w">                </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">                </span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">VkInstanceCreateInfo</span><span class="w"> </span><span class="n">instanceCI</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">pApplicationInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ai</span><span class="p">;</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">activeInstanceLayers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">ppEnabledLayerNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeInstanceLayers</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">enabledExtensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">instanceCI</span><span class="p">.</span><span class="n">ppEnabledExtensionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeInstanceExtensions</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkCreateInstance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instanceCI</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instance</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Vulkan Instance.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Physical Device</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">physicalDeviceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkPhysicalDevice</span><span class="o">&gt;</span><span class="w"> </span><span class="n">physicalDevices</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumeratePhysicalDevices</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">physicalDeviceCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate PhysicalDevices.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">physicalDevices</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">physicalDeviceCount</span><span class="p">);</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumeratePhysicalDevices</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">physicalDeviceCount</span><span class="p">,</span><span class="w"> </span><span class="n">physicalDevices</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate PhysicalDevices.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">VkPhysicalDevice</span><span class="w"> </span><span class="n">physicalDeviceFromXR</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanGraphicsDeviceKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">physicalDeviceFromXR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Graphics Device for Vulkan.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">physicalDeviceFromXR_it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">physicalDevices</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">physicalDevices</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">physicalDeviceFromXR</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">physicalDeviceFromXR_it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">physicalDevices</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">physicalDevice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">physicalDeviceFromXR_it</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ERROR: Vulkan: Failed to find PhysicalDevice for OpenXR.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// Select the first available device.</span>
+<span class="w">        </span><span class="n">physicalDevice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">physicalDevices</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Device</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkQueueFamilyProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queueFamilyProperties</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">queueFamilyPropertiesCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">vkGetPhysicalDeviceQueueFamilyProperties</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">queueFamilyPropertiesCount</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queueFamilyProperties</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">queueFamilyPropertiesCount</span><span class="p">);</span>
+<span class="w">    </span><span class="n">vkGetPhysicalDeviceQueueFamilyProperties</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">queueFamilyPropertiesCount</span><span class="p">,</span><span class="w"> </span><span class="n">queueFamilyProperties</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkDeviceQueueCreateInfo</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deviceQueueCIs</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">queuePriorities</span><span class="p">;</span>
+<span class="w">    </span><span class="n">queuePriorities</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">queueFamilyProperties</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">deviceQueueCIs</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">queueFamilyProperties</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">deviceQueueCIs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">queueFamilyProperties</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">queueCount</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">            </span><span class="n">queuePriorities</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO</span><span class="p">;</span>
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">queueFamilyIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">queueCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueFamilyProperties</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">queueCount</span><span class="p">;</span>
+<span class="w">        </span><span class="n">deviceQueueCIs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pQueuePriorities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queuePriorities</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">BitwiseCheck</span><span class="p">(</span><span class="n">queueFamilyProperties</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">queueFlags</span><span class="p">,</span><span class="w"> </span><span class="n">VkQueueFlags</span><span class="p">(</span><span class="n">VK_QUEUE_GRAPHICS_BIT</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">queueFamilyIndex</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">queueIndex</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">queueFamilyIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="n">queueIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">deviceExtensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumerateDeviceExtensionProperties</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">deviceExtensionCount</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate DeviceExtensionProperties.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkExtensionProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deviceExtensionProperties</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceExtensionProperties</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">deviceExtensionCount</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkEnumerateDeviceExtensionProperties</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">deviceExtensionCount</span><span class="p">,</span><span class="w"> </span><span class="n">deviceExtensionProperties</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to enumerate DeviceExtensionProperties.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">openXrDeviceExtensionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetDeviceExtensionsForOpenXR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">requestExtension</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">openXrDeviceExtensionNames</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VkExtensionProperties</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionProperty</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">deviceExtensionProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">extensionProperty</span><span class="p">.</span><span class="n">extensionName</span><span class="p">))</span>
+<span class="w">                </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">                </span><span class="n">activeDeviceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">requestExtension</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">VkPhysicalDeviceFeatures</span><span class="w"> </span><span class="n">features</span><span class="p">;</span>
+<span class="w">    </span><span class="n">vkGetPhysicalDeviceFeatures</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">features</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">VkDeviceCreateInfo</span><span class="w"> </span><span class="n">deviceCI</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">queueCreateInfoCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">deviceQueueCIs</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">pQueueCreateInfos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deviceQueueCIs</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">enabledLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">ppEnabledLayerNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">enabledExtensionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">activeDeviceExtensions</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">ppEnabledExtensionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeDeviceExtensions</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">deviceCI</span><span class="p">.</span><span class="n">pEnabledFeatures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">features</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkCreateDevice</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">deviceCI</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">device</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Device.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">GraphicsAPI_Vulkan</span><span class="o">::~</span><span class="n">GraphicsAPI_Vulkan</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">vkDestroyDevice</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">vkDestroyInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GraphicsAPI_Vulkan::LoadPFN_XrFunctions</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetVulkanGraphicsRequirementsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetVulkanGraphicsRequirementsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetVulkanGraphicsRequirementsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetVulkanInstanceExtensionsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetVulkanInstanceExtensionsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetVulkanInstanceExtensionsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetVulkanDeviceExtensionsKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetVulkanDeviceExtensionsKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetVulkanDeviceExtensionsKHR.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrGetVulkanGraphicsDeviceKHR&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrGetVulkanGraphicsDeviceKHR</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProcAddr for xrGetVulkanGraphicsDeviceKHR.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetInstanceExtensionsForOpenXR</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">extensionNamesSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanInstanceExtensionsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Vulkan Instance Extensions.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensionNames</span><span class="p">(</span><span class="n">extensionNamesSize</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanInstanceExtensionsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="n">extensionNames</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to get Vulkan Instance Extensions.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="nf">streamData</span><span class="p">(</span><span class="n">extensionNames</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensions</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">extension</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">streamData</span><span class="p">,</span><span class="w"> </span><span class="n">extension</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39; &#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">extensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">extensions</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GraphicsAPI_Vulkan</span><span class="o">::</span><span class="n">GetDeviceExtensionsForOpenXR</span><span class="p">(</span><span class="n">XrInstance</span><span class="w"> </span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">XrSystemId</span><span class="w"> </span><span class="n">systemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">extensionNamesSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanDeviceExtensionsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Vulkan Device Extensions.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensionNames</span><span class="p">(</span><span class="n">extensionNamesSize</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetVulkanDeviceExtensionsKHR</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">systemId</span><span class="p">,</span><span class="w"> </span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">extensionNamesSize</span><span class="p">,</span><span class="w"> </span><span class="n">extensionNames</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="s">&quot;Failed to get Vulkan Device Extensions.&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="nf">streamData</span><span class="p">(</span><span class="n">extensionNames</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensions</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">extension</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">streamData</span><span class="p">,</span><span class="w"> </span><span class="n">extension</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39; &#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">extensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">extensions</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="color-science">
+<h2>6.3 Color Science<a class="headerlink" href="#color-science" title="Permalink to this heading">¶</a></h2>
+<p>As OpenXR support both linear and sRGB color spaces for compositing. It is helpful to have a deeper knowledge of color science; especially if you are planning to use sRGB formats and have the OpenXR runtime/compositor do automatic conversions for you.</p>
 <p>For more information on color spaces and gamma encoding, see Guy Davidson’s video presentation <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">here</a>.</p>
 </section>
 </section>
@@ -507,7 +1274,9 @@ OpenGL supports rendering to both eye views with multiview, which simplifies the
 
 						</div>
 					</div>
-					<footer>
+					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="5-extensions.html" class="btn btn-neutral float-left" title="5 Extensions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr>
 
