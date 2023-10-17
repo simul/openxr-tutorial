@@ -315,17 +315,13 @@
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
-	</button>
-	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
 		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
-	</button>
-	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
-	</button>
-	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
 		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
-	</button>
-	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
 </div>
@@ -423,7 +419,7 @@
 </pre></div>
 </div>
 <p>Here, we store in a vector of strings the extension names that we would like to use. <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> is a macro of a string defined in <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code>. The XR_EXT_debug_utils is extension that checks the validity of calls made to OpenXR, and can use a call back function to handle any raised errors. We will explore this extension more in <a class="reference internal" href="#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>. Depending on which <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macro you defined, this code will add the relevant extension.</p>
-<p>Not all API layers and extensions are available to use, so we much check which ones are available when OpenXR is initialized. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide. Let’s do this now by adding the following code to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method:</p>
+<p>Not all API layers and extensions are available to use, so we must check which ones are available when OpenXR is initialized. We will use <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrEnumerateInstanceExtensionProperties()</span></code> to check which ones the runtime can provide. Let’s do this now by adding the following code to the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Get all the API Layers from the OpenXR runtime.</span>
 <span class="kt">uint32_t</span><span class="w"> </span><span class="n">apiLayerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrApiLayerProperties</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apiLayerProperties</span><span class="p">;</span>
@@ -1032,7 +1028,8 @@
   <hr>
 
   <div role="contentinfo">
-    <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.</p>
+      <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.
+<p dir="auto">The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p></p>
   </div> 
 
 </footer>

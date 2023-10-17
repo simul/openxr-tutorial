@@ -2,6 +2,15 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 17 Oct** : Fixed typos in 5.2 text.
+    | **Tue 17 Oct** : Finally addition to complete chapter 5.2 text.
+    | **Tue 17 Oct** : Added AndroidBuildFolder.zip for quicker from scratch android builds. Updated chapter 1 text giving options for both. This is WIP - we want to just have the .zip folder.
+    | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 17 Oct** : Updated Chapter 3 code and text to use a depth swapchain. Code copied to chapter 4 and 5.
+    | **Tue 17 Oct** : Tab separation. Centering of platform icons.
+    | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 17 Oct** : Previous/next buttons are purple now, and aligned with paragraph width. Corrected footer text. Fixed some typos.
+    | **Tue 17 Oct** : Updated Code License to Apache-2.0.
     | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 17 Oct** : Added Multiview explanation text in 6.1. Removed comments from GLES shaders.
     | **Tue 17 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -93,12 +102,3 @@ Changelist
     | **Thu 21 Sep** : Work on fixing build
     | **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
     | **Wed 20 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 20 Sep** : Updated code and texts to use #include<> from external sources like GraphicsAPI, OpenXR, OS and C/C++ headers, plus our /Common folder.
-    | **Wed 20 Sep** : Amended spelling in Chapter 2 text.
-    | **Tue 19 Sep** : Vulkan fixes for Chapter 1.
-    | **Tue 19 Sep** : Added svg icons
-    | **Fri 08 Sep** : Updated Chapter2/CMakeLists.txt and 1-introduction.rst to add explanation of "-Wno-cast-calling-convention" for Android.
-    | **Thu 07 Sep** : Updated timetable for testing.
-    | **Thu 07 Sep** : Fixed some text flow.
-    | **Thu 07 Sep** : Added missing BlockInteraction() call.
-    | **Thu 07 Sep** : Declare blocks in ch4

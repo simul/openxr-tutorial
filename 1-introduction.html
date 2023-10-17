@@ -310,17 +310,13 @@
 <div id='selectgraphicsapi'>
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
-	</button>
-	<button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
 		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
-	</button>
-	<button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
-	</button>
-	<button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
 		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
-	</button>
-	<button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
 </div>
@@ -403,20 +399,19 @@ allows you to write code that works with multiple XR platforms, with minimal ada
 </tr>
 </tbody>
 </table>
-<p>OpenXR’s lexicon and API style are based on the Vulkan API, and it provides a clear and precise common language for developers and hardware vendors to use. It was a decision by the OpenXR working group to have APIs similar.</p>
-<p>An OpenXR Runtime implements the OpenXR API. There maybe multiple runtime installed on a system, but an OpenXR application can only choose one. The runtime acts to translate the OpenXR function calls into something that the vendor’s software/hardware can understand. There is a fully open source OpenXR runtime for Linux in development called <a class="reference external" href="https://monado.dev/">Monado</a>.</p>
+<p>OpenXR provides a clear and precise common language for developers and hardware vendors to use.</p>
+<p>An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor’s software/hardware can understand.</p>
 <p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <cite>XR_EXT_debug_utils</cite>, any functions associated with that extension will need to be loaded in with <cite>xrGetInstanceProcAddr()</cite>. Some platforms like Android require extra work and information to initialise the loader.</p>
-<p>API Layers are additional code layers that are inserted between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Some simple examples of API Layers would be logging the OpenXR functions to the output or a file, or creating trace file of the OpenXR calls for later replay. A validation layer could be used to check that the function calls made to OpenXR are compatible with the specification and with the current state of OpenXR, which would be very similar the Vulkan Validation layer.</p>
-<p>OpenXR supports multiple graphics APIs via its extension functionality. Like in Vulkan, OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality, as bold as it might seem, provides us with the flexibility in choosing the graphics APIs now and in the future. Firstly, OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. Secondly, the extensive nature of OpenXR allows revisions of and any new graphics APIs to be integrated with ease. Already, there are two mutually exclusive extensions in OpenXR for interacting with Vulkan.</p>
-<p>OpenXR recognised that there is vast and ever changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that same application can target difference and newer hardware. The abstraction is done via the concept of an <cite>XrAction</cite>, which acts as handle to interactive elements of the application. Instead of directly querying the state of any one button, joysticks, trigger, touch pad etc., you create an <cite>XrAction</cite> for a specific action such as a “menu_click”. You provide a suggested binding along with an interaction profile so that OpenXR can link that action with the available input hardware at runtime.</p>
+<p>API Layers are additional code layers that are inserted between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or to check that the function calls made to OpenXR are compatible with the OpenXR specification.</p>
+<p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of abstracting the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensiblee nature of OpenXR allows revisions of existing API’s and new graphics API’s to be integrated with ease.</p>
+<p>OpenXR recognizes that there is a vast and ever changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change.</p>
 </section>
 <section id="environment-setup">
 <h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">¶</a></h2>
-<p>This section will help you set up your development environment. Here your choice of platform really makes a difference. After that, things will be much more consistent. You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking a tab above.</p>
+<p>This section will help you set up your development environment. Here your choice of platform really makes a difference, but afterwards things will be much more consistent. You can change platform at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking a tab above.</p>
 <div class="windows docutils container">
 <p class="rubric">Visual Studio</p>
-<p>If you’ll be building an OpenXR project for Microsoft Windows PC based devices, we’ll assume you’ll be using Microsoft Visual Studio.
-The free Community edition of Visual Studio is available to download <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
+<p>If you’ll be building an OpenXR project for Microsoft Windows PC based devices, we’ll assume you’ll be using Microsoft Visual Studio. The free Community Edition of Visual Studio is available to download <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
 <p class="rubric">CMake</p>
 <p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake to generate the Visual Studio Solution and Project files.</p>
 <p>Next you’ll want to choose which Graphics API you’ll be using.</p>
@@ -496,7 +491,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <p><a class="reference download internal" download="" href="_downloads/873a1884f399251a093874b50e73432c/glsl_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">glsl_shader.cmake</span></code></a></p>
 </div>
 <p>Now, create a text file in the <em>workspace</em> folder called <cite>CMakeLists.txt</cite> and in it, put the following code:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.16</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 
 <span class="nb">project</span><span class="p">(</span><span class="s">openxr-tutorial</span><span class="p">)</span>
 
@@ -552,7 +547,7 @@ In it, put the following code:</p>
 </pre></div>
 </div>
 <p>After setting our CMake version, our own CMake variable <cite>PROJECT_NAME</cite> to <cite>OpenXRTutorialChapter2</cite> and with that variable setting the project’s name, we append to the <cite>CMAKE_MODULE_PATH</cite> variable an additional path for <cite>find_package()`</cite> to search within and we include <cite>FetchContent</cite> and use it to get the OpenXR-SDK from Khronos’s GitHub page.</p>
-<p>Now, we will add to our <cite>CMakeLists.txt</cite> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
+<p>Now, we will add to <cite>Chapter2/CMakeLists.txt</cite> to specify the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
@@ -622,7 +617,7 @@ In it, put the following code:</p>
 </div>
 </div>
 <p>All the files listed above with <cite>../Common/*.*</cite> are available to download below. In the next section, you will find the links and discussion of their usage. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files for your chosen API.</p>
-<p>Add the following code to <cite>CMakeLists.txt</cite>:</p>
+<p>Add the following code to <cite>Chapter2/CMakeLists.txt</cite>:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -700,6 +695,9 @@ In it, put the following code:</p>
 <p>That’s all the CMake code that we require for this project.</p>
 </div>
 <div class="android docutils container">
+<p>For a quick setup download this <code class="docutils literal notranslate"><span class="pre">.zip</span></code> archive and follow later instructions to build the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>:</p>
+<p><a class="reference download internal" download="" href="_downloads/53f2623ee04342421f984f841e7a6464/AndroidBuildFolder.zip"><code class="xref download docutils literal notranslate"><span class="pre">AndroidBuildFolder.zip</span></code></a></p>
+<p>For a detailed explantion of the Android build folder set up continue below:</p>
 <p>Here, We’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
 First, we will create a <em>workspace</em> folder and in that folder create a subdirectory called <cite>/Chapter2</cite>.
 Open Android Studio, select New Project and choose an Empty View Activity (Android Studio 22+) or an Empty Activity (Android Studio up to version 21).</p>
@@ -720,13 +718,13 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <a class="reference internal image-reference" href="_images/GradleSync.png"><img alt="Gradle Sync" src="_images/GradleSync.png" style="width: 282.70000000000005px; height: 366.3px;" /></a>
 </figure>
 <div class="opengles docutils container">
-<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked files below and put them in <cite>cmake</cite>. These will be used in our <cite>CMakeLists.txt</cite> to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked files below and put them in <cite>cmake</cite>. These will be used by CMake to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a>
 <a class="reference download internal" download="" href="_downloads/89eb289f84bcf399649e6363229fe702/FindEGL.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindEGL.cmake</span></code></a>
 <a class="reference download internal" download="" href="_downloads/ff2de0272f6a69e9d334910d356b7cc5/FindOpenGLES.cmake"><code class="xref download docutils literal notranslate"><span class="pre">FindOpenGLES.cmake</span></code></a></p>
 </div>
 <div class="vulkan docutils container">
-<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked file below and put it in <cite>cmake</cite>. This will be used in later chapters in our <cite>CMakeLists.txt</cite> to help build our project.</p>
+<p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked file below and put it in <cite>cmake</cite>. This will be used by CMake to help build our project.</p>
 <p><a class="reference download internal" download="" href="_downloads/873a1884f399251a093874b50e73432c/glsl_shader.cmake"><code class="xref download docutils literal notranslate"><span class="pre">glsl_shader.cmake</span></code></a></p>
 </div>
 <p>Create a text file called <cite>CMakeLists.txt</cite> in the <cite>Chapter2</cite> directory. We will use this file to specific how our Native C++ code will be built. This file will be invoked by Android Studio’s Gradle build system.</p>
@@ -1184,7 +1182,7 @@ Click the link “create a launch.json file” to and enter the following in lau
 <span class="w">                        </span><span class="nt">&quot;request&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;launch&quot;</span><span class="p">,</span>
 <span class="w">                        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Chapter2&quot;</span><span class="p">,</span>
 <span class="w">                        </span><span class="nt">&quot;program&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${workspaceFolder}/build/Chapter2/OpenXRTutorialChapter2&quot;</span><span class="p">,</span>
-<span class="w">                        </span><span class="nt">&quot;cwd&quot;</span><span class="p">:</span><span class="s2">&quot;${workspaceFolder}/OpenXRTutorialChapter2&quot;</span>
+<span class="w">                        </span><span class="nt">&quot;cwd&quot;</span><span class="p">:</span><span class="s2">&quot;${workspaceFolder}/Chapter2&quot;</span>
 <span class="w">                </span><span class="p">}</span>
 <span class="w">        </span><span class="p">]</span>
 <span class="p">}</span>
@@ -1220,7 +1218,8 @@ It is also recommended to sync the gradle files too.</p>
   <hr>
 
   <div role="contentinfo">
-    <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.</p>
+      <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.
+<p dir="auto">The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p></p>
   </div> 
 
 </footer>
