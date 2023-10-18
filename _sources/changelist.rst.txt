@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 18 Oct** : Corrections for typos.
     | **Tue 17 Oct** : Fixed typos in 5.2 text.
     | **Tue 17 Oct** : Finally addition to complete chapter 5.2 text.
     | **Tue 17 Oct** : Added AndroidBuildFolder.zip for quicker from scratch android builds. Updated chapter 1 text giving options for both. This is WIP - we want to just have the .zip folder.
@@ -100,5 +102,3 @@ Changelist
     | **Thu 21 Sep** : CMake cleanup, fix for linux, and update to latest recommended practices.
     | **Thu 21 Sep** : Initial CMake cleanup
     | **Thu 21 Sep** : Work on fixing build
-    | **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
-    | **Wed 20 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main

@@ -151,12 +151,8 @@
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
 	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
-	//const newNode = document.createElement("img");
-	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
 	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
-	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
-	//newNode.width = "30";
 	i++;
 	console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 	});
@@ -974,7 +970,7 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRDebugUtils.h&gt;</span>
 </pre></div>
 </div>
-<p>Now we will define the main class <cite>OpenXRTutorial</cite> of the application. It’s just a stub for now, with an empty <cite>Run()</cite> method:</p>
+<p>Now we will define the main class <cite>OpenXRTutorial</cite> of the application. It’s just a stub for now, with an empty <cite>Run()</cite> method. Add the following to main.cpp:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span>
@@ -985,11 +981,11 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>

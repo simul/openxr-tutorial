@@ -149,12 +149,8 @@
 	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
 	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
 	[].forEach.call(toctreeheadings, function(el) {
-	//const newNode = document.createElement("img");
-	//el.insertBefore(newNode, el.children[0]);
 	el.id =heading_ids[i];
 	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
-	//newNode.src = "_static/css/icons/"+heading_ids[i]+".svg";
-	//newNode.width = "30";
 	i++;
 	console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 	});
@@ -324,7 +320,9 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 17 Oct** : Fixed typos in 5.2 text.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 18 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Wed 18 Oct** : Corrections for typos.
+| **Tue 17 Oct** : Fixed typos in 5.2 text.
 | **Tue 17 Oct** : Finally addition to complete chapter 5.2 text.
 | **Tue 17 Oct** : Added AndroidBuildFolder.zip for quicker from scratch android builds. Updated chapter 1 text giving options for both. This is WIP - we want to just have the .zip folder.
 | **Tue 17 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
@@ -422,8 +420,6 @@
 | **Thu 21 Sep** : CMake cleanup, fix for linux, and update to latest recommended practices.
 | **Thu 21 Sep** : Initial CMake cleanup
 | **Thu 21 Sep** : Work on fixing build
-| **Wed 20 Sep** : Updated Chapters 4 and 5 CMake to use glslc from the Android NDK (and not the PC glslangvalidator) for Vulkan SPIR-V. Added files to build Chapter 5 for Android.
-| **Wed 20 Sep** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 </pre></div>
 </div>
 </section>
