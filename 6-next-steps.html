@@ -255,7 +255,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">6 Next Steps</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#multiview-rendering">6.1 Multiview rendering</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#graphics-api">6.2 Graphics API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#color-science">6.3 Color Science</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openxr-api-layers">6.3 OpenXR API Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#color-science">6.4 Color Science</a></li>
 </ul>
 </li>
 </ul>
@@ -1256,10 +1257,42 @@ Also see this example from ARM’s OpenGL ES SDK for Android <a class="reference
 </div>
 </div>
 </section>
+<section id="openxr-api-layers">
+<h2>6.3 OpenXR API Layers<a class="headerlink" href="#openxr-api-layers" title="Permalink to this heading">¶</a></h2>
+<p>The OpenXR loader has a layer system that allows OpenXR API calls to pass through a number of optional layers, that add some functionality for the application. These are extremely useful for debugging.</p>
+<p>The OpenXR SDK provides two API layers for us to use:
+In the table below are the layer names and thier associated libraries and json files.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XR_APILAYER_LUNARG_api_dump</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_api_dump.dll</span></code> or <code class="docutils literal notranslate"><span class="pre">.so</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_api_dump.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>XR_APILAYER_LUNARG_core_validation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_core_validation.dll</span></code> or <code class="docutils literal notranslate"><span class="pre">.so</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_core_validation.json</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>XR_APILAYER_LUNARG_api_dump simply logs extra/verbose information to <code class="docutils literal notranslate"><span class="pre">std::cout</span></code> descibing in more detail what has happened during that API call. XR_APILAYER_LUNARG_core_validation acts similarly to VK_LAYER_KHRONOS_validation in Vulkan, where the layer intercepts the API call and performs validation to ensure conformance with the specification.</p>
+<p>Other runtimes and hardware vendors may provide layers that are useful for debugging your XR application.</p>
+<p>To enable API layers, add the <code class="docutils literal notranslate"><span class="pre">XR_API_LAYER_PATH=&lt;path&gt;</span></code> environment variable to your project or your system. Something like this: <code class="docutils literal notranslate"><span class="pre">XR_API_LAYER_PATH=&lt;openxr_base&gt;/&lt;build_folder&gt;/src/api_layers/;&lt;another_path&gt;</span></code>.</p>
+<p>The path must point to a folder containing a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file similar to the one for XR_APILAYER_LUNARG_core_validation, shown below:</p>
+<p>This file points to the library that the loader should use for this API layer.</p>
+<dl class="simple">
+<dt>To select which API layers we want to use, there are two ways to do this:</dt><dd><ol class="arabic simple">
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">XR_ENABLE_API_LAYERS=&lt;layer_name&gt;</span></code> environment variable to your project or your system. Something like this: <code class="docutils literal notranslate"><span class="pre">XR_ENABLE_API_LAYERS=XR_APILAYER_LUNARG_test1;XR_APILAYER_LUNARG_test2</span></code>.</p></li>
+<li><p>When creating the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, specify the requested API layers in the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> structure.</p></li>
+</ol>
+</dd>
+</dl>
+<p>Calls to <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> should now return a pointer to an array of structs and the count of all API layers available to the application.</p>
+<p>For more details, please see <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/main/src/api_layers/README.md">API Layers README</a> and see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/loader.html#openxr-api-layers">OpenXR API Layers</a>.</p>
+</section>
 <section id="color-science">
-<h2>6.3 Color Science<a class="headerlink" href="#color-science" title="Permalink to this heading">¶</a></h2>
+<h2>6.4 Color Science<a class="headerlink" href="#color-science" title="Permalink to this heading">¶</a></h2>
 <p>As OpenXR support both linear and sRGB color spaces for compositing. It is helpful to have a deeper knowledge of color science; especially if you are planning to use sRGB formats and have the OpenXR runtime/compositor do automatic conversions for you.</p>
-<p>For more information on color spaces and gamma encoding, see Guy Davidson’s video presentation <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">here</a>.</p>
+<p>For more information on color spaces and gamma encoding, see Guy Davidson’s <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">video presentation</a>.</p>
 </section>
 </section>
 
