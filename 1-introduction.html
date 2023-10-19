@@ -493,14 +493,11 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 
 <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CONFIGURATION_TYPES</span><span class="w"> </span><span class="s2">&quot;Debug;Release&quot;</span><span class="p">)</span>
 
-<span class="nb">option</span><span class="p">(</span><span class="s">TUTORIAL_BUILD_DOCUMENTATION</span><span class="w"> </span><span class="s2">&quot;Build the tutorial documentation?&quot;</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
-<span class="nb">option</span><span class="p">(</span><span class="s">TUTORIAL_BUILD_PROJECTS</span><span class="w"> </span><span class="s2">&quot;Build the tutorial projects?&quot;</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
-
 <span class="c"># Optional override runtime</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">XR_RUNTIME_JSON</span>
-<span class="w">    </span><span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span>
-<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span>
-<span class="w">        </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span>
+<span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span>
+<span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span>
+<span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -982,12 +979,22 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
+</div>
+<p>Note here that for some platforms, we need additional functionality provided via the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method, so that our application can react to any relevant updates from the platform correctly.</p>
+<div class="windows linux docutils container">
+<p>For Windows and Linux, there no relevant system event that we need to be aware of, and thus the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method definition can be left blank.</p>
+</div>
+<div class="android docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method is outside the scope of OpenXR, but in general it polls Android for system events, updates and uses the <code class="docutils literal notranslate"><span class="pre">AndroidAppState</span></code>, <code class="docutils literal notranslate"><span class="pre">m_applicationRunning</span></code> and <code class="docutils literal notranslate"><span class="pre">m_sessionRunning</span></code> members, which we describe later in this chapter.</p>
 </div>
 <p>We’ll add the main function for the application. It will look slightly different, depending on your
 chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenXRTutorial_Main()</cite>, in which we create an instance of our <cite>OpenXRTutorial</cite> class, taking a <cite>GraphicsAPI_Type</cite> parameter, and call the <cite>Run()</cite> method. <cite>GraphicsAPI_Type</cite> can be changed to suit the graphics API that you have chosen.</p>

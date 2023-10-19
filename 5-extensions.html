@@ -255,6 +255,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5 Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#hand-tracking">5.1 Hand Tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#composition-layer-depth">5.2 Composition Layer Depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xr-api-layers">5.3 XR_API_LAYERS</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
@@ -343,7 +344,7 @@
 </div>
 <p>We saw in <a class="reference internal" href="2-setup.html#instanceextensions"><span class="std std-ref">Chapter 2</span></a>  how to create a list of instance extensions before starting up the OpenXR instance. At the top of CreateInstance(), where we’re listing the extensions to request, we’ll add the name of the one that enables hand tracking:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
-<span class="c1">// TODO make sure this is already defined when we add this line.</span>
+<span class="c1">// Ensure m_apiType is already defined when we call this line.</span>
 <span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
 </pre></div>
 </div>
@@ -453,7 +454,7 @@
 </div>
 <p>Now, in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> under the extensions from Chapter 2:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
-<span class="c1">// TODO make sure this is already defined when we add this line.</span>
+<span class="c1">// Ensure m_apiType is already defined when we call this line.</span>
 <span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
 </pre></div>
 </div>
@@ -481,6 +482,37 @@
 <span class="w">   </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">farZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">farZ</span><span class="p">;</span>
 </pre></div>
 </div>
+</section>
+<section id="xr-api-layers">
+<h2>5.3 XR_API_LAYERS<a class="headerlink" href="#xr-api-layers" title="Permalink to this heading">¶</a></h2>
+<p>The OpenXR loader has a layer system that allows the OpenXR API calls to pass through a number of optional layers, that add some functionality for the application. These are exceptionally useful for debugging.</p>
+<p>The OpenXR SDK provides us two API layers for us to use:
+There’s the layer name and its associated library and json file.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>XR_APILAYER_LUNARG_api_dump</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_api_dump.dll</span></code> or <code class="docutils literal notranslate"><span class="pre">.so</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_api_dump.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>XR_APILAYER_LUNARG_core_validation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_core_validation.dll</span></code> or <code class="docutils literal notranslate"><span class="pre">.so</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XrApiLayer_core_validation.json</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>XR_APILAYER_LUNARG_api_dump simply logs extra/verbose information to <code class="docutils literal notranslate"><span class="pre">std::cout</span></code> descibing in more detail what has happened during that API call. XR_APILAYER_LUNARG_core_validation acts similarly to VK_LAYER_KHRONOS_validation in Vulkan, where the layer intercepts the API call and performance validation to ensure conformance with the specification.</p>
+<p>Other runtimes and hardware vendor may provide layers that are useful for debugging your XR system.</p>
+<p>To enable api layers, add the <code class="docutils literal notranslate"><span class="pre">XR_API_LAYER_PATH=&lt;path&gt;</span></code> environment variable to your project or your system. Something like this: <code class="docutils literal notranslate"><span class="pre">XR_API_LAYER_PATH=&lt;openxr_base&gt;/&lt;build_folder&gt;/src/api_layers/;&lt;another_path&gt;</span></code>.</p>
+<p>The path must point a folder containing a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file similar to the one for XR_APILAYER_LUNARG_core_validation, shown below:</p>
+<dl class="simple">
+<dt>To select which API Layers we want to use, there are two ways to do this:</dt><dd><ol class="arabic simple">
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">XR_ENABLE_API_LAYERS=&lt;layer_name&gt;</span></code> environment variable to your project or your system. Something like this: <code class="docutils literal notranslate"><span class="pre">XR_ENABLE_API_LAYERS=XR_APILAYER_LUNARG_test1;XR_APILAYER_LUNARG_test2</span></code>.</p></li>
+<li><p>When creating the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>, specify the requested API layers in the <code class="docutils literal notranslate"><span class="pre">XrInstanceCreateInfo</span></code> struct.</p></li>
+</ol>
+</dd>
+</dl>
+<p>Calls to <code class="docutils literal notranslate"><span class="pre">xrEnumerateApiLayerProperties()</span></code> should now return the count and data of all API layers available to the application.</p>
+<p>For more details, please see <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/main/src/api_layers/README.md">API Layers README</a> and see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/loader.html#openxr-api-layers">OpenXR API Layers</a>.</p>
 </section>
 </section>
 

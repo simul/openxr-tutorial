@@ -447,6 +447,7 @@ So you can create multiple Action Sets, but we only need one for this example. T
 <span class="w">    </span><span class="p">};</span>
 </pre></div>
 </div>
+<p>Here we’ve created each action with a little local lambda function <cite>CreateAction</cite>. Each action has a name, a localized description, and the type of action it is. It also, optionally, has a list of sub-action paths. A sub-action is, essentially the same action on a different control device: left- or right-hand controllers for example.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// An Action for grabbing cubes.</span>
 <span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grab-cube&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_FLOAT_INPUT</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">});</span>
 <span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_spawnCubeAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spawn-cube&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_BOOLEAN_INPUT</span><span class="w"> </span><span class="p">);</span>
@@ -461,7 +462,6 @@ So you can create multiple Action Sets, but we only need one for this example. T
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Here we’ve created each action with a little local lambda function <cite>CreateAction</cite>. Each action has a name, a localized description, and the type of action it is. It also, optionally, has a list of sub-action paths. A sub-action is, essentially the same action on a different control device: left- or right-hand controllers for example.</p>
 <p>Each Action and Action Set has both a name, for internal use, and a localized description to show to the end-user. This is because the user may want to re-map actions from the default controls, so there must be a human-readable name to show them.</p>
 </section>
 <section id="interaction-profiles-and-bindings">
@@ -844,6 +844,10 @@ controller’s position.</p>
 </pre></div>
 </div>
 <p>Now build and run your application. You should see something like this:</p>
+<figure class="align-left">
+<a class="reference internal image-reference" href="_images/Chapter4-Screenshot.png"><img alt="Chapter4 Screenshot of final result." src="_images/Chapter4-Screenshot.png" style="width: 99%;" /></a>
+</figure>
+<p>You should also be able to grab and move the cubes with the controllers.</p>
 </section>
 <section id="checking-for-connected-controllers">
 <h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Permalink to this heading">¶</a></h2>
