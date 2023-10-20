@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 20 Oct** : Updated AndroidBuildFolder.zip and the text in chapter 1 to use it.
+    | **Fri 20 Oct** : Updated license for build-eoc-archs.sh. Added eoc-archs-rm-tags.py to remove XR_DOCS_TAG_ from CPP and CMake files.
+    | **Thu 19 Oct** : Don't upload EndOfChapters zip to GitHub releases.
+    | **Thu 19 Oct** : Initial commit for creating end of chapter archives.
     | **Thu 19 Oct** : Minor corrections to chapter 3.1 - 3.2 text.
     | **Thu 19 Oct** : Title change for 6.3 and reference in chapter 2.1.2 text.
     | **Thu 19 Oct** : Revised 5.2 and 5.3. Moved 5.3 to 6.3.
@@ -98,7 +102,3 @@ Changelist
     | **Mon 25 Sep** : Renamed TUTORIAL_BUILD_TUTORIAL
     | **Mon 25 Sep** : Updated gitignore.
     | **Fri 22 Sep** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials
-    | **Fri 22 Sep** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Fri 22 Sep** : Added GradleSync.png image, fixed some Android instructions.
-    | **Fri 22 Sep** : Merge pull request #40 from rpavlik/cmake-improvements
-    | **Fri 22 Sep** : Added XR_SESSION_STATE_LOSS_PENDING checks in PollEvents() to exit the application if the XrSession is lost.
