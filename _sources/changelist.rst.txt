@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 20 Oct** : Added graphics_api_select.cmake to add the XR_TUTORIAL_GRAPHICS_API define for all projects. This is not currently referenced in the text.
+    | **Fri 20 Oct** : Updated TUTORIAL_BUILD_DOCUMENTATION to XR_TUTORIAL_BUILD_DOCUMENTATION and TUTORIAL_BUILD_PROJECTS to XR_TUTORIAL_BUILD_PROJECTS.
     | **Fri 20 Oct** : Updated chapter 1 text to better explain building Android from the zip file. Updated tags in all chapter code.
     | **Fri 20 Oct** : Updated AndroidBuildFolder.zip and the text in chapter 1 to use it.
     | **Fri 20 Oct** : Updated license for build-eoc-archs.sh. Added eoc-archs-rm-tags.py to remove XR_DOCS_TAG_ from CPP and CMake files.
@@ -100,5 +102,3 @@ Changelist
     | **Mon 25 Sep** : Fix Chapter2 braces in first code block to use KR convention.
     | **Mon 25 Sep** : Ch2 is OpenXR Setup.
     | **Mon 25 Sep** : Reverted Chapter2/CMakeLists.txt to fix sphinx tags recognition.
-    | **Mon 25 Sep** : Renamed TUTORIAL_BUILD_TUTORIAL
-    | **Mon 25 Sep** : Updated gitignore.
