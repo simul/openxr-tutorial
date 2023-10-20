@@ -688,22 +688,23 @@ In it, put the following code:</p>
 <p>That’s all the CMake code that we require for this project.</p>
 </div>
 <div class="android docutils container">
-<p>For a quick setup download this <code class="docutils literal notranslate"><span class="pre">.zip</span></code> archive:</p>
+<p><strong>For a quick setup download this ``.zip`` archive:</strong></p>
 <p><a class="reference download internal" download="" href="_downloads/53f2623ee04342421f984f841e7a6464/AndroidBuildFolder.zip"><code class="xref download docutils literal notranslate"><span class="pre">AndroidBuildFolder.zip</span></code></a></p>
-<p>First, create a <em>workspace</em> folder and copy the downloaded zip archive into that folder. Unzip the archive in place and rename the <code class="docutils literal notranslate"><span class="pre">AndroidBuildFolder</span></code> folder to <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. You can delete the used zip archive as it’s no longer needed. Now follow later instructions to build the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>:</p>
-<p>For a detailed explantion of the Android build folder set up continue below:</p>
+<p>First, create a <em>workspace</em> folder and copy the downloaded zip archive into that folder. Unzip the archive in place and rename the <code class="docutils literal notranslate"><span class="pre">AndroidBuildFolder</span></code> folder to <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. You can delete the used zip archive as it’s no longer needed.
+Open Android Studio and then open the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> foler that was created.</p>
+<p><em>Now follow instructions under the CMake and CMakeLists.txt headings of this sub-chapter and then go straight on to 1.4.2 Common Files.</em></p>
+<p><strong>For a detailed explantion of the Android build folder set up continue below:</strong></p>
+<p class="rubric">Android Studio</p>
 <p>Here, We’ll show how to hand build an Android Studio project that runs a C++ Native Activity.
 First, we will create a <em>workspace</em> folder and in that folder create a subdirectory called <cite>/Chapter2</cite>.
 Open Android Studio, select New Project and choose an Empty View Activity (Android Studio 22+) or an Empty Activity (Android Studio up to version 21).</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/android-studio-newproject.png"><img alt="Android Studio - New Project - Empty View Activity." src="_images/android-studio-newproject.png" style="width: 488.95000000000005px; height: 380.05px;" /></a>
 </figure>
-<p class="rubric">CMake</p>
 <p>Set the Name to ‘OpenXR Tutorial Chapter 2’, the Package name to ‘<cite>org.khronos.openxrtutorialchapter2`</cite> and save location to that <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder.  The language can be ignored here as we are using C++, and we can set the Minimum SDK to API 24: Android 7.0 (Nougat) or higher. If a “Build Configuration Language” option is shown, set this to <code class="docutils literal notranslate"><span class="pre">Groovy</span> <span class="pre">DSL</span> <span class="pre">(build.gradle)</span></code>. Click “Finish” to complete the set up.</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/android-studio-newproject-options.png"><img alt="Android Studio - New Project - options." src="_images/android-studio-newproject-options.png" style="width: 501.6px; height: 377.85px;" /></a>
 </figure>
-<p class="rubric">CMake</p>
 <p>With the Android Studio project now set up, we need to modify some of the files and folders to support the C++ Native Activity.</p>
 <p>Then switch to the “Project” view in the “Project” tab (on the top right of the default Android Studio layout).
 Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <cite>libs</cite> folder, and under the <cite>app/src</cite> you can also delete the <cite>androidTest</cite> and <cite>test</cite> folders. Finally under <cite>app/src/main</cite>, delete the <cite>java</cite> folder. Under the <cite>app/src/main/res</cite>, delete the <cite>layout</cite>, <cite>values-night</cite> and <cite>xml</cite> folders. Under the <cite>values</cite> folder, delete <cite>colors.xml</cite> and <cite>themes.xml</cite></p>
@@ -711,6 +712,7 @@ Under the <cite>app</cite> folder in <cite>Chapter2</cite>, you can delete the <
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/GradleSync.png"><img alt="Gradle Sync" src="_images/GradleSync.png" style="width: 282.70000000000005px; height: 366.3px;" /></a>
 </figure>
+<p class="rubric">CMake</p>
 <div class="opengles docutils container">
 <p>Create a folder called <cite>cmake</cite> in the <em>workspace</em> directory. Download the linked files below and put them in <cite>cmake</cite>. These will be used by CMake to help build our project. Files with <cite>shader</cite> in the name will be used in later chapters.</p>
 <p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a>
@@ -975,7 +977,6 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
-
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
@@ -983,7 +984,6 @@ For the OpenXR platform header file, note the comment about using the preceding 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
-
 <span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
@@ -1134,29 +1134,28 @@ chosen platform. We first create a ‘pseudo-main function’ called <cite>OpenX
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
-
-<span class="k">private</span><span class="o">:</span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Checks whether Android has requested that application should by destroyed.</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>And into <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method copy:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Checks whether Android has requested that application should by destroyed.</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Poll and process the Android OS system events.</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">android_poll_source</span><span class="w"> </span><span class="o">*</span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// The timeout depends on whether the application is active.</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeoutMilliseconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">androidAppState</span><span class="p">.</span><span class="n">resumed</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ALooper_pollAll</span><span class="p">(</span><span class="n">timeoutMilliseconds</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">source</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">source</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">source</span><span class="o">-&gt;</span><span class="n">process</span><span class="p">(</span><span class="n">androidApp</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// Poll and process the Android OS system events.</span>
-<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">android_poll_source</span><span class="w"> </span><span class="o">*</span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">            </span><span class="c1">// The timeout depends on whether the application is active.</span>
-<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeoutMilliseconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">androidAppState</span><span class="p">.</span><span class="n">resumed</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">androidApp</span><span class="o">-&gt;</span><span class="n">destroyRequested</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ALooper_pollAll</span><span class="p">(</span><span class="n">timeoutMilliseconds</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">source</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">source</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">source</span><span class="o">-&gt;</span><span class="n">process</span><span class="p">(</span><span class="n">androidApp</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="p">);</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
