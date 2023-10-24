@@ -268,6 +268,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#rendering-cuboids">3.3 Rendering Cuboids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">3.4 Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
@@ -1980,7 +1981,13 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 <p>Finally, we set <code class="docutils literal notranslate"><span class="pre">renderCuboidIndex</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> and call <code class="docutils literal notranslate"><span class="pre">RenderCuboid()</span></code> twice drawing two cuboids. The first is offset by our (arbitrary) view height, so as to represent a “floor”. We scale it by 2 meters in the horizontal directions and 0.1 meter in the vertical, so it’s flat. With that, we should now have a clear color and two cuboid rendered to each view in your XR system.</p>
-<p>In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
+</section>
+<section id="summary">
+<h2>3.4 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>Our XR application now renders graphics to the views and uses the XR compositor to presents them correctly.
+In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
+<p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
+<p><a class="reference download internal" download="" href="_downloads/3392a72d571fe370877d20636dfc5025/Chapter3.zip"><code class="xref download docutils literal notranslate"><span class="pre">Chapter3.zip</span></code></a></p>
 </section>
 </section>
 
