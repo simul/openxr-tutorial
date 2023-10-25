@@ -329,53 +329,67 @@
 <h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h1>
 <section id="multiview-rendering">
 <h2>6.1 Multiview rendering<a class="headerlink" href="#multiview-rendering" title="Permalink to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>D3D11 supports rendering to a Texture2DArray RenderTarget, but requires the use of instanced rendering to render to multiviews in the same draw call.</p></li>
-<li><p>D3D12 supports rendering to both eye views with View Instancing, which simplifies the rendering code. <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">D3D12 View Instancing</a>.</p></li>
-<li><p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p></li>
-<li><p>OpenGL supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL Multiview</a>.</p></li>
-</ul>
-<p>View Instancing/Multiview can be used for stereo rendering by creating one <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> with 2D array images. This is done by setting the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo::arraySize</span></code> to <code class="docutils literal notranslate"><span class="pre">2</span></code>; similarly we also create image views that compasses the two subresources one for each eye view.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
+<div class="d3d11 docutils container">
+<p>D3D11 supports rendering to a Texture2DArray RenderTarget, but requires the use of instanced rendering to render to multiviews in the same draw call.</p>
+</div>
+<div class="d3d12 docutils container">
+<p>D3D12 supports rendering to both eye views with View Instancing, which simplifies the rendering code. <a class="reference external" href="https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html">D3D12 View Instancing</a>.</p>
+</div>
+<div class="opengl opengles docutils container">
+<p>OpenGL and OpenGL ES supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/OpenGL/extensions/OVR/OVR_multiview.txt">OpenGL and OpenGL ES Multiview</a>.</p>
+</div>
+<div class="vulkan docutils container">
+<p>Vulkan supports rendering to both eye views with multiview, which simplifies the rendering code. <a class="reference external" href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_multiview.html">Vulkan Multiview</a>.</p>
+</div>
+<p>Multiview or View Instancing can be used for stereo rendering by creating one <code class="docutils literal notranslate"><span class="pre">XrSwapchain</span></code> that contains 2D array images. This is done by setting the <code class="docutils literal notranslate"><span class="pre">XrSwapchainCreateInfo::arraySize</span></code> to <code class="docutils literal notranslate"><span class="pre">2</span></code>; similarly we also create image views that encompasses the two subresources - one layer for each eye view.</p>
+<p>Remember also to update any uniform/constant buffer data types to support multiple view matrics via the use of arrays. Update any changes to shaders paths and set the <code class="docutils literal notranslate"><span class="pre">PipelineCreateInfo::viewMask</span></code> member to <code class="docutils literal notranslate"><span class="pre">0b11</span></code> for two views.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+<span class="n">XrSwapchainCreateInfo</span><span class="w"> </span><span class="n">swapchainCI</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_CREATE_INFO</span><span class="p">};</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">createFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">usageFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_SAMPLED_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT</span><span class="p">;</span>
-<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectColorSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">          </span><span class="c1">// Use        GraphicsAPI to select the first compatible format.</span>
-<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w">  </span><span class="c1">// Use the    recommended values from the XrViewConfigurationView.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SelectColorSwapchainFormat</span><span class="p">(</span><span class="n">formats</span><span class="p">);</span><span class="w">          </span><span class="c1">// Use GraphicsAPI to select the first compatible format.</span>
+<span class="n">swapchainCI</span><span class="p">.</span><span class="n">sampleCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedSwapchainSampleCount</span><span class="p">;</span><span class="w">  </span><span class="c1">// Use the recommended values from the XrViewConfigurationView.</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewConfigurationView</span><span class="p">.</span><span class="n">recommendedImageRectHeight</span><span class="p">;</span>
 <span class="n">swapchainCI</span><span class="p">.</span><span class="n">faceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="hll"><span class="n">swapchainCI</span><span class="p">.</span><span class="n">arraySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="hll"><span class="n">swapchainCI</span><span class="p">.</span><span class="n">arraySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewCount</span><span class="p">;</span>
 </span><span class="n">swapchainCI</span><span class="p">.</span><span class="n">mipCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateSwapchain</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Swapchain&quot;</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateSwapchain</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">swapchainCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Color Swapchain&quot;</span><span class="p">);</span>
 
-<span class="c1">// [...]</span>
+<span class="c1">// Similar for depth swapchain</span>
 
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">swapchainImageCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="w"> </span><span class="n">imageViewCI</span><span class="p">;</span>
-<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">GetSwapchainImage</span><span class="p">(</span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">GetSwapchainImage</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">);</span>
 <span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">RTV</span><span class="p">;</span>
-<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">View</span><span class="o">::</span><span class="n">TYPE_2D</span><span class="p">;</span>
-<span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="p">;</span>
+<span class="hll"><span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">View</span><span class="o">::</span><span class="n">TYPE_2D_ARRAY</span><span class="p">;</span>
+</span><span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchainFormat</span><span class="p">;</span>
 <span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">aspect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GraphicsAPI</span><span class="o">::</span><span class="n">ImageViewCreateInfo</span><span class="o">::</span><span class="n">Aspect</span><span class="o">::</span><span class="n">COLOR_BIT</span><span class="p">;</span>
 <span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">baseMipLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">levelCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">baseArrayLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span class="w">        </span><span class="n">swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateImageView</span><span class="p">(</span><span class="n">imageViewCI</span><span class="p">));</span>
+<span class="hll"><span class="w">        </span><span class="n">imageViewCI</span><span class="p">.</span><span class="n">layerCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewCount</span><span class="p">;</span>
+</span><span class="w">        </span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">imageViews</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">CreateImageView</span><span class="p">(</span><span class="n">imageViewCI</span><span class="p">));</span>
 <span class="p">}</span>
+
+<span class="c1">// Similar for depth image views</span>
 </pre></div>
 </div>
-<p>When setting up the rendering code in <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>, there’s no need to repeat rendering code per eye view; instead we call <code class="docutils literal notranslate"><span class="pre">xrAcquireSwapchainImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrWaitSwapchainImage()</span></code> to get the next 2D array from the swapchain. We are still required to submit an <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code> struct for each view in the system, but in the <code class="docutils literal notranslate"><span class="pre">XrSwapchainSubImage</span></code> we can set the <code class="docutils literal notranslate"><span class="pre">imageArrayIndex</span></code> to specify which layer of the swapchain image we wish to associate with that view; so in the case of stereo rendering it would be <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. We attach our 2D array image as an render target/color attachment for the pixel/fragment shader to write to.</p>
+<p>When setting up the rendering code in <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>, there’s no need to repeat rendering code per eye view; instead we call <code class="docutils literal notranslate"><span class="pre">xrAcquireSwapchainImage()</span></code> and <code class="docutils literal notranslate"><span class="pre">xrWaitSwapchainImage()</span></code> to get the next 2D array image from the swapchain. We are still required to submit an <code class="docutils literal notranslate"><span class="pre">XrCompositionLayerProjectionView</span></code> structure for each view in the system, but in the <code class="docutils literal notranslate"><span class="pre">XrSwapchainSubImage</span></code> we can set the <code class="docutils literal notranslate"><span class="pre">imageArrayIndex</span></code> to specify which layer of the swapchain image we wish to associate with that view. So in the case of stereo rendering, it would be <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. We attach our 2D array image as an render target/color attachment for the pixel/fragment shader to write to.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Acquire and wait for an image from the swapchain.</span>
 <span class="c1">// Get the image index of an image in the swapchain.</span>
 <span class="c1">// The timeout is infinite.</span>
-<span class="kt">uint32_t</span><span class="w"> </span><span class="n">imageIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">colorImageIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">depthImageIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="hll"><span class="n">XrSwapchainImageAcquireInfo</span><span class="w"> </span><span class="n">acquireInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_ACQUIRE_INFO</span><span class="p">};</span>
-</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAcquireSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">acquireInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">imageIndex</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to acquire Image from the Swapchian&quot;</span><span class="p">);</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAcquireSwapchainImage</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">acquireInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">colorImageIndex</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to acquire Image from the Color Swapchian&quot;</span><span class="p">);</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAcquireSwapchainImage</span><span class="p">(</span><span class="n">m_depthSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">acquireInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">depthImageIndex</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to acquire Image from the Depth Swapchian&quot;</span><span class="p">);</span>
 </span><span class="hll">
 </span><span class="hll"><span class="n">XrSwapchainImageWaitInfo</span><span class="w"> </span><span class="n">waitInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_WAIT_INFO</span><span class="p">};</span>
 </span><span class="hll"><span class="n">waitInfo</span><span class="p">.</span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_INFINITE_DURATION</span><span class="p">;</span>
-</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">waitInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for Image from the Swapchain&quot;</span><span class="p">);</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitSwapchainImage</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">waitInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for Image from the Color Swapchain&quot;</span><span class="p">);</span>
+</span><span class="hll"><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrWaitSwapchainImage</span><span class="p">(</span><span class="n">m_depthSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">waitInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to wait for Image from the Depth Swapchain&quot;</span><span class="p">);</span>
 </span>
 <span class="c1">// Get the width and height and construct the viewport and scissors.</span>
 <span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">recommendedImageRectWidth</span><span class="p">;</span>
@@ -402,12 +416,12 @@
 
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_environmentBlendMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// VR mode use a background color.</span>
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">imageViews</span><span class="p">[</span><span class="n">colorImageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
 <span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// In AR mode make the background color black.</span>
-<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearColor</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">imageViews</span><span class="p">[</span><span class="n">colorImageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.00f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.00f</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">ClearDepth</span><span class="p">(</span><span class="n">m_depthSwapchainInfo</span><span class="p">.</span><span class="n">imageViews</span><span class="p">[</span><span class="n">depthImageIndex</span><span class="p">],</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
 
 <span class="hll"><span class="n">m_graphicsAPI</span><span class="o">-&gt;</span><span class="n">SetRenderAttachments</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">colorImageViews</span><span class="p">[</span><span class="n">imageIndex</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">depthImageView</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">eight</span><span class="p">,</span><span class="w"> </span><span class="n">m_pipeline</span><span class="p">);</span>
 </span>
@@ -417,235 +431,281 @@
 
 <span class="c1">// Give the swapchain image back to OpenXR, allowing the compositor to use the image.</span>
 <span class="n">XrSwapchainImageReleaseInfo</span><span class="w"> </span><span class="n">releaseInfo</span><span class="p">{</span><span class="n">XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO</span><span class="p">};</span>
-<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_swapchainAndDepthImage</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Swapchain&quot;</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_colorSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Color Swapchain&quot;</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrReleaseSwapchainImage</span><span class="p">(</span><span class="n">m_depthSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">releaseInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to release Image back to the Depth Swapchain&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Shaders and Pipelines will need to be modified to support multiview rendering.</p>
 <div class="d3d11 docutils container">
-<p>Here we use the vertex shader to write to the <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> System-Value Semantics. Note that this is only supported when <code class="docutils literal notranslate"><span class="pre">D3D11_FEATURE_DATA_D3D11_OPTIONS3::VPAndRTArrayIndexFromAnyShaderFeedingRasterizer</span></code> is set to true. Otherwise, you would need to use a geometry shader. <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a>.
-Also see this example from Microsoft’s OpenXR-MixedReality GitHub repository <cite>here &lt;https://github.com/microsoft/OpenXR-MixedReality/blob/a46ea22a396a38725043fea91166c6d5b1a49dfc/samples/BasicXrApp/CubeGraphics.cpp&gt;_</cite>.</p>
-<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
-<span class="k">cbuffer</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">cbuffer</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<span class="p">};</span>
-
-<span class="k">struct</span><span class="w"> </span><span class="n">VS_IN</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">vertexId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_VertexId</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">instanceId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_InstanceId</span><span class="p">;</span>
-</span><span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">a_Positions</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">struct</span><span class="w"> </span><span class="n">VS_OUT</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">o_Position</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_Position</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">viewId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_RenderTargetArrayIndex</span><span class="p">;</span>
-</span><span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD1</span><span class="p">;</span>
-<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Color</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD2</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">VS_OUT</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="n">VS_IN</span><span class="w"> </span><span class="n">IN</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="n">VS_OUT</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">modelViewProj</span><span class="p">[</span><span class="n">IN</span><span class="p">.</span><span class="n">instanceId</span><span class="p">],</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">a_Positions</span><span class="p">);</span>
-</span><span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">viewId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">instanceId</span><span class="p">;</span>
-</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">vertexId</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float2</span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">face</span><span class="p">),</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">mul</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">])).</span><span class="n">xyz</span><span class="p">;</span>
-<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
-<span class="p">}</span>
+<p>Here we use the vertex shader to write to the <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> System-Value Semantic, which specifies which index in the array within the render target we should emit the primitives data to. This System-Value Semantic must be matched in the pixel shader input. Note that this is only supported when <code class="docutils literal notranslate"><span class="pre">D3D11_FEATURE_DATA_D3D11_OPTIONS3::VPAndRTArrayIndexFromAnyShaderFeedingRasterizer</span></code> is set to true. Otherwise, you would need to use a geometry shader. <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a>.
+Also see this example from Microsoft’s <a class="reference external" href="https://github.com/microsoft/OpenXR-MixedReality/blob/a46ea22a396a38725043fea91166c6d5b1a49dfc/samples/BasicXrApp/CubeGraphics.cpp">OpenXR-MixedReality GitHub repository</a> and a reference page from Mixed Reality about <a class="reference external" href="https://learn.microsoft.com/en-us/windows/mixed-reality/develop/native/rendering-in-directx">Rendering in DirectX</a>.</p>
+<p>When executing draw calls remember to set the instance count parameter to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p>
+<p>Vertex Shader:</p>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX11_MV.hlsl</span>
+<span class="gu">@@ -4,8 +4,8 @@</span>
+<span class="w"> </span>
+<span class="w"> </span>cbuffer CameraConstants : register(b0)
+<span class="w"> </span>{
+<span class="gd">-    float4x4 viewProj;</span>
+<span class="gd">-    float4x4 modelViewProj;</span>
+<span class="gi">+    float4x4 viewProj[2];</span>
+<span class="gi">+    float4x4 modelViewProj[2];</span>
+<span class="w"> </span>    float4x4 model;
+<span class="w"> </span>    float4 color;
+<span class="w"> </span>    float4 pad1;
+<span class="gu">@@ -20,6 +20,7 @@</span>
+<span class="w"> </span>struct VS_IN
+<span class="w"> </span>{
+<span class="w"> </span>    uint vertexId : SV_VertexId;
+<span class="gi">+    uint instanceId : SV_InstanceId;</span>
+<span class="w"> </span>    float4 a_Positions : TEXCOORD0;
+<span class="w"> </span>};
+<span class="w"> </span>struct VS_OUT
+<span class="gu">@@ -28,12 +29,14 @@</span>
+<span class="w"> </span>    nointerpolation float2 o_TexCoord : TEXCOORD0;
+<span class="w"> </span>    float3 o_Normal : TEXCOORD1;
+<span class="w"> </span>    nointerpolation float3 o_Color : TEXCOORD2;
+<span class="gi">+    uint viewId : SV_RenderTargetArrayIndex;</span>
+<span class="w"> </span>};
+<span class="w"> </span>
+<span class="w"> </span>VS_OUT main(VS_IN IN)
+<span class="w"> </span>{
+<span class="w"> </span>    VS_OUT OUT;
+<span class="gd">-    OUT.o_Position = mul(modelViewProj, IN.a_Positions);</span>
+<span class="gi">+    OUT.o_Position = mul(modelViewProj[IN.instanceId], IN.a_Positions);</span>
+<span class="gi">+    OUT.viewId = IN.instanceId;</span>
+<span class="w"> </span>    int face = IN.vertexId / 6;
+<span class="w"> </span>    OUT.o_TexCoord = float2(float(face), 0);
+<span class="w"> </span>    OUT.o_Normal = (mul(model, normals[face])).xyz;
+</pre></div>
+</div>
+<p>Pixel Shader:</p>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\PixelShader.hlsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\PixelShader_DX11_MV.hlsl</span>
+<span class="gu">@@ -8,6 +8,7 @@</span>
+<span class="w"> </span>    nointerpolation float2 i_TexCoord : TEXCOORD0;
+<span class="w"> </span>    float3 i_Normal : TEXCOORD1;
+<span class="w"> </span>    nointerpolation float3 i_Color : TEXCOORD2;
+<span class="gi">+    uint viewId : SV_RenderTargetArrayIndex;</span>
+<span class="w"> </span>};
+<span class="w"> </span>struct PS_OUT
+<span class="w"> </span>{
 </pre></div>
 </div>
 </div>
 <div class="d3d12 docutils container">
-<p>Set up the <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_DESC</span></code> and <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCE_LOCATION</span></code> for the <code class="docutils literal notranslate"><span class="pre">ID3D12Pipeline</span></code>.
-Set the RenderTargetArrayIndex to <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. We don’t need to write to SV_RenderTargetArrayIndex in the shader.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">D3D12_VIEW_INSTANCING_DESC</span><span class="w"> </span><span class="n">viewInstancingDesc</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">D3D12_VIEW_INSTANCE_LOCATION</span><span class="o">&gt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">;</span>
+<p>First, you need to check that <code class="docutils literal notranslate"><span class="pre">D3D12_FEATURE_DATA_D3D12_OPTIONS3::ViewInstancingTier</span></code> doesn’t equal <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_TIER_NOT_SUPPORTED</span></code>. Next, within the pipeline creation, set up the <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_DESC</span></code> and a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;D3D12_VIEW_INSTANCE_LOCATION&gt;</span></code> for the <code class="docutils literal notranslate"><span class="pre">ID3D12Pipeline</span></code>. Here, we must use <code class="docutils literal notranslate"><span class="pre">ID3D12Device2::CreatePipelineState()</span></code> for pipeline creation for ViewInstancing. Set the <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCE_LOCATION::RenderTargetArrayIndex</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> for left and <code class="docutils literal notranslate"><span class="pre">1</span></code> for right eye views. This means that we don’t need to write to <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> in the shader. We set <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_DESC::Flags</span></code> to <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_FLAG_NONE</span></code>, though it’s possible to set it to <code class="docutils literal notranslate"><span class="pre">D3D12_VIEW_INSTANCING_FLAG_ENABLE_VIEW_INSTANCE_MASKING</span></code> and use <code class="docutils literal notranslate"><span class="pre">ID3D12CommandList2::SetViewInstanceMask()</span></code> to control further which views will be written to.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//Pipeline Extensions</span>
+<span class="w">        </span><span class="n">CD3DX12_PIPELINE_STATE_STREAM1</span><span class="w"> </span><span class="nf">gpss1</span><span class="p">(</span><span class="n">GPSD</span><span class="p">);</span>
 
-<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="p">);</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">RenderTargetArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">UINT</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-<span class="w">        </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">ViewportArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">pViewInstanceLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
-<span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">Flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_VIEW_INSTANCING_FLAG_ENABLE_VIEW_INSTANCE_MASKING</span><span class="p">;</span>
+<span class="w">        </span><span class="n">D3D12_VIEW_INSTANCING_DESC</span><span class="w"> </span><span class="n">viewInstancingDesc</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">D3D12_VIEW_INSTANCE_LOCATION</span><span class="o">&gt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">viewIndex</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">viewIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x00000001</span><span class="p">);</span>
+<span class="w">            </span><span class="n">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">viewIndex</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">index</span><span class="p">;</span>
+<span class="w">        </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">ViewInstanceCount</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">viewInstanceLocations</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">RenderTargetArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">UINT</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="n">viewInstanceLocations</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ViewportArrayIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">pViewInstanceLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewInstanceLocations</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">        </span><span class="n">viewInstancingDesc</span><span class="p">.</span><span class="n">Flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D3D12_VIEW_INSTANCING_FLAG_NONE</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">gpss1</span><span class="p">.</span><span class="n">ViewInstancingDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CD3DX12_VIEW_INSTANCING_DESC</span><span class="p">(</span><span class="n">viewInstancingDesc</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">D3D12_PIPELINE_STATE_STREAM_DESC</span><span class="w"> </span><span class="n">gpssd</span><span class="p">;</span>
+<span class="w">        </span><span class="n">gpssd</span><span class="p">.</span><span class="n">SizeInBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">gpss1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">gpssd</span><span class="p">.</span><span class="n">pPipelineStateSubobjectStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gpss1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">ID3D12Device2</span><span class="o">*</span><span class="w"> </span><span class="n">device2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">QueryInterface</span><span class="o">&lt;</span><span class="n">ID3D12Device2</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">device2</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">S_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Error in querying for ID3D12Device2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">device2</span><span class="o">-&gt;</span><span class="n">CreatePipelineState</span><span class="p">(</span><span class="o">&amp;</span><span class="n">gpssd</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pipeline</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create Pipeline.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">D3D12_CHECK</span><span class="p">(</span><span class="n">device</span><span class="o">-&gt;</span><span class="n">CreateGraphicsPipelineState</span><span class="p">(</span><span class="o">&amp;</span><span class="n">GPSD</span><span class="p">,</span><span class="w"> </span><span class="n">IID_PPV_ARGS</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pipeline</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;Failed to create Pipeline&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> and use shader model 6.1.
-See <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a> for the usage of <code class="docutils literal notranslate"><span class="pre">SV_ViewId</span></code>.</p>
-<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
-<span class="k">cbuffer</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="w">        </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">cbuffer</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<span class="p">};</span>
-
-<span class="k">struct</span><span class="w"> </span><span class="n">VS_IN</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">vertexId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_VertexId</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">viewId</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">SV_ViewId</span>
-</span><span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">a_Positions</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">struct</span><span class="w"> </span><span class="n">VS_OUT</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="kt">float4</span><span class="w"> </span><span class="n">o_Position</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nd">SV_Position</span><span class="p">;</span>
-<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD0</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD1</span><span class="p">;</span>
-<span class="w">        </span><span class="k">nointerpolation</span><span class="w"> </span><span class="kt">float3</span><span class="w"> </span><span class="n">o_Color</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TEXCOORD2</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">VS_OUT</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="n">VS_IN</span><span class="w"> </span><span class="n">IN</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">        </span><span class="n">VS_OUT</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
-<span class="hll"><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">modelViewProj</span><span class="p">[</span><span class="n">IN</span><span class="p">.</span><span class="n">viewId</span><span class="p">],</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">a_Positions</span><span class="p">);</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">vertexId</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-</span><span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float2</span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">face</span><span class="p">),</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">mul</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">])).</span><span class="n">xyz</span><span class="p">;</span>
-<span class="w">        </span><span class="n">OUT</span><span class="p">.</span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">OUT</span><span class="p">;</span>
-<span class="p">}</span>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> and compile with shader model 6.1 to allow the vertex shader to use the new <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> System-Value Semantic. See <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a> for its usage.</p>
+<blockquote>
+<div><p>Vertex Shader:</p>
+</div></blockquote>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX12_MV.hlsl</span>
+<span class="gu">@@ -4,8 +4,8 @@</span>
+<span class="w"> </span>
+<span class="w"> </span>cbuffer CameraConstants : register(b0)
+<span class="w"> </span>{
+<span class="gd">-    float4x4 viewProj;</span>
+<span class="gd">-    float4x4 modelViewProj;</span>
+<span class="gi">+    float4x4 viewProj[2];</span>
+<span class="gi">+    float4x4 modelViewProj[2];</span>
+<span class="w"> </span>    float4x4 model;
+<span class="w"> </span>    float4 color;
+<span class="w"> </span>    float4 pad1;
+<span class="gu">@@ -20,6 +20,7 @@</span>
+<span class="w"> </span>struct VS_IN
+<span class="w"> </span>{
+<span class="w"> </span>    uint vertexId : SV_VertexId;
+<span class="gi">+    uint viewId : SV_ViewId;</span>
+<span class="w"> </span>    float4 a_Positions : TEXCOORD0;
+<span class="w"> </span>};
+<span class="w"> </span>struct VS_OUT
+<span class="gu">@@ -33,7 +34,7 @@</span>
+<span class="w"> </span>VS_OUT main(VS_IN IN)
+<span class="w"> </span>{
+<span class="w"> </span>    VS_OUT OUT;
+<span class="gd">-    OUT.o_Position = mul(modelViewProj, IN.a_Positions);</span>
+<span class="gi">+    OUT.o_Position = mul(modelViewProj[IN.viewId], IN.a_Positions);</span>
+<span class="w"> </span>    int face = IN.vertexId / 6;
+<span class="w"> </span>    OUT.o_TexCoord = float2(float(face), 0);
+<span class="w"> </span>    OUT.o_Normal = (mul(model, normals[face])).xyz;
 </pre></div>
 </div>
 </div>
 <div class="opengl docutils container">
-<p>TODO: Check this!</p>
-<p>Enusre you have support for GL_OVR_multiview  and have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function. You will use this to create a framebuffer to render to.
-Also see this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
-<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension.</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
-<span class="cp">#version 450</span>
-<span class="cp">#extension GL_KHR_vulkan_glsl : enable</span>
-<span class="hll"><span class="cp">#extension GL_OVR_multiview : enable</span>
-</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Color</span><span class="p">;</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewIndex_OVR</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexIndex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-<span class="p">}</span>
+<p>Enusre you have support for <code class="docutils literal notranslate"><span class="pre">GL_OVR_multiview</span></code> by checking the extensions and that you have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function pointer, if you need to do so. You will use this to create a framebuffer supports rendering to multiple layers.
+See this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>, which works for OpenGL too.</p>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension. The line <code class="docutils literal notranslate"><span class="pre">layout(num_views</span> <span class="pre">=</span> <span class="pre">2)</span> <span class="pre">in</span></code> specifies the number of views the vertex shader a will broadcast to.</p>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GL_MV.glsl</span>
+<span class="gu">@@ -4,9 +4,11 @@</span>
+<span class="w"> </span>
+<span class="w"> </span>#version 450
+<span class="w"> </span>#extension GL_KHR_vulkan_glsl : enable
+<span class="gi">+#extension GL_OVR_multiview : enable</span>
+<span class="gi">+layout(num_views = 2) in;</span>
+<span class="w"> </span>layout(std140, binding = 0) uniform CameraConstants {
+<span class="gd">-    mat4 viewProj;</span>
+<span class="gd">-    mat4 modelViewProj;</span>
+<span class="gi">+    mat4 viewProj[2];</span>
+<span class="gi">+    mat4 modelViewProj[2];</span>
+<span class="w"> </span>    mat4 model;
+<span class="w"> </span>    vec4 color;
+<span class="w"> </span>    vec4 pad1;
+<span class="gu">@@ -21,7 +23,7 @@</span>
+<span class="w"> </span>layout(location = 1) out flat vec3 o_Normal;
+<span class="w"> </span>layout(location = 2) out flat vec3 o_Color;
+<span class="w"> </span>void main() {
+<span class="gd">-    gl_Position = modelViewProj * a_Positions;</span>
+<span class="gi">+    gl_Position = modelViewProj[gl_ViewID_OVR] * a_Positions;</span>
+<span class="w"> </span>    int face = gl_VertexIndex / 6;
+<span class="w"> </span>    o_TexCoord = uvec2(face, 0);
+<span class="w"> </span>    o_Normal = (model * normals[face]).xyz;
 </pre></div>
 </div>
 </div>
 <div class="opengles docutils container">
-<p>Enusre you have support for GL_OVR_multiview  and have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function. You will use this to create a framebuffer to render to.
-Also see this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
-<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension.</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="cp">#version 310 es</span>
-<span class="hll"><span class="cp">#extension GL_OVR_multiview : enable</span>
-</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">colour</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">highp</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">highp</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Colour</span><span class="p">;</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewID_OVR</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexID</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_Colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colour</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-<span class="p">}</span>
+<p>Enusre you have support for <code class="docutils literal notranslate"><span class="pre">GL_OVR_multiview</span></code> by checking the extensions and that you have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function pointer, if you need to do so. You will use this to create a framebuffer supports rendering to multiple layers.
+See this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
+<p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension. The line <code class="docutils literal notranslate"><span class="pre">layout(num_views</span> <span class="pre">=</span> <span class="pre">2)</span> <span class="pre">in</span></code> specifies the number of views the vertex shader a will broadcast to.</p>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GL_MV.glsl</span>
+<span class="gu">@@ -4,9 +4,11 @@</span>
+<span class="w"> </span>
+<span class="w"> </span>#version 450
+<span class="w"> </span>#extension GL_KHR_vulkan_glsl : enable
+<span class="gi">+#extension GL_OVR_multiview : enable</span>
+<span class="gi">+layout(num_views = 2) in;</span>
+<span class="w"> </span>layout(std140, binding = 0) uniform CameraConstants {
+<span class="gd">-    mat4 viewProj;</span>
+<span class="gd">-    mat4 modelViewProj;</span>
+<span class="gi">+    mat4 viewProj[2];</span>
+<span class="gi">+    mat4 modelViewProj[2];</span>
+<span class="w"> </span>    mat4 model;
+<span class="w"> </span>    vec4 color;
+<span class="w"> </span>    vec4 pad1;
+<span class="gu">@@ -21,7 +23,7 @@</span>
+<span class="w"> </span>layout(location = 1) out flat vec3 o_Normal;
+<span class="w"> </span>layout(location = 2) out flat vec3 o_Color;
+<span class="w"> </span>void main() {
+<span class="gd">-    gl_Position = modelViewProj * a_Positions;</span>
+<span class="gi">+    gl_Position = modelViewProj[gl_ViewID_OVR] * a_Positions;</span>
+<span class="w"> </span>    int face = gl_VertexIndex / 6;
+<span class="w"> </span>    o_TexCoord = uvec2(face, 0);
+<span class="w"> </span>    o_Normal = (model * normals[face]).xyz;
 </pre></div>
 </div>
 </div>
 <div class="vulkan docutils container">
-<p>Add <code class="docutils literal notranslate"><span class="pre">VkRenderPassMultiviewCreateInfo</span></code> to the <code class="docutils literal notranslate"><span class="pre">VkRenderPassCreateInfo</span></code> when creating the <code class="docutils literal notranslate"><span class="pre">VkPipeline</span></code>. Note that there is similar functionality for Vulkan 1.3 - Dynamic Rendering.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">VkRenderPassCreateInfo</span><span class="w"> </span><span class="n">renderPassCI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<p>First, add the <code class="docutils literal notranslate"><span class="pre">VK_KHR_MULTIVIEW_EXTENSION_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;VK_KHR_multiview&quot;</span></code> string to the device extensions list when creating the <code class="docutils literal notranslate"><span class="pre">VkDevice</span></code>.</p>
+<p>At pipeline creation, chain via the next pointer a <code class="docutils literal notranslate"><span class="pre">VkRenderPassMultiviewCreateInfo</span></code> structure to the <code class="docutils literal notranslate"><span class="pre">VkRenderPassCreateInfo</span></code> structure when creating the <code class="docutils literal notranslate"><span class="pre">VkRenderPass</span></code>. Note that there is similar functionality for <code class="docutils literal notranslate"><span class="pre">VK_KHR_dynamic_rendering</span></code>. The viewMask specifies the number of views the rasterizer a will broadcast to.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">multiview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VkRenderPassMultiviewCreateInfoKHR</span><span class="w"> </span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
+<span class="cp">#if XR_TUTORIAL_ENABLE_MULTIVIEW</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">subpassCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">dependencyCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewOffsets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">correlationMaskCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pCorrelationMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="p">;</span>
+<span class="w">        </span><span class="n">multiview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="cp">#endif</span>
 
-<span class="c1">// [...]</span>
-
-<span class="kt">uint32_t</span><span class="w"> </span><span class="n">viewMask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mb">0b11</span><span class="p">;</span><span class="w"> </span><span class="c1">//Render to layers 0 and 1</span>
-
-<span class="n">VkRenderPassMultiviewCreateInfo</span><span class="w"> </span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">subpassCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewMask</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">dependencyCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pViewOffsets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">correlationMaskCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pCorrelationMasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">viewMask</span><span class="p">;</span>
-<span class="n">renderPassCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VkRenderPass</span><span class="w"> </span><span class="n">renderPass</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">VkRenderPassCreateInfo</span><span class="w"> </span><span class="n">renderPassCI</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multiview</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">&amp;</span><span class="n">multiviewCreateInfo</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">attachmentCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">attachmentDescriptions</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">pAttachments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attachmentDescriptions</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">subpassCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">pSubpasses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">subpassDescription</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">dependencyCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderPassCI</span><span class="p">.</span><span class="n">pDependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">subpassDependency</span><span class="p">;</span>
+<span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkCreateRenderPass</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">renderPassCI</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">renderPass</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create RenderPass.&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex</span></code> and the GL_EXT_multiview GLSL extension.</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="c1">// Vertex Shader</span>
-<span class="cp">#version 450</span>
-<span class="cp">#extension GL_KHR_vulkan_glsl : enable</span>
-<span class="hll"><span class="cp">#extension GL_EXT_multiview : enable</span>
-</span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CameraConstants</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">viewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="hll"><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="w">        </span><span class="kt">mat4</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad1</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad2</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">pad3</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="w"> </span><span class="n">binding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Normals</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">uvec2</span><span class="w"> </span><span class="n">o_TexCoord</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Normal</span><span class="p">;</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">flat</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">o_Color</span><span class="p">;</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="hll"><span class="w">        </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelViewProj</span><span class="p">[</span><span class="nb">gl_ViewIndex</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a_Positions</span><span class="p">;</span>
-</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gl_VertexIndex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_TexCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uvec2</span><span class="p">(</span><span class="n">face</span><span class="p">,</span><span class="w"> </span><span class="mo">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">o_Normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normals</span><span class="p">[</span><span class="n">face</span><span class="p">]).</span><span class="n">xyz</span><span class="p">;</span>
-<span class="w">        </span><span class="n">o_Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
+<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_VK_MV.glsl</span>
+<span class="gu">@@ -4,9 +4,10 @@</span>
+<span class="w"> </span>
+<span class="w"> </span>#version 450
+<span class="w"> </span>#extension GL_KHR_vulkan_glsl : enable
+<span class="gi">+#extension GL_EXT_multiview : enable</span>
+<span class="w"> </span>layout(std140, binding = 0) uniform CameraConstants {
+<span class="gd">-    mat4 viewProj;</span>
+<span class="gd">-    mat4 modelViewProj;</span>
+<span class="gi">+    mat4 viewProj[2];</span>
+<span class="gi">+    mat4 modelViewProj[2];</span>
+<span class="w"> </span>    mat4 model;
+<span class="w"> </span>    vec4 color;
+<span class="w"> </span>    vec4 pad1;
+<span class="gu">@@ -14,14 +15,14 @@</span>
+<span class="w"> </span>    vec4 pad3;
+<span class="w"> </span>};
+<span class="w"> </span>layout(std140, binding = 1) uniform Normals {
+<span class="gd">-    vec4 normals[6];</span>
+<span class="gi">+        vec4 normals[6];</span>
+<span class="w"> </span>};
+<span class="w"> </span>layout(location = 0) in vec4 a_Positions;
+<span class="w"> </span>layout(location = 0) out flat uvec2 o_TexCoord;
+<span class="w"> </span>layout(location = 1) out flat vec3 o_Normal;
+<span class="w"> </span>layout(location = 2) out flat vec3 o_Color;
+<span class="w"> </span>void main() {
+<span class="gd">-    gl_Position = modelViewProj * a_Positions;</span>
+<span class="gi">+    gl_Position = modelViewProj[gl_ViewIndex] * a_Positions;</span>
+<span class="w"> </span>    int face = gl_VertexIndex / 6;
+<span class="w"> </span>    o_TexCoord = uvec2(face, 0);
+<span class="w"> </span>    o_Normal = (model * normals[face]).xyz;
 </pre></div>
 </div>
 </div>

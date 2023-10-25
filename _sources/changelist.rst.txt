@@ -2,6 +2,11 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 25 Oct** : Updated 6.1 text. Updated white spaces in ShadersMultiview shaders. Minor update to Chapter6_1_Multiview/Common/GraphicsAPI_D3D12.cpp.
+    | **Tue 24 Oct** : Added Chapter6_1_Multiview - Download reference code for Chapter 6.1. WIP for full integration into the main part of the repository. Updated licenses.
+    | **Tue 24 Oct** : Removed usage of GetDepthFormat() in Chapters 3 - 5 code.
+    | **Tue 24 Oct** : Provide initial value for RenderLayerInfo::predictedDisplayTime.
+    | **Tue 24 Oct** : Removed references to XrCompositionLayerDepthInfoKHR in RenderLayerInfo in chapters 3 and 4 code.
     | **Mon 23 Oct** : Updated build-eoc-archs.yml to build end of chapters archives and upload to release on a tag push.
     | **Mon 23 Oct** : Tested and updated build-eoc-archs.sh to build zip archives
     | **Mon 23 Oct** : Moved the CMake include: cmake/graphics_api_select.cmake. Added download link to the archives at the end of the chapter texts. Added custom CMakeLists.txt files to copy into the archives. Added .bat version of build-eoc-archs.sh for CMake to call on Windows. Other tidy ups.
@@ -97,8 +102,3 @@ Changelist
     | **Tue 03 Oct** : Removed all references to com.simul... in Android build files.
     | **Tue 03 Oct** : Renamed TUTORIAL_BUILD_TUTORIAL to TUTORIAL_BUILD_DOCUMENTATION. Minor clean ups in Chapter2/CMakeLists.txt and tutorial/3-graphics.rst.
     | **Tue 03 Oct** : Removed thirdparty/AndroidDefaultApp/ as it is no longer needed for diffs in the texts.
-    | **Mon 02 Oct** : Adjust grey tab colours, #d0d4da is better.
-    | **Mon 02 Oct** : Fixed layout issues, ensured footer is visible. Responsive behaviour for API tab sizes. API logos are aligned on their baselines.
-    | **Mon 02 Oct** : Added Cog.svg
-    | **Mon 02 Oct** : Fixed(?) subsection anchor link positioning.
-    | **Thu 28 Sep** : Fixed vertical alignment of chapter icons. Added jigsaw piece icon for Chapter 5.
