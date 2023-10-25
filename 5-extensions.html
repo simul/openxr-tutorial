@@ -376,8 +376,9 @@
 </pre></div>
 </div>
 <p><cite>Hand</cite> is a simple struct to encapsulate the XrHandTrackerEXT object for each hand, and the joint location structures that we’ll update to track hand motion. Now, in Run(), after the call to AttachActionSet(), add:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">           </span><span class="n">CreateHandTrackers</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Add this function after the definition of AttachActionSet(). For each of two hands, we’ll call xrCreateHandTrackerEXT() and fill in the m_handTracker object.</p>
@@ -427,7 +428,7 @@
 </pre></div>
 </div>
 <p>Now in RenderLayer(), just before the call to <cite>m_graphicsAPI-&gt;EndRendering()</cite>, add this so we render both hands, with all their joints:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">hand_color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.f</span><span class="p">};</span>
@@ -437,6 +438,7 @@
 <span class="w">            </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">,</span><span class="w"> </span><span class="n">hand_color</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Run the app: you’ll now see both hands, rendered as blocks.</p>
