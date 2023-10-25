@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 25 Oct** : Reviewed Chapter 6 text.
+    | **Wed 25 Oct** : Reviewed Chapter 5 text.
     | **Wed 25 Oct** : Reviewed chapter text 1.4.3 - 1.5.
     | **Wed 25 Oct** : Review chapter 1.0 - 1.4.2. Typo in index.rst/
     | **Wed 25 Oct** : Minor changes to Common/DebugOutput.h
@@ -100,5 +102,3 @@ Changelist
     | **Thu 05 Oct** : CMakeLists.txt files: Updated target_include_directories for project. Updated tutorial/1-introduction.rst to reflect CMake changes.
     | **Wed 04 Oct** : Updated 2.3.1 xrPollEvent and rst literalinclude referencing the OpenXR headers.
     | **Wed 04 Oct** : Merged and edited CMake file from PR #40. Added TUTORIAL_BUILD_PROJECTS to toggle building all projects. fxc_shader() has OUTPUT_PDB and ENTRY_POINT args, and glsl_spv_shader() has ENTRY_POINT arg. gfxwrapper.cmake: Added include directory - ${openxr_SOURCE_DIR}/external/include and switched to ${OpenGLES_V3_LIBRARY} due CMake generation errors.
-    | **Tue 03 Oct** : Added m_changeColorAction and m_spawnCubeAction to Chapter4 code.
-    | **Tue 03 Oct** : Revert CMakeLists.txt files to fix merge issues. Will be remerged later.
