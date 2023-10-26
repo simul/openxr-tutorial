@@ -2,6 +2,22 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 26 Oct** : Revert theme.css for now to keep existing scrolling behaviour.
+    | **Thu 26 Oct** : Fixed rst issue in Chapter4 text
+    | **Thu 26 Oct** : Changes to Chapter 6 text.
+    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 26 Oct** : Fixed rst issue in chapter 2.
+    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 26 Oct** : Changes to Chapter 4 text.
+    | **Thu 26 Oct** : Some additional definitions, code fixes, grammar and spelling.
+    | **Thu 26 Oct** : Changes to Chapter 4 text.
+    | **Thu 26 Oct** : Changes to Chapter 3 text.
+    | **Thu 26 Oct** : Fixed small comment typo
+    | **Thu 26 Oct** : Updated comment typo.
+    | **Thu 26 Oct** : Changes to Chapter 2 text.
+    | **Thu 26 Oct** : Application typo.
+    | **Thu 26 Oct** : Changes to Chapter 1 text.
     | **Wed 25 Oct** : Reviewed Chapter 6 text.
     | **Wed 25 Oct** : Reviewed Chapter 5 text.
     | **Wed 25 Oct** : Reviewed chapter text 1.4.3 - 1.5.
@@ -32,9 +48,11 @@ Changelist
     | **Thu 19 Oct** : Fixed code highlighting in Chapter 2 text.
     | **Thu 19 Oct** : Updated license for thirdparty\AndroidBuildFolder.zip. Moved TUTORIAL_BUILD_DOCUMENTATION and TUTORIAL_BUILD_PROJECTS outside if rst tags.
     | **Thu 19 Oct** : Added Chapter 5.2 text.
+    | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Wed 18 Oct** : Updated comment on m_apiType need for instance extension.
     | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 18 Oct** : Added initialize list to chapter code block.
+    | **Wed 18 Oct** : Css fixes.
     | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Wed 18 Oct** : Corrections for typos.
     | **Tue 17 Oct** : Fixed typos in 5.2 text.
@@ -84,21 +102,3 @@ Changelist
     | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 10 Oct** : Added initial implementation of reuse, which check licenses at CMake configure.
     | **Mon 09 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Mon 09 Oct** : Added ViewSpace.png
-    | **Fri 06 Oct** : Merge pull request #64 from rbessems/main
-    | **Fri 06 Oct** : Fix URL to repo
-    | **Fri 06 Oct** : Merge pull request #63 from rbessems/main
-    | **Fri 06 Oct** : Add site build github action workflow.
-    | **Fri 06 Oct** : Updated shader files in Android Shader output directories.
-    | **Fri 06 Oct** : Updated dedent in chapter 4 text.
-    | **Fri 06 Oct** : Updated tags in code for chapters 4 and 5. Correction for chapter 4 text: rst dedents, CMake changes, usage of app/application and code includes.
-    | **Fri 06 Oct** : Updated tags in coded chapters 3/4/5 to fix text error in Chapter 3.2 and 3.3. Fix rst container and dedent errors. Corrections to chapter 3 text.
-    | **Fri 06 Oct** : Removed :name: from rst containers. Using US English spelling of color in GraphicsAPI. Updated Chapter 3.3 and 4 text as cuboid rendering has moved to chapter 3.3. Chapter 4/5 code: updated tags and code.
-    | **Thu 05 Oct** : Added Chapter 3 text - WIP. Chapter minor updates - will need updating.
-    | **Thu 05 Oct** : Unifying changes across main.cpp files. Added Chapter 3.3 code.
-    | **Thu 05 Oct** : Added shaders to Chapter 3 CMake. Other minor clean in Chapter 4/5 & Main CMake.
-    | **Thu 05 Oct** : White space / minor clean up and corrections in shaders.
-    | **Thu 05 Oct** : Minor corrections to tutorial/1-introduction.rst.
-    | **Thu 05 Oct** : CMakeLists.txt files: Updated target_include_directories for project. Updated tutorial/1-introduction.rst to reflect CMake changes.
-    | **Wed 04 Oct** : Updated 2.3.1 xrPollEvent and rst literalinclude referencing the OpenXR headers.
-    | **Wed 04 Oct** : Merged and edited CMake file from PR #40. Added TUTORIAL_BUILD_PROJECTS to toggle building all projects. fxc_shader() has OUTPUT_PDB and ENTRY_POINT args, and glsl_spv_shader() has ENTRY_POINT arg. gfxwrapper.cmake: Added include directory - ${openxr_SOURCE_DIR}/external/include and switched to ${OpenGLES_V3_LIBRARY} due CMake generation errors.
