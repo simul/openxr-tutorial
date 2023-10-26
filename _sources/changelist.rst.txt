@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 26 Oct** : Using updated (non-final) illustrations.
     | **Thu 26 Oct** : Removed Ch6 for now.
     | **Thu 26 Oct** : Scrollable area padding.
     | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 10 Oct** : Updated path to reuse executable. Not reliant on PATH.
     | **Tue 10 Oct** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
