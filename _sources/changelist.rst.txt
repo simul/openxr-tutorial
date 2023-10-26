@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 26 Oct** : Scrollable area padding.
     | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 26 Oct** : Revert theme.css for now to keep existing scrolling behaviour.
     | **Thu 26 Oct** : Fixed rst issue in Chapter4 text
@@ -101,4 +102,3 @@ Changelist
     | **Tue 10 Oct** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 10 Oct** : Added initial implementation of reuse, which check licenses at CMake configure.
-    | **Mon 09 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
