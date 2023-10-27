@@ -514,6 +514,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">CMAKE_MODULE_PATH</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../cmake&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Now, we append to the <code class="docutils literal notranslate"><span class="pre">CMAKE_MODULE_PATH</span></code> variable an additional path for <code class="docutils literal notranslate"><span class="pre">find_package()</span></code> to search within.</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
 
@@ -536,7 +537,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now, we append to the <code class="docutils literal notranslate"><span class="pre">CMAKE_MODULE_PATH</span></code> variable an additional path for <code class="docutils literal notranslate"><span class="pre">find_package()</span></code> to search within and we include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK-Source from Khronos’s GitHub page.</p>
+<p>We include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK-Source from Khronos’s GitHub page.</p>
 <p>Now, we will add to <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeLists.txt</span></code> the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
 <div class="d3d11 docutils container">
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
