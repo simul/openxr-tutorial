@@ -2,6 +2,12 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 27 Oct** : Converted all code rst ` to ``.
+    | **Fri 27 Oct** : Added DEBUG_BREAK to OpenXRDebugBreak().
+    | **Thu 26 Oct** : Fixed spelling of initialize.
+    | **Thu 26 Oct** : Added code and text to Chapter 4 to resolve initial controller pose.
+    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Thu 26 Oct** : Removed linenos in chapter 2.3 text
     | **Thu 26 Oct** : Using updated (non-final) illustrations.
     | **Thu 26 Oct** : Removed Ch6 for now.
     | **Thu 26 Oct** : Scrollable area padding.
@@ -96,9 +102,3 @@ Changelist
     | **Thu 12 Oct** : Added LICENSES folder for reuse. Project is compliant with version 3.0 of the REUSE Specification.
     | **Thu 12 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Thu 12 Oct** : Added .reuse/dep5 for bulk license attributions. Updated Shaders and CMakeLists.txt files to added licensing comment headers.
-    | **Wed 11 Oct** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials
-    | **Wed 11 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Wed 11 Oct** : Fixed Hamburger menu.
-    | **Tue 10 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 10 Oct** : Updated path to reuse executable. Not reliant on PATH.
-    | **Tue 10 Oct** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
