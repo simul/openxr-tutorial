@@ -531,13 +531,13 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>In the above, we first check that <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">XR_EXT_debug_utils</span></code> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code>, which we used to create the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>. Next, we call the <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> function.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Check that &quot;XR_EXT_debug_utils&quot; is in the active Instance Extensions before destroying the XrDebugUtilsMessengerEXT.</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_debugUtilsMessenger</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">XR_NULL_HANDLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">DestroyOpenXRDebugUtilsMessenger</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">m_debugUtilsMessenger</span><span class="p">);</span><span class="w">  </span><span class="c1">// From OpenXRDebugUtils.h.</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>In the above, we first check that <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">XR_EXT_debug_utils</span></code> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code>, which we used to create the <code class="docutils literal notranslate"><span class="pre">XrInstance</span></code>. Next, we call the <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> function. At the end of the application, we call <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger()</span></code> to release the resource.</p>
 <p>Another feature of OpenXR is the API Layers, which may also assist you in debugging. You can read more about them in <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
 </section>
 <section id="xrsystemid">

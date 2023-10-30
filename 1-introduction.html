@@ -401,8 +401,7 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 <p>An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor’s software/hardware can understand.</p>
 <p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <code class="docutils literal notranslate"><span class="pre">XR_EXT_debug_utils</span></code>, any functions associated with that extension will need to be loaded in with <code class="docutils literal notranslate"><span class="pre">xrGetInstanceProcAddr()</span></code>. Some platforms like Android require extra work and information to initialize the loader.</p>
 <p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
-<p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.
-OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.</p>
+<p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.</p>
 <p>OpenXR recognizes that there is a vast and ever-changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change. This is the core reasoning behind the OpenXR Actions System.</p>
 </section>
 <section id="environment-setup">
@@ -506,7 +505,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <p>In the <em>workspace</em> folder, create a folder called <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>, and in it create another <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file. Into the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeLists.txt</span></code>, put the following code:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This sets a minimum CMake version (required for some of the features we use here) and our own CMake variable <code class="docutils literal notranslate"><span class="pre">PROJECT_NAME</span></code> which is set to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code>. Now add:</p>
@@ -725,7 +724,7 @@ Open Android Studio, select New Project and choose an Empty View Activity (Andro
 <p>Add the following to your new CMakeLists.txt file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here we have declared our tutorial project. At least CMake 3.22.1 is needed to use all the features in the tutorial. Now add:</p>
@@ -903,6 +902,32 @@ You can open the file. You don’t need to edit it, but note:</p>
 <ul class="simple">
 <li><p><a class="reference download internal" download="" href="_downloads/7e1287eebafcf47fda72c8aaf562283d/GraphicsAPI_Vulkan.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_Vulkan.h</span></code></a></p></li>
 <li><p><a class="reference download internal" download="" href="_downloads/ac69bef9a1770690c3db93d34147b297/GraphicsAPI_Vulkan.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_Vulkan.cpp</span></code></a></p></li>
+</ul>
+</div>
+<p>Or, you can download the <code class="docutils literal notranslate"><span class="pre">zip</span></code> archive containing all the required files. Extract the archive to get the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder.</p>
+<div class="d3d11 docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/9e2c736d1bc5a1e054fbbbcd24777915/Common_D3D11.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_D3D11.zip</span></code></a></p></li>
+</ul>
+</div>
+<div class="d3d12 docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/6544e1f6cda763ce1e32cf1d8f14e826/Common_D3D12.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_D3D12.zip</span></code></a></p></li>
+</ul>
+</div>
+<div class="opengl docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/c147ea650c1fcc5508a6d5107df5905b/Common_OpenGL.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_OpenGL.zip</span></code></a></p></li>
+</ul>
+</div>
+<div class="opengles docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/b796c3aa1ec013b06aab68360fd442d2/Common_OpenGL_ES.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_OpenGL_ES.zip</span></code></a></p></li>
+</ul>
+</div>
+<div class="vulkan docutils container">
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/9edc43bb836ea703afe1b34072c1ba57/Common_Vulkan.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_Vulkan.zip</span></code></a></p></li>
 </ul>
 </div>
 <p class="rubric">DebugOutput</p>
@@ -1163,6 +1188,12 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
 <div class="windows docutils container">
 <p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally, click “Open Project” to open that solution with Visual Studio.</p>
+<p>If you wish to build the project with CMake at the terminal, use the following commands to configure and generate the project:</p>
+<div class="highlight-batch notranslate"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
+<span class="k">cd</span> build
+cmake -G <span class="s2">&quot;&lt;your_visual_studio_version&gt;&quot;</span> ../
+</pre></div>
+</div>
 <p>You can now build and run your program. It should compile and link with no errors or warnings, but it won’t run correctly yet.</p>
 </div>
 <div class="linux docutils container">
@@ -1174,6 +1205,12 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/linux-vscode-cmake-configure.png"><img alt="Select" src="_images/linux-vscode-cmake-configure.png" style="width: 523.6px; height: 679.8000000000001px;" /></a>
 </figure>
+<p>If you wish to build the project with CMake at the terminal, use the following commands to configure and generate the project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;&lt;your_generator&gt;&quot;</span><span class="w"> </span>../
+</pre></div>
+</div>
 <p>If you haven’t previously done so, install the gdb extension for VS Code: select the “Extensions” tab, and type “gdb” in the search box. To enable debugging, select the Run/Debug panel in Visual Studio Code. You will now need to create a debugging configuration.
 Click the link “create a launch.json file” to and enter the following in launch.json:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -1190,6 +1227,15 @@ Click the link “create a launch.json file” to and enter the following in lau
 <span class="p">}</span>
 </pre></div>
 </div>
+</div>
+<div class="windows linux docutils container">
+<p>If you wish to run the application outside of you IDE, you will need to be aware of the working directory for the application to run correctly. For example, To run the debug varinat of the Chapter2 application, use this:</p>
+</div>
+<div class="windows docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">[...]/&lt;workspaceFolder&gt;/build/Chapter2&gt;&quot;Debug/OpenXRTutorialChapter2&quot;</span></code></p>
+</div>
+<div class="linux docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">[...]/&lt;workspaceFolder&gt;/Chapter2</span> <span class="pre">$</span> <span class="pre">&quot;../build/Chapter2/OpenXRTutorialChapter2&quot;</span></code></p>
 </div>
 <div class="android docutils container">
 <p>With all the source and build systems set up, we can now build the Android project. In upper right of Android Studio, you should find the toolbar below. Click the green hammer icon to build the project, if all is successful you should see “BUILD SUCCESSFUL in […]s” in the Build Output window.

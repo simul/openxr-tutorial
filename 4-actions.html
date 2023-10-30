@@ -335,20 +335,20 @@
 							
   <section id="interactions">
 <h1>4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
-<p>The goal of this chapter is to build an application uses OpenXR actions to create interactivity. We will render numerous colored cubes for the user play with and build stuctures. First, we will update our build files and folders.</p>
+<p>The goal of this chapter is to build an application that uses OpenXR actions to create interactivity. We will render numerous colored cubes for the user play with and build stuctures. First, we will update our build files and folders.</p>
 <div class="windows linux docutils container">
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter4</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> and update these lines:</p>
+<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code>. In the <code class="docutils literal notranslate"><span class="pre">Chapter4/CMakeLists.txt</span></code> update these lines:</p>
 </div>
 <div class="android docutils container">
-<p>Add a <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> to it. In CMakeLists.txt, update this line:</p>
+<p>Add a <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> to it. In <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, update this line:</p>
 </div>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter4</span><span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="android docutils container">

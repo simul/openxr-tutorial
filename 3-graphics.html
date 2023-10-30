@@ -347,14 +347,14 @@
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. For the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, copy the from <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> and update these lines:</p>
+<p>Now, create a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> from <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. In the <code class="docutils literal notranslate"><span class="pre">Chapter3/CMakeLists.txt</span></code> update these lines:</p>
 </div>
 <div class="android docutils container">
-<p>Add a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> to it. In CMakeLists.txt, update this line:</p>
+<p>Add a <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> to it. In <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, update this line:</p>
 </div>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter3</span><span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Needed for Android</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a <code class="docutils literal notranslate"><span class="pre">Shaders</span></code> folder in your root workspace folder, download and put these files in it:</p>
