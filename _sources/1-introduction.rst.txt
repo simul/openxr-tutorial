@@ -6,7 +6,7 @@
 1.1 Goal of OpenXR
 ******************
 
-OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging.
+OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found `here <https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html>`.
 
 Despite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two slightly different perspectives. Most had a way to track the user's head and hands or hand controllers. Most had buttons, many had analogue controls like triggers or joysticks and many had haptic feedback.
 
@@ -61,7 +61,7 @@ OpenXR provides a clear and precise common language for developers and hardware 
 
 An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor's software/hardware can understand.
 
-The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as :openxr_ref:`XR_EXT_debug_utils`, any functions associated with that extension will need to be loaded in with :openxr_ref:`xrGetInstanceProcAddr`. Some platforms like Android require extra work and information to initialize the loader.
+The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as :openxr_ref:`XR_EXT_debug_utils`, any functions associated with that extension will need to be loaded in with :openxr_ref:`xrGetInstanceProcAddr`. Some platforms like Android require extra work and information to initialize the loader. Documentation for the OpenXR Loader can be found `here <https://registry.khronos.org/OpenXR/specs/1.0/loader.html>`.
 
 API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See :ref:`Chapter 6.3 <6.3 OpenXR API Layers>`. 
 
@@ -74,6 +74,10 @@ OpenXR recognizes that there is a vast and ever-changing array of hardware and c
 *********************
 
 This section will help you set up your development environment. Here your choice of platform makes a difference, but afterwards, things will be much more consistent. You can change platform and graphics API at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking the appropriate tab above.
+
+.. container:: windows linux
+
+	You should make sure that the XR runtime that you wish to use is made the default for the XR loader to recognize and load for your application.
 
 .. container:: windows
 
@@ -92,15 +96,25 @@ This section will help you set up your development environment. Here your choice
 		Direct3D 11 and Direct3D 12 are built into the Windows SDK. If you're using Direct3D, D3D12 is recommended, because of it support for `View Instancing <https://microsoft.github.io/DirectX-Specs/d3d/ViewInstancing.html>`_. Essentially, it allows you to draw both eye views in one draw call.
 
 		In both cases, download and install the latest `Windows SDK <https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/>`_.
+
+		You will need GPU that supports ``D3D_FEATURE_LEVEL_11_0`` for this tutorial.
+	
+	.. container:: d3d11
+
+		You will need at least Direct3D 11.1 Feature for this tutorial.
 		
 	.. container:: opengl
 
 		For this tutorial, we are using the 'gfxwrapper' for the OpenGL API found as a part of the `OpenXR-SDK-Source <https://github.com/KhronosGroup/OpenXR-SDK-Source>`_ reposity under ``src/common/``.
 		If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - `Creating an OpenGL Context WGL <https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)>`_. You will also need to use a function loader like GLAD to access functions for OpenGL - `GLAD <https://glad.dav1d.de/>`_.
 
+		You will need GPU that supports at least OpenGL 4.3 for this tutorial.
+
 	.. container:: vulkan
 
 		If you're using Vulkan, download and install the latest `Vulkan SDK <https://www.lunarg.com/vulkan-sdk/>`_.
+
+		You will need GPU that supports at least Vulkan 1.0 for this tutorial.
 
 .. container:: linux
 
@@ -119,9 +133,13 @@ This section will help you set up your development environment. Here your choice
 		For this tutorial, we are using the 'gfxwrapper' for the OpenGL API found as a part of the `OpenXR-SDK-Source <https://github.com/KhronosGroup/OpenXR-SDK-Source>`_ reposity under ``src/common/``.
 		If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - `Tutorial: OpenGL 3.0 Context Creation (GLX) <Tutorial:_OpenGL_3.0_Context_Creation_(GLX)>`_. You will also need to use a function loader like GLAD to access functions for OpenGL - `GLAD <https://glad.dav1d.de/>`_.
 
+		You will need GPU that supports at least OpenGL 4.3 for this tutorial.
+
 	.. container:: vulkan
 
 		If you want to use Vulkan, download and install the latest `Vulkan SDK <https://www.lunarg.com/vulkan-sdk/>`_.
+
+		You will need GPU that supports at least Vulkan 1.0 for this tutorial.
 
 	.. rubric Install Monado
 
@@ -140,9 +158,13 @@ This section will help you set up your development environment. Here your choice
 		For this tutorial, we are using the 'gfxwrapper' for the OpenGL ES API found as a part of the `OpenXR-SDK-Source <https://github.com/KhronosGroup/OpenXR-SDK-Source>`_ reposity under ``src/common/``. 
 		If you want to use OpenGL ES stand-alone, you will need to use EGL to create a valid OpenGL ES Context for Android - `EGL Overview <https://www.khronos.org/egl>`_. You will also need to use a function loader like GLAD to access functions for OpenGL ES - `GLAD <https://glad.dav1d.de/>`_.
 
+		You will need an Android device that supports at least OpenGL ES 3.1 for this tutorial.
+
 	.. container:: vulkan
 
 		Vulkan is included as part of the NDK provided by Google and is supported on Android 7.0 (Nougat), API level 24 or higher (see `https://developer.android.com/ndk/guides/graphics <https://developer.android.com/ndk/guides/graphics>`_).
+
+		You will need an Android device that supports at least Vulkan 1.0 for this tutorial.
 
 *****************
 1.4 Project Setup
@@ -385,7 +407,7 @@ This section explains how to set up your project ready for :ref:`Chapter 2<2.1 C
 
 	**For a quick setup download this ``.zip`` archive:**
 
-	:download:`AndroidBuildFolder.zip <../thirdparty/AndroidBuildFolder.zip>`
+	:download:`AndroidBuildFolder.zip <../build/android_archs/AndroidBuildFolder.zip>`
 
 	First, create a *workspace* folder and copy the downloaded zip archive into that folder. Unzip the archive in place and rename the ``AndroidBuildFolder`` folder to ``Chapter2``. You can delete the used zip archive as it's no longer needed. Open Android Studio and then open the ``Chapter2`` foler that was created.
 
@@ -633,15 +655,15 @@ Or, you can download the ``zip`` archive containing all the required files. Extr
 
 .. container:: windows
 
-	``DebugOutput`` inherits from ``vsBufferedStringStreamBuf``, which inherits from ``std::streambuf``. ``vsBufferedStringStreamBuf`` queues the data from the redirected ``std::streambuf`` and calls ``virtual void writeString(const std::string &)``, which ``DebugOutput`` implements as a call to ``OutputDebugStringA()``.
+	``DebugOutput`` uses ``OutputDebugStringA()`` to log the message to the Visual Studio Output window.
 
 .. container:: linux
 
-	No functionality is currently provided.
+	``DebugOutput`` will not redirect the output a Visual Studio Code window. The output will remain in the terminal.
 
 .. container:: android
 
-	``DebugOutput`` has a memeber ``AndroidStreambuf``, which inherits from ``std::streambuf``. ``AndroidStreambuf`` queues the data from the redirected ``std::streambuf`` and calls ``__android_log_write()`` to log the message to Android Logcat.
+	``DebugOutput`` uses ``__android_log_write()`` to log the message to Android Logcat.
 
 .. rubric::  HelperFunctions
 
