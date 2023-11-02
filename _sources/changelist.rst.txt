@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 02 Nov** : Scrolling position bug fixed.
     | **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
     | **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
     | **Thu 02 Nov** : Added build-android-arch.yml
@@ -100,5 +102,3 @@ Changelist
     | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Wed 18 Oct** : Corrections for typos.
     | **Tue 17 Oct** : Fixed typos in 5.2 text.
-    | **Tue 17 Oct** : Finally addition to complete chapter 5.2 text.
-    | **Tue 17 Oct** : Added AndroidBuildFolder.zip for quicker from scratch android builds. Updated chapter 1 text giving options for both. This is WIP - we want to just have the .zip folder.
