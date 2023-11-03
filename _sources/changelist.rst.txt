@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 03 Nov** : Improved Vulkan Rendering performance.
+    | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
+    | **Thu 02 Nov** : Minor code corrections.
     | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 02 Nov** : Scrolling position bug fixed.
     | **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
@@ -98,7 +102,3 @@ Changelist
     | **Wed 18 Oct** : Updated comment on m_apiType need for instance extension.
     | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 18 Oct** : Added initialize list to chapter code block.
-    | **Wed 18 Oct** : Css fixes.
-    | **Wed 18 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Wed 18 Oct** : Corrections for typos.
-    | **Tue 17 Oct** : Fixed typos in 5.2 text.
