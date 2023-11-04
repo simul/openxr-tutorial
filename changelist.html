@@ -146,8 +146,8 @@
 	{
 	var toctreeheadings = document.getElementsByClassName('toctree-l1');
 	var i = 0;
-	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_next_steps"];
-	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","next_steps"];
+	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
 	[].forEach.call(toctreeheadings, function(el) {
 	el.id =heading_ids[i];
 	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
@@ -251,6 +251,7 @@
 <li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
@@ -319,7 +320,22 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Fri 03 Nov** : Improved Vulkan Rendering performance.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sat 04 Nov** : Next Steps text updates.
+| **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 03 Nov** : Enabling Ch6 and its icon.
+| **Fri 03 Nov** : Added chapter 6 downloads for d3d12.
+| **Fri 03 Nov** : Updated code block in 6-next-steps.rst. Added some missing tags to chapter code.
+| **Fri 03 Nov** : Added more info on xrWaitFrame in chapter 3.2.3.
+| **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
+| **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
+| **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
+| **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 03 Nov** : New icons, 3d graphics icon and next steps icon. All icons updated.
+| **Fri 03 Nov** : For XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING reference in text 2.3.1, we point forwards to 3.2.2 for details on XrSpaces.
+| **Fri 03 Nov** : Update CreateSwapchains() code and text to use the correct XrViewConfigurationView pre view.
+| **Fri 03 Nov** : Added back XR_TUTORIAL_ENABLE_MULTIVIEW to PC builds. Checks for coherent view in multiview.
+| **Fri 03 Nov** : Updated PollEvents() for better checks on session and XrResults. Text updated too.
+| **Fri 03 Nov** : Improved Vulkan Rendering performance.
 | **Thu 02 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 | **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
 | **Thu 02 Nov** : Minor code corrections.
@@ -404,21 +420,6 @@
 | **Fri 20 Oct** : Updated TUTORIAL_BUILD_DOCUMENTATION to XR_TUTORIAL_BUILD_DOCUMENTATION and TUTORIAL_BUILD_PROJECTS to XR_TUTORIAL_BUILD_PROJECTS.
 | **Fri 20 Oct** : Updated chapter 1 text to better explain building Android from the zip file. Updated tags in all chapter code.
 | **Fri 20 Oct** : Updated AndroidBuildFolder.zip and the text in chapter 1 to use it.
-| **Fri 20 Oct** : Updated license for build-eoc-archs.sh. Added eoc-archs-rm-tags.py to remove XR_DOCS_TAG_ from CPP and CMake files.
-| **Thu 19 Oct** : Don&#39;t upload EndOfChapters zip to GitHub releases.
-| **Thu 19 Oct** : Initial commit for creating end of chapter archives.
-| **Thu 19 Oct** : Minor corrections to chapter 3.1 - 3.2 text.
-| **Thu 19 Oct** : Title change for 6.3 and reference in chapter 2.1.2 text.
-| **Thu 19 Oct** : Revised 5.2 and 5.3. Moved 5.3 to 6.3.
-| **Thu 19 Oct** : Updated explanation of swapchainImagesMap member in chapter 3 text. Added Chapter4-Screenshot.png and re-flowed text and code block in 4.2.
-| **Thu 19 Oct** : Description of PollSystemEvent() moved to chapter 1.4 text.
-| **Thu 19 Oct** : Fixed code highlighting in Chapter 2 text.
-| **Thu 19 Oct** : Updated license for thirdparty\AndroidBuildFolder.zip. Moved TUTORIAL_BUILD_DOCUMENTATION and TUTORIAL_BUILD_PROJECTS outside if rst tags.
-| **Thu 19 Oct** : Added Chapter 5.2 text.
-| **Wed 18 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Wed 18 Oct** : Updated comment on m_apiType need for instance extension.
-| **Wed 18 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
-| **Wed 18 Oct** : Added initialize list to chapter code block.
 </pre></div>
 </div>
 </section>
