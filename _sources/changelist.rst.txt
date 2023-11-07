@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 07 Nov** : Removed console logging, fixed link text for full source link.
     | **Tue 07 Nov** : Site passes nu validation for its generated html.
     | **Tue 07 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 07 Nov** : Ch6 text, new images. Footer new text.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 24 Oct** : Removed references to XrCompositionLayerDepthInfoKHR in RenderLayerInfo in chapters 3 and 4 code.
     | **Mon 23 Oct** : Updated build-eoc-archs.yml to build end of chapters archives and upload to release on a tag push.
     | **Mon 23 Oct** : Tested and updated build-eoc-archs.sh to build zip archives
-    | **Mon 23 Oct** : Moved the CMake include: cmake/graphics_api_select.cmake. Added download link to the archives at the end of the chapter texts. Added custom CMakeLists.txt files to copy into the archives. Added .bat version of build-eoc-archs.sh for CMake to call on Windows. Other tidy ups.
