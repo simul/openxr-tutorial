@@ -339,10 +339,10 @@
 <h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found <cite>here &lt;https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html&gt;</cite>.</p>
 <p>Despite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two slightly different perspectives. Most had a way to track the user’s head and hands or hand controllers. Most had buttons, many had analogue controls like triggers or joysticks and many had haptic feedback.</p>
-<figure class="align-left" id="id7">
+<figure class="align-left" id="id6">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
-<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
@@ -351,8 +351,8 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 <section id="overview">
 <h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
-<table class="longtable docutils align-default" id="id8">
-<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<table class="longtable docutils align-default" id="id7">
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 16.7%" />
 <col style="width: 83.3%" />
@@ -443,7 +443,7 @@ If you want to use OpenGL stand-alone, you will need to use WGL to create a vali
 <p>Now choose which graphics API you want to use from the tabs at the top of the page. For Linux you can either use OpenGL or Vulkan.</p>
 <div class="opengl docutils container">
 <p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>.
-If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - <a class="reference external" href="Tutorial:_OpenGL_3.0_Context_Creation_(GLX)">Tutorial: OpenGL 3.0 Context Creation (GLX)</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>.</p>
+If you want to use OpenGL stand-alone, you will need to use GLX to create a valid OpenGL Context for Linux - see <a class="reference external" href="https://www.khronos.org/opengl/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX)">Tutorial: OpenGL 3.0 Context Creation (GLX)</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - see <a class="reference external" href="https://glad.dav1d.de/">https://glad.dav1d.de</a>.</p>
 <p>You will need GPU that supports at least OpenGL 4.3 for this tutorial.</p>
 </div>
 <div class="vulkan docutils container">
@@ -468,7 +468,7 @@ If you want to use OpenGL ES stand-alone, you will need to use EGL to create a v
 </section>
 <section id="project-setup">
 <h2>1.4 Project Setup<a class="headerlink" href="#project-setup" title="Permalink to this heading">¶</a></h2>
-<p>This section explains how to set up your project ready for <a class="reference internal" href="2-setup.html#creating-an-xrinstance-xrgetsystem"><span class="std std-ref">Chapter 2</span></a> and will make references to the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> folder. It explains how to include the OpenXR headers, link the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> library, graphics API integration, and other boilerplate code and finally create a simple stub application which will be expanded on in later chapters.</p>
+<p>This section explains how to set up your project ready for <span class="xref std std-ref">Chapter 2</span> and will make references to the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> folder. It explains how to include the OpenXR headers, link the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> library, graphics API integration, and other boilerplate code and finally create a simple stub application which will be expanded on in later chapters.</p>
 <section id="cmake-and-project-files">
 <h3>1.4.1 CMake and Project Files<a class="headerlink" href="#cmake-and-project-files" title="Permalink to this heading">¶</a></h3>
 <div class="windows docutils container">

@@ -255,16 +255,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#view-configurations">3.1.1 View Configurations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enumerate-the-swapchain-formats">3.1.2 Enumerate the Swapchain Formats</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#create-the-swapchains">3.1.3 Create the Swapchains</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateswapchainimages">3.1.4 xrEnumerateSwapchainImages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerate-swapchain-images">3.1.4 Enumerate Swapchain Images</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#create-the-swapchain-image-views">3.1.5 Create the Swapchain Image Views</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrdestroyswapchain">3.1.6 xrDestroySwapchain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#destroy-the-swapchain">3.1.6 Destroy the Swapchain</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#building-a-renderloop">3.2 Building a RenderLoop</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#xrenumerateenvironmentblendmodes">3.2.1 xrEnumerateEnvironmentBlendModes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xrcreatereferencespace">3.2.2 xrCreateReferenceSpace</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#renderframe">3.2.3 RenderFrame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#renderlayer">3.2.4 RenderLayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-blend-modes">3.2.1 Environment Blend Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reference-spaces">3.2.2 Reference Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rendering-a-frame">3.2.3 Rendering a Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rendering-layers">3.2.4 Rendering Layers</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#rendering-cuboids">3.3 Rendering Cuboids</a></li>
@@ -543,7 +543,7 @@
 <li><p>2 views - Stereoscopic headset.</p></li>
 </ul>
 </div></blockquote>
-<p>Orthogonal to multiple views is the layering of multiple images. You could, for example, have a background that is a pass-through of your environment, a stereoscopic view of rendered graphics and a quadrilateral overlay of a HUD (Head-up display) or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views. Composition layers will be discussed later in <a class="reference internal" href="#renderframe"><span class="std std-ref">Chapter 3.2.3</span></a>.</p>
+<p>Orthogonal to multiple views is the layering of multiple images. You could, for example, have a background that is a pass-through of your environment, a stereoscopic view of rendered graphics and a quadrilateral overlay of a HUD (Head-up display) or UI elements; all of of which could have different spatial orientations. This layering of views is handled by the XR compositor to composite correctly the layers for each view - that quad overlay might be behind the user, and thus shouldn’t be rendered to the eye views. Composition layers will be discussed later in <span class="xref std std-ref">Chapter 3.2.3</span>.</p>
 <p>Firstly, we will update the class in the <code class="docutils literal notranslate"><span class="pre">Chapter3/main.cpp</span></code> to add the new methods and members. Copy the highlighted code below.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
@@ -972,8 +972,8 @@ Append the following two code blocks to the <code class="docutils literal notran
 <p>Lastly, we called <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrCreateSwapchain.html">xrCreateSwapchain</a> to create our <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a>, which, if successful, returned <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> and the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a> was non-null. We copied our swapchain format to our <code class="docutils literal notranslate"><span class="pre">SwapchainInfo::swapchainFormat</span></code> for later usage.</p>
 <p>The same process is repeated for the depth swapchain.</p>
 </section>
-<section id="xrenumerateswapchainimages">
-<h3>3.1.4 xrEnumerateSwapchainImages<a class="headerlink" href="#xrenumerateswapchainimages" title="Permalink to this heading">¶</a></h3>
+<section id="enumerate-swapchain-images">
+<h3>3.1.4 Enumerate Swapchain Images<a class="headerlink" href="#enumerate-swapchain-images" title="Permalink to this heading">¶</a></h3>
 <p>Now that we have created the swapchain, we need to get access to its images. We first call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEnumerateSwapchainImages.html">xrEnumerateSwapchainImages</a> to get the count of the images in the swapchain. Next, we set up an array of structures to store the images from the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a>. In this tutorial, this array of structures, which stores the swapchains images, is stored in the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class. We use the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a> handle as the key to an <code class="docutils literal notranslate"><span class="pre">std::unordered_map</span></code> to get the type and the images relating to the swapchain. They are stored inside the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> class, because OpenXR will return to the application an array of structures that contain the API-specific handles to the swapchain images. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::AllocateSwapchainImageData()</span></code> is a virtual method implemented by each graphics API, which stores the type and resizes an API-specific <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrSwapchainImage...KHR&gt;</span></code> and returns a pointer to the first element in that array casting it to a <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchainImageBaseHeader.html">XrSwapchainImageBaseHeader</a> pointer.
 The same process is repeated for the depth swapchain.</p>
 <p>Copy and append the following code into the for loop of the <code class="docutils literal notranslate"><span class="pre">CreateSwapchains()</span></code> method.</p>
@@ -1179,8 +1179,8 @@ The same process is repeated for the depth swapchain.</p>
 </div>
 <p>For the color and depth image views, we use the previously stored color/depth image format, that we used when creating their respective swapchains. We store our newly created color and depth image views for the swapchains in separate <code class="docutils literal notranslate"><span class="pre">SwapchainInfo::imageViews</span></code> instantiations.</p>
 </section>
-<section id="xrdestroyswapchain">
-<h3>3.1.6 xrDestroySwapchain<a class="headerlink" href="#xrdestroyswapchain" title="Permalink to this heading">¶</a></h3>
+<section id="destroy-the-swapchain">
+<h3>3.1.6 Destroy the Swapchain<a class="headerlink" href="#destroy-the-swapchain" title="Permalink to this heading">¶</a></h3>
 <p>When the main render loop has finished and the application is shutting down, we need to destroy our created <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a> s. This is done by calling <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrDestroySwapchain.html">xrDestroySwapchain</a> passing the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a> as a parameter. It will return <code class="docutils literal notranslate"><span class="pre">XR_SUCCESS</span></code> if successful. At the same time, we destroy all of the image views (both color and depth) by calling <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::DestroyImageView()</span></code> and freeing all the allocated swapchain image data with <code class="docutils literal notranslate"><span class="pre">GraphicsAPI::FreeSwapchainImageData()</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Per view in the view configuration:</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1310,8 +1310,8 @@ The same process is repeated for the depth swapchain.</p>
 </span><span class="p">};</span>
 </pre></div>
 </div>
-<section id="xrenumerateenvironmentblendmodes">
-<h3>3.2.1 xrEnumerateEnvironmentBlendModes<a class="headerlink" href="#xrenumerateenvironmentblendmodes" title="Permalink to this heading">¶</a></h3>
+<section id="environment-blend-modes">
+<h3>3.2.1 Environment Blend Modes<a class="headerlink" href="#environment-blend-modes" title="Permalink to this heading">¶</a></h3>
 <p>Some XR experiences rely on blending the real world and rendered graphics together. Choosing the correct environment blend mode is vital for creating immersion in both virtual and augmented realities.</p>
 <p>This blending is done at the final stage after the compositor has flattened and blended all the compositing layers passed to OpenXR at the end of the XR frame.</p>
 <p>The enum <cite>XrEnvironmentBlendMode</cite> describes how OpenXR should blend the rendered view(s) with the external environment behind the screen(s). The values are:</p>
@@ -1374,8 +1374,8 @@ level of blending with the real world behind the display.</p></td>
 </div>
 <p>We enumerated the environment blend modes as shown above. This function took a pointer to the first element in an array of <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrEnvironmentBlendMode.html">XrEnvironmentBlendMode</a> s as multiple environment blend modes could be available to the system. The runtime returned an array ordered by its preference for the system. After we enumerated all the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrEnvironmentBlendMode.html">XrEnvironmentBlendMode</a> s,  we looped through all of our <code class="docutils literal notranslate"><span class="pre">m_applicationEnvironmentBlendModes</span></code> to try and find one in our <code class="docutils literal notranslate"><span class="pre">m_environmentBlendModes</span></code>, if we can’t find one, we default to <code class="docutils literal notranslate"><span class="pre">XR_ENVIRONMENT_BLEND_MODE_OPAQUE</span></code>, assigning the result to <code class="docutils literal notranslate"><span class="pre">m_environmentBlendMode</span></code>.</p>
 </section>
-<section id="xrcreatereferencespace">
-<h3>3.2.2 xrCreateReferenceSpace<a class="headerlink" href="#xrcreatereferencespace" title="Permalink to this heading">¶</a></h3>
+<section id="reference-spaces">
+<h3>3.2.2 Reference Spaces<a class="headerlink" href="#reference-spaces" title="Permalink to this heading">¶</a></h3>
 <p>Now that OpenXR knows what the user should see, we need to tell OpenXR about the user’s viewpoint. This is where the reference space comes in. Copy the following code into the <code class="docutils literal notranslate"><span class="pre">CreateReferenceSpace()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Fill out an XrReferenceSpaceCreateInfo structure and create a reference XrSpace, specifying a Local space with an identity pose as the origin.</span>
 <span class="n">XrReferenceSpaceCreateInfo</span><span class="w"> </span><span class="n">referenceSpaceCI</span><span class="p">{</span><span class="n">XR_TYPE_REFERENCE_SPACE_CREATE_INFO</span><span class="p">};</span>
@@ -1388,22 +1388,19 @@ level of blending with the real world behind the display.</p></td>
 <p>When we create the <em>reference space</em>, we need to specify an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrPosef.html">XrPosef</a>, which will be the origin transform of the space. In this case, we will set <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceCreateInfo.html">XrReferenceSpaceCreateInfo</a> <code class="docutils literal notranslate"><span class="pre">::poseInReferenceSpace</span></code> to an “identity” pose - an identity quaternion and a zero position.</p>
 <p>If we specify a different pose, the origin received when we poll the space would be offset from the default origin the runtime defines for that space type.</p>
 <p>An <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSpace.html">XrSpace</a> is a frame of reference defined not by its instantaneous values, but semantically by its purpose and relationship to other spaces. The actual, instantaneous position and orientation of an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSpace.html">XrSpace</a> is called its <em>pose</em>.</p>
-<p class="rubric">View Space</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="_images/ViewSpace.png"><img alt="OpenXR Reference Space View" src="_images/ViewSpace.png" style="width: 70%;" /></a>
+<a class="reference internal image-reference" href="_images/ViewSpace.png"><img alt="OpenXR Reference Space View" src="_images/ViewSpace.png" style="width: 50%;" /></a>
 </figure>
 <p>One kind of reference space is view space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_VIEW</span></code>), which is oriented with the user’s head, and is useful for user interfaces and many other purposes. We don’t use it to generate view matrices for rendering, because those are often offset from the view space due to stereo rendering.</p>
 <p>The View Reference Space uses the view origin (or the centroid of the views in the case of stereo) as the origin of the space. +Y is up, +X is to the right, and -Z is forward. The space is aligned in front of the viewer and it is not gravity aligned. It is most often used for rendering small head-locked content like a HUD (Head-up display).</p>
-<p class="rubric">Local Space</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="_images/LocalSpace.png"><img alt="OpenXR Reference Space Local" src="_images/LocalSpace.png" style="width: 70%;" /></a>
+<a class="reference internal image-reference" href="_images/LocalSpace.png"><img alt="OpenXR Reference Space Local" src="_images/LocalSpace.png" style="width: 50%;" /></a>
 </figure>
 <p>By using <code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_LOCAL</span></code> we specify that the views are relative to the XR hardware’s ‘local’ space - either the headset’s starting position or some other world-locked origin.</p>
 <p>The Local Reference Space uses an initial location to establish a world-locked, gravity-aligned point as the origin of the space. +Y is up,+X is to the right, and -Z is forward. The origin is also locked for pitch(x) and roll(z). The initial position may be established at the application start up or from a calibrated origin point.</p>
 <p>It may be used for rendering seated-scale experiences such as driving or aircraft simulation, where a virtual floor is not required. When recentering, the runtime will queue a <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrEventDataReferenceSpaceChangePending.html">XrEventDataReferenceSpaceChangePending</a> structure for the application to process.</p>
-<p class="rubric">Stage Space</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="_images/StageSpace.png"><img alt="OpenXR Reference Space Stage" src="_images/StageSpace.png" style="width: 70%;" /></a>
+<a class="reference internal image-reference" href="_images/StageSpace.png"><img alt="OpenXR Reference Space Stage" src="_images/StageSpace.png" style="width: 80%;" /></a>
 </figure>
 <p>Some devices support stage space (<code class="docutils literal notranslate"><span class="pre">XR_REFERENCE_SPACE_TYPE_STAGE</span></code>); this implies a roomscale space, e.g. with its origin on the floor.</p>
 <p>The Stage Reference Space defines a rectangular area that is flat and devoid of obstructions. The origin is defined to be on the floor and at the center of the rectangular area. +Y is up, +X is to the right, and -Z is forward. The origin is axis-aligned to the XZ plane. It is most often used for rendering standing-scale experiences (no bounds) or roomscale experiences (with bounds) where a physical floor is required. When the user is redefining the origin or bounds of the area, the runtime will queue a <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrEventDataReferenceSpaceChangePending.html">XrEventDataReferenceSpaceChangePending</a> structure for the application to process.</p>
@@ -1421,8 +1418,8 @@ level of blending with the real world behind the display.</p></td>
 </pre></div>
 </div>
 </section>
-<section id="renderframe">
-<h3>3.2.3 RenderFrame<a class="headerlink" href="#renderframe" title="Permalink to this heading">¶</a></h3>
+<section id="rendering-a-frame">
+<h3>3.2.3 Rendering a Frame<a class="headerlink" href="#rendering-a-frame" title="Permalink to this heading">¶</a></h3>
 <p>Below is the code needed for rendering a frame in OpenXR. For each frame, we sequence through the three primary functions: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrWaitFrame.html">xrWaitFrame</a>, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrBeginFrame.html">xrBeginFrame</a> and <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEndFrame.html">xrEndFrame</a>. These functions wrap around our rendering code and communicate to the OpenXR runtime that we are rendering and that we need to synchronize with the XR compositor. Copy the following code into <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Get the XrFrameState for timing and rendering info.</span>
 <span class="n">XrFrameState</span><span class="w"> </span><span class="n">frameState</span><span class="p">{</span><span class="n">XR_TYPE_FRAME_STATE</span><span class="p">};</span>
@@ -1584,8 +1581,8 @@ level of blending with the real world behind the display.</p></td>
 <p>See more here: <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#composition-layer-flags">10.6.1. Composition Layer Flags</a>.</p>
 <p>Before we call <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>, we check that the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> is active, as we don’t want to needlessly render graphics, and we also check whether OpenXR wants us to render via the use of <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrFrameState.html">XrFrameState</a> <code class="docutils literal notranslate"><span class="pre">::shouldRender</span></code>.</p>
 </section>
-<section id="renderlayer">
-<h3>3.2.4 RenderLayer<a class="headerlink" href="#renderlayer" title="Permalink to this heading">¶</a></h3>
+<section id="rendering-layers">
+<h3>3.2.4 Rendering Layers<a class="headerlink" href="#rendering-layers" title="Permalink to this heading">¶</a></h3>
 <p>From the <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code> function we call <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>. Here, we locate the views within the reference space, render to our swapchain images and fill out the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjection.html">XrCompositionLayerProjection</a> and <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerProjectionView&gt;</span></code> members in the <code class="docutils literal notranslate"><span class="pre">RenderLayerInfo</span></code> parameter. Copy the two following blocks of code into the <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Locate the views from the view configuration within the (reference) space at the display time.</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">views</span><span class="p">(</span><span class="n">m_viewConfigurationViews</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_VIEW</span><span class="p">});</span>
