@@ -292,11 +292,11 @@
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
 	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg" alt="DirectX 12" />
 	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
 	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGLES_Black_Aligned.svg" alt="OpenGL ES" />
 	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
@@ -320,7 +320,11 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Sat 04 Nov** : Next Steps text updates.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 07 Nov** : Site passes nu validation for its generated html.
+| **Tue 07 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 07 Nov** : Ch6 text, new images. Footer new text.
+| **Tue 07 Nov** : Updated chapter 6.1 text and added chapter 6.5 text for multithreaded rendering. Added build-common-archs.bat/.sh for Chapter 6. Added OpenXR multithreaded diagrams from talk. Minor ordering and tag corrections for chapter 6 code.
+| **Sat 04 Nov** : Next Steps text updates.
 | **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Fri 03 Nov** : Enabling Ch6 and its icon.
 | **Fri 03 Nov** : Added chapter 6 downloads for d3d12.
@@ -416,10 +420,6 @@
 | **Mon 23 Oct** : Updated build-eoc-archs.yml to build end of chapters archives and upload to release on a tag push.
 | **Mon 23 Oct** : Tested and updated build-eoc-archs.sh to build zip archives
 | **Mon 23 Oct** : Moved the CMake include: cmake/graphics_api_select.cmake. Added download link to the archives at the end of the chapter texts. Added custom CMakeLists.txt files to copy into the archives. Added .bat version of build-eoc-archs.sh for CMake to call on Windows. Other tidy ups.
-| **Fri 20 Oct** : Added graphics_api_select.cmake to add the XR_TUTORIAL_GRAPHICS_API define for all projects. This is not currently referenced in the text.
-| **Fri 20 Oct** : Updated TUTORIAL_BUILD_DOCUMENTATION to XR_TUTORIAL_BUILD_DOCUMENTATION and TUTORIAL_BUILD_PROJECTS to XR_TUTORIAL_BUILD_PROJECTS.
-| **Fri 20 Oct** : Updated chapter 1 text to better explain building Android from the zip file. Updated tags in all chapter code.
-| **Fri 20 Oct** : Updated AndroidBuildFolder.zip and the text in chapter 1 to use it.
 </pre></div>
 </div>
 </section>
@@ -432,8 +432,9 @@
   <hr>
 
   <div role="contentinfo">
-      <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.
-<p dir="auto">The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p></p>
+      <p>&#169; &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Text is licensed as Creative Commons International 4.0 BY Attribution.
+          All code is licensed as Apache 2.0.
+The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
   </div> 
 
 </footer>

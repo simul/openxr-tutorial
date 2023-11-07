@@ -313,11 +313,11 @@
 	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
 		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
 	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
-		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg"" alt="DirectX 12" />
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg" alt="DirectX 12" />
 	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
 		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
 	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
-		<img class="api-tab-img" src="_static/css/OpenGL ES_Black_Aligned.svg" alt="OpenGL ES" />
+		<img class="api-tab-img" src="_static/css/OpenGLES_Black_Aligned.svg" alt="OpenGL ES" />
 	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
 		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
 	</button>
@@ -1001,9 +1001,8 @@
 </table>
 <p>(*) Applications may wish to re-create objects like <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSystemId.html">XrSystemId</a> and <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> if hardware changes are detected.</p>
 <p>Developers should also be aware of the lifecycle of an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. Certain <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionState.html">XrSessionState</a> s can only lead to certain others under the correct circumstances. Below is a diagram showing the lifecycle of an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> within an OpenXR application.</p>
-<figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="_images/openxr-session-life-cycle.svg"><img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" width="99%" /></a>
-<figcaption>
+<figure class="align-default" id="id1">
+<img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" /><figcaption>
 <p><span class="caption-text">OpenXR Session Life-Cycle</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
@@ -1050,8 +1049,9 @@
   <hr>
 
   <div role="contentinfo">
-      <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.
-<p dir="auto">The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p></p>
+      <p>&#169; &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Text is licensed as Creative Commons International 4.0 BY Attribution.
+          All code is licensed as Apache 2.0.
+The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
   </div> 
 
 </footer>
