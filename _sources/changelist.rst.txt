@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 10 Nov** : Fixed broken links and rst header underlining.
+    | **Fri 10 Nov** : Chapter 6.1 code - D3D12 updated variable name.
+    | **Fri 10 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Fri 10 Nov** : Fixed dxc_shader.cmake download in chapter 6 text.
     | **Tue 07 Nov** : Updated Footer text.
     | **Tue 07 Nov** : Fixed broken links, alignment of centred figures.
     | **Tue 07 Nov** : Removed console logging, fixed link text for full source link.
@@ -98,7 +102,3 @@ Changelist
     | **Wed 25 Oct** : Added scopes to single line if statements in Chapter5/main.cpp. Minor updates to chapter 1 text. Reviewed index.rst.
     | **Wed 25 Oct** : Minor correction to index and chapter 1 text.
     | **Wed 25 Oct** : Updated 6.1 text. Updated white spaces in ShadersMultiview shaders. Minor update to Chapter6_1_Multiview/Common/GraphicsAPI_D3D12.cpp.
-    | **Tue 24 Oct** : Added Chapter6_1_Multiview - Download reference code for Chapter 6.1. WIP for full integration into the main part of the repository. Updated licenses.
-    | **Tue 24 Oct** : Removed usage of GetDepthFormat() in Chapters 3 - 5 code.
-    | **Tue 24 Oct** : Provide initial value for RenderLayerInfo::predictedDisplayTime.
-    | **Tue 24 Oct** : Removed references to XrCompositionLayerDepthInfoKHR in RenderLayerInfo in chapters 3 and 4 code.
