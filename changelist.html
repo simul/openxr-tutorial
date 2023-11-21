@@ -27,46 +27,82 @@
 	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+	
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(name, value)
+	{
+		var searchParams = new URLSearchParams(window.location.search)
+		if (searchParams.get(name) != value)
+		{
+			searchParams.set(name, value)
+			window.location.search = searchParams.toString()
+		}
+	}
+
+	function getUrlParameter(name)
+	{
+		//console.log(window.location)
+		const urlParams = new Proxy(new URLSearchParams(window.location.search),
+		{
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+		return urlParams.name;
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		console.log("getUrlParameter()" + urlParameter)
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	//console.log("updatePlatform(), platform = " + platform);
+	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
+	addUrlParameter('platform', platform);
+
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
 	$(".windows").show();
-	$(".selectd3d11").disabled = false;
-	$(".selectd3d12").disabled = false;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "linux")
 	{
 	$(".linux").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "android")
 	{
+		console.log("platform  " + platform + ".");
 	$(".android").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = false;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = true;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
-	//console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
 	var el=oldelements.item(0);
@@ -158,11 +194,13 @@
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	//console.log("graphicsapi = " + graphicsApi);
+	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
 	if (typeof graphicsApi == 'undefined')
 	{
-	graphicsApi = "vulkan"; // Set default here.
+		graphicsApi = "vulkan"; // Set default here.
 	}
+	addUrlParameter('graphicsapi', graphicsApi)
+
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -320,7 +358,24 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 14 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
+| **Tue 21 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 21 Nov** : Initial commit to support url parameters for platform.
+| **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled &gt; img.
+| **Tue 21 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd&#39;s. New compass icon.
+| **Tue 21 Nov** : Changed &lt;br&gt; to &lt;p&gt;&lt;/p&gt; in footer.html in reference to #79.
+| **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
+| **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate &#39;here&#39; symbols.
+| **Thu 16 Nov** : Updated footer in relation to #79.
+| **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
+| **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
+| **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
+| **Thu 16 Nov** : Updated external links in chapter 1 text.
+| **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
+| **Wed 15 Nov** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
+| **Wed 15 Nov** : Update text for chapter 6.3.
+| **Tue 14 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
 | **Tue 14 Nov** : Added Chapter1 zip upload.
 | **Tue 14 Nov** : Added execute permission to android and common build shell scripts.
@@ -403,25 +458,9 @@
 | **Thu 26 Oct** : Removed linenos in chapter 2.3 text
 | **Thu 26 Oct** : Using updated (non-final) illustrations.
 | **Thu 26 Oct** : Removed Ch6 for now.
-| **Thu 26 Oct** : Scrollable area padding.
-| **Thu 26 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Thu 26 Oct** : Revert theme.css for now to keep existing scrolling behaviour.
-| **Thu 26 Oct** : Fixed rst issue in Chapter4 text
-| **Thu 26 Oct** : Changes to Chapter 6 text.
-| **Thu 26 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Thu 26 Oct** : Fixed rst issue in chapter 2.
-| **Thu 26 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Thu 26 Oct** : Changes to Chapter 4 text.
-| **Thu 26 Oct** : Some additional definitions, code fixes, grammar and spelling.
-| **Thu 26 Oct** : Changes to Chapter 4 text.
-| **Thu 26 Oct** : Changes to Chapter 3 text.
-| **Thu 26 Oct** : Fixed small comment typo
-| **Thu 26 Oct** : Updated comment typo.
-| **Thu 26 Oct** : Changes to Chapter 2 text.
-| **Thu 26 Oct** : Application typo.
-| **Thu 26 Oct** : Changes to Chapter 1 text.
 </pre></div>
 </div>
+<p>Version: v0.0.0</p>
 </section>
 
 
@@ -431,10 +470,31 @@
 
   <hr>
 
+  <b>Legal Notice</b>
+  <br>
   <div role="contentinfo">
-      <p>&#169; "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc. OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos. Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft. Text is licensed as <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>.
-          All code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
-          The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
+      <div class="legal-notice">
+          <h3>Legal</h3>
+          <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>

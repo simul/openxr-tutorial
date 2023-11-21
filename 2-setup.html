@@ -29,46 +29,82 @@
 	<link rel="prev" title="1 Introduction" href="1-introduction.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+	
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(name, value)
+	{
+		var searchParams = new URLSearchParams(window.location.search)
+		if (searchParams.get(name) != value)
+		{
+			searchParams.set(name, value)
+			window.location.search = searchParams.toString()
+		}
+	}
+
+	function getUrlParameter(name)
+	{
+		//console.log(window.location)
+		const urlParams = new Proxy(new URLSearchParams(window.location.search),
+		{
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+		return urlParams.name;
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		console.log("getUrlParameter()" + urlParameter)
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	//console.log("updatePlatform(), platform = " + platform);
+	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
+	addUrlParameter('platform', platform);
+
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
 	$(".windows").show();
-	$(".selectd3d11").disabled = false;
-	$(".selectd3d12").disabled = false;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "linux")
 	{
 	$(".linux").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "android")
 	{
+		console.log("platform  " + platform + ".");
 	$(".android").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = false;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = true;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
-	//console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
 	var el=oldelements.item(0);
@@ -160,11 +196,13 @@
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	//console.log("graphicsapi = " + graphicsApi);
+	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
 	if (typeof graphicsApi == 'undefined')
 	{
-	graphicsApi = "vulkan"; // Set default here.
+		graphicsApi = "vulkan"; // Set default here.
 	}
+	addUrlParameter('graphicsapi', graphicsApi)
+
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -540,7 +578,7 @@
 </pre></div>
 </div>
 <p>In the above, we first check that <code class="docutils literal notranslate"><span class="pre">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span></code> or <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a> is in <code class="docutils literal notranslate"><span class="pre">activeInstanceExtensions</span></code>, which we used to create the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a>. Next, we call the <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> function. At the end of the application, we call <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger()</span></code> to release the resource.</p>
-<p>Another feature of OpenXR is the API Layers, which may also assist you in debugging. You can read more about them in <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
+<p>Another feature of OpenXR is the API Layers, which may also assist you in debugging. You can read more about them in <span class="xref std std-ref">Chapter 6.3</span>.</p>
 </section>
 <section id="obtaining-the-system-id">
 <h3>2.1.3 Obtaining the System Id<a class="headerlink" href="#obtaining-the-system-id" title="Permalink to this heading">¶</a></h3>
@@ -1034,7 +1072,8 @@
 <h2>2.4 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
 <p>We have now created an XR application that can begin and stop an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>, next we will look to add graphics to our application!</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
-<p><a class="reference download internal" download="" href="_downloads/fc1fc8c5ba0d8cc91eb373c0785d583e/Chapter2.zip"><code class="xref download docutils literal notranslate"><span class="pre">Chapter2.zip</span></code></a></p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter2.zip">Chapter2.zip</a></p>
+<p>Version: v0.0.0</p>
 </section>
 </section>
 
@@ -1048,10 +1087,31 @@
 
   <hr>
 
+  <b>Legal Notice</b>
+  <br>
   <div role="contentinfo">
-      <p>&#169; "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc. OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos. Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft. Text is licensed as <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>.
-          All code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
-          The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
+      <div class="legal-notice">
+          <h3>Legal</h3>
+          <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>

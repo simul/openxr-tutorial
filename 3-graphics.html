@@ -29,46 +29,82 @@
 	<link rel="prev" title="2 OpenXR Setup" href="2-setup.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+	
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(name, value)
+	{
+		var searchParams = new URLSearchParams(window.location.search)
+		if (searchParams.get(name) != value)
+		{
+			searchParams.set(name, value)
+			window.location.search = searchParams.toString()
+		}
+	}
+
+	function getUrlParameter(name)
+	{
+		//console.log(window.location)
+		const urlParams = new Proxy(new URLSearchParams(window.location.search),
+		{
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+		return urlParams.name;
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		console.log("getUrlParameter()" + urlParameter)
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	//console.log("updatePlatform(), platform = " + platform);
+	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
+	addUrlParameter('platform', platform);
+
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
 	$(".windows").show();
-	$(".selectd3d11").disabled = false;
-	$(".selectd3d12").disabled = false;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "linux")
 	{
 	$(".linux").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "android")
 	{
+		console.log("platform  " + platform + ".");
 	$(".android").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = false;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = true;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
-	//console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
 	var el=oldelements.item(0);
@@ -160,11 +196,13 @@
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	//console.log("graphicsapi = " + graphicsApi);
+	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
 	if (typeof graphicsApi == 'undefined')
 	{
-	graphicsApi = "vulkan"; // Set default here.
+		graphicsApi = "vulkan"; // Set default here.
 	}
+	addUrlParameter('graphicsapi', graphicsApi)
+
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -2044,7 +2082,8 @@ level of blending with the real world behind the display.</p></td>
 <p>Our XR application now renders graphics to the views and uses the XR compositor to present them correctly.
 In the next chapter, we will discuss how to use OpenXR to interact with your XR application enabling new experiences in spatial computing.</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
-<p><a class="reference download internal" download="" href="_downloads/3392a72d571fe370877d20636dfc5025/Chapter3.zip"><code class="xref download docutils literal notranslate"><span class="pre">Chapter3.zip</span></code></a></p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter3.zip">Chapter3.zip</a></p>
+<p>Version: v0.0.0</p>
 </section>
 </section>
 
@@ -2058,10 +2097,31 @@ In the next chapter, we will discuss how to use OpenXR to interact with your XR 
 
   <hr>
 
+  <b>Legal Notice</b>
+  <br>
   <div role="contentinfo">
-      <p>&#169; "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc. OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos. Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft. Text is licensed as <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>.
-          All code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
-          The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
+      <div class="legal-notice">
+          <h3>Legal</h3>
+          <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>

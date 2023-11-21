@@ -2,6 +2,23 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 21 Nov** : Initial commit to support url parameters for platform.
+    | **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled > img.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd's. New compass icon.
+    | **Tue 21 Nov** : Changed <br> to <p></p> in footer.html in reference to #79.
+    | **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
+    | **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate 'here' symbols.
+    | **Thu 16 Nov** : Updated footer in relation to #79.
+    | **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
+    | **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
+    | **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
+    | **Thu 16 Nov** : Updated external links in chapter 1 text.
+    | **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
+    | **Wed 15 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 15 Nov** : Update text for chapter 6.3.
     | **Tue 14 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
     | **Tue 14 Nov** : Added Chapter1 zip upload.
@@ -85,20 +102,3 @@ Changelist
     | **Thu 26 Oct** : Removed linenos in chapter 2.3 text
     | **Thu 26 Oct** : Using updated (non-final) illustrations.
     | **Thu 26 Oct** : Removed Ch6 for now.
-    | **Thu 26 Oct** : Scrollable area padding.
-    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 26 Oct** : Revert theme.css for now to keep existing scrolling behaviour.
-    | **Thu 26 Oct** : Fixed rst issue in Chapter4 text
-    | **Thu 26 Oct** : Changes to Chapter 6 text.
-    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 26 Oct** : Fixed rst issue in chapter 2.
-    | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 26 Oct** : Changes to Chapter 4 text.
-    | **Thu 26 Oct** : Some additional definitions, code fixes, grammar and spelling.
-    | **Thu 26 Oct** : Changes to Chapter 4 text.
-    | **Thu 26 Oct** : Changes to Chapter 3 text.
-    | **Thu 26 Oct** : Fixed small comment typo
-    | **Thu 26 Oct** : Updated comment typo.
-    | **Thu 26 Oct** : Changes to Chapter 2 text.
-    | **Thu 26 Oct** : Application typo.
-    | **Thu 26 Oct** : Changes to Chapter 1 text.

@@ -29,46 +29,82 @@
 	<link rel="prev" title="OpenXR Tutorial" href="index.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+	
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(name, value)
+	{
+		var searchParams = new URLSearchParams(window.location.search)
+		if (searchParams.get(name) != value)
+		{
+			searchParams.set(name, value)
+			window.location.search = searchParams.toString()
+		}
+	}
+
+	function getUrlParameter(name)
+	{
+		//console.log(window.location)
+		const urlParams = new Proxy(new URLSearchParams(window.location.search),
+		{
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+		return urlParams.name;
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		console.log("getUrlParameter()" + urlParameter)
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	//console.log("updatePlatform(), platform = " + platform);
+	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
 	if (typeof platform == 'undefined')
 	{
-	platform = "linux"; // Set default here.
+		platform = "linux"; // Set default here.
 	}
+	addUrlParameter('platform', platform);
+
 	$(".linux").hide();
 	$(".android").hide();
 	$(".windows").hide();
 	if (platform == "windows")
 	{
 	$(".windows").show();
-	$(".selectd3d11").disabled = false;
-	$(".selectd3d12").disabled = false;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "linux")
 	{
 	$(".linux").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = true;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = false;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
 	}
 	if (platform == "android")
 	{
+		console.log("platform  " + platform + ".");
 	$(".android").show();
-	$(".selectd3d11").disabled = true;
-	$(".selectd3d12").disabled = true;
-	$(".selectopengles").disabled = false;
-	$(".selectvulkan").disabled = false;
-	$(".selectopengl").disabled = true;
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
 	}
 	var oldelements = document.querySelectorAll(".selected-platform");
-	//console.log("selected-platform on "+oldelements.length+" elements.");
 	while (oldelements.length > 0)
 	{
 	var el=oldelements.item(0);
@@ -160,11 +196,13 @@
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	//console.log("graphicsapi = " + graphicsApi);
+	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
 	if (typeof graphicsApi == 'undefined')
 	{
-	graphicsApi = "vulkan"; // Set default here.
+		graphicsApi = "vulkan"; // Set default here.
 	}
+	addUrlParameter('graphicsapi', graphicsApi)
+
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -337,7 +375,7 @@
 <h1>1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
 <section id="goal-of-openxr">
 <h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
-<p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found <cite>here &lt;https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html&gt;</cite>.</p>
+<p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html</a>.</p>
 <p>Despite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two slightly different perspectives. Most had a way to track the user’s head and hands or hand controllers. Most had buttons, many had analogue controls like triggers or joysticks and many had haptic feedback.</p>
 <figure class="align-left" id="id6">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
@@ -400,8 +438,8 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 </table>
 <p>OpenXR provides a clear and precise common language for developers and hardware vendors to use.</p>
 <p>An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor’s software/hardware can understand.</p>
-<p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a>, any functions associated with that extension will need to be loaded in with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProcAddr.html">xrGetInstanceProcAddr</a>. Some platforms like Android require extra work and information to initialize the loader. Documentation for the OpenXR Loader can be found <cite>here &lt;https://registry.khronos.org/OpenXR/specs/1.0/loader.html&gt;</cite>.</p>
-<p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
+<p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a>, any functions associated with that extension will need to be loaded in with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProcAddr.html">xrGetInstanceProcAddr</a>. Some platforms like Android require extra work and information to initialize the loader. Documentation for the OpenXR Loader can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/loader.html">https://registry.khronos.org/OpenXR/specs/1.0/loader.html</a>.</p>
+<p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <span class="xref std std-ref">Chapter 6.3</span>.</p>
 <p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.</p>
 <p>OpenXR recognizes that there is a vast and ever-changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change. This is the core reasoning behind the OpenXR Actions System.</p>
 </section>
@@ -413,7 +451,7 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 </div>
 <div class="windows docutils container">
 <p class="rubric">Visual Studio</p>
-<p>If you’ll be building an OpenXR project for Microsoft Windows PC-based devices, we’ll assume you’ll be using Microsoft Visual Studio. The free Community Edition of Visual Studio is available to download <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">here</a>.</p>
+<p>If you’ll be building an OpenXR project for Microsoft Windows PC-based devices, we’ll assume you’ll be using Microsoft Visual Studio. The free Community Edition of Visual Studio is available to download <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">https://visualstudio.microsoft.com/vs/community/</a>.</p>
 <p class="rubric">CMake</p>
 <p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake to generate the Visual Studio Solution and Project files. At least CMake 3.22.1 will be needed, so follow the instructions on the CMake download page to ensure that you have an up-to-date version.</p>
 <p>Next, you’ll want to choose which graphics API you’ll be using.</p>
@@ -700,7 +738,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 </div>
 <div class="android docutils container">
 <p><strong>For a quick setup download this ``.zip`` archive:</strong></p>
-<p><a class="reference download internal" download="" href="_downloads/98de98d311b503bbf0cd3f33ddf60764/AndroidBuildFolder.zip"><code class="xref download docutils literal notranslate"><span class="pre">AndroidBuildFolder.zip</span></code></a></p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/AndroidBuildFolder.zip">AndroidBuildFolder.zip</a></p>
 <p>First, create a <em>workspace</em> folder and copy the downloaded zip archive into that folder. Unzip the archive in place and rename the <code class="docutils literal notranslate"><span class="pre">AndroidBuildFolder</span></code> folder to <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>. You can delete the used zip archive as it’s no longer needed. Open Android Studio and then open the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> foler that was created.</p>
 <p><em>Now follow instructions under the CMake and CMakeLists.txt headings of this sub-chapter and then go straight on to 1.4.2 Common Files.</em></p>
 <p><strong>For a detailed explantion of the Android build folder set up continue below:</strong></p>
@@ -921,27 +959,27 @@ You can open the file. You don’t need to edit it, but note:</p>
 <p>Or, you can download the <code class="docutils literal notranslate"><span class="pre">zip</span></code> archive containing all the required files. Extract the archive to get the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder.</p>
 <div class="d3d11 docutils container">
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="_downloads/9e2c736d1bc5a1e054fbbbcd24777915/Common_D3D11.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_D3D11.zip</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_D3D11.zip">Common_D3D11.zip</a></p></li>
 </ul>
 </div>
 <div class="d3d12 docutils container">
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="_downloads/6544e1f6cda763ce1e32cf1d8f14e826/Common_D3D12.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_D3D12.zip</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_D3D12.zip">Common_D3D12.zip</a></p></li>
 </ul>
 </div>
 <div class="opengl docutils container">
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="_downloads/c147ea650c1fcc5508a6d5107df5905b/Common_OpenGL.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_OpenGL.zip</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_OpenGL.zip">Common_OpenGL.zip</a></p></li>
 </ul>
 </div>
 <div class="opengles docutils container">
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="_downloads/b796c3aa1ec013b06aab68360fd442d2/Common_OpenGL_ES.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_OpenGL_ES.zip</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_OpenGL_ES.zip">Common_OpenGL_ES.zip</a></p></li>
 </ul>
 </div>
 <div class="vulkan docutils container">
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="_downloads/9edc43bb836ea703afe1b34072c1ba57/Common_Vulkan.zip"><code class="xref download docutils literal notranslate"><span class="pre">Common_Vulkan.zip</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_Vulkan.zip">Common_Vulkan.zip</a></p></li>
 </ul>
 </div>
 <p class="rubric">DebugOutput</p>
@@ -1267,7 +1305,8 @@ It is also recommended to sync the gradle files too.</p>
 <h2>1.5 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
 <p>In this chapter, you learned about the fundamental concepts of OpenXR and created a project you will use to build your OpenXR application. Now that we have this basic application up and running, we will start to set up OpenXR.</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs. Note that Chapter2 is renamed to Chapter1 is the archive and repository folder.</p>
-<p><a class="reference download internal" download="" href="_downloads/f064798619ebbd362b4ed6ffd89601ea/Chapter1.zip"><code class="xref download docutils literal notranslate"><span class="pre">Chapter1.zip</span></code></a></p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter1.zip">Chapter1.zip</a></p>
+<p>Version: v0.0.0</p>
 </section>
 </section>
 
@@ -1281,10 +1320,31 @@ It is also recommended to sync the gradle files too.</p>
 
   <hr>
 
+  <b>Legal Notice</b>
+  <br>
   <div role="contentinfo">
-      <p>&#169; "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc. OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos. Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft. Text is licensed as <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>.
-          All code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
-          The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.</p>
+      <div class="legal-notice">
+          <h3>Legal</h3>
+          <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>
