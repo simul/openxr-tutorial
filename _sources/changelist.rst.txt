@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 21 Nov** : Updated title in footer.html
+    | **Tue 21 Nov** : Restored Chapter 6.3 text.
+    | **Tue 21 Nov** : Minor text correction to Chapter 3.
     | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
     | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Tue 21 Nov** : Initial commit to support url parameters for platform.
@@ -99,6 +102,3 @@ Changelist
     | **Thu 26 Oct** : Fixed spelling of initialize.
     | **Thu 26 Oct** : Added code and text to Chapter 4 to resolve initial controller pose.
     | **Thu 26 Oct** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Thu 26 Oct** : Removed linenos in chapter 2.3 text
-    | **Thu 26 Oct** : Using updated (non-final) illustrations.
-    | **Thu 26 Oct** : Removed Ch6 for now.

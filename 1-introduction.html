@@ -439,7 +439,7 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 <p>OpenXR provides a clear and precise common language for developers and hardware vendors to use.</p>
 <p>An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor’s software/hardware can understand.</p>
 <p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a>, any functions associated with that extension will need to be loaded in with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProcAddr.html">xrGetInstanceProcAddr</a>. Some platforms like Android require extra work and information to initialize the loader. Documentation for the OpenXR Loader can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/loader.html">https://registry.khronos.org/OpenXR/specs/1.0/loader.html</a>.</p>
-<p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <span class="xref std std-ref">Chapter 6.3</span>.</p>
+<p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
 <p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.</p>
 <p>OpenXR recognizes that there is a vast and ever-changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change. This is the core reasoning behind the OpenXR Actions System.</p>
 </section>
@@ -1320,12 +1320,10 @@ It is also recommended to sync the gradle files too.</p>
 
   <hr>
 
-  <b>Legal Notice</b>
-  <br>
   <div role="contentinfo">
       <div class="legal-notice">
-          <h3>Legal</h3>
-          <p>
+      <h3>Legal Notice</h3>
+      <p>
       </p>
       <p>
         &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
