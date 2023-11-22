@@ -33,17 +33,18 @@
 	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
 	function addUrlParameter(name, value)
 	{
-		var searchParams = new URLSearchParams(window.location.search)
+		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get(name) != value)
 		{
-			searchParams.set(name, value)
-			window.location.search = searchParams.toString()
+			searchParams.set(name, value);
+			window.location.search = searchParams.toString();
+			console.log("addUrlParameter() - " + name + " = " + value);
 		}
 	}
 
 	function getUrlParameter(name)
 	{
-		//console.log(window.location)
+		console.log(window.location);
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get(name);
 	}
@@ -51,7 +52,7 @@
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		//console.log("getUrlParameter()" + urlParameter)
+		console.log("getUrlParameter()" + urlParameter);
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -60,16 +61,33 @@
 		return ok ? urlParameter : defaultValue;
 	}
 
+	function updatePlatformFromURL()
+	{
+		var platform = undefined;
+		platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
+		Cookies.set('platform', platform, { expires: 365});
+		console.log('updatePlatformFromURL() - platform = ' + platform);
+		updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+		var platform = Cookies.get("platform");
+		Cookies.set('platform', platform, { expires: 365});
+		console.log('updatePlatformFromTab() - platform = ' + platform);
+		updatePlatform();
+	}
+
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
+	console.log('updatePlatform() 1 - platform = ' + platform);
 	if (typeof platform == 'undefined')
 	{
 		platform = "linux"; // Set default here.
 	}
 	addUrlParameter('platform', platform);
-	Cookies.set('platform', platform, { expires: 365})
+	console.log('updatePlatform() 2 - platform = ' + platform);
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -258,7 +276,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL();" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -327,7 +345,7 @@
 	function choosePlatform(platformName)
 	{
 		Cookies.set('platform', platformName, { expires: 365 })
-		updatePlatform();
+		updatePlatformFromTab();
 	};
 </script>
 
