@@ -85,7 +85,7 @@
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	console.log('updatePlatform() - platform = ' + platform);
+	console.log('updatePlatform() = ' + platform);
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -110,7 +110,6 @@
 	}
 	if (platform == "android")
 	{
-		console.log("platform  " + platform + ".");
 	$(".android").show();
 	$(".selectd3d11").attr("disabled", true);
 	$(".selectd3d12").attr("disabled", true);
@@ -234,6 +233,7 @@
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
+	console.log('updateGraphicsAPI() = ' + graphicsApi);
 	
 	// first, hide all the api's
 	$(".d3d11").hide();
@@ -390,7 +390,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Minor changes to console log in layout.html.
+| **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
 | **Wed 22 Nov** : Moved updatePlatform() default value.
 | **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
 | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
@@ -489,7 +490,6 @@
 | **Wed 01 Nov** : Added sphinx.ext.extlinks to link OpenXR type to the OpenXR manual.
 | **Mon 30 Oct** : Unified comments. Copied ViewConfiguration changes to chapters 4 and 5. Changed Count for Size naming variables for array sizes.
 | **Mon 30 Oct** : Minor updates to GraphicsAPI_D3D12.cpp and GraphicsAPI_OpenGL_ES.cpp.
-| **Mon 30 Oct** : Added XR_DOCS_TAGS back to chapter 6. Using count instead of size for array counts.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
