@@ -84,6 +84,7 @@
 	{
 		platform = "linux"; // Set default here.
 	}
+	Cookies.set('platform', platform, { expires: 365});
 	addUrlParameter('platform', platform);
 	console.log('updatePlatform() 2 - platform = ' + platform);
 
@@ -373,7 +374,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
+| **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
 | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
 | **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
 | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for &quot;This file does not belong to any project target...&quot; warning.
@@ -472,7 +474,6 @@
 | **Mon 30 Oct** : Reduced error message for no depth swapchain format.
 | **Mon 30 Oct** : Fixed D3D12 Buffer creation states on upload heap.
 | **Mon 30 Oct** : Fixed code formatting in Chapters 3 - 5.
-| **Mon 30 Oct** : Fixed typo in Chapter 4 text. Removed repeated line in 1.2 text. Added text to describe CMake cmdline build and running the app from the cmdline.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
