@@ -62,6 +62,10 @@
 	function updatePlatformFromURL()
 	{
 		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], Cookies.get("platform"));
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
 		Cookies.set('platform', platform, { expires: 365});
 		console.log('updatePlatformFromURL() - platform = ' + platform);
 		updatePlatform();
@@ -70,6 +74,10 @@
 	function updatePlatformFromTab()
 	{
 		var platform = Cookies.get("platform");
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
 		Cookies.set('platform', platform, { expires: 365});
 		console.log('updatePlatformFromTab() - platform = ' + platform);
 		addUrlParameter('platform', platform);
@@ -79,10 +87,6 @@
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	if (typeof platform == 'undefined')
-	{
-		platform = "linux"; // Set default here.
-	}
 	console.log('updatePlatform() - platform = ' + platform);
 
 	$(".linux").hide();
@@ -371,7 +375,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Moved updatePlatform() default value.
+| **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
 | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
 | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
 | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
@@ -470,7 +475,6 @@
 | **Mon 30 Oct** : Minor updates to GraphicsAPI_D3D12.cpp and GraphicsAPI_OpenGL_ES.cpp.
 | **Mon 30 Oct** : Added XR_DOCS_TAGS back to chapter 6. Using count instead of size for array counts.
 | **Mon 30 Oct** : Updated chapter 2 and 3 text and code to discuss/use xrEnumerateViewConfigurations().
-| **Mon 30 Oct** : Reduced error message for no depth swapchain format.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
