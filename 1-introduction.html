@@ -1010,6 +1010,9 @@ You can open the file. You don’t need to edit it, but note:</p>
 <section id="main-cpp-and-the-openxrtutorial-class">
 <h3>1.4.3 Main.cpp and the OpenXRTutorial Class<a class="headerlink" href="#main-cpp-and-the-openxrtutorial-class" title="Permalink to this heading">¶</a></h3>
 <p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;DebugOutput.h&gt;</span>
+</pre></div>
+</div>
 <p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
 <div class="d3d11 docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_D3D11.h&gt;</span>
@@ -1071,7 +1074,7 @@ You can open the file. You don’t need to edit it, but note:</p>
 chosen platform. We first create a ‘pseudo-main function’ called <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>, in which we create an instance of our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, taking a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter, and call the <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> can be changed to suit the graphics API that you have chosen.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w">  </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
-<span class="w">    </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OpenXR Tutorial Chapter 2&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">XR_TUT_LOG</span><span class="p">(</span><span class="s">&quot;OpenXR Tutorial Chapter 2&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">apiType</span><span class="p">);</span>
 <span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
 <span class="p">}</span>
@@ -1283,14 +1286,14 @@ Click the link “create a launch.json file” to and enter the following in lau
 <p><code class="docutils literal notranslate"><span class="pre">[...]/&lt;workspaceFolder&gt;/Chapter2</span> <span class="pre">$</span> <span class="pre">&quot;../build/Chapter2/OpenXRTutorialChapter2&quot;</span></code></p>
 </div>
 <div class="android docutils container">
-<p>With all the source and build systems set up, we can now build the Android project. In upper right of Android Studio, you should find the toolbar below. Click the green hammer icon to build the project, if all is successful you should see “BUILD SUCCESSFUL in […]s” in the Build Output window.
-It is also recommended to sync the gradle files too.</p>
+<p>With all the source and build system files set up, we can now build our Android project. If while editing <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> or any other file you are seeing warnings like this: <code class="docutils literal notranslate"><span class="pre">&quot;This</span> <span class="pre">file</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">belong</span> <span class="pre">to</span> <span class="pre">any</span> <span class="pre">project</span> <span class="pre">target...&quot;</span></code>, right-click on the top-level folder of the project in the <code class="docutils literal notranslate"><span class="pre">Project</span></code> panel, select <code class="docutils literal notranslate"><span class="pre">Mark</span> <span class="pre">Directory</span> <span class="pre">as</span> <span class="pre">&gt;</span></code>, and click the option <code class="docutils literal notranslate"><span class="pre">Sources</span> <span class="pre">Root</span></code>.</p>
+<p>To build your project go to the upper right of Android Studio, and there you should find the toolbar below. Click the green hammer icon to build the project, if all is successful you should see “BUILD SUCCESSFUL in […]s” in the Build Output window. It is also recommended to sync the gradle files too.</p>
 <p>Next to the green hammer icon is the Run/Debug configuration dropdown menu. If that isn’t populated, create a configuration called app.</p>
-<p>Turn on and connect your Android device. Set up any requirements for USB debugging and adb. Your device should appear in the dropdown. Here, we are using a Meta Quest 2:</p>
+<p>Turn on and connect your Android device. Set up any requirements for USB debugging and <code class="docutils literal notranslate"><span class="pre">adb</span></code>. Your device should appear in the dropdown. Here, we are using a Meta Quest 2:</p>
 <figure class="align-default">
 <img alt="Build/Run Toolbar" src="_images/android-studio-build-run-toolbar.png" />
 </figure>
-<p>To debug/run the application click the green bug icon.</p>
+<p>To debug/run the application click the green bug icon (the plain green bug, not the one with an arrow on it).</p>
 </div>
 </section>
 </section>

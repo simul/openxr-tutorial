@@ -2,6 +2,13 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for "This file does not belong to any project target..." warning.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Added SVG's of spaces illustrations.
     | **Wed 22 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
     | **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
     | **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
@@ -95,10 +102,3 @@ Changelist
     | **Fri 27 Oct** : Fixed minor typos.
     | **Fri 27 Oct** : Added Common_....zip download links. Common/xr_linear_algebra.h is not present in the zip.
     | **Fri 27 Oct** : Fixed build-common-archs.sh. Restored cmdline args too.
-    | **Fri 27 Oct** : Updated build-common-archs.sh to not use cmdline parametes
-    | **Fri 27 Oct** : Updated build-common-archs.sh
-    | **Fri 27 Oct** : Added build scripts for creating archives of the Common folder.
-    | **Fri 27 Oct** : Removed Android comment in CMakeLists.txt files.
-    | **Fri 27 Oct** : Reflowed text and code in 2.1.2.
-    | **Fri 27 Oct** : Reflowed CMAKE_MODULE_PATH code and text. Fixed code highlighting in 2.1 text. Chapter 3 text states that the XR compositor is part of the runtime.
-    | **Fri 27 Oct** : Moved TODO outside of text snippet.
