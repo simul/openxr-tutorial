@@ -36,13 +36,13 @@
 		{
 			searchParams.set(name, value);
 			window.location.search = searchParams.toString();
-			console.log("addUrlParameter() - " + name + " = " + value);
+			//console.log("addUrlParameter() - " + name + " = " + value);
 		}
 	}
 
 	function getUrlParameter(name)
 	{
-		console.log(window.location);
+		//console.log(window.location);
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get(name);
 	}
@@ -50,7 +50,7 @@
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		console.log("getUrlParameter()" + urlParameter);
+		//console.log("getUrlParameter()" + urlParameter);
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -67,7 +67,6 @@
 			platform = "linux"; // Set default here.
 		}
 		Cookies.set('platform', platform, { expires: 365});
-		console.log('updatePlatformFromURL() - platform = ' + platform);
 		updatePlatform();
 	}
 	
@@ -79,7 +78,6 @@
 			platform = "linux"; // Set default here.
 		}
 		Cookies.set('platform', platform, { expires: 365});
-		console.log('updatePlatformFromTab() - platform = ' + platform);
 		addUrlParameter('platform', platform);
 		updatePlatform();
 	}
@@ -209,17 +207,34 @@
 	//console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 	});
 	}
+
+	function updateGraphicsAPIFromURL()
+	{
+		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], Cookies.get("graphicsapi"));
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+		updateGraphicsAPI();
+	}
+	
+	function updateGraphicsAPIFromTab()
+	{
+		var graphicsApi = Cookies.get("graphicsapi");
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+		addUrlParameter('graphicsapi', graphicsApi);
+		updateGraphicsAPI();
+	}
+
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
-	if (typeof graphicsApi == 'undefined')
-	{
-		graphicsApi = "vulkan"; // Set default here.
-	}
-	addUrlParameter('graphicsapi', graphicsApi)
-	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
-
+	
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -276,7 +291,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL();" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL();  updateGraphicsAPIFromURL();" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -361,7 +376,7 @@
 	function chooseGraphicsAPI(graphicsApiName)
 	{
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
-		updateGraphicsAPI();
+		updateGraphicsAPIFromTab();
 		limitAPIChoice();
 	};
 </script>
@@ -375,7 +390,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Moved updatePlatform() default value.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
+| **Wed 22 Nov** : Moved updatePlatform() default value.
 | **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
 | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
 | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
@@ -474,7 +490,6 @@
 | **Mon 30 Oct** : Unified comments. Copied ViewConfiguration changes to chapters 4 and 5. Changed Count for Size naming variables for array sizes.
 | **Mon 30 Oct** : Minor updates to GraphicsAPI_D3D12.cpp and GraphicsAPI_OpenGL_ES.cpp.
 | **Mon 30 Oct** : Added XR_DOCS_TAGS back to chapter 6. Using count instead of size for array counts.
-| **Mon 30 Oct** : Updated chapter 2 and 3 text and code to discuss/use xrEnumerateViewConfigurations().
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>

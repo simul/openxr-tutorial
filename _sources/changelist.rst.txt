@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
     | **Wed 22 Nov** : Moved updatePlatform() default value.
     | **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
     | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
@@ -101,4 +102,3 @@ Changelist
     | **Mon 30 Oct** : Unified comments. Copied ViewConfiguration changes to chapters 4 and 5. Changed Count for Size naming variables for array sizes.
     | **Mon 30 Oct** : Minor updates to GraphicsAPI_D3D12.cpp and GraphicsAPI_OpenGL_ES.cpp.
     | **Mon 30 Oct** : Added XR_DOCS_TAGS back to chapter 6. Using count instead of size for array counts.
-    | **Mon 30 Oct** : Updated chapter 2 and 3 text and code to discuss/use xrEnumerateViewConfigurations().
