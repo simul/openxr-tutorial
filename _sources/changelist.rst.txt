@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
     | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
     | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
     | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
@@ -101,4 +102,3 @@ Changelist
     | **Mon 30 Oct** : Updated chapter 2 and 3 text and code to discuss/use xrEnumerateViewConfigurations().
     | **Mon 30 Oct** : Reduced error message for no depth swapchain format.
     | **Mon 30 Oct** : Fixed D3D12 Buffer creation states on upload heap.
-    | **Mon 30 Oct** : Fixed code formatting in Chapters 3 - 5.
