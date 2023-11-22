@@ -61,8 +61,7 @@
 
 	function updatePlatformFromURL()
 	{
-		var platform = undefined;
-		platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
+		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], Cookies.get("platform"));
 		Cookies.set('platform', platform, { expires: 365});
 		console.log('updatePlatformFromURL() - platform = ' + platform);
 		updatePlatform();
@@ -80,12 +79,11 @@
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	console.log('updatePlatform() 1 - platform = ' + platform);
 	if (typeof platform == 'undefined')
 	{
 		platform = "linux"; // Set default here.
 	}
-	console.log('updatePlatform() 2 - platform = ' + platform);
+	console.log('updatePlatform() - platform = ' + platform);
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -373,7 +371,8 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
+| **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
 | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
 | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
 | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
@@ -472,7 +471,6 @@
 | **Mon 30 Oct** : Added XR_DOCS_TAGS back to chapter 6. Using count instead of size for array counts.
 | **Mon 30 Oct** : Updated chapter 2 and 3 text and code to discuss/use xrEnumerateViewConfigurations().
 | **Mon 30 Oct** : Reduced error message for no depth swapchain format.
-| **Mon 30 Oct** : Fixed D3D12 Buffer creation states on upload heap.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
