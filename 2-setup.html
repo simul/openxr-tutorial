@@ -44,17 +44,14 @@
 	function getUrlParameter(name)
 	{
 		//console.log(window.location)
-		const urlParams = new Proxy(new URLSearchParams(window.location.search),
-		{
-			get: (searchParams, prop) => searchParams.get(prop),
-		});
-		return urlParams.name;
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
 	}
 
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		console.log("getUrlParameter()" + urlParameter)
+		//console.log("getUrlParameter()" + urlParameter)
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -72,6 +69,7 @@
 		platform = "linux"; // Set default here.
 	}
 	addUrlParameter('platform', platform);
+	Cookies.set('platform', platform, { expires: 365})
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -202,6 +200,7 @@
 		graphicsApi = "vulkan"; // Set default here.
 	}
 	addUrlParameter('graphicsapi', graphicsApi)
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
 
 	// first, hide all the api's
 	$(".d3d11").hide();
@@ -341,7 +340,6 @@
 <script>
 	function choosePlatform(platformName)
 	{
-		var platform = Cookies.get('platform')
 		Cookies.set('platform', platformName, { expires: 365 })
 		updatePlatform();
 	};
@@ -364,7 +362,6 @@
 	function chooseGraphicsAPI(graphicsApiName)
 	{
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
-		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 		limitAPIChoice();
 	};
@@ -505,7 +502,7 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to find OpenXR instance extension: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requestedInstanceExtension</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">LOG_ERROR</span><span class="p">(</span><span class="s">&quot;Failed to find OpenXR instance extension: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">requestedInstanceExtension</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -536,10 +533,10 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrInstanceProperties</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">{</span><span class="n">XR_TYPE_INSTANCE_PROPERTIES</span><span class="p">};</span>
 <span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProperties</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">instanceProperties</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get InstanceProperties.&quot;</span><span class="p">);</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Runtime: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeName</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_PATCH</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OpenXR Runtime: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeName</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span>
+<span class="w">                            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MAJOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span>
+<span class="w">                            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_MINOR</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;.&quot;</span>
+<span class="w">                            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">XR_VERSION_PATCH</span><span class="p">(</span><span class="n">instanceProperties</span><span class="p">.</span><span class="n">runtimeVersion</span><span class="p">));</span>
 </pre></div>
 </div>
 <p>Here, we have initialized the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstanceProperties.html">XrInstanceProperties</a> with the correct <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrStructureType.html">XrStructureType</a> and passed it along with the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a> to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProperties.html">xrGetInstanceProperties</a>. This will fill the rest of that structure. Next, we logged out the runtime’s name, and using the <code class="docutils literal notranslate"><span class="pre">XR_VERSION_...</span></code> macros, we parsed and logged the runtime version.</p>
@@ -884,13 +881,13 @@
 <span class="w">    </span><span class="c1">// Log the number of lost events from the runtime.</span>
 <span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_EVENTS_LOST</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*</span><span class="n">eventsLost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataEventsLost</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Events Lost: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">eventsLost</span><span class="o">-&gt;</span><span class="n">lostEventCount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OPENXR: Events Lost: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">eventsLost</span><span class="o">-&gt;</span><span class="n">lostEventCount</span><span class="p">);</span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="c1">// Log that an instance loss is pending and shutdown the application.</span>
 <span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INSTANCE_LOSS_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*</span><span class="n">instanceLossPending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInstanceLossPending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Instance Loss Pending at: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceLossPending</span><span class="o">-&gt;</span><span class="n">lossTime</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OPENXR: Instance Loss Pending at: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceLossPending</span><span class="o">-&gt;</span><span class="n">lossTime</span><span class="p">);</span>
 <span class="w">        </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>
@@ -898,9 +895,9 @@
 <span class="w">    </span><span class="c1">// Log that the interaction profile has changed.</span>
 <span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*</span><span class="n">interactionProfileChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataInteractionProfileChanged</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Interaction Profile changed for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">interactionProfileChanged</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OPENXR: Interaction Profile changed for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">interactionProfileChanged</span><span class="o">-&gt;</span><span class="n">session</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">interactionProfileChanged</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;XrEventDataInteractionProfileChanged for unknown Session&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;XrEventDataInteractionProfileChanged for unknown Session&quot;</span><span class="p">);</span>
 <span class="w">            </span><span class="k">break</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>
@@ -908,9 +905,9 @@
 <span class="w">    </span><span class="c1">// Log that there&#39;s a reference space change pending.</span>
 <span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*</span><span class="n">referenceSpaceChangePending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">XrEventDataReferenceSpaceChangePending</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventData</span><span class="p">);</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OPENXR: Reference Space Change pending for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">referenceSpaceChangePending</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OPENXR: Reference Space Change pending for Session: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">referenceSpaceChangePending</span><span class="o">-&gt;</span><span class="n">session</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">referenceSpaceChangePending</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;XrEventDataReferenceSpaceChangePending for unknown Session&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">           </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;XrEventDataReferenceSpaceChangePending for unknown Session&quot;</span><span class="p">);</span>
 <span class="w">            </span><span class="k">break</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span>

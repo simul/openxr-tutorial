@@ -42,17 +42,14 @@
 	function getUrlParameter(name)
 	{
 		//console.log(window.location)
-		const urlParams = new Proxy(new URLSearchParams(window.location.search),
-		{
-			get: (searchParams, prop) => searchParams.get(prop),
-		});
-		return urlParams.name;
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
 	}
 
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		console.log("getUrlParameter()" + urlParameter)
+		//console.log("getUrlParameter()" + urlParameter)
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -70,6 +67,7 @@
 		platform = "linux"; // Set default here.
 	}
 	addUrlParameter('platform', platform);
+	Cookies.set('platform', platform, { expires: 365})
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -200,6 +198,7 @@
 		graphicsApi = "vulkan"; // Set default here.
 	}
 	addUrlParameter('graphicsapi', graphicsApi)
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
 
 	// first, hide all the api's
 	$(".d3d11").hide();
@@ -320,7 +319,6 @@
 <script>
 	function choosePlatform(platformName)
 	{
-		var platform = Cookies.get('platform')
 		Cookies.set('platform', platformName, { expires: 365 })
 		updatePlatform();
 	};
@@ -343,7 +341,6 @@
 	function chooseGraphicsAPI(graphicsApiName)
 	{
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
-		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 		limitAPIChoice();
 	};
@@ -358,7 +355,12 @@
 							
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 21 Nov** : Updated title in footer.html
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 22 Nov** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
+| **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
+| **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
+| **Tue 21 Nov** : Merge branch &#39;main&#39; into simplify-log
+| **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
+| **Tue 21 Nov** : Updated title in footer.html
 | **Tue 21 Nov** : Restored Chapter 6.3 text.
 | **Tue 21 Nov** : Minor text correction to Chapter 3.
 | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
@@ -453,11 +455,6 @@
 | **Fri 27 Oct** : Reflowed text and code in 2.1.2.
 | **Fri 27 Oct** : Reflowed CMAKE_MODULE_PATH code and text. Fixed code highlighting in 2.1 text. Chapter 3 text states that the XR compositor is part of the runtime.
 | **Fri 27 Oct** : Moved TODO outside of text snippet.
-| **Fri 27 Oct** : Converted all code rst ` to ``.
-| **Fri 27 Oct** : Added DEBUG_BREAK to OpenXRDebugBreak().
-| **Thu 26 Oct** : Fixed spelling of initialize.
-| **Thu 26 Oct** : Added code and text to Chapter 4 to resolve initial controller pose.
-| **Thu 26 Oct** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>

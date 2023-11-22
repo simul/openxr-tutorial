@@ -44,17 +44,14 @@
 	function getUrlParameter(name)
 	{
 		//console.log(window.location)
-		const urlParams = new Proxy(new URLSearchParams(window.location.search),
-		{
-			get: (searchParams, prop) => searchParams.get(prop),
-		});
-		return urlParams.name;
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
 	}
 
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		console.log("getUrlParameter()" + urlParameter)
+		//console.log("getUrlParameter()" + urlParameter)
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -72,6 +69,7 @@
 		platform = "linux"; // Set default here.
 	}
 	addUrlParameter('platform', platform);
+	Cookies.set('platform', platform, { expires: 365})
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -202,6 +200,7 @@
 		graphicsApi = "vulkan"; // Set default here.
 	}
 	addUrlParameter('graphicsapi', graphicsApi)
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
 
 	// first, hide all the api's
 	$(".d3d11").hide();
@@ -335,7 +334,6 @@
 <script>
 	function choosePlatform(platformName)
 	{
-		var platform = Cookies.get('platform')
 		Cookies.set('platform', platformName, { expires: 365 })
 		updatePlatform();
 	};
@@ -358,7 +356,6 @@
 	function chooseGraphicsAPI(graphicsApiName)
 	{
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
-		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 		limitAPIChoice();
 	};
@@ -1013,9 +1010,6 @@ You can open the file. You don’t need to edit it, but note:</p>
 <section id="main-cpp-and-the-openxrtutorial-class">
 <h3>1.4.3 Main.cpp and the OpenXRTutorial Class<a class="headerlink" href="#main-cpp-and-the-openxrtutorial-class" title="Permalink to this heading">¶</a></h3>
 <p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;DebugOutput.h&gt;</span>
-</pre></div>
-</div>
 <p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
 <div class="d3d11 docutils container">
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_D3D11.h&gt;</span>
@@ -1077,8 +1071,7 @@ You can open the file. You don’t need to edit it, but note:</p>
 chosen platform. We first create a ‘pseudo-main function’ called <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>, in which we create an instance of our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, taking a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter, and call the <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> can be changed to suit the graphics API that you have chosen.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w">  </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-
+<span class="w">    </span><span class="n">LOG_INFO</span><span class="p">(</span><span class="s">&quot;OpenXR Tutorial Chapter 2&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">apiType</span><span class="p">);</span>
 <span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
 <span class="p">}</span>

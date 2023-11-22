@@ -44,17 +44,14 @@
 	function getUrlParameter(name)
 	{
 		//console.log(window.location)
-		const urlParams = new Proxy(new URLSearchParams(window.location.search),
-		{
-			get: (searchParams, prop) => searchParams.get(prop),
-		});
-		return urlParams.name;
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
 	}
 
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
 		const urlParameter = getUrlParameter(name);
-		console.log("getUrlParameter()" + urlParameter)
+		//console.log("getUrlParameter()" + urlParameter)
 		ok = false;
 		for (i = 0; i < checkValues.length; i++)
 		{
@@ -72,6 +69,7 @@
 		platform = "linux"; // Set default here.
 	}
 	addUrlParameter('platform', platform);
+	Cookies.set('platform', platform, { expires: 365})
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -202,6 +200,7 @@
 		graphicsApi = "vulkan"; // Set default here.
 	}
 	addUrlParameter('graphicsapi', graphicsApi)
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
 
 	// first, hide all the api's
 	$(".d3d11").hide();
@@ -327,7 +326,6 @@
 <script>
 	function choosePlatform(platformName)
 	{
-		var platform = Cookies.get('platform')
 		Cookies.set('platform', platformName, { expires: 365 })
 		updatePlatform();
 	};
@@ -350,7 +348,6 @@
 	function chooseGraphicsAPI(graphicsApiName)
 	{
 		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
-		var graphicsApi = Cookies.get('graphicsapi')
 		updateGraphicsAPI();
 		limitAPIChoice();
 	};
