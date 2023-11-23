@@ -28,66 +28,41 @@
 	<link rel="prev" title="5 Extensions" href="5-extensions.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
-	
+
 	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
-	function addUrlParameter(name, value)
+	function addUrlParameter(addr,name, value)
 	{
-		var searchParams = new URLSearchParams(window.location.search);
-		if (searchParams.get(name) != value)
-		{
-			searchParams.set(name, value);
-			window.location.search = searchParams.toString();
-			//console.log("addUrlParameter() - " + name + " = " + value);
-		}
+		url=new URL(addr);
+		url.searchParams.set(name,value);
+		return url.toString();
 	}
 
 	function getUrlParameter(name)
 	{
-		//console.log(window.location);
-		const urlParams = new URLSearchParams(window.location.search);
-		return urlParams.get(name);
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
 	}
 
 	function getUrlParameterWithCheck(name, checkValues, defaultValue)
 	{
-		const urlParameter = getUrlParameter(name);
-		//console.log("getUrlParameter()" + urlParameter);
-		ok = false;
-		for (i = 0; i < checkValues.length; i++)
-		{
-			ok |= (urlParameter == checkValues[i]);
-		}
-		return ok ? urlParameter : defaultValue;
-	}
-
-	function updatePlatformFromURL()
+	const urlParameter = getUrlParameter(name);
+	ok = false;
+	for (i = 0; i < checkValues.length; i++)
 	{
-		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], Cookies.get("platform"));
-		if (typeof platform == 'undefined')
-		{
-			platform = "linux"; // Set default here.
-		}
-		Cookies.set('platform', platform, { expires: 365});
-		addUrlParameter('platform', platform);
-		updatePlatform();
+	ok |= (urlParameter == checkValues[i]);
 	}
-	
-	function updatePlatformFromTab()
-	{
-		var platform = Cookies.get("platform");
-		if (typeof platform == 'undefined')
-		{
-			platform = "linux"; // Set default here.
-		}
-		Cookies.set('platform', platform, { expires: 365});
-		addUrlParameter('platform', platform);
-		updatePlatform();
+	return ok ? urlParameter : defaultValue;
 	}
 
 	function updatePlatform()
 	{
 	var platform = Cookies.get("platform");
-	console.log('updatePlatform() = ' + platform);
+	platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], platform);
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux"; // Set default here.
+	}
+	Cookies.set('platform', platform, { expires: 365})
 
 	$(".linux").hide();
 	$(".android").hide();
@@ -112,6 +87,7 @@
 	}
 	if (platform == "android")
 	{
+	console.log("platform  " + platform + ".");
 	$(".android").show();
 	$(".selectd3d11").attr("disabled", true);
 	$(".selectd3d12").attr("disabled", true);
@@ -208,36 +184,27 @@
 	//console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 	});
 	}
-
-	function updateGraphicsAPIFromURL()
+	function copyLinkToThisPage()
 	{
-		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], Cookies.get("graphicsapi"));
-		if (typeof graphicsApi == 'undefined')
-		{
-			graphicsApi = "vulkan"; // Set default here.
-		}
-		Cookies.set('graphicsapi', graphicsApi, { expires: 365});
-		addUrlParameter('graphicsapi', graphicsApi);
-		updateGraphicsAPI();
+	var graphicsapi = Cookies.get("graphicsapi")
+	var platform = Cookies.get("platform")
+	var url=window.location.href;
+	url=addUrlParameter(url,"platform",platform)
+	url=addUrlParameter(url,"graphicsapi",graphicsapi)
+	navigator.clipboard.writeText(url);
+	// Alert the copied text
+	alert("Copied the link: " + url+" to the clipboard.");
 	}
-	
-	function updateGraphicsAPIFromTab()
-	{
-		var graphicsApi = Cookies.get("graphicsapi");
-		if (typeof graphicsApi == 'undefined')
-		{
-			graphicsApi = "vulkan"; // Set default here.
-		}
-		Cookies.set('graphicsapi', graphicsApi, { expires: 365});
-		addUrlParameter('graphicsapi', graphicsApi);
-		updateGraphicsAPI();
-	}
-
 	function updateGraphicsAPI()
 	{
 	var graphicsApi = Cookies.get("graphicsapi")
-	console.log('updateGraphicsAPI() = ' + graphicsApi);
-	
+	graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], graphicsApi);
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365})
+
 	// first, hide all the api's
 	$(".d3d11").hide();
 	$(".d3d12").hide();
@@ -294,7 +261,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL();  updateGraphicsAPIFromURL();" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+<body class="wy-body-for-nav" onload="updatePlatform(); updateGraphicsAPI(); makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -401,9 +368,15 @@
 </div>
 		<div class="wy-nav-content">
 				<div class="rst-content">
-					<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-						<div itemprop="articleBody">
-							
+					<dic class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<span class="share-page-tooltiptext">Copy link to this page</span>
+					</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
   <section id="next-steps">
 <h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h1>
 <p>So far, you’ve learned how to create a basic OpenXR application: how to initialize and shut down an OpenXR instance and session, how to connect a graphics API to receive rendering events, and how to poll your runtime for interactions. The next steps are up to you but in these chapter you’ll find a few suggestions.</p>
@@ -2099,9 +2072,9 @@ In the table below are the layer names and their associated libraries and .json 
 </section>
 
 
-						</div>
 					</div>
-					<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+				</div>
+				<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="5-extensions.html" class="btn btn-neutral float-left" title="5 Extensions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -2133,7 +2106,7 @@ In the table below are the layer names and their associated libraries and .json 
   </div> 
 
 </footer>
-				</div>
+			</div>
 			</div>
 		</div>
 	</div>
