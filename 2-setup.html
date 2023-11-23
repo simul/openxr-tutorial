@@ -69,6 +69,7 @@
 			platform = "linux"; // Set default here.
 		}
 		Cookies.set('platform', platform, { expires: 365});
+		addUrlParameter('platform', platform);
 		updatePlatform();
 	}
 	
@@ -217,6 +218,7 @@
 			graphicsApi = "vulkan"; // Set default here.
 		}
 		Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+		addUrlParameter('graphicsapi', graphicsApi);
 		updateGraphicsAPI();
 	}
 	
