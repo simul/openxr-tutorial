@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Fri 24 Nov** : Improved tab-clicking, cookie and link-share button behaviour.
     | **Thu 23 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 23 Nov** : Added "copy url" button with "share" icon at the top-right of each page. This appends the platform/api parameters if not already present.
     | **Thu 23 Nov** : Updated README.md and added BUILD.md, CONTRIBUTORS.md, Schedule.md and screencapture-openxr-tutorial-index.png. Updated reuse. #85
@@ -101,4 +102,3 @@ Changelist
     | **Wed 01 Nov** : Added links to core and loader specs in the chapter 1 text.
     | **Wed 01 Nov** : Added text to Chapter 2.1.1 explaining xrEnumerateInstanceExtensionProperties playerName parameter
     | **Wed 01 Nov** : Updated text in Chapter 3 and 5 to better explain depth swapchain format support.
-    | **Wed 01 Nov** : Added chapter 1 folder for archive zip and reference of the stub application.
