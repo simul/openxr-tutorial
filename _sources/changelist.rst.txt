@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 28 Nov** : Removed "sphinx_sitemap" from extensions, don't do this by default.
+    | **Tue 28 Nov** : Updated sitemap.xml
+    | **Tue 28 Nov** : Sitemap for combinations of api and platform. Added tutorialmap for url remapping.
     | **Tue 28 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 28 Nov** : Added sitemap, but don't auto-generate sitemap by default (add sphinx_sitemap to extensions if needed). Added .htaccess and robots.txt for information, but do not deploy.
     | **Tue 28 Nov** : Updated glslangValidator cmd line args. Potential fix for #88.
@@ -99,6 +102,3 @@ Changelist
     | **Thu 02 Nov** : Added build-android-arch.yml
     | **Thu 02 Nov** : Removed local.properties from AndroidBuildFolder.zip
     | **Thu 02 Nov** : Added build-android-arch scripts. Other minor typo fixes.
-    | **Thu 02 Nov** : Updated text in Chapter 1 for DebugOutput.
-    | **Wed 01 Nov** : Renamed m_localOrStageSpace to m_localSpace.
-    | **Wed 01 Nov** : Clarification in Chapter 4 text for setup blocks location.
