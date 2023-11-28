@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 28 Nov** : Updated glslangValidator cmd line args. Potential fix for #88.
+    | **Tue 28 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Tue 28 Nov** : Updated OpenXR_500px logos and README.md.
+    | **Mon 27 Nov** : Headerlinks are invisible until hovered.
     | **Fri 24 Nov** : Improved tab-clicking, cookie and link-share button behaviour.
     | **Thu 23 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Thu 23 Nov** : Added "copy url" button with "share" icon at the top-right of each page. This appends the platform/api parameters if not already present.
@@ -98,7 +102,3 @@ Changelist
     | **Wed 01 Nov** : Clarification in Chapter 4 text for setup blocks location.
     | **Wed 01 Nov** : Minor change to Chapter 3 text for shader folder location.
     | **Wed 01 Nov** : Added text to chapter 1 for default XR runtime checks.
-    | **Wed 01 Nov** : Added minimum Graphics API versions to chapter 1 text.
-    | **Wed 01 Nov** : Added links to core and loader specs in the chapter 1 text.
-    | **Wed 01 Nov** : Added text to Chapter 2.1.1 explaining xrEnumerateInstanceExtensionProperties playerName parameter
-    | **Wed 01 Nov** : Updated text in Chapter 3 and 5 to better explain depth swapchain format support.
