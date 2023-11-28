@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>6 Next Steps &mdash; OpenXR Tutorial  documentation</title>
@@ -14,14 +14,15 @@
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
 	
-	<script src="_static/jquery.js"></script>
-	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
 	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/jquery.js"></script>
+	<script src="_static/underscore.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
 	<script src="_static/doctools.js"></script>
 	<script src="_static/sphinx_highlight.js"></script>
 	<script src="_static/clipboard.min.js"></script>
 	<script src="_static/copybutton.js"></script>
-	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+	<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
 	<link rel="index" title="Index" href="genindex.html" >
@@ -1071,8 +1072,8 @@
 <p>Here, we use the vertex shader to write to the <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> System-Value Semantic, which specifies which index in the array within the render target we should emit the primitives data to. This System-Value Semantic must be matched in the pixel shader input. Note that this is only supported when <code class="docutils literal notranslate"><span class="pre">D3D11_FEATURE_DATA_D3D11_OPTIONS3::VPAndRTArrayIndexFromAnyShaderFeedingRasterizer</span></code> is set to true. Otherwise, you would need to use a geometry shader. <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a>.
 Also see this example from Microsoft’s <a class="reference external" href="https://github.com/microsoft/OpenXR-MixedReality/blob/a46ea22a396a38725043fea91166c6d5b1a49dfc/samples/BasicXrApp/CubeGraphics.cpp">OpenXR-MixedReality GitHub repository</a> and a reference page from Mixed Reality about <a class="reference external" href="https://learn.microsoft.com/en-us/windows/mixed-reality/develop/native/rendering-in-directx">Rendering in DirectX</a>.</p>
 <p>Vertex Shader:</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX11_MV.hlsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX11_MV.hlsl</span>
 <span class="gu">@@ -4,8 +4,8 @@</span>
 <span class="w"> </span>
 <span class="w"> </span>cbuffer CameraConstants : register(b0)
@@ -1111,8 +1112,8 @@ Also see this example from Microsoft’s <a class="reference external" href="htt
 </pre></div>
 </div>
 <p>Pixel Shader:</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\PixelShader.hlsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\PixelShader_DX11_MV.hlsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\PixelShader.hlsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\PixelShader_DX11_MV.hlsl</span>
 <span class="gu">@@ -8,6 +8,7 @@</span>
 <span class="w"> </span>    nointerpolation float2 i_TexCoord : TEXCOORD0;
 <span class="w"> </span>    float3 i_Normal : TEXCOORD1;
@@ -1170,8 +1171,8 @@ Also see this example from Microsoft’s <a class="reference external" href="htt
 </div>
 <p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> and compile with shader model 6.1 to allow the vertex shader to use the new <code class="docutils literal notranslate"><span class="pre">SV_ViewID</span></code> System-Value Semantic. See <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a> for its usage.</p>
 <p>Vertex Shader:</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX12_MV.hlsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\VertexShader.hlsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_DX12_MV.hlsl</span>
 <span class="gu">@@ -4,8 +4,8 @@</span>
 <span class="w"> </span>
 <span class="w"> </span>cbuffer CameraConstants : register(b0)
@@ -1207,8 +1208,8 @@ Also see this example from Microsoft’s <a class="reference external" href="htt
 <p>Enusre you have support for <code class="docutils literal notranslate"><span class="pre">GL_OVR_multiview</span></code> by checking the extensions and that you have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function pointer, if you need to do so. You will use this to create a framebuffer that supports rendering to multiple layers.
 See this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>, which works for OpenGL too.</p>
 <p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension. The line <code class="docutils literal notranslate"><span class="pre">layout(num_views</span> <span class="pre">=</span> <span class="pre">2)</span> <span class="pre">in</span></code> specifies the number of views the vertex shader a will broadcast to.</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GL_MV.glsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GL_MV.glsl</span>
 <span class="gu">@@ -4,9 +4,11 @@</span>
 <span class="w"> </span>
 <span class="w"> </span>#version 450
@@ -1239,8 +1240,8 @@ See this example from ARM’s OpenGL ES SDK for Android <a class="reference exte
 <p>Enusre you have support for <code class="docutils literal notranslate"><span class="pre">GL_OVR_multiview</span></code> by checking the extensions and that you have loaded the <code class="docutils literal notranslate"><span class="pre">glFramebufferTextureMultiviewOVR()</span></code> function pointer, if you need to do so. You will use this to create a framebuffer that supports rendering to multiple layers.
 See this example from ARM’s OpenGL ES SDK for Android <a class="reference external" href="https://arm-software.github.io/opengl-es-sdk-for-android/multiview.html">here</a>.</p>
 <p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex_OVR</span></code> and the GL_OVR_multiview GLSL extension. The line <code class="docutils literal notranslate"><span class="pre">layout(num_views</span> <span class="pre">=</span> <span class="pre">2)</span> <span class="pre">in</span></code> specifies the number of views the vertex shader a will broadcast to.</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader_GLES.glsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GLES_MV.glsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\VertexShader_GLES.glsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_GLES_MV.glsl</span>
 <span class="gu">@@ -3,9 +3,11 @@</span>
 <span class="w"> </span>// SPDX-License-Identifier: Apache-2.0
 <span class="w"> </span>
@@ -1302,8 +1303,8 @@ See this example from ARM’s OpenGL ES SDK for Android <a class="reference exte
 </pre></div>
 </div>
 <p>Modify the shader to use <code class="docutils literal notranslate"><span class="pre">gl_ViewIndex</span></code> and the GL_EXT_multiview GLSL extension.</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
-<span class="gi">+++ G:\Jarvis\workspace\openxr-tutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_VK_MV.glsl</span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- E:\Code\OpenXRTutorial\openxr-tutorial-src\Shaders\VertexShader.glsl</span>
+<span class="gi">+++ E:\Code\OpenXRTutorial\openxr-tutorial-src\Chapter6_1_Multiview\ShadersMultiview\VertexShader_VK_MV.glsl</span>
 <span class="gu">@@ -4,9 +4,10 @@</span>
 <span class="w"> </span>
 <span class="w"> </span>#version 450
