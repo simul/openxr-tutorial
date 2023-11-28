@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 28 Nov** : Updated .htaccess
     | **Tue 28 Nov** : Removed "sphinx_sitemap" from extensions, don't do this by default.
     | **Tue 28 Nov** : Updated sitemap.xml
     | **Tue 28 Nov** : Sitemap for combinations of api and platform. Added tutorialmap for url remapping.
@@ -101,4 +102,3 @@ Changelist
     | **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
     | **Thu 02 Nov** : Added build-android-arch.yml
     | **Thu 02 Nov** : Removed local.properties from AndroidBuildFolder.zip
-    | **Thu 02 Nov** : Added build-android-arch scripts. Other minor typo fixes.
