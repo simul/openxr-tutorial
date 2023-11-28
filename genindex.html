@@ -6,6 +6,7 @@
 	<title>Index &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
 	<!--[if lt IE 9]>
 	  <script src="_static/js/html5shiv.min.js"></script>
@@ -16,6 +17,8 @@
 	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
 	<script src="_static/doctools.js"></script>
 	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -23,41 +26,287 @@
 	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+	//console.log("add url parameter to : "+addr)
+	url=new URL(addr);
+	url.searchParams.set(name,value);
+	return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+	const urlParameter = getUrlParameter(name);
+	ok = false;
+	for (i = 0; i < checkValues.length; i++)
+	{
+	ok |= (urlParameter == checkValues[i]);
+	}
+	return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+	var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], Cookies.get("platform"));
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux"; // Set default here.
+	}
+	Cookies.set('platform', platform, { expires: 365});
+	updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+	var platform = Cookies.get("platform");
+	//console.log("from cookie, platform " + platform);
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux"; // Set default here.
+	}
+	Cookies.set('platform', platform, { expires: 365});
+	updatePlatform();
+	}
+
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform");
+	//console.log('updatePlatform() = ' + platform);
+
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").hide();
+	if (platform == "windows")
+	{
+	$(".windows").show();
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
+	}
+	if (platform == "linux")
+	{
+	$(".linux").show();
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
+	}
+	if (platform == "android")
+	{
+	//console.log("platform  " + platform + ".");
+	$(".android").show();
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
+	}
+	var oldelements = document.querySelectorAll(".selected-platform");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-platform');
+	////console.log("Removing selected-platform from "+el.id);
+	oldelements = document.querySelectorAll(".selected-platform");
+	}
+	var element = document.getElementById('select' + platform);
+	if(element)
+	{
+	element.classList.add('selected-platform');
+	////console.log("Adding selected-platform to "+element.id);
+	}
+	var element2 = document.getElementById('select' + platform + "-inline");
+	if(element2)
+	{
+	element2.classList.add('selected-platform');
+	////console.log("Adding selected-platform to "+element2.id);
+	}
+	else
+	{
+	////console.log('select' + platform + "-inline not found");
+	}
+	if(limitAPIChoice())
+	updateGraphicsAPI();
+	window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+	var platform = Cookies.get("platform");
+	var graphicsApi = Cookies.get("graphicsapi")
+	////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+	window.limitAPIChoice=limitAPIChoice;
+	var newApi=graphicsApi;
+	if (platform == "windows")
+	{
+	if (graphicsApi == "opengles"||graphicsApi==undefined)
+	newApi="d3d11";
+	}
+	if (platform == "linux")
+	{
+	if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+	newApi="vulkan";
+	}
+	if (platform == "android"||graphicsApi==undefined)
+	{
+	if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+	newApi="vulkan";
+	}
+	////console.log("newApi = "+newApi);
+	if (newApi != graphicsApi)
+	{
+	////console.log("setting graphicsapi = "+newApi);
+	Cookies.set('graphicsapi', newApi,{ expires: 365})
+	graphicsApi=newApi;
+	return true;
+	}
+	return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+	////console.log("makeLinksOpenInNewWindow ");
+	var download_hrefs = document.getElementsByClassName('reference download internal');
+	[].forEach.call(download_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	////console.log("Adding target blank to "+el.id);
+	});
+	link_hrefs = document.getElementsByClassName('reference external');
+	[].forEach.call(link_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	////console.log("Adding target blank to "+el.id);
+	});
+	window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function addIconsToToctree()
+	{
+	var toctreeheadings = document.getElementsByClassName('toctree-l1');
+	var i = 0;
+	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+	[].forEach.call(toctreeheadings, function(el) {
+	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+	i++;
+	////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+	});
+	}
+	function copyLinkToThisPage()
+	{
+	var graphicsapi =Cookies.get("graphicsapi")
+	var platform	=Cookies.get("platform")
+	var url			=window.location.href;
+	url				=addUrlParameter(url,"platform",platform);
+	url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+	navigator.clipboard.writeText(url);
+	var dlg = document.getElementById("copied-link-dialog");
+	document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+	dlg.style.visibility = 'visible';
+	var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+	//sharepagetooltip.style.opacity = 0;
+	setTimeout(() =>
+	{
+	const dlg = document.getElementById("copied-link-dialog");
+	dlg.style.visibility = 'hidden';
+	}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+	var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], Cookies.get("graphicsapi"));
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+	updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+	var graphicsApi = Cookies.get("graphicsapi");
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+	updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+	var graphicsApi = Cookies.get("graphicsapi")
+	//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+	// first, hide all the api's
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d12").show();
+	}
+	if (graphicsApi == "opengl") {
+	$(".opengl").show();
+	}
+	if (graphicsApi == "opengles") {
+	$(".opengles").show();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".vulkan").show();
+	}
+	var oldelements = document.querySelectorAll(".selected-graphics-api");
+	////console.log("selected-platform on "+oldelements.length+" elements.");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-graphics-api');
+	////console.log("Removing selected-graphics-api from "+el.id);
+	oldelements = document.querySelectorAll(".selected-graphics-api");
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	if(element)
+	{
+	element.classList.add('selected-graphics-api');
+	}
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	if (element2)
+	{
+	element2.classList.add('selected-graphics-api');
+	}
+	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
 	<script >
-	var platform = Cookies.get("platform")
-	if (platform==undefined) {
-	Cookies.set('platform', 'windows',{ expires: 365})
-	platform='windows';
+	var graphicsApi = Cookies.get("graphicsapi")
+	if (graphicsApi==undefined) {
+	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+	graphicsApi='vulkan';
 	}
 	</script>
-	<script defer src="_static/js/updatePlatform.js"></script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform();"> 
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -66,7 +315,7 @@
           
           
 			<a href="index.html"  class="" >
-				<img src="_static/OpenXR_500px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
 					Tutorial
@@ -84,36 +333,86 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">5. Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
       </div>
     </nav>
 
-    <div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">OpenXR Tutorial</a>
-      </nav>
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Index</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img class="platform-tab-img" src="_static/css/windows-mono.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img class="platform-tab-img" src="_static/css/tux-mono.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img class="platform-tab-img" src="_static/css/android-mono.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		console.log("choose platform " + platformName);
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatformFromTab();
+	};
+</script>
+
+<div id='selectgraphicsapi'>
+	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
+	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg" alt="DirectX 12" />
+	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
+	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+		<img class="api-tab-img" src="_static/css/OpenGLES_Black_Aligned.svg" alt="OpenGL ES" />
+	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
+	</button>
+</div>
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<dic class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
 
 <h1 id="index">Index</h1>
 
@@ -122,26 +421,43 @@
 </div>
 
 
-           </div>
-          </div>
-          <footer>
+					</div>
+				</div>
+				<footer>
 
   <hr>
 
   <div role="contentinfo">
-    <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.</p>
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+			</div>
+			</div>
+		</div>
+	</div>
+  <script></script> 
 
 </body>
 </html>

@@ -7,6 +7,7 @@
 	<title>Changelist &mdash; OpenXR Tutorial  documentation</title>
 	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
 	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
 	<link rel="shortcut icon" href="_static/favicon.ico">
 	<!--[if lt IE 9]>
 	  <script src="_static/js/html5shiv.min.js"></script>
@@ -17,6 +18,8 @@
 	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
 	<script src="_static/doctools.js"></script>
 	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -24,41 +27,287 @@
 	<link rel="search" title="Search" href="search.html" > 
 	<script  src="_static/js/js.cookie.min.js"></script>
 	<script >
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+	//console.log("add url parameter to : "+addr)
+	url=new URL(addr);
+	url.searchParams.set(name,value);
+	return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+	const urlParameter = getUrlParameter(name);
+	ok = false;
+	for (i = 0; i < checkValues.length; i++)
+	{
+	ok |= (urlParameter == checkValues[i]);
+	}
+	return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+	var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], Cookies.get("platform"));
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux"; // Set default here.
+	}
+	Cookies.set('platform', platform, { expires: 365});
+	updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+	var platform = Cookies.get("platform");
+	//console.log("from cookie, platform " + platform);
+	if (typeof platform == 'undefined')
+	{
+	platform = "linux"; // Set default here.
+	}
+	Cookies.set('platform', platform, { expires: 365});
+	updatePlatform();
+	}
+
 	function updatePlatform()
 	{
-		var platform = Cookies.get("platform")
-		console.log("platform = " + platform);
-		if (platform == "windows") {
-			$(".linux").hide();
-			$(".android").hide();
-			$(".windows").show();
-			$(".windows-linux").show();
-		}
-		if (platform == "linux") {
-			$(".linux").show();
-			$(".android").hide();
-			$(".windows").hide();
-			$(".windows-linux").show();
-		}
-		if (platform == "android") {
-			$(".linux").hide();
-			$(".android").show();
-			$(".windows").hide();
-			$(".windows-linux").hide();
-		}
-		window.updatePlatform=updatePlatform;
+	var platform = Cookies.get("platform");
+	//console.log('updatePlatform() = ' + platform);
+
+	$(".linux").hide();
+	$(".android").hide();
+	$(".windows").hide();
+	if (platform == "windows")
+	{
+	$(".windows").show();
+	$(".selectd3d11").removeAttr("disabled");
+	$(".selectd3d12").removeAttr("disabled");
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
+	}
+	if (platform == "linux")
+	{
+	$(".linux").show();
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").attr("disabled", true);
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").removeAttr("disabled");
+	}
+	if (platform == "android")
+	{
+	//console.log("platform  " + platform + ".");
+	$(".android").show();
+	$(".selectd3d11").attr("disabled", true);
+	$(".selectd3d12").attr("disabled", true);
+	$(".selectopengles").removeAttr("disabled");
+	$(".selectvulkan").removeAttr("disabled");
+	$(".selectopengl").attr("disabled", true);
+	}
+	var oldelements = document.querySelectorAll(".selected-platform");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-platform');
+	////console.log("Removing selected-platform from "+el.id);
+	oldelements = document.querySelectorAll(".selected-platform");
+	}
+	var element = document.getElementById('select' + platform);
+	if(element)
+	{
+	element.classList.add('selected-platform');
+	////console.log("Adding selected-platform to "+element.id);
+	}
+	var element2 = document.getElementById('select' + platform + "-inline");
+	if(element2)
+	{
+	element2.classList.add('selected-platform');
+	////console.log("Adding selected-platform to "+element2.id);
+	}
+	else
+	{
+	////console.log('select' + platform + "-inline not found");
+	}
+	if(limitAPIChoice())
+	updateGraphicsAPI();
+	window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+	var platform = Cookies.get("platform");
+	var graphicsApi = Cookies.get("graphicsapi")
+	////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+	window.limitAPIChoice=limitAPIChoice;
+	var newApi=graphicsApi;
+	if (platform == "windows")
+	{
+	if (graphicsApi == "opengles"||graphicsApi==undefined)
+	newApi="d3d11";
+	}
+	if (platform == "linux")
+	{
+	if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+	newApi="vulkan";
+	}
+	if (platform == "android"||graphicsApi==undefined)
+	{
+	if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+	newApi="vulkan";
+	}
+	////console.log("newApi = "+newApi);
+	if (newApi != graphicsApi)
+	{
+	////console.log("setting graphicsapi = "+newApi);
+	Cookies.set('graphicsapi', newApi,{ expires: 365})
+	graphicsApi=newApi;
+	return true;
+	}
+	return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+	////console.log("makeLinksOpenInNewWindow ");
+	var download_hrefs = document.getElementsByClassName('reference download internal');
+	[].forEach.call(download_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	////console.log("Adding target blank to "+el.id);
+	});
+	link_hrefs = document.getElementsByClassName('reference external');
+	[].forEach.call(link_hrefs, function(el) {
+	el.setAttribute('target', "_blank");
+	////console.log("Adding target blank to "+el.id);
+	});
+	window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function addIconsToToctree()
+	{
+	var toctreeheadings = document.getElementsByClassName('toctree-l1');
+	var i = 0;
+	const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+	const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+	[].forEach.call(toctreeheadings, function(el) {
+	el.id =heading_ids[i];
+	el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+	i++;
+	////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+	});
+	}
+	function copyLinkToThisPage()
+	{
+	var graphicsapi =Cookies.get("graphicsapi")
+	var platform	=Cookies.get("platform")
+	var url			=window.location.href;
+	url				=addUrlParameter(url,"platform",platform);
+	url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+	navigator.clipboard.writeText(url);
+	var dlg = document.getElementById("copied-link-dialog");
+	document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+	dlg.style.visibility = 'visible';
+	var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+	//sharepagetooltip.style.opacity = 0;
+	setTimeout(() =>
+	{
+	const dlg = document.getElementById("copied-link-dialog");
+	dlg.style.visibility = 'hidden';
+	}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+	var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], Cookies.get("graphicsapi"));
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+	updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+	var graphicsApi = Cookies.get("graphicsapi");
+	if (typeof graphicsApi == 'undefined')
+	{
+	graphicsApi = "vulkan"; // Set default here.
+	}
+	Cookies.set('graphicsapi', graphicsApi, { expires: 365});
+	updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+	var graphicsApi = Cookies.get("graphicsapi")
+	//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+	// first, hide all the api's
+	$(".d3d11").hide();
+	$(".d3d12").hide();
+	$(".opengl").hide();
+	$(".opengles").hide();
+	$(".vulkan").hide();
+	// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+	if (graphicsApi == "d3d11") {
+	$(".d3d11").show();
+	}
+	if (graphicsApi == "d3d12") {
+	$(".d3d12").show();
+	}
+	if (graphicsApi == "opengl") {
+	$(".opengl").show();
+	}
+	if (graphicsApi == "opengles") {
+	$(".opengles").show();
+	}
+	if (graphicsApi == "vulkan") {
+	$(".vulkan").show();
+	}
+	var oldelements = document.querySelectorAll(".selected-graphics-api");
+	////console.log("selected-platform on "+oldelements.length+" elements.");
+	while (oldelements.length > 0)
+	{
+	var el=oldelements.item(0);
+	el.classList.remove('selected-graphics-api');
+	////console.log("Removing selected-graphics-api from "+el.id);
+	oldelements = document.querySelectorAll(".selected-graphics-api");
+	}
+	var element = document.getElementById('select' + graphicsApi);
+	if(element)
+	{
+	element.classList.add('selected-graphics-api');
+	}
+	var element2 = document.getElementById('select' + graphicsApi +"-inline");
+	if (element2)
+	{
+	element2.classList.add('selected-graphics-api');
+	}
+	window.updateGraphicsAPI=updateGraphicsAPI;
 	}</script>
 	<script >
-	var platform = Cookies.get("platform")
-	if (platform==undefined) {
-	Cookies.set('platform', 'windows',{ expires: 365})
-	platform='windows';
+	var graphicsApi = Cookies.get("graphicsapi")
+	if (graphicsApi==undefined) {
+	Cookies.set('graphicsapi', 'vulkan',{ expires: 365})
+	graphicsApi='vulkan';
 	}
 	</script>
-	<script defer src="_static/js/updatePlatform.js"></script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
 </head>
 
-<body class="wy-body-for-nav" onload="updatePlatform();"> 
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -67,7 +316,7 @@
           
           
 			<a href="index.html"  class="" >
-				<img src="_static/OpenXR_500px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
 					Tutorial
@@ -85,132 +334,231 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graphics.html">3. Graphics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="actions.html">4. Actions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">5. Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
 
         </div>
       </div>
     </nav>
 
-    <div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">OpenXR Tutorial</a>
-      </nav>
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Changelist</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/changelist.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr>
+	  <li class="wy-breadcrumbs-aside">
+		  <div id='selectplatform'>
+	<button class="select-platform" id='selectwindows' onclick="choosePlatform('windows')">
+		<img class="platform-tab-img" src="_static/css/windows-mono.svg" alt="Windows" />
+	</button>
+	<button class="select-platform" id='selectlinux' onclick="choosePlatform('linux')">
+		<img class="platform-tab-img" src="_static/css/tux-mono.svg" alt="Linux" />
+	</button>
+	<button class="select-platform" id='selectandroid' onclick="choosePlatform('android')">
+		<img class="platform-tab-img" src="_static/css/android-mono.svg" alt="Android" />
+	</button>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<script>
+	function choosePlatform(platformName)
+	{
+		console.log("choose platform " + platformName);
+		Cookies.set('platform', platformName, { expires: 365 })
+		updatePlatformFromTab();
+	};
+</script>
+
+<div id='selectgraphicsapi'>
+	<button class="select-graphics-api selectd3d11" id='selectd3d11' onclick="chooseGraphicsAPI('d3d11')">
+		<img class="api-tab-img" src="_static/css/DirectX11_Black_Aligned.svg" alt="DirectX 11" />
+	</button><button class="select-graphics-api selectd3d12" id='selectd3d12' onclick="chooseGraphicsAPI('d3d12')">
+		<img class="api-tab-img" src="_static/css/DirectX12_Black_Aligned.svg" alt="DirectX 12" />
+	</button><button class="select-graphics-api selectopengl" id='selectopengl' onclick="chooseGraphicsAPI('opengl')">
+		<img class="api-tab-img" src="_static/css/OpenGL_Black_Aligned.svg" alt="OpenGL" />
+	</button><button class="select-graphics-api selectopengles" id='selectopengles' onclick="chooseGraphicsAPI('opengles')">
+		<img class="api-tab-img" src="_static/css/OpenGLES_Black_Aligned.svg" alt="OpenGL ES" />
+	</button><button class="select-graphics-api selectvulkan" id='selectvulkan' onclick="chooseGraphicsAPI('vulkan')">
+		<img class="api-tab-img" src="_static/css/Vulkan_Black_Aligned.svg" alt="Vulkan" />
+	</button>
+</div>
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		Cookies.set('graphicsapi', graphicsApiName, { expires: 365 })
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<dic class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="line-block">
-<div class="line"><strong>Tue 11 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Tue 11 Apr</strong> : Integrating android sections.</div>
-<div class="line"><strong>Tue 11 Apr</strong> : Added container for Android in introduction.rst.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Added image</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Styles and README.md</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Fix broken theme table layout - tables should not overrun width.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Add new diagrams.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Moved the majority of the Android setup docs to setup.rst.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Added text for Chapter 5.1. Minor updates for main.cpp.</div>
-<div class="line"><strong>Fri 07 Apr</strong> : Updated ` to be `` in rst to represent code block. Added XrSystemId section to Chapter 2.1 text.</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Text for Chapter 2.1.</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Adde platforms.html</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Platform selection radio box styling.</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Fixed documentation errors.</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 06 Apr</strong> : Added documentation for Android Studio Project generation and Chapter2.1 WIP. Removed unneeded main/cpp/main.cpp. Tidied up CMakeLists.txt.</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Rid of js modules.</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Radio button selection automated.</div>
-<div class="line"><strong>Wed 05 Apr</strong> : selector</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Wed 05 Apr</strong> : .</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Updated Android build files and XrApplication::engineName.</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Add missing images.</div>
-<div class="line"><strong>Wed 05 Apr</strong> : Android: Set the abiFilters in app/build.gradle and updated target_link_directories in app/src/main/cpp/CMakeLists.txt.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Fix Logo link.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Replace svg logo with png: works better with older browsers.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Added favicon and Khronos copyright notice.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Using sphinxcontrib-jquery.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : html correctness.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : css contrast.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Fix some html tags.</div>
-<div class="line"><strong>Sat 01 Apr</strong> : Modified background image.</div>
-<div class="line"><strong>Fri 31 Mar</strong> : Added introduction images, initial example text for introduction.rst and setup.rst.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Added android version still WIP.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Added initial rst files and images.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Added openxr binaries.</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Thu 30 Mar</strong> : Removed CMAKE_MSVC_RUNTIME_LIBRARY due to MSVC CXX errors. Updated OpenXR SDK.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added initial theme, logo.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Merge branch ‘main’ of github.com:simul/openxr-tutorial-src into main</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added Chapter2.1 code WIP.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added openxr libs and headers</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Fix CMakeLists.txt</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Added initial Sphinx files.</div>
-<div class="line"><strong>Wed 29 Mar</strong> : Initial commit</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Fri 24 Nov** : Improved tab-clicking, cookie and link-share button behaviour.
+| **Thu 23 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Thu 23 Nov** : Added &quot;copy url&quot; button with &quot;share&quot; icon at the top-right of each page. This appends the platform/api parameters if not already present.
+| **Thu 23 Nov** : Updated README.md and added BUILD.md, CONTRIBUTORS.md, Schedule.md and screencapture-openxr-tutorial-index.png. Updated reuse. #85
+| **Thu 23 Nov** : updatePlatformFromTab() and updateGraphicsAPIFromTab() call addUrlParameter().
+| **Wed 22 Nov** : Minor changes to console log in layout.html.
+| **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
+| **Wed 22 Nov** : Moved updatePlatform() default value.
+| **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
+| **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
+| **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
+| **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
+| **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
+| **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
+| **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for &quot;This file does not belong to any project target...&quot; warning.
+| **Wed 22 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
+| **Wed 22 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
+| **Wed 22 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Wed 22 Nov** : Added SVG&#39;s of spaces illustrations.
+| **Wed 22 Nov** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
+| **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
+| **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
+| **Tue 21 Nov** : Merge branch &#39;main&#39; into simplify-log
+| **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
+| **Tue 21 Nov** : Updated title in footer.html
+| **Tue 21 Nov** : Restored Chapter 6.3 text.
+| **Tue 21 Nov** : Minor text correction to Chapter 3.
+| **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
+| **Tue 21 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Tue 21 Nov** : Initial commit to support url parameters for platform.
+| **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled &gt; img.
+| **Tue 21 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd&#39;s. New compass icon.
+| **Tue 21 Nov** : Changed &lt;br&gt; to &lt;p&gt;&lt;/p&gt; in footer.html in reference to #79.
+| **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
+| **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate &#39;here&#39; symbols.
+| **Thu 16 Nov** : Updated footer in relation to #79.
+| **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
+| **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
+| **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
+| **Thu 16 Nov** : Updated external links in chapter 1 text.
+| **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
+| **Wed 15 Nov** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials into main
+| **Wed 15 Nov** : Update text for chapter 6.3.
+| **Tue 14 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
+| **Tue 14 Nov** : Added Chapter1 zip upload.
+| **Tue 14 Nov** : Added execute permission to android and common build shell scripts.
+| **Tue 14 Nov** : Updated build-eoc-arch.sh to have execute permission.
+| **Tue 14 Nov** : Added workflow_dispatch to all yaml files.
+| **Tue 14 Nov** : Added workflow_dispatch to build-eoc-archs.yml
+| **Tue 14 Nov** : Updated GitHub Action yaml files.
+| **Fri 10 Nov** : Fixed broken links and rst header underlining.
+| **Fri 10 Nov** : Chapter 6.1 code - D3D12 updated variable name.
+| **Fri 10 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Fri 10 Nov** : Fixed dxc_shader.cmake download in chapter 6 text.
+| **Tue 07 Nov** : Updated Footer text.
+| **Tue 07 Nov** : Fixed broken links, alignment of centred figures.
+| **Tue 07 Nov** : Removed console logging, fixed link text for full source link.
+| **Tue 07 Nov** : Site passes nu validation for its generated html.
+| **Tue 07 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 07 Nov** : Ch6 text, new images. Footer new text.
+| **Tue 07 Nov** : Updated chapter 6.1 text and added chapter 6.5 text for multithreaded rendering. Added build-common-archs.bat/.sh for Chapter 6. Added OpenXR multithreaded diagrams from talk. Minor ordering and tag corrections for chapter 6 code.
+| **Sat 04 Nov** : Next Steps text updates.
+| **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 03 Nov** : Enabling Ch6 and its icon.
+| **Fri 03 Nov** : Added chapter 6 downloads for d3d12.
+| **Fri 03 Nov** : Updated code block in 6-next-steps.rst. Added some missing tags to chapter code.
+| **Fri 03 Nov** : Added more info on xrWaitFrame in chapter 3.2.3.
+| **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
+| **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
+| **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
+| **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Fri 03 Nov** : New icons, 3d graphics icon and next steps icon. All icons updated.
+| **Fri 03 Nov** : For XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING reference in text 2.3.1, we point forwards to 3.2.2 for details on XrSpaces.
+| **Fri 03 Nov** : Update CreateSwapchains() code and text to use the correct XrViewConfigurationView pre view.
+| **Fri 03 Nov** : Added back XR_TUTORIAL_ENABLE_MULTIVIEW to PC builds. Checks for coherent view in multiview.
+| **Fri 03 Nov** : Updated PollEvents() for better checks on session and XrResults. Text updated too.
+| **Fri 03 Nov** : Improved Vulkan Rendering performance.
+| **Thu 02 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src into main
+| **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
+| **Thu 02 Nov** : Minor code corrections.
+| **Thu 02 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Thu 02 Nov** : Scrolling position bug fixed.
+| **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
+| **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
+| **Thu 02 Nov** : Added build-android-arch.yml
+| **Thu 02 Nov** : Removed local.properties from AndroidBuildFolder.zip
+| **Thu 02 Nov** : Added build-android-arch scripts. Other minor typo fixes.
+| **Thu 02 Nov** : Updated text in Chapter 1 for DebugOutput.
+| **Wed 01 Nov** : Renamed m_localOrStageSpace to m_localSpace.
+| **Wed 01 Nov** : Clarification in Chapter 4 text for setup blocks location.
+| **Wed 01 Nov** : Minor change to Chapter 3 text for shader folder location.
+| **Wed 01 Nov** : Added text to chapter 1 for default XR runtime checks.
+| **Wed 01 Nov** : Added minimum Graphics API versions to chapter 1 text.
+| **Wed 01 Nov** : Added links to core and loader specs in the chapter 1 text.
+| **Wed 01 Nov** : Added text to Chapter 2.1.1 explaining xrEnumerateInstanceExtensionProperties playerName parameter
+| **Wed 01 Nov** : Updated text in Chapter 3 and 5 to better explain depth swapchain format support.
+</pre></div>
 </div>
+<p>Version: v0.0.0</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer>
+					</div>
+				</div>
+				<footer>
 
   <hr>
 
   <div role="contentinfo">
-    <p>&#169; Copyright &#34;OpenXR&#34; and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom.</p>
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
   </div> 
 
 </footer>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+			</div>
+			</div>
+		</div>
+	</div>
+  <script></script> 
 
 </body>
 </html>

@@ -1,70 +1,104 @@
 Changelist 
 ========= 
-| **Tue 11 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Tue 11 Apr** : Integrating android sections.
-| **Tue 11 Apr** : Added container for Android in introduction.rst.
-| **Fri 07 Apr** : Added image
-| **Fri 07 Apr** : Styles and README.md
-| **Fri 07 Apr** : Fix broken theme table layout - tables should not overrun width.
-| **Fri 07 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Fri 07 Apr** : Add new diagrams.
-| **Fri 07 Apr** : Moved the majority of the Android setup docs to setup.rst.
-| **Fri 07 Apr** : Added text for Chapter 5.1. Minor updates for main.cpp.
-| **Fri 07 Apr** : Updated ` to be `` in rst to represent code block. Added XrSystemId section to Chapter 2.1 text.
-| **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Thu 06 Apr** : Text for Chapter 2.1.
-| **Thu 06 Apr** : Adde platforms.html
-| **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Thu 06 Apr** : Platform selection radio box styling.
-| **Thu 06 Apr** : Fixed documentation errors.
-| **Thu 06 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Thu 06 Apr** : Added documentation for Android Studio Project generation and Chapter2.1 WIP. Removed unneeded main/cpp/main.cpp. Tidied up CMakeLists.txt.
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : Rid of js modules.
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : Radio button selection automated.
-| **Wed 05 Apr** : selector
-| **Wed 05 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Wed 05 Apr** : .
-| **Wed 05 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Wed 05 Apr** : Updated Android build files and XrApplication::engineName.
-| **Wed 05 Apr** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Wed 05 Apr** : Add missing images.
-| **Wed 05 Apr** : Android: Set the abiFilters in app/build.gradle and updated target_link_directories in app/src/main/cpp/CMakeLists.txt.
-| **Sat 01 Apr** : Fix Logo link.
-| **Sat 01 Apr** : Replace svg logo with png: works better with older browsers.
-| **Sat 01 Apr** : Added favicon and Khronos copyright notice.
-| **Sat 01 Apr** : Using sphinxcontrib-jquery.
-| **Sat 01 Apr** : html correctness.
-| **Sat 01 Apr** : css contrast.
-| **Sat 01 Apr** : Fix some html tags.
-| **Sat 01 Apr** : Modified background image.
-| **Fri 31 Mar** : Added introduction images, initial example text for introduction.rst and setup.rst.
-| **Thu 30 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Thu 30 Mar** : Added android version still WIP.
-| **Thu 30 Mar** : Added initial rst files and images.
-| **Thu 30 Mar** : Fleshed out Chapter2.1/main.cpp code. Windows only at the moment.
-| **Thu 30 Mar** : Chapter2.1/CMakeLists.txt copies openxr_loader.dll to the output binary directory.
-| **Thu 30 Mar** : Added openxr binaries.
-| **Thu 30 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Thu 30 Mar** : Removed CMAKE_MSVC_RUNTIME_LIBRARY due to MSVC CXX errors. Updated OpenXR SDK.
-| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-| **Wed 29 Mar** : Added initial theme, logo.
-| **Wed 29 Mar** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-| **Wed 29 Mar** : Added Chapter2.1 code WIP.
-| **Wed 29 Mar** : Added openxr libs and headers
-| **Wed 29 Mar** : Fix CMakeLists.txt
-| **Wed 29 Mar** : Added initial Sphinx files.
-| **Wed 29 Mar** : Initial commit
+.. code-block:: json 
+ 
+    | **Fri 24 Nov** : Improved tab-clicking, cookie and link-share button behaviour.
+    | **Thu 23 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 23 Nov** : Added "copy url" button with "share" icon at the top-right of each page. This appends the platform/api parameters if not already present.
+    | **Thu 23 Nov** : Updated README.md and added BUILD.md, CONTRIBUTORS.md, Schedule.md and screencapture-openxr-tutorial-index.png. Updated reuse. #85
+    | **Thu 23 Nov** : updatePlatformFromTab() and updateGraphicsAPIFromTab() call addUrlParameter().
+    | **Wed 22 Nov** : Minor changes to console log in layout.html.
+    | **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
+    | **Wed 22 Nov** : Moved updatePlatform() default value.
+    | **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
+    | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
+    | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
+    | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
+    | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
+    | **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
+    | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for "This file does not belong to any project target..." warning.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Added SVG's of spaces illustrations.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
+    | **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
+    | **Tue 21 Nov** : Merge branch 'main' into simplify-log
+    | **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
+    | **Tue 21 Nov** : Updated title in footer.html
+    | **Tue 21 Nov** : Restored Chapter 6.3 text.
+    | **Tue 21 Nov** : Minor text correction to Chapter 3.
+    | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 21 Nov** : Initial commit to support url parameters for platform.
+    | **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled > img.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd's. New compass icon.
+    | **Tue 21 Nov** : Changed <br> to <p></p> in footer.html in reference to #79.
+    | **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
+    | **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate 'here' symbols.
+    | **Thu 16 Nov** : Updated footer in relation to #79.
+    | **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
+    | **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
+    | **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
+    | **Thu 16 Nov** : Updated external links in chapter 1 text.
+    | **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
+    | **Wed 15 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 15 Nov** : Update text for chapter 6.3.
+    | **Tue 14 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
+    | **Tue 14 Nov** : Added Chapter1 zip upload.
+    | **Tue 14 Nov** : Added execute permission to android and common build shell scripts.
+    | **Tue 14 Nov** : Updated build-eoc-arch.sh to have execute permission.
+    | **Tue 14 Nov** : Added workflow_dispatch to all yaml files.
+    | **Tue 14 Nov** : Added workflow_dispatch to build-eoc-archs.yml
+    | **Tue 14 Nov** : Updated GitHub Action yaml files.
+    | **Fri 10 Nov** : Fixed broken links and rst header underlining.
+    | **Fri 10 Nov** : Chapter 6.1 code - D3D12 updated variable name.
+    | **Fri 10 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Fri 10 Nov** : Fixed dxc_shader.cmake download in chapter 6 text.
+    | **Tue 07 Nov** : Updated Footer text.
+    | **Tue 07 Nov** : Fixed broken links, alignment of centred figures.
+    | **Tue 07 Nov** : Removed console logging, fixed link text for full source link.
+    | **Tue 07 Nov** : Site passes nu validation for its generated html.
+    | **Tue 07 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 07 Nov** : Ch6 text, new images. Footer new text.
+    | **Tue 07 Nov** : Updated chapter 6.1 text and added chapter 6.5 text for multithreaded rendering. Added build-common-archs.bat/.sh for Chapter 6. Added OpenXR multithreaded diagrams from talk. Minor ordering and tag corrections for chapter 6 code.
+    | **Sat 04 Nov** : Next Steps text updates.
+    | **Fri 03 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 03 Nov** : Enabling Ch6 and its icon.
+    | **Fri 03 Nov** : Added chapter 6 downloads for d3d12.
+    | **Fri 03 Nov** : Updated code block in 6-next-steps.rst. Added some missing tags to chapter code.
+    | **Fri 03 Nov** : Added more info on xrWaitFrame in chapter 3.2.3.
+    | **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
+    | **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
+    | **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
+    | **Fri 03 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 03 Nov** : New icons, 3d graphics icon and next steps icon. All icons updated.
+    | **Fri 03 Nov** : For XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING reference in text 2.3.1, we point forwards to 3.2.2 for details on XrSpaces.
+    | **Fri 03 Nov** : Update CreateSwapchains() code and text to use the correct XrViewConfigurationView pre view.
+    | **Fri 03 Nov** : Added back XR_TUTORIAL_ENABLE_MULTIVIEW to PC builds. Checks for coherent view in multiview.
+    | **Fri 03 Nov** : Updated PollEvents() for better checks on session and XrResults. Text updated too.
+    | **Fri 03 Nov** : Improved Vulkan Rendering performance.
+    | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
+    | **Thu 02 Nov** : Minor code corrections.
+    | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 02 Nov** : Scrolling position bug fixed.
+    | **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
+    | **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
+    | **Thu 02 Nov** : Added build-android-arch.yml
+    | **Thu 02 Nov** : Removed local.properties from AndroidBuildFolder.zip
+    | **Thu 02 Nov** : Added build-android-arch scripts. Other minor typo fixes.
+    | **Thu 02 Nov** : Updated text in Chapter 1 for DebugOutput.
+    | **Wed 01 Nov** : Renamed m_localOrStageSpace to m_localSpace.
+    | **Wed 01 Nov** : Clarification in Chapter 4 text for setup blocks location.
+    | **Wed 01 Nov** : Minor change to Chapter 3 text for shader folder location.
+    | **Wed 01 Nov** : Added text to chapter 1 for default XR runtime checks.
+    | **Wed 01 Nov** : Added minimum Graphics API versions to chapter 1 text.
+    | **Wed 01 Nov** : Added links to core and loader specs in the chapter 1 text.
+    | **Wed 01 Nov** : Added text to Chapter 2.1.1 explaining xrEnumerateInstanceExtensionProperties playerName parameter
+    | **Wed 01 Nov** : Updated text in Chapter 3 and 5 to better explain depth swapchain format support.
