@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 29 Nov** : If cookies disabled, show "all" content.
     | **Tue 28 Nov** : Updated .htaccess
     | **Tue 28 Nov** : Removed "sphinx_sitemap" from extensions, don't do this by default.
     | **Tue 28 Nov** : Updated sitemap.xml
@@ -101,4 +102,3 @@ Changelist
     | **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
     | **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
     | **Thu 02 Nov** : Added build-android-arch.yml
-    | **Thu 02 Nov** : Removed local.properties from AndroidBuildFolder.zip
