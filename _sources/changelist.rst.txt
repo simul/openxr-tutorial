@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 30 Nov** : Added COMMAND_EXPAND_LISTS to CMake shader compilation.
+    | **Thu 30 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Thu 30 Nov** : Fixed Vulkan Fence resetting issue.
+    | **Wed 29 Nov** : Fixed hamburger menu again. Possibly deleted by a bad merge.
     | **Wed 29 Nov** : If cookies disabled, show "all" content.
     | **Tue 28 Nov** : Updated .htaccess
     | **Tue 28 Nov** : Removed "sphinx_sitemap" from extensions, don't do this by default.
@@ -98,7 +102,3 @@ Changelist
     | **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
     | **Thu 02 Nov** : Minor code corrections.
     | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Thu 02 Nov** : Scrolling position bug fixed.
-    | **Thu 02 Nov** : Updated AndroidBuildFolder.zip link in Chapter 1 text. CMake build the archive at config time.
-    | **Thu 02 Nov** : Removed thirdparty/AndroidBuildFolder.zip
-    | **Thu 02 Nov** : Added build-android-arch.yml

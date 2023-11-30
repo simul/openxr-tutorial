@@ -1309,8 +1309,7 @@ See this example from ARM’s OpenGL ES SDK for Android <a class="reference exte
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">multiview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">    </span><span class="n">VkRenderPassMultiviewCreateInfoKHR</span><span class="w"> </span><span class="n">multiviewCreateInfo</span><span class="p">;</span>
 <span class="cp">#if XR_TUTORIAL_ENABLE_MULTIVIEW</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipelineCI</span><span class="p">.</span><span class="n">viewMask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO</span><span class="p">;</span>
 <span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
 <span class="w">        </span><span class="n">multiviewCreateInfo</span><span class="p">.</span><span class="n">subpassCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1934,7 +1933,7 @@ See this example from ARM’s OpenGL ES SDK for Android <a class="reference exte
 <span class="w">    </span><span class="n">VkCommandPoolCreateInfo</span><span class="w"> </span><span class="n">cmdPoolCI</span><span class="p">;</span>
 <span class="w">    </span><span class="n">cmdPoolCI</span><span class="p">.</span><span class="n">sType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO</span><span class="p">;</span>
 <span class="w">    </span><span class="n">cmdPoolCI</span><span class="p">.</span><span class="n">pNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">    </span><span class="n">cmdPoolCI</span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cmdPoolCI</span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT</span><span class="p">;</span>
 <span class="w">    </span><span class="n">cmdPoolCI</span><span class="p">.</span><span class="n">queueFamilyIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueFamilyIndex</span><span class="p">;</span>
 <span class="w">    </span><span class="n">VULKAN_CHECK</span><span class="p">(</span><span class="n">vkCreateCommandPool</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cmdPoolCI</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cmdPool</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create CommandPool.&quot;</span><span class="p">);</span>
 
@@ -2198,7 +2197,11 @@ In the table below are the layer names and their associated libraries and .json 
 			</div>
 		</div>
 	</div>
-  <script></script> 
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
 </body>
 </html>
