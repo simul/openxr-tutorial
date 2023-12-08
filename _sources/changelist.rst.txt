@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 05 Dec** : Removed -x parameter from calls to glslangValidator, to fix Linux shader loading. Removed _glsl_spv_output_type_arg from glsl shader compilation.
     | **Sat 02 Dec** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Sat 02 Dec** : Default build documentation to OFF in CMake. README.md describes how to build the tutorial in Sphinx.
     | **Thu 30 Nov** : Added COMMAND_EXPAND_LISTS to CMake shader compilation.
@@ -101,4 +102,3 @@ Changelist
     | **Fri 03 Nov** : Updated PollEvents() for better checks on session and XrResults. Text updated too.
     | **Fri 03 Nov** : Improved Vulkan Rendering performance.
     | **Thu 02 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Thu 02 Nov** : Unified member name between chapter 4 and 5. Other minor corrections.
