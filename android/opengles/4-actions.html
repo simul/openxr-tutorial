@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="OpenXR Tutorial: Actions, Controller Profiles and Bindings" name="description" />
+<meta content="khronos, openxr, tutorial, actions, profiles, bindings, xr" name="keywords" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>4 Interactions &mdash; OpenXR Tutorial  documentation</title>
+	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
+	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
+	<link rel="shortcut icon" href="_static/favicon.ico">
+	<link rel="canonical" href="https://openxr-tutorial.simul.co/4-actions.html" >
+	<!--[if lt IE 9]>
+	  <script src="_static/js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
+	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="_static/js/theme.js"></script>
+	<link rel="index" title="Index" href="genindex.html" >
+	<link rel="search" title="Search" href="search.html" >
+	<link rel="next" title="5 Extensions" href="5-extensions.html" >
+	<link rel="prev" title="3 Graphics" href="3-graphics.html" > 
+	<script  src="_static/js/js.cookie.min.js"></script>
+	<script >
+	var currentPlatform="all";
+	var currentAPI="all";
+	function setPlatform(pl)
+	{
+		currentPlatform=pl;
+		if(navigator.cookieEnabled)
+			Cookies.set('platform', pl, { expires: 365,sameSite: "strict"});
+	}
+	function setGraphicsAPI(a)
+	{
+		currentAPI=a;
+		if(navigator.cookieEnabled)
+			Cookies.set('graphicsapi', a, { expires: 365,sameSite: "strict"});
+	}
+	function getPlatform()
+	{
+		if(currentPlatform=="all"&&navigator.cookieEnabled)
+		{
+			currentPlatform=Cookies.get("platform");
+			if (typeof currentPlatform == 'undefined')
+			{
+				currentPlatform = "windows"; // Default if cookies are enabled.
+			//	console.log("getPlatform() defaulted to: "+currentPlatform);
+			}
+			//else
+			//	console.log("getPlatform() from cookie: "+currentPlatform);
+		}
+		//console.log("getPlatform() returned: "+currentPlatform);
+		return currentPlatform;
+	}
+	function getGraphicsAPI()
+	{
+		if(currentAPI=="all"&&navigator.cookieEnabled)
+		{
+			currentAPI=Cookies.get("graphicsapi");
+			if (typeof currentAPI == 'undefined')
+			{
+				currentAPI = "vulkan"; // Default if cookies are enabled.
+				//console.log("getGraphicsAPI() defaulted to: "+currentAPI);
+			}
+			//else
+			//	console.log("getGraphicsAPI() from cookie: "+currentAPI);
+		}
+		//console.log("getGraphicsAPI() returned: "+currentAPI);
+		return currentAPI;
+	}
+
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+		//console.log("add url parameter to : "+addr)
+		url=new URL(addr);
+		url.searchParams.set(name,value);
+		return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], getPlatform());
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+		var platform = getPlatform();
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatform()
+	{
+		var platform = getPlatform();
+		console.log('updatePlatform() = ' + platform);
+		$(".linux").hide();
+		$(".android").hide();
+		$(".windows").hide();
+		if (platform == "windows"||platform == "all")
+		{
+		$(".windows").show();
+			$(".selectd3d11").removeAttr("disabled");
+			$(".selectd3d12").removeAttr("disabled");
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "linux"||platform == "all")
+		{
+			$(".linux").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "android"||platform == "all")
+		{
+			//console.log("platform  " + platform + ".");
+			$(".android").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").removeAttr("disabled");
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").attr("disabled", true);
+		}
+		var oldelements = document.querySelectorAll(".selected-platform");
+		while (oldelements.length > 0)
+		{
+			var el=oldelements.item(0);
+			el.classList.remove('selected-platform');
+			////console.log("Removing selected-platform from "+el.id);
+			oldelements = document.querySelectorAll(".selected-platform");
+		}
+		var element = document.getElementById('select' + platform);
+		if(element)
+		{
+			element.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element.id);
+		}
+		var element2 = document.getElementById('select' + platform + "-inline");
+		if(element2)
+		{
+			element2.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element2.id);
+		}
+		if(limitAPIChoice())
+			updateGraphicsAPI();
+		window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+		var platform = getPlatform();
+		var graphicsApi = getGraphicsAPI();
+		////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+		window.limitAPIChoice=limitAPIChoice;
+		var newApi=graphicsApi;
+		if (platform == "windows")
+		{
+			if (graphicsApi == "opengles"||graphicsApi==undefined)
+			newApi="d3d11";
+		}
+		if (platform == "linux")
+		{
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+			newApi="vulkan";
+		}
+		if (platform == "android"||graphicsApi==undefined)
+		{
+			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+			newApi="vulkan";
+		}
+		////console.log("newApi = "+newApi);
+		if (newApi != graphicsApi)
+		{
+			////console.log("setting graphicsapi = "+newApi);
+			setGraphicsAPI(newApi);
+			graphicsApi=newApi;
+			return true;
+		}
+		return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+		////console.log("makeLinksOpenInNewWindow ");
+		var download_hrefs = document.getElementsByClassName('reference download internal');
+		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		link_hrefs = document.getElementsByClassName('reference external');
+		[].forEach.call(link_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function initDropdownLinks()
+	{
+		//console.log("initDropdownLinks ");
+		var platform_api_links = document.getElementsByClassName('dropdown-platform-api');
+		//let pattern = new RegExp("\/[windows|linux|android]\/[d3d11|d3d12|vulkan|opengl|opengles]\/","gm");
+		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengl|opengles)","gm");
+		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
+		[].forEach.call(platform_api_links, function(el) {
+			href=window.location.href;
+			//console.log("href "+href);
+			platform_api=el.id.replace('-','/');
+			//console.log("platform_api "+platform_api);
+			if(href.match(pattern)==null)
+			{
+				href=href.replace(root_pattern,"$1/"+platform_api+"/$2");
+			}
+			else
+			{
+				href=href.replace(pattern, platform_api);
+			}
+			//console.log("-> href "+href);
+			el.href=href;
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.initDropdownLinks=initDropdownLinks;
+	}
+	function addIconsToToctree()
+	{
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+		[].forEach.call(toctreeheadings, function(el) {
+		el.id =heading_ids[i];
+		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+		i++;
+		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
+	function copyLinkToThisPage()
+	{
+		var graphicsapi =getGraphicsAPI();
+		var platform	=getPlatform();
+		var url			=window.location.href;
+		url				=addUrlParameter(url,"platform",platform);
+		url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+		navigator.clipboard.writeText(url);
+		var dlg = document.getElementById("copied-link-dialog");
+		document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+		dlg.style.visibility = 'visible';
+		var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+		//sharepagetooltip.style.opacity = 0;
+		setTimeout(() =>
+		{
+		const dlg = document.getElementById("copied-link-dialog");
+		dlg.style.visibility = 'hidden';
+		}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], getGraphicsAPI());
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+		var graphicsApi = getGraphicsAPI();
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+		var graphicsApi = getGraphicsAPI();
+		//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+		if (graphicsApi == "d3d11"||graphicsApi == "all") {
+		$(".d3d11").show();
+		}
+		if (graphicsApi == "d3d12"||graphicsApi == "all") {
+		$(".d3d12").show();
+		}
+		if (graphicsApi == "opengl"||graphicsApi == "all") {
+		$(".opengl").show();
+		}
+		if (graphicsApi == "opengles"||graphicsApi == "all") {
+		$(".opengles").show();
+		}
+		if (graphicsApi == "vulkan"||graphicsApi == "all") {
+		$(".vulkan").show();
+		}
+			var oldelements = document.querySelectorAll(".selected-graphics-api");
+			////console.log("selected-platform on "+oldelements.length+" elements.");
+			while (oldelements.length > 0)
+			{
+				var el=oldelements.item(0);
+				el.classList.remove('selected-graphics-api');
+				////console.log("Removing selected-graphics-api from "+el.id);
+				oldelements = document.querySelectorAll(".selected-graphics-api");
+			}
+			var element = document.getElementById('select' + graphicsApi);
+			if(element)
+			{
+				element.classList.add('selected-graphics-api');
+			}
+			var element2 = document.getElementById('select' + graphicsApi +"-inline");
+			if (element2)
+			{
+				element2.classList.add('selected-graphics-api');
+			}
+			window.updateGraphicsAPI=updateGraphicsAPI;
+		}</script>
+		<script >
+		var graphicsApi = getGraphicsAPI();
+		if (graphicsApi==undefined) {
+			setGraphicsAPI(a);
+			graphicsApi='vulkan';
+		}
+	</script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
+</head>
+
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+			<a href="index.html"  class="" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				
+				<span class="sidebartitle">
+					Tutorial
+				</span>
+				
+			</a>
+<div role="search">
+    <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+        <label class="search-label" for="q">Search the tutorial</label>
+        <input type="text" name="q" id="q" placeholder="Search..." aria-label="Search docs">
+        <input type="hidden" name="check_keywords" value="yes">
+        <input type="hidden" name="area" value="default">
+    </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4 Interactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-openxr-interaction-system">4.1 The OpenXR Interaction System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interaction-profiles-and-bindings">4.3 Interaction Profiles and Bindings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bindings-and-profiles">4.3.1 Bindings and Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#binding-interactions">4.3.2 Binding Interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#theory-and-best-practices-for-interaction-profiles">Theory and Best Practices for Interaction Profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-actions-in-the-application">4.4 Using Actions in the Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rendering-the-controller-position">4.5 Rendering the Controller Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-connected-controllers">4.6 Checking for Connected Controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">4.7 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
+
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">4 Interactions</li>
+	  <li class="wy-breadcrumbs-aside">
+		  
+
+<div class="platform-api-dropdown">
+  <span>Platform/API</span>
+  <div class="platform-api-dropdown-content">
+    <ul>
+      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d11" href="#">Windows D3D11</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d12" href="#">Windows D3D12</a></li>
+      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+<script>
+	function choosePlatform(platformName)
+	{
+		setPlatform(platformName);
+		updatePlatformFromTab();
+	};
+</script>
+
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		setGraphicsAPI(graphicsApiName);
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
+  <section id="interactions">
+<h1>4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
+<p>The goal of this chapter is to build an application that uses OpenXR actions to create interactivity. We will render numerous colored cubes for the user play with and build stuctures. First, we will update our build files and folders.</p>
+<p>Add a <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder in the <em>workspace</em> directory and into that folder copy the whole contents of <code class="docutils literal notranslate"><span class="pre">Chapter3</span></code> to it. In <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>, update this line:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter4</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For Android, you will also need to change all references to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter3</span></code> to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter4</span></code> in app/build.gradle, settings.gradle and app/src/main/AndroidManifest.xml. Refer to <a class="reference internal" href="1-introduction.html#cmake-and-project-files"><span class="std std-ref">Chapter 1.4.1</span></a> for a refresher on the Android build files.</p>
+<p>Load your new project in Android Studio.</p>
+<p>Now build your project, you can run it to check that it behaves the same as your Chapter 3 code so far.</p>
+<section id="the-openxr-interaction-system">
+<h2>4.1 The OpenXR Interaction System<a class="headerlink" href="#the-openxr-interaction-system" title="Permalink to this heading">¶</a></h2>
+<p>OpenXR interactions are defined in a two-way system with inputs such as motion-based poses, button presses, analogue controls, and outputs such as haptic controller vibrations. Collectively in OpenXR terminology, these are called Actions. An <em>Action</em> is a semantic object, not necessarily associated with a specific hardware control: for example, you would define a “Select” action, not an action for “press the A button”. You would define an action “walk”, not “left analogue stick position”. The specific device input or output that an Action is associated with, is in the realm of <em>Bindings</em>, which are defined by <em>Interaction Profiles</em> (see below).</p>
+<p>Actions are contextual. They are grouped within <em>Action Sets</em>, which are again semantic and app-specific. For example, you might have an Action Set for “gameplay” and a different Action Set for “pause menu”. In more complex applications, you would create Action Sets for different situations - “driving car” and “walking” could be different Action Sets.</p>
+<p>In this chapter, you’ll learn how to create an Action Set containing multiple Actions of different types. You’ll create a binding for your Actions with a simple controller profile, and optionally, with a profile specific to the device or devices you are testing.</p>
+</section>
+<section id="creating-actions-and-action-sets">
+<h2>4.2 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Permalink to this heading">¶</a></h2>
+<p>An OpenXR application has interactions with the user which can be user input to the application or haptic output to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: Spaces, Actions, and Bindings.</p>
+<p>At the end of your <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, add this code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrActionSet</span><span class="w"> </span><span class="n">m_actionSet</span><span class="p">;</span>
+<span class="c1">// An action for grabbing blocks, and an action to change the color of a block.</span>
+<span class="n">XrAction</span><span class="w"> </span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">m_spawnCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">m_changeColorAction</span><span class="p">;</span>
+<span class="c1">// The realtime states of these actions.</span>
+<span class="n">XrActionStateFloat</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="n">XR_TYPE_ACTION_STATE_FLOAT</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_FLOAT</span><span class="p">}};</span>
+<span class="n">XrActionStateBoolean</span><span class="w"> </span><span class="n">m_changeColorState</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="n">XR_TYPE_ACTION_STATE_BOOLEAN</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_BOOLEAN</span><span class="p">}};</span>
+<span class="n">XrActionStateBoolean</span><span class="w"> </span><span class="n">m_spawnCubeState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_BOOLEAN</span><span class="p">};</span>
+<span class="c1">// The haptic output action for grabbing cubes.</span>
+<span class="n">XrAction</span><span class="w"> </span><span class="n">m_buzzAction</span><span class="p">;</span>
+<span class="c1">// The current haptic output value for each controller.</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">m_buzz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="c1">// The action for getting the hand or controller position and orientation.</span>
+<span class="n">XrAction</span><span class="w"> </span><span class="n">m_palmPoseAction</span><span class="p">;</span>
+<span class="c1">// The XrPaths for left and right hand hands or controllers.</span>
+<span class="n">XrPath</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="c1">// The spaces that represents the two hand poses.</span>
+<span class="n">XrSpace</span><span class="w"> </span><span class="n">m_handPoseSpace</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">XrActionStatePose</span><span class="w"> </span><span class="n">m_handPoseState</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="n">XR_TYPE_ACTION_STATE_POSE</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_POSE</span><span class="p">}};</span>
+<span class="c1">// The current poses obtained from the XrSpaces.</span>
+<span class="n">XrPosef</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">}},</span>
+<span class="w">    </span><span class="p">{{</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">m_viewHeightM</span><span class="p">}}};</span>
+</pre></div>
+</div>
+<p>Here, we have defined an Action Set: a group of related actions that are created together. The individual actions, such as <code class="docutils literal notranslate"><span class="pre">m_grabAction</span></code> and <code class="docutils literal notranslate"><span class="pre">m_palmPoseAction</span></code>, will belong to this set. For a pose action, we need an XrSpace, so <code class="docutils literal notranslate"><span class="pre">m_handPoseSpace[]</span></code> has been declared. And we’ll keep a copy of the pose itself for each hand, which will change per-frame. We initialize the hand poses to a predefined pose.</p>
+<p>Action Sets are created before the session is initialized, so in Run(), after the call to GetSystemID(), add this line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CreateActionSet</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>After the definition of GetSystemID(), we’ll add these helper functions that convert a string into an XrPath, and vice-versa. Add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrPath</span><span class="w"> </span><span class="nf">CreateXrPath</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path_string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrPath</span><span class="w"> </span><span class="n">xrPath</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrStringToPath</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">path_string</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrPath</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create XrPath from string.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">xrPath</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">FromXrPath</span><span class="p">(</span><span class="n">XrPath</span><span class="w"> </span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">strl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">text</span><span class="p">[</span><span class="n">XR_MAX_PATH_LENGTH</span><span class="p">];</span>
+<span class="w">    </span><span class="n">XrResult</span><span class="w"> </span><span class="n">res</span><span class="p">;</span>
+<span class="w">    </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrPathToString</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_PATH_LENGTH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">strl</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">str</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to retrieve path.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">str</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we will define the <code class="docutils literal notranslate"><span class="pre">CreateActionSet()</span></code> function. Add the first part of this function after <code class="docutils literal notranslate"><span class="pre">FromXrPath()</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateActionSet</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrActionSetCreateInfo</span><span class="w"> </span><span class="n">actionSetCI</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_SET_CREATE_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// The internal name the runtime uses for this Action Set.</span>
+<span class="w">    </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionSetCI</span><span class="p">.</span><span class="n">actionSetName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;openxr-tutorial-actionset&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_ACTION_SET_NAME_SIZE</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Localized names are required so there is a human-readable action name to show the user if they are rebinding Actions in an options screen.</span>
+<span class="w">    </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionSetCI</span><span class="p">.</span><span class="n">localizedActionSetName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial ActionSet&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateActionSet</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionSetCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_actionSet</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create ActionSet.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Set a priority: this comes into play when we have multiple Action Sets, and determines which Action takes priority in binding to a specific input.</span>
+<span class="w">    </span><span class="n">actionSetCI</span><span class="p">.</span><span class="n">priority</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>An Action Set is a group of actions that apply in a specific context. You might have an Action Set for when your XR game is showing a pause menu or control panel and a different Action Set for in-game. There might be different Action Sets for different situations in an XR application: rowing in a boat, climbing a cliff, and so on.
+So you can create multiple Action Sets, but we only need one for this example. The Action Set is created with a name and a localized string for its description. Now add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">CreateAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="n">XrAction</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrAction</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">XrActionType</span><span class="w"> </span><span class="n">xrActionType</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">subaction_paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrActionCreateInfo</span><span class="w"> </span><span class="n">actionCI</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_CREATE_INFO</span><span class="p">};</span>
+<span class="w">        </span><span class="c1">// The type of action: float input, pose, haptic output etc.</span>
+<span class="w">        </span><span class="n">actionCI</span><span class="p">.</span><span class="n">actionType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrActionType</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// Subaction paths, e.g. left and right hand. To distinguish the same action performed on different devices.</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrPath</span><span class="o">&gt;</span><span class="w"> </span><span class="n">subaction_xrpaths</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">subaction_paths</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">subaction_xrpaths</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">CreateXrPath</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">actionCI</span><span class="p">.</span><span class="n">countSubactionPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">subaction_xrpaths</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">        </span><span class="n">actionCI</span><span class="p">.</span><span class="n">subactionPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subaction_xrpaths</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// The internal name the runtime uses for this Action.</span>
+<span class="w">        </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionCI</span><span class="p">.</span><span class="n">actionName</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_ACTION_NAME_SIZE</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Localized names are required so there is a human-readable action name to show the user if they are rebinding the Action in an options screen.</span>
+<span class="w">        </span><span class="n">strncpy</span><span class="p">(</span><span class="n">actionCI</span><span class="p">.</span><span class="n">localizedActionName</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_LOCALIZED_ACTION_NAME_SIZE</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateAction</span><span class="p">(</span><span class="n">m_actionSet</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrAction</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Action.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Here we’ve created each action with a little local lambda function <code class="docutils literal notranslate"><span class="pre">CreateAction()</span></code>. Each action has a name, a localized description, and the type of action it is. It also, optionally, has a list of sub-action paths. A sub-action is, essentially the same action on a different control device: left- or right-hand controllers for example.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// An Action for grabbing cubes.</span>
+<span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grab-cube&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_FLOAT_INPUT</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">});</span>
+<span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_spawnCubeAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spawn-cube&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_BOOLEAN_INPUT</span><span class="p">);</span>
+<span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_changeColorAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;change-color&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_BOOLEAN_INPUT</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">});</span>
+<span class="w">    </span><span class="c1">// An Action for the position of the palm of the user&#39;s hand - appropriate for the location of a grabbing Actions.</span>
+<span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;palm-pose&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_POSE_INPUT</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">});</span>
+<span class="w">    </span><span class="c1">// An Action for a vibration output on one or other hand.</span>
+<span class="w">    </span><span class="n">CreateAction</span><span class="p">(</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;buzz&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_ACTION_TYPE_VIBRATION_OUTPUT</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">});</span>
+<span class="w">    </span><span class="c1">// For later convenience we create the XrPaths for the subaction path names.</span>
+<span class="w">    </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each Action and Action Set has both a name, for internal use, and a localized description to show to the end-user. This is because the user may want to re-map actions from the default controls, so there must be a human-readable name to show them.</p>
+</section>
+<section id="interaction-profiles-and-bindings">
+<h2>4.3 Interaction Profiles and Bindings<a class="headerlink" href="#interaction-profiles-and-bindings" title="Permalink to this heading">¶</a></h2>
+<section id="bindings-and-profiles">
+<h3>4.3.1 Bindings and Profiles<a class="headerlink" href="#bindings-and-profiles" title="Permalink to this heading">¶</a></h3>
+<p>As OpenXR is an API for many different devices, it needs to provide a way for you as a developer to refer to the various buttons, joysticks, inputs and outputs that a device may have, without needing to know in advance which device or devices the user will have.</p>
+<p>To do this, OpenXR defines the concept of <em>interaction profiles</em>. An interaction profile is a collection of interactions supported by a given device and runtime, and defined using textual paths.</p>
+<p>Each interaction is defined by a path with three components: the Profile Path, the User Path, and the Component Path. The Profile Path has the form <code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/&lt;vendor_name&gt;/&lt;type_name&gt;&quot;</span></code>. The User Path is a string identifying the controller device, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;/user/hand/left&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;/user/gamepad&quot;</span></code>. The Component Path is a string identifying the specific input or output, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;/input/select/click&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;/output/haptic_left_trigger&quot;</span></code>.</p>
+<p>For example, the Khronos Simple Controller Profile has the path:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/khr/simple_controller&quot;</span></code></p>
+<p>It has user paths</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;/user/hand/left&quot;</span></code></p>
+<p>and</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;/user/hand/right&quot;</span></code>.</p>
+<p>The component paths are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;/input/select/click&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;/input/menu/click&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;/input/grip/pose&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;/input/aim/pose&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;/output/haptic&quot;</span></code></p></li>
+</ul>
+<p>Putting the three parts together, we might identify the select button on the left hand controller as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">profile</span> <span class="pre">+</span> <span class="pre">user</span> <span class="pre">+</span> <span class="pre">component</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/khr/simple_controller&quot;</span> <span class="pre">+</span> <span class="pre">&quot;/user/hand/left&quot;</span> <span class="pre">+</span> <span class="pre">&quot;/input/select/click&quot;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/khr/simple_controller/user/hand/left/input/select/click&quot;</span></code></p>
+<p>We will now show how to use these profiles in practice to suggest bindings between Actions and inputs or outputs.</p>
+</section>
+<section id="binding-interactions">
+<h3>4.3.2 Binding Interactions<a class="headerlink" href="#binding-interactions" title="Permalink to this heading">¶</a></h3>
+<p>We will set up bindings for the actions. A binding is a <em>suggested</em> correspondence between an action (which is app-defined), and the input/output on the user’s devices.</p>
+<p>An XrPath is a 64-bit number that uniquely identifies any given forward-slash-delimited path string, allowing us to refer to paths without putting cumbersome string-handling in our runtime code. After the call to <code class="docutils literal notranslate"><span class="pre">CreateActionSet()</span></code> in <code class="docutils literal notranslate"><span class="pre">Run()</span></code>, add the line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SuggestBindings</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>After the definition of CreateActionSet(), add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">SuggestBindings</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">SuggestBindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">profile_path</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrActionSuggestedBinding</span><span class="o">&gt;</span><span class="w"> </span><span class="n">bindings</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// The application can call xrSuggestInteractionProfileBindings once per interaction profile that it supports.</span>
+<span class="w">        </span><span class="n">XrInteractionProfileSuggestedBinding</span><span class="w"> </span><span class="n">interactionProfileSuggestedBinding</span><span class="p">{</span><span class="n">XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING</span><span class="p">};</span>
+<span class="w">        </span><span class="n">interactionProfileSuggestedBinding</span><span class="p">.</span><span class="n">interactionProfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="n">profile_path</span><span class="p">);</span>
+<span class="w">        </span><span class="n">interactionProfileSuggestedBinding</span><span class="p">.</span><span class="n">suggestedBindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bindings</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">        </span><span class="n">interactionProfileSuggestedBinding</span><span class="p">.</span><span class="n">countSuggestedBindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">bindings</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">xrSuggestInteractionProfileBindings</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">interactionProfileSuggestedBinding</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XrResult</span><span class="o">::</span><span class="n">XR_SUCCESS</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XR_TUT_LOG</span><span class="p">(</span><span class="s">&quot;Failed to suggest bindings with &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">profile_path</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Using the lambda function <code class="docutils literal notranslate"><span class="pre">SuggestBindings</span></code>, we call into OpenXR with a given list of suggestions. Let’s try this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">any_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Each Action here has two paths, one for each SubAction path.</span>
+<span class="w">    </span><span class="n">any_ok</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SuggestBindings</span><span class="p">(</span><span class="s">&quot;/interaction_profiles/khr/simple_controller&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="n">m_changeColorAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/select/click&quot;</span><span class="p">)},</span>
+<span class="w">                                                                              </span><span class="p">{</span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/select/click&quot;</span><span class="p">)},</span>
+<span class="w">                                                                              </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                              </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                              </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/output/haptic&quot;</span><span class="p">)},</span>
+<span class="w">                                                                              </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/output/haptic&quot;</span><span class="p">)}});</span>
+</pre></div>
+</div>
+<p>Here, we create a proposed match-up between our app-specific actions and XrPaths which refer to specific controls as interpreted by the Runtime. We call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrSuggestInteractionProfileBindings.html">xrSuggestInteractionProfileBindings</a>. If the user’s device supports the given profile ( and <code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/khr/simple_controller&quot;</span></code> should usually be supported in any OpenXR runtime), it will recognize these paths and can map them to its own controls. If the user’s device does not support a profile, the bindings will be ignored.
+The suggested bindings are not guaranteed to be used: that’s up to the runtime. Some runtimes allow users to override the default bindings, and OpenXR expects this.</p>
+<p>For OpenXR hand controllers, we distinguish between a “grip pose”, representing the orientation of the handle of the device, and an “aim pose” - which is oriented where the device “points”. The relative orientations of these will vary between different controller configurations, so again, it’s important to test with the devices you have. Let the runtime worry about adaptating to different devices that you haven’t tested.</p>
+<figure class="align-left" id="id1">
+<img alt="OpenXR Standard Controller Poses" src="_images/standard-poses.png" />
+<figcaption>
+<p><span class="caption-text">Standard Grip and Aim poses for OpenXR Controllers.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The next part depends on what hardware you will be testing on. It’s optional: the Khronos Simple Controller should work on any OpenXR runtime/device combination. But it has limitations - not least that there are no floating-point controls. If you have an Oculus Quest, whether building natively or running on PC VR via a streaming system, the native profile is called <code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/oculus/touch_controller&quot;</span></code>, and you can insert the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Each Action here has two paths, one for each SubAction path.</span>
+<span class="w">    </span><span class="n">any_ok</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SuggestBindings</span><span class="p">(</span><span class="s">&quot;/interaction_profiles/oculus/touch_controller&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/squeeze/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_grabCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/squeeze/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_spawnCubeAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/a/click&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_changeColorAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/trigger/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_changeColorAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/trigger/value&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/input/grip/pose&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/left/output/haptic&quot;</span><span class="p">)},</span>
+<span class="w">                                                                                </span><span class="p">{</span><span class="n">m_buzzAction</span><span class="p">,</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="s">&quot;/user/hand/right/output/haptic&quot;</span><span class="p">)}});</span>
+</pre></div>
+</div>
+<p>The main apparent difference is that the grab action is now analogue (<code class="docutils literal notranslate"><span class="pre">&quot;squeeze/value&quot;</span></code> rather than <code class="docutils literal notranslate"><span class="pre">&quot;select/click&quot;</span></code>). But you should never assume that the same path means exactly the same behaviour on different profiles. So again, only implement profiles that you can test with their associated hardware, and test every profile that you implement.</p>
+<p>We now close out the function, and add <code class="docutils literal notranslate"><span class="pre">RecordCurrentBindings()</span></code> to report how the runtime has <em>actually</em> bound your actions to your devices.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">any_ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DEBUG_BREAK</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">RecordCurrentBindings</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// now we are ready to:</span>
+<span class="w">        </span><span class="n">XrInteractionProfileState</span><span class="w"> </span><span class="n">interactionProfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_INTERACTION_PROFILE_STATE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">        </span><span class="c1">// for each action, what is the binding?</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetCurrentInteractionProfile</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">interactionProfile</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get profile.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">interactionProfile</span><span class="p">.</span><span class="n">interactionProfile</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">XR_TUT_LOG</span><span class="p">(</span><span class="s">&quot;user/hand/left ActiveProfile &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">FromXrPath</span><span class="p">(</span><span class="n">interactionProfile</span><span class="p">.</span><span class="n">interactionProfile</span><span class="p">).</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetCurrentInteractionProfile</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">interactionProfile</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get profile.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">interactionProfile</span><span class="p">.</span><span class="n">interactionProfile</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">XR_TUT_LOG</span><span class="p">(</span><span class="s">&quot;user/hand/right ActiveProfile &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">FromXrPath</span><span class="p">(</span><span class="n">interactionProfile</span><span class="p">.</span><span class="n">interactionProfile</span><span class="p">).</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In PollEvents(), in the switch case for <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span></code>, before the <code class="docutils literal notranslate"><span class="pre">break;</span></code> directive, insert this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">RecordCurrentBindings</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Now, on startup and if the interaction profile changes for any reason, the active binding will be reported.</p>
+</section>
+<section id="theory-and-best-practices-for-interaction-profiles">
+<h3>Theory and Best Practices for Interaction Profiles<a class="headerlink" href="#theory-and-best-practices-for-interaction-profiles" title="Permalink to this heading">¶</a></h3>
+<p>To get the best results from your application on the end-user’s device, it is important to understand the key principles behind the Interaction Profile system. These are laid out in the OpenXR Guide (<a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md">https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md</a>) but in brief:</p>
+<ul class="simple">
+<li><p>An application written for OpenXR should work without modification on device/runtime combination, even those created after the application has been written.</p></li>
+<li><p>An OpenXR device and runtime should work with any OpenXR application, even those not tested with that device.</p></li>
+</ul>
+<p>The way this is achieved is as follows: Usually, each device will have its own “native” profile, and should also support <code class="docutils literal notranslate"><span class="pre">&quot;khr/simple_controller&quot;</span></code>. As a developer:</p>
+<ul class="simple">
+<li><p>You should <em>test the devices and runtimes you have</em>.</p></li>
+<li><p>You should <em>specify profile bindings for each device you have tested</em>.</p></li>
+<li><p>You should <em>not</em> implement profiles you have not tested.</p></li>
+</ul>
+<p>It is the <em>runtime’s responsibility</em> to support non-native profiles where possible, either automatically, or with the aid of user-specified rebinding. A device can support any number of interaction profiles, either the nine profiles defined in the OpenXR standard, or an extension profile (see <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#_adding_input_sources_via_extensions</a>).</p>
+<p>See also <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#semantic-path-interaction-profiles">semantic-path-interaction-profiles</a>.</p>
+</section>
+</section>
+<section id="using-actions-in-the-application">
+<h2>4.4 Using Actions in the Application<a class="headerlink" href="#using-actions-in-the-application" title="Permalink to this heading">¶</a></h2>
+<p>Action Sets and Suggested Bindings are created before the session is initialized. There is a session-specific setup to be done for our actions also. After the call to CreateSession(), add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CreateActionPoses</span><span class="p">();</span>
+<span class="n">AttachActionSet</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Now after the definition of SuggestBindings(), add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateActionPoses</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create an xrSpace for a pose action.</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">CreateActionPoseSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="n">XrSession</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">XrAction</span><span class="w"> </span><span class="n">xrAction</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">subaction_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">XrSpace</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">XrSpace</span><span class="w"> </span><span class="n">xrSpace</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">XrPosef</span><span class="w"> </span><span class="n">xrPoseIdentity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">}};</span>
+<span class="w">        </span><span class="c1">// Create frame of reference for a pose action</span>
+<span class="w">        </span><span class="n">XrActionSpaceCreateInfo</span><span class="w"> </span><span class="n">actionSpaceCI</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_SPACE_CREATE_INFO</span><span class="p">};</span>
+<span class="w">        </span><span class="n">actionSpaceCI</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrAction</span><span class="p">;</span>
+<span class="w">        </span><span class="n">actionSpaceCI</span><span class="p">.</span><span class="n">poseInActionSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrPoseIdentity</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subaction_path</span><span class="p">)</span>
+<span class="w">            </span><span class="n">actionSpaceCI</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateXrPath</span><span class="p">(</span><span class="n">subaction_path</span><span class="p">);</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateActionSpace</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionSpaceCI</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrSpace</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create ActionSpace.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">xrSpace</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">m_handPoseSpace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateActionPoseSpace</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/left&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_handPoseSpace</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateActionPoseSpace</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="n">m_palmPoseAction</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/user/hand/right&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here, we’re creating the XrSpace that represents the hand pose actions. As with the reference space, we use an identity <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrPosef.html">XrPosef</a> to indicate that we’ll take the pose as-is, without offsets.</p>
+<p>Finally, as far as action setup goes, we will attach the Action Set to the session. Add this function:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">AttachActionSet</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Attach the action set we just made to the session. We could attach multiple action sets!</span>
+<span class="w">    </span><span class="n">XrSessionActionSetsAttachInfo</span><span class="w"> </span><span class="n">actionSetAttachInfo</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="n">actionSetAttachInfo</span><span class="p">.</span><span class="n">countActionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">actionSetAttachInfo</span><span class="p">.</span><span class="n">actionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_actionSet</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrAttachSessionActionSets</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionSetAttachInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to attach ActionSet to Session.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see, it’s possible here to attach multiple Action Sets. But <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrAttachSessionActionSets.html">xrAttachSessionActionSets</a> can only be called <em>once</em> per session. You have to know what Action Sets you will be using before the session can start - xrBeginSession() is called from PollEvents() once all setup is complete and the application is ready to proceed.</p>
+<p>Now, we must poll the actions, once per-frame. Add these two calls in RenderFrame() just before the call to RenderLayer():</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// poll actions here because they require a predicted display time, which we&#39;ve only just obtained.</span>
+<span class="n">PollActions</span><span class="p">(</span><span class="n">frameState</span><span class="p">.</span><span class="n">predictedDisplayTime</span><span class="p">);</span>
+<span class="c1">// Handle the interaction between the user and the 3D blocks.</span>
+<span class="n">BlockInteraction</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>And add this function after the definition of PollEvents():</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">PollActions</span><span class="p">(</span><span class="n">XrTime</span><span class="w"> </span><span class="n">predictedTime</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Update our action set with up-to-date input data.</span>
+<span class="w">    </span><span class="c1">// First, we specify the actionSet we are polling.</span>
+<span class="w">    </span><span class="n">XrActiveActionSet</span><span class="w"> </span><span class="n">activeActionSet</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">activeActionSet</span><span class="p">.</span><span class="n">actionSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_actionSet</span><span class="p">;</span>
+<span class="w">    </span><span class="n">activeActionSet</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_NULL_PATH</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Now we sync the Actions to make sure they have current data.</span>
+<span class="w">    </span><span class="n">XrActionsSyncInfo</span><span class="w"> </span><span class="n">actionsSyncInfo</span><span class="p">{</span><span class="n">XR_TYPE_ACTIONS_SYNC_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="n">actionsSyncInfo</span><span class="p">.</span><span class="n">countActiveActionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">actionsSyncInfo</span><span class="p">.</span><span class="n">activeActionSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">activeActionSet</span><span class="p">;</span>
+<span class="w">    </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrSyncActions</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionsSyncInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to sync Actions.&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here we enable the Action Set we’re interested in (in our case we have only one), and tell OpenXR to prepare the actions’ per-frame data with xrSyncActions().</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">XrActionStateGetInfo</span><span class="w"> </span><span class="n">actionStateGetInfo</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_GET_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// We pose a single Action, twice - once for each subAction Path.</span>
+<span class="w">    </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_palmPoseAction</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// For each hand, get the pose state if possible.</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Specify the subAction Path.</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetActionStatePose</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionStateGetInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="s">&quot;Failed to get Pose State.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">XrSpaceLocation</span><span class="w"> </span><span class="n">spaceLocation</span><span class="p">{</span><span class="n">XR_TYPE_SPACE_LOCATION</span><span class="p">};</span>
+<span class="w">            </span><span class="n">XrResult</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xrLocateSpace</span><span class="p">(</span><span class="n">m_handPoseSpace</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">m_localSpace</span><span class="p">,</span><span class="w"> </span><span class="n">predictedTime</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spaceLocation</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XR_UNQUALIFIED_SUCCESS</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">                </span><span class="p">(</span><span class="n">spaceLocation</span><span class="p">.</span><span class="n">locationFlags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">XR_SPACE_LOCATION_POSITION_VALID_BIT</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">                </span><span class="p">(</span><span class="n">spaceLocation</span><span class="p">.</span><span class="n">locationFlags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">XR_SPACE_LOCATION_ORIENTATION_VALID_BIT</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceLocation</span><span class="p">.</span><span class="n">pose</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If, and only if the action is active, we use <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrLocateSpace.html">xrLocateSpace</a> to obtain the current pose of the controller. We specify that we want this relative to our reference space <code class="docutils literal notranslate"><span class="pre">localOrStageSpace</span></code>, because this is the global space we’re using for rendering. If we fail to locate the current pose of the controller, we set <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStatePose.html">XrActionStatePose</a> <code class="docutils literal notranslate"><span class="pre">::isActive</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>. We’ll use <code class="docutils literal notranslate"><span class="pre">leftGripPose</span></code> in the next section to render the controller’s position.</p>
+<p>We’ll add the grabbing Action.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_grabCubeAction</span><span class="p">;</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetActionStateFloat</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionStateGetInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="s">&quot;Failed to get Float State of Grab Cube action.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_changeColorAction</span><span class="p">;</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetActionStateBoolean</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionStateGetInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_changeColorState</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="s">&quot;Failed to get Boolean State of Change Color action.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// The Spawn Cube action has no subActionPath:</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_spawnCubeAction</span><span class="p">;</span>
+<span class="w">        </span><span class="n">actionStateGetInfo</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetActionStateBoolean</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">actionStateGetInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m_spawnCubeState</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get Boolean State of Spawn Cube action.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally in this function, we’ll add the haptic buzz behaviour, which has variable amplitude.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.01f</span><span class="p">)</span>
+<span class="w">            </span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrHapticVibration</span><span class="w"> </span><span class="n">vibration</span><span class="p">{</span><span class="n">XR_TYPE_HAPTIC_VIBRATION</span><span class="p">};</span>
+<span class="w">        </span><span class="n">vibration</span><span class="p">.</span><span class="n">amplitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">vibration</span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_MIN_HAPTIC_DURATION</span><span class="p">;</span>
+<span class="w">        </span><span class="n">vibration</span><span class="p">.</span><span class="n">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_FREQUENCY_UNSPECIFIED</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">XrHapticActionInfo</span><span class="w"> </span><span class="n">hapticActionInfo</span><span class="p">{</span><span class="n">XR_TYPE_HAPTIC_ACTION_INFO</span><span class="p">};</span>
+<span class="w">        </span><span class="n">hapticActionInfo</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_buzzAction</span><span class="p">;</span>
+<span class="w">        </span><span class="n">hapticActionInfo</span><span class="p">.</span><span class="n">subactionPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPaths</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrApplyHapticFeedback</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hapticActionInfo</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">XrHapticBaseHeader</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">vibration</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to apply haptic feedback.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we’ve completed polling all the actions in the application. Let’s introduce something to interact with. After your declaration of <code class="docutils literal notranslate"><span class="pre">m_pipeline</span></code> and before <code class="docutils literal notranslate"><span class="pre">XrActionSet</span> <span class="pre">m_actionSet</span></code>, we will declare some interactable 3D blocks. Add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// An instance of a 3d colored block.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Block</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrPosef</span><span class="w"> </span><span class="n">pose</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+<span class="w">    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="c1">// The list of block instances.</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Block</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">;</span>
+<span class="c1">// Don&#39;t let too many m_blocks get created.</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_maxBlockCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="c1">// Which block, if any, is being held by each of the user&#39;s hands or controllers.</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+<span class="c1">// Which block, if any, is nearby to each hand or controller.</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>We will add two more functions after the definition of <code class="docutils literal notranslate"><span class="pre">PollActions</span></code> to enable some interaction between the user and the 3D blocks:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Helper function to snap a 3D position to the nearest 10cm</span>
+<span class="k">static</span><span class="w"> </span><span class="n">XrVector3f</span><span class="w"> </span><span class="nf">FixPosition</span><span class="p">(</span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nearbyint</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.f</span><span class="p">));</span>
+<span class="w">    </span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// Handle the interaction between the user&#39;s hands, the grab action, and the 3D blocks.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">BlockInteraction</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// For each hand:</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">nearest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// If not currently holding a block:</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">// Only if the pose was detected this frame:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// For each block:</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">auto</span><span class="w"> </span><span class="n">block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">                    </span><span class="c1">// How far is it from the hand to this block?</span>
+<span class="w">                    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">block</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
+<span class="w">                    </span><span class="kt">float</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">z</span><span class="p">)));</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.05f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nearest</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="w">                        </span><span class="n">nearest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distance</span><span class="p">;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">currentState</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">                    </span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_changeColorState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_TRUE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_changeColorState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">currentState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_FALSE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_changeColorState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">changedSinceLastSync</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_TRUE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">thisBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">[</span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+<span class="w">                    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">)};</span>
+<span class="w">                    </span><span class="n">thisBlock</span><span class="p">.</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// not near a block? We can spawn one.</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_spawnCubeState</span><span class="p">.</span><span class="n">isActive</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_TRUE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_spawnCubeState</span><span class="p">.</span><span class="n">currentState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_FALSE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_spawnCubeState</span><span class="p">.</span><span class="n">changedSinceLastSync</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_TRUE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_maxBlockCount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">XrQuaternionf</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">                    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">)};</span>
+<span class="w">                    </span><span class="n">m_blocks</span><span class="p">.</span><span class="n">push_back</span><span class="p">({{</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">FixPosition</span><span class="p">(</span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">position</span><span class="p">)},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.095f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.095f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.095f</span><span class="p">},</span><span class="w"> </span><span class="n">color</span><span class="p">});</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span>
+<span class="w">                </span><span class="n">m_blocks</span><span class="p">[</span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_handPose</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">isActive</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m_grabState</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">currentState</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">m_blocks</span><span class="p">[</span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FixPosition</span><span class="p">(</span><span class="n">m_blocks</span><span class="p">[</span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">);</span>
+<span class="w">                </span><span class="n">m_grabbedBlock</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">                </span><span class="n">m_buzz</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="rendering-the-controller-position">
+<h2>4.5 Rendering the Controller Position<a class="headerlink" href="#rendering-the-controller-position" title="Permalink to this heading">¶</a></h2>
+<p>We will now draw some geometry to represent the controller poses. We already have a mathematics library from a previous chapter, but we will need a couple more headers for <code class="docutils literal notranslate"><span class="pre">std::min()</span></code>, <code class="docutils literal notranslate"><span class="pre">std::max()</span></code> and for generating pseudo-random colors.</p>
+<p>Add this after <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;xr_linear_algebra.h&gt;</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Include &lt;algorithm&gt; for std::min and max</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
+<span class="c1">// Random numbers for colorful blocks</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;random&gt;</span>
+<span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">);</span>
+<span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mt19937</span><span class="w"> </span><span class="n">pseudo_random_generator</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Inside our <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code> method, locate where we set the variable <code class="docutils literal notranslate"><span class="pre">numberOfCuboids</span></code> and update it as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">size_t</span><span class="w"> </span><span class="n">numberOfCuboids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We will render 64 interactable cubes, two cuboids representing the controllers and a further two for the floor and table from the previous chapter. Inside our <code class="docutils literal notranslate"><span class="pre">CreateResources()</span></code> method and after the call to <code class="docutils literal notranslate"><span class="pre">m_graphicsAPI-&gt;CreatePipeline()</span></code>, add the following code that m_vertexBuffersets up the orientation, position and color of each interactable cube.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create sixty-four cubic blocks, 20cm wide, evenly distributed,</span>
+<span class="c1">// and randomly colored.</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2f</span><span class="p">;</span>
+<span class="c1">// Center the blocks a little way from the origin.</span>
+<span class="n">XrVector3f</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.2f</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.7f</span><span class="p">};</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">float</span><span class="w"> </span><span class="n">angleRad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">float</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">center</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">// No rotation</span>
+<span class="w">            </span><span class="n">XrQuaternionf</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+<span class="w">            </span><span class="c1">// A random color.</span>
+<span class="w">            </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">),</span><span class="w"> </span><span class="n">pseudorandom_distribution</span><span class="p">(</span><span class="n">pseudo_random_generator</span><span class="p">)};</span>
+<span class="w">            </span><span class="n">m_blocks</span><span class="p">.</span><span class="n">push_back</span><span class="p">({{</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.095f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.095f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.095f</span><span class="p">},</span><span class="w"> </span><span class="n">color</span><span class="p">});</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Recall that we’ve already inserted a call to <code class="docutils literal notranslate"><span class="pre">PollActions()</span></code> in the function <code class="docutils literal notranslate"><span class="pre">RenderFrame()</span></code>, so we’re ready to render the controller position and input values. In the <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> method, after we render the floor and table,(i.e. just before <code class="docutils literal notranslate"><span class="pre">m_graphicsAPI-&gt;EndRendering()</span></code>) render the controller positions and interactable cubes, add the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Draw some blocks at the controller positions:</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_handPoseState</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">isActive</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">m_handPose</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="p">{</span><span class="mf">0.02f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.10f</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">thisBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_blocks</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">    </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thisBlock</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m_nearBlock</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="w">        </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thisBlock</span><span class="p">.</span><span class="n">scale</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.05f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">thisBlock</span><span class="p">.</span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">,</span><span class="w"> </span><span class="n">thisBlock</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now build and run your application. You should see something like this:</p>
+<figure class="align-left">
+<a class="reference internal image-reference" href="_images/Chapter4-Screenshot.png"><img alt="Chapter4 Screenshot of final result." src="_images/Chapter4-Screenshot.png" style="width: 99%;" /></a>
+</figure>
+<p>You should also be able to grab and move the cubes with the controllers.</p>
+</section>
+<section id="checking-for-connected-controllers">
+<h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Permalink to this heading">¶</a></h2>
+<p>Look again now at the function PollActions(). We specify which action to look at with the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateGetInfo.html">XrActionStateGetInfo</a> struct. Then we use a type-specific call. For our boolean Grab Action, we call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetActionStateBoolean.html">xrGetActionStateBoolean</a> to retrieve an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateBoolean.html">XrActionStateBoolean</a> struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the specified button on the controller.
+However, the struct <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateBoolean.html">XrActionStateBoolean</a> also has a member called <code class="docutils literal notranslate"><span class="pre">isActive</span></code>, which is true if the state of the action is actually being read. If it’s false, the value of <code class="docutils literal notranslate"><span class="pre">currentState</span></code> is irrelevant - the polling failed.</p>
+<p>Similarly, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateFloat.html">XrActionStateFloat</a> has a floating-point <code class="docutils literal notranslate"><span class="pre">currentState</span></code> value, which is valid if <code class="docutils literal notranslate"><span class="pre">isActive</span></code> is true. The struct has <code class="docutils literal notranslate"><span class="pre">changedSinceLastSync</span></code>, which is true if the value changed between the previous and current calls to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrSyncActions.html">xrSyncActions</a>. And it has <code class="docutils literal notranslate"><span class="pre">lastChangeTime</span></code>, which is the time at which the value last changed. This allows us to be very precise about when the user pressed the button, and how long they held it down for. This could be used to detect “long presses”, or double-clicks.</p>
+<p>Careful use of this polling metadata will help you to create applications that are responsive and intuitive to use. Bear in mind as well that multiple physical controls could be bound to the same action, and the user could be using more than one controller at once. See the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#multiple_inputs">OpenXR spec</a>. for more details.</p>
+</section>
+<section id="summary">
+<h2>4.7 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>In this chapter, you have learned about Actions, Controller Profiles, Bindings. You’ve learned the principles and best practices of the action systm: how to specify bindings, and when to use different binding profiles. And you’ve created interactions for your app that demonstrate these principles in practice.</p>
+<p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter4.zip">Chapter4.zip</a></p>
+<p>Version: v0.0.0</p>
+</section>
+</section>
+
+
+					</div>
+				</div>
+				<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="3-graphics.html" class="btn btn-neutral float-left" title="3 Graphics" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="5-extensions.html" class="btn btn-neutral float-right" title="5 Extensions" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
+  </div> 
+
+</footer>
+			</div>
+			</div>
+		</div>
+	</div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

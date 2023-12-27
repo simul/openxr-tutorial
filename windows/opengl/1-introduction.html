@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="OpenXR Tutorial: Introduction to OpenXR" name="description" />
+<meta content="khronos, openxr, tutorial" name="keywords" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1 Introduction &mdash; OpenXR Tutorial  documentation</title>
+	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
+	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
+	<link rel="shortcut icon" href="_static/favicon.ico">
+	<link rel="canonical" href="https://openxr-tutorial.simul.co/1-introduction.html" >
+	<!--[if lt IE 9]>
+	  <script src="_static/js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
+	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="_static/js/theme.js"></script>
+	<link rel="index" title="Index" href="genindex.html" >
+	<link rel="search" title="Search" href="search.html" >
+	<link rel="next" title="2 OpenXR Setup" href="2-setup.html" >
+	<link rel="prev" title="OpenXR Tutorial" href="index.html" > 
+	<script  src="_static/js/js.cookie.min.js"></script>
+	<script >
+	var currentPlatform="all";
+	var currentAPI="all";
+	function setPlatform(pl)
+	{
+		currentPlatform=pl;
+		if(navigator.cookieEnabled)
+			Cookies.set('platform', pl, { expires: 365,sameSite: "strict"});
+	}
+	function setGraphicsAPI(a)
+	{
+		currentAPI=a;
+		if(navigator.cookieEnabled)
+			Cookies.set('graphicsapi', a, { expires: 365,sameSite: "strict"});
+	}
+	function getPlatform()
+	{
+		if(currentPlatform=="all"&&navigator.cookieEnabled)
+		{
+			currentPlatform=Cookies.get("platform");
+			if (typeof currentPlatform == 'undefined')
+			{
+				currentPlatform = "windows"; // Default if cookies are enabled.
+			//	console.log("getPlatform() defaulted to: "+currentPlatform);
+			}
+			//else
+			//	console.log("getPlatform() from cookie: "+currentPlatform);
+		}
+		//console.log("getPlatform() returned: "+currentPlatform);
+		return currentPlatform;
+	}
+	function getGraphicsAPI()
+	{
+		if(currentAPI=="all"&&navigator.cookieEnabled)
+		{
+			currentAPI=Cookies.get("graphicsapi");
+			if (typeof currentAPI == 'undefined')
+			{
+				currentAPI = "vulkan"; // Default if cookies are enabled.
+				//console.log("getGraphicsAPI() defaulted to: "+currentAPI);
+			}
+			//else
+			//	console.log("getGraphicsAPI() from cookie: "+currentAPI);
+		}
+		//console.log("getGraphicsAPI() returned: "+currentAPI);
+		return currentAPI;
+	}
+
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+		//console.log("add url parameter to : "+addr)
+		url=new URL(addr);
+		url.searchParams.set(name,value);
+		return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], getPlatform());
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+		var platform = getPlatform();
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatform()
+	{
+		var platform = getPlatform();
+		console.log('updatePlatform() = ' + platform);
+		$(".linux").hide();
+		$(".android").hide();
+		$(".windows").hide();
+		if (platform == "windows"||platform == "all")
+		{
+		$(".windows").show();
+			$(".selectd3d11").removeAttr("disabled");
+			$(".selectd3d12").removeAttr("disabled");
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "linux"||platform == "all")
+		{
+			$(".linux").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "android"||platform == "all")
+		{
+			//console.log("platform  " + platform + ".");
+			$(".android").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").removeAttr("disabled");
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").attr("disabled", true);
+		}
+		var oldelements = document.querySelectorAll(".selected-platform");
+		while (oldelements.length > 0)
+		{
+			var el=oldelements.item(0);
+			el.classList.remove('selected-platform');
+			////console.log("Removing selected-platform from "+el.id);
+			oldelements = document.querySelectorAll(".selected-platform");
+		}
+		var element = document.getElementById('select' + platform);
+		if(element)
+		{
+			element.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element.id);
+		}
+		var element2 = document.getElementById('select' + platform + "-inline");
+		if(element2)
+		{
+			element2.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element2.id);
+		}
+		if(limitAPIChoice())
+			updateGraphicsAPI();
+		window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+		var platform = getPlatform();
+		var graphicsApi = getGraphicsAPI();
+		////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+		window.limitAPIChoice=limitAPIChoice;
+		var newApi=graphicsApi;
+		if (platform == "windows")
+		{
+			if (graphicsApi == "opengles"||graphicsApi==undefined)
+			newApi="d3d11";
+		}
+		if (platform == "linux")
+		{
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+			newApi="vulkan";
+		}
+		if (platform == "android"||graphicsApi==undefined)
+		{
+			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+			newApi="vulkan";
+		}
+		////console.log("newApi = "+newApi);
+		if (newApi != graphicsApi)
+		{
+			////console.log("setting graphicsapi = "+newApi);
+			setGraphicsAPI(newApi);
+			graphicsApi=newApi;
+			return true;
+		}
+		return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+		////console.log("makeLinksOpenInNewWindow ");
+		var download_hrefs = document.getElementsByClassName('reference download internal');
+		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		link_hrefs = document.getElementsByClassName('reference external');
+		[].forEach.call(link_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function initDropdownLinks()
+	{
+		//console.log("initDropdownLinks ");
+		var platform_api_links = document.getElementsByClassName('dropdown-platform-api');
+		//let pattern = new RegExp("\/[windows|linux|android]\/[d3d11|d3d12|vulkan|opengl|opengles]\/","gm");
+		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengl|opengles)","gm");
+		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
+		[].forEach.call(platform_api_links, function(el) {
+			href=window.location.href;
+			//console.log("href "+href);
+			platform_api=el.id.replace('-','/');
+			//console.log("platform_api "+platform_api);
+			if(href.match(pattern)==null)
+			{
+				href=href.replace(root_pattern,"$1/"+platform_api+"/$2");
+			}
+			else
+			{
+				href=href.replace(pattern, platform_api);
+			}
+			//console.log("-> href "+href);
+			el.href=href;
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.initDropdownLinks=initDropdownLinks;
+	}
+	function addIconsToToctree()
+	{
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+		[].forEach.call(toctreeheadings, function(el) {
+		el.id =heading_ids[i];
+		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+		i++;
+		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
+	function copyLinkToThisPage()
+	{
+		var graphicsapi =getGraphicsAPI();
+		var platform	=getPlatform();
+		var url			=window.location.href;
+		url				=addUrlParameter(url,"platform",platform);
+		url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+		navigator.clipboard.writeText(url);
+		var dlg = document.getElementById("copied-link-dialog");
+		document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+		dlg.style.visibility = 'visible';
+		var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+		//sharepagetooltip.style.opacity = 0;
+		setTimeout(() =>
+		{
+		const dlg = document.getElementById("copied-link-dialog");
+		dlg.style.visibility = 'hidden';
+		}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], getGraphicsAPI());
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+		var graphicsApi = getGraphicsAPI();
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+		var graphicsApi = getGraphicsAPI();
+		//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+		if (graphicsApi == "d3d11"||graphicsApi == "all") {
+		$(".d3d11").show();
+		}
+		if (graphicsApi == "d3d12"||graphicsApi == "all") {
+		$(".d3d12").show();
+		}
+		if (graphicsApi == "opengl"||graphicsApi == "all") {
+		$(".opengl").show();
+		}
+		if (graphicsApi == "opengles"||graphicsApi == "all") {
+		$(".opengles").show();
+		}
+		if (graphicsApi == "vulkan"||graphicsApi == "all") {
+		$(".vulkan").show();
+		}
+			var oldelements = document.querySelectorAll(".selected-graphics-api");
+			////console.log("selected-platform on "+oldelements.length+" elements.");
+			while (oldelements.length > 0)
+			{
+				var el=oldelements.item(0);
+				el.classList.remove('selected-graphics-api');
+				////console.log("Removing selected-graphics-api from "+el.id);
+				oldelements = document.querySelectorAll(".selected-graphics-api");
+			}
+			var element = document.getElementById('select' + graphicsApi);
+			if(element)
+			{
+				element.classList.add('selected-graphics-api');
+			}
+			var element2 = document.getElementById('select' + graphicsApi +"-inline");
+			if (element2)
+			{
+				element2.classList.add('selected-graphics-api');
+			}
+			window.updateGraphicsAPI=updateGraphicsAPI;
+		}</script>
+		<script >
+		var graphicsApi = getGraphicsAPI();
+		if (graphicsApi==undefined) {
+			setGraphicsAPI(a);
+			graphicsApi='vulkan';
+		}
+	</script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
+</head>
+
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+			<a href="index.html"  class="" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				
+				<span class="sidebartitle">
+					Tutorial
+				</span>
+				
+			</a>
+<div role="search">
+    <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+        <label class="search-label" for="q">Search the tutorial</label>
+        <input type="text" name="q" id="q" placeholder="Search..." aria-label="Search docs">
+        <input type="hidden" name="check_keywords" value="yes">
+        <input type="hidden" name="area" value="default">
+    </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1 Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1 Goal of OpenXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">1.2 Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">1.3 Environment Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-setup">1.4 Project Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cmake-and-project-files">1.4.1 CMake and Project Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-files">1.4.2 Common Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main-cpp-and-the-openxrtutorial-class">1.4.3 Main.cpp and the OpenXRTutorial Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-run">1.4.4 Build and Run</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">1.5 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
+
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">1 Introduction</li>
+	  <li class="wy-breadcrumbs-aside">
+		  
+
+<div class="platform-api-dropdown">
+  <span>Platform/API</span>
+  <div class="platform-api-dropdown-content">
+    <ul>
+      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d11" href="#">Windows D3D11</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d12" href="#">Windows D3D12</a></li>
+      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+<script>
+	function choosePlatform(platformName)
+	{
+		setPlatform(platformName);
+		updatePlatformFromTab();
+	};
+</script>
+
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		setGraphicsAPI(graphicsApiName);
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
+  <section id="introduction">
+<h1>1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<section id="goal-of-openxr">
+<h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
+<p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html</a>.</p>
+<p>Despite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two slightly different perspectives. Most had a way to track the user’s head and hands or hand controllers. Most had buttons, many had analogue controls like triggers or joysticks and many had haptic feedback.</p>
+<figure class="align-left" id="id6">
+<a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
+<figcaption>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
+and outputting to its displays and haptic systems. Just as OpenGL and Vulkan provide a common API to access graphics hardware, so OpenXR allows you to write code that works with multiple XR platforms, with minimal adaptation.</p>
+</section>
+<section id="overview">
+<h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
+<table class="longtable docutils align-default" id="id7">
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Concept</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>API</p></td>
+<td><p>The OpenXR API is the set of commands, functions and structures that an OpenXR-compliant runtime is required to offer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Application</p></td>
+<td><p>The Application is your program, called an “app” for short.</p></td>
+</tr>
+<tr class="row-even"><td><p>Runtime</p></td>
+<td><p>A Runtime is a specific implementation of the OpenXR functionality. It might be provided by a hardware vendor, as part of a device’s operating system; it might be supplied by a software vendor to enable OpenXR support with a specific range of hardware. The Loader finds the appropriate Runtime       and loads it when OpenXR is initialized.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Loader</p></td>
+<td><p>The OpenXR Loader is a special library that connects your application to whichever OpenXR Runtime you’re using. The Loader’s job is to find the Runtime and initialize it, then allow your application to access the Runtime’s version of the API. Some devices can have multiple Runtimes available, but only one can be active at any given time.</p></td>
+</tr>
+<tr class="row-even"><td><p>Layers</p></td>
+<td><p>API layers are optional components that augment an OpenXR system. A Layer might help with debugging, or filter information between the application and the Runtime. API layers are selectively enabled when the OpenXR Instance is created.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instance</p></td>
+<td><p>The Instance is the foundational object that allows your application to communicate with a Runtime. You’ll ask OpenXR to create an Instance when initializing XR support in your application.</p></td>
+</tr>
+<tr class="row-even"><td><p>Graphics</p></td>
+<td><p>OpenXR needs to connect to a graphics API in order to render the headset views. Which Graphics APIs are supported depends on the Runtime and the hardware.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Input/Output</p></td>
+<td><p>OpenXR allows apps to query what inputs and outputs are available. These can then be bound to Actions, so the app knows what the user is doing.</p></td>
+</tr>
+<tr class="row-even"><td><p>Action</p></td>
+<td><p>A semantically-defined input or output for the app, which can be bound to different hardware inputs or outputs using Bindings.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Binding</p></td>
+<td><p>A mapping from hardware/Runtime-defined inputs and outputs to semantic Actions.</p></td>
+</tr>
+<tr class="row-even"><td><p>Pose</p></td>
+<td><p>A position and orientation in 3D space.</p></td>
+</tr>
+</tbody>
+</table>
+<p>OpenXR provides a clear and precise common language for developers and hardware vendors to use.</p>
+<p>An OpenXR Runtime implements the OpenXR API. The runtime translates the OpenXR function calls into something that the vendor’s software/hardware can understand.</p>
+<p>The OpenXR Loader finds and loads a suitable OpenXR runtime that is present on the system. The Loader will load in all of the OpenXR function pointers stated in the core specification for the application to use. If you are using an extension, such as <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a>, any functions associated with that extension will need to be loaded in with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProcAddr.html">xrGetInstanceProcAddr</a>. Some platforms like Android require extra work and information to initialize the loader. Documentation for the OpenXR Loader can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/loader.html">https://registry.khronos.org/OpenXR/specs/1.0/loader.html</a>.</p>
+<p>API Layers are additional code layers that are inserted by the loader between the application and the runtime. Each of these API layers intercepts the OpenXR function calls from the layer above, does something with that function, and then calls the next layer down. Examples of API Layers would be: logging the OpenXR functions to the output or a file; creating trace files of the OpenXR calls for later replay; or for checking that the function calls made to OpenXR are compatible with the OpenXR specification. See <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
+<p>OpenXR supports multiple graphics APIs via its extension functionality. OpenXR can extend its functionality to include debugging layers, vendor hardware and software support and graphics APIs. This idea of absolving the core specification of the graphics API functionality provides flexibility in choosing the graphics APIs now and in the future. OpenXR is targeted at developing XR experiences and isn’t concerned with the specifics of any graphics APIs. The extensible nature of OpenXR allows revisions of existing APIs and new graphics APIs to be integrated with ease. See <a class="reference internal" href="5-extensions.html#extensions"><span class="std std-ref">Chapter 5</span></a>.</p>
+<p>OpenXR recognizes that there is a vast and ever-changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change. This is the core reasoning behind the OpenXR Actions System.</p>
+</section>
+<section id="environment-setup">
+<h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">¶</a></h2>
+<p>This section will help you set up your development environment. Here your choice of platform makes a difference, but afterwards, things will be much more consistent. You can change platform and graphics API at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking the appropriate tab above.</p>
+<p>You should make sure that the XR runtime that you wish to use is made the default for the XR loader to recognize and load for your application.</p>
+<p class="rubric">Visual Studio</p>
+<p>If you’ll be building an OpenXR project for Microsoft Windows PC-based devices, we’ll assume you’ll be using Microsoft Visual Studio. The free Community Edition of Visual Studio is available to download from <a class="reference external" href="https://visualstudio.microsoft.com/vs/community/">https://visualstudio.microsoft.com/vs/community/</a>.</p>
+<p class="rubric">CMake</p>
+<p>Install the latest <a class="reference external" href="https://cmake.org/download/">CMake</a>. This tutorial uses CMake to generate the Visual Studio Solution and Project files. At least CMake 3.22.1 will be needed, so follow the instructions on the CMake download page to ensure that you have an up-to-date version.</p>
+<p>Next, you’ll want to choose which graphics API you’ll be using.</p>
+<p>For this tutorial, we are using the ‘gfxwrapper’ for the OpenGL API found as a part of the <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source">OpenXR-SDK-Source</a> reposity under <code class="docutils literal notranslate"><span class="pre">src/common/</span></code>.
+If you want to use OpenGL stand-alone, you will need to use WGL to create a valid OpenGL Context for Microsoft Windows - <a class="reference external" href="https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_(WGL)">Creating an OpenGL Context WGL</a>. You will also need to use a function loader like GLAD to access functions for OpenGL - <a class="reference external" href="https://glad.dav1d.de/">GLAD</a>.</p>
+<p>You will need GPU that supports at least OpenGL 4.3 for this tutorial.</p>
+</section>
+<section id="project-setup">
+<h2>1.4 Project Setup<a class="headerlink" href="#project-setup" title="Permalink to this heading">¶</a></h2>
+<p>This section explains how to set up your project ready for <a class="reference internal" href="2-setup.html#creating-an-instance"><span class="std std-ref">Chapter 2</span></a> and will make references to the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> folder. It explains how to include the OpenXR headers, link the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> library, graphics API integration, and other boilerplate code and finally create a simple stub application which will be expanded on in later chapters.</p>
+<section id="cmake-and-project-files">
+<h3>1.4.1 CMake and Project Files<a class="headerlink" href="#cmake-and-project-files" title="Permalink to this heading">¶</a></h3>
+<p>For the Microsoft Windows OpenXR project, we’ll use CMake to create the solution and project files for Visual Studio.
+Create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
+<p>Create a folder called <code class="docutils literal notranslate"><span class="pre">cmake</span></code> in the <em>workspace</em> directory. Download the linked file below and put it in <code class="docutils literal notranslate"><span class="pre">cmake</span></code>. This will be used in our <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to help build our project.</p>
+<p><a class="reference download internal" download="" href="_downloads/83556787d033381913a10dfa2331a6e5/gfxwrapper.cmake"><code class="xref download docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code></a></p>
+<p>Now, create a text file in the <em>workspace</em> folder called <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and in it, put the following code:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
+
+<span class="nb">project</span><span class="p">(</span><span class="s">openxr-tutorial</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CONFIGURATION_TYPES</span><span class="w"> </span><span class="s2">&quot;Debug;Release&quot;</span><span class="p">)</span>
+
+<span class="c"># Optional override runtime</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">XR_RUNTIME_JSON</span>
+<span class="w">    </span><span class="s2">&quot;$ENV{XR_RUNTIME_JSON}&quot;</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">PATH</span>
+<span class="w">    </span><span class="s2">&quot;Optional location of a specific OpenXR runtime configuration file.&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, we specify the CMake version, project name and configuration types, and provide a CMake variable called <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> which you can use to point to the runtime you will be using (by default, OpenXR will try to find the standard runtime from your hardware vendor). Finally, we specify CMake to continue the build into the Chapter2 directory with <code class="docutils literal notranslate"><span class="pre">add_subdirectory()</span></code>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the <em>workspace</em> folder, create a folder called <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code>, and in it create another <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file. Into the <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeLists.txt</span></code>, put the following code:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.22.1</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_NAME</span><span class="w"> </span><span class="s">OpenXRTutorialChapter2</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s2">&quot;${PROJECT_NAME}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This sets a minimum CMake version (required for some of the features we use here) and our own CMake variable <code class="docutils literal notranslate"><span class="pre">PROJECT_NAME</span></code> which is set to <code class="docutils literal notranslate"><span class="pre">OpenXRTutorialChapter2</span></code>. Now add:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Additional Directories for find_package() to search within.</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">CMAKE_MODULE_PATH</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../cmake&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we append to the <code class="docutils literal notranslate"><span class="pre">CMAKE_MODULE_PATH</span></code> variable an additional path for <code class="docutils literal notranslate"><span class="pre">find_package()</span></code> to search within.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># For FetchContent_Declare() and FetchContent_MakeAvailable()</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
+
+<span class="c"># openxr_loader - From github.com/KhronosGroup</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_TESTS</span>
+<span class="w">    </span><span class="s">OFF</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Build tests&quot;</span>
+<span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BUILD_API_LAYERS</span>
+<span class="w">    </span><span class="s">ON</span>
+<span class="w">    </span><span class="s">CACHE</span><span class="w"> </span><span class="s">INTERNAL</span><span class="w"> </span><span class="s2">&quot;Use OpenXR layers&quot;</span>
+<span class="p">)</span>
+<span class="nb">FetchContent_Declare</span><span class="p">(</span>
+<span class="w">    </span><span class="s">OpenXR</span>
+<span class="w">    </span><span class="s">URL_HASH</span><span class="w"> </span><span class="s">MD5=81930f0ccecdca852906e1a22aee4a45</span>
+<span class="w">    </span><span class="s">URL</span><span class="w"> </span><span class="s">https://github.com/KhronosGroup/OpenXR-SDK-Source/archive/refs/tags/release-1.0.28.zip</span>
+<span class="w">        </span><span class="s">SOURCE_DIR</span>
+<span class="w">        </span><span class="s">openxr</span>
+<span class="p">)</span>
+<span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">OpenXR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We include <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> and use it to get the OpenXR-SDK-Source from Khronos’s GitHub page.</p>
+<p>Now, we will add to <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeLists.txt</span></code> the source and header files by adding the following code. Here, we are including all the files needed for our project.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Files</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SOURCES</span>
+<span class="w">        </span><span class="s2">&quot;main.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.cpp&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">HEADERS</span>
+<span class="w">        </span><span class="s2">&quot;../Common/DebugOutput.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/GraphicsAPI_OpenGL.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/HelperFunctions.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRDebugUtils.h&quot;</span>
+<span class="w">        </span><span class="s2">&quot;../Common/OpenXRHelper.h&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All the files listed above with <code class="docutils literal notranslate"><span class="pre">../Common/*.*</span></code> are available to download below. In the next section, you will find the links and a discussion of their usage. This tutorial includes all the graphics APIs header and cpp files; you only need to download the files for your chosen graphics API.</p>
+<p>Add the following code to <code class="docutils literal notranslate"><span class="pre">Chapter2/CMakeLists.txt</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">HEADERS</span><span class="o">}</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s2">&quot;${XR_RUNTIME_JSON}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">VS_DEBUGGER_ENVIRONMENT</span><span class="w"> </span><span class="s2">&quot;XR_RUNTIME_JSON=${XR_RUNTIME_JSON}&quot;</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># In this repo</span>
+<span class="w">    </span><span class="s">../Common/</span>
+<span class="w">    </span><span class="c"># From OpenXR repo</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span>
+<span class="w">    </span><span class="s2">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span>
+<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr_loader</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We have used <code class="docutils literal notranslate"><span class="pre">add_executable()</span></code> to create the program we’ll be building, and specified its <code class="docutils literal notranslate"><span class="pre">${SOURCES}</span></code> and <code class="docutils literal notranslate"><span class="pre">${HEADERS}</span></code>. We passed the <code class="docutils literal notranslate"><span class="pre">XR_RUNTIME_JSON</span></code> variable on to the debugging environment (Windows only). We’ve added the <code class="docutils literal notranslate"><span class="pre">../Common</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;${openxr_SOURCE_DIR}/src/common&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;${openxr_SOURCE_DIR}/external/include&quot;</span></code> folders as include directories and linked the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> which we obtained with <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>. This will also add the include directory for the OpenXR headers.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># OpenGL</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">../cmake/gfxwrapper.cmake</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">openxr-gfxwrapper</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">XR_TUTORIAL_USE_OPENGL</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We include the <code class="docutils literal notranslate"><span class="pre">gfxwrapper.cmake</span></code> from our <code class="docutils literal notranslate"><span class="pre">cmake</span></code> folder in the <em>workspace</em> directory. This file creates a static library called <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which will allow us to use OpenGL. We link against <code class="docutils literal notranslate"><span class="pre">openxr-gfxwrapper</span></code>, which also provide us with the needed include directories. We’ve added the <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_OPENGL</span></code> compiler definition to specify which graphics APIs should be supported and have their headers included in <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>.</p>
+<p>That’s all the CMake code that we require for this project.</p>
+</section>
+<section id="common-files">
+<h3>1.4.2 Common Files<a class="headerlink" href="#common-files" title="Permalink to this heading">¶</a></h3>
+<p>Create a folder called <code class="docutils literal notranslate"><span class="pre">Common</span></code> in the <em>workspace</em> directory. Download each of the linked files below and put them in <code class="docutils literal notranslate"><span class="pre">Common</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/a668d9f10e44c7f46a041356e11e3d9e/DebugOutput.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/DebugOutput.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/09fde4dd830aa0c1ae2771d8eff634c4/HelperFunctions.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/HelperFunctions.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/25292376df5afce45fe1df04d91fea9f/OpenXRDebugUtils.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRDebugUtils.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/f206e1c8599e8788f3b84b60d65b3396/OpenXRDebugUtils.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRDebugUtils.cpp</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/07ed85d64fa8eeb958885d2b14115e3f/OpenXRHelper.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/OpenXRHelper.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/ee7900b1ff1ef2d947bd578e417c62db/GraphicsAPI.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/c4b96771e22873e9c1d09d729dea1bd2/GraphicsAPI.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI.cpp</span></code></a></p></li>
+</ul>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/6ecf914e43c32a3fbf68265b4c70d1b6/GraphicsAPI_OpenGL.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/4ab2a28ab4cc788086acc7ac599bcbe3/GraphicsAPI_OpenGL.cpp"><code class="xref download docutils literal notranslate"><span class="pre">Common/GraphicsAPI_OpenGL.cpp</span></code></a></p></li>
+</ul>
+<p>Or, you can download the <code class="docutils literal notranslate"><span class="pre">zip</span></code> archive containing all the required files. Extract the archive to get the <code class="docutils literal notranslate"><span class="pre">Common</span></code> folder.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Common_OpenGL.zip">Common_OpenGL.zip</a></p></li>
+</ul>
+<p class="rubric">DebugOutput</p>
+<p><code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> is a class that redirects <code class="docutils literal notranslate"><span class="pre">std::cout</span></code> and <code class="docutils literal notranslate"><span class="pre">std::cerr</span></code> to the output window in your IDE.</p>
+<p><code class="docutils literal notranslate"><span class="pre">DebugOutput</span></code> uses <code class="docutils literal notranslate"><span class="pre">OutputDebugStringA()</span></code> to log the message to the Visual Studio Output window.</p>
+<p class="rubric">HelperFunctions</p>
+<p>This is a simple header file for boilerplate code for the various platforms. It includes various C/C++ standard header and the code that defines the macro <code class="docutils literal notranslate"><span class="pre">DEBUG_BREAK</span></code>, according to which platform we’re building for. This macro will stop the execution of your program when an error occurs, so you can see where it happened and fix it. We use this macro in the <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> function, which is discussed in detail in <a class="reference internal" href="2-setup.html#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>.
+<code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code> and <code class="docutils literal notranslate"><span class="pre">BitwiseCheck()</span></code> are just simple wrappers over commonly used code. <code class="docutils literal notranslate"><span class="pre">IsStringInVector()</span></code> checks if a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> is in a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;const</span> <span class="pre">char</span> <span class="pre">*&gt;</span></code> by using <code class="docutils literal notranslate"><span class="pre">strcmp()</span></code>, and <code class="docutils literal notranslate"><span class="pre">BitwiseCheck()</span></code> checks if a bit is set in a bitfield.</p>
+<p class="rubric">OpenXRDebugUtils</p>
+<p>A header and cpp file pair that helps in setting up the DebugUtilsMessenger. <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_EXT_debug_utils.html">XR_EXT_debug_utils</a> in an OpenXR instance extension that can intercept call made to OpenXR and provide extra information or report warning and errors, if the usage of the API or the current state of OpenXR is not valid. As you go through this tutorial it is highly recommended to have this enabled to help with debugging. This is discussed in detail in <a class="reference internal" href="2-setup.html#xr-ext-debug-utils"><span class="std std-ref">Chapter 2.1</span></a>, but in general, <code class="docutils literal notranslate"><span class="pre">CreateOpenXRDebugUtilsMessenger()</span></code> creates and <code class="docutils literal notranslate"><span class="pre">DestroyOpenXRDebugUtilsMessenger()</span></code> destroys an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrDebugUtilsMessengerEXT.html">XrDebugUtilsMessengerEXT</a>. <code class="docutils literal notranslate"><span class="pre">OpenXRMessageCallbackFunction()</span></code> is a callback function that is specified at object creation, which is called when OpenXR raises an issue. The header declares the functions and the cpp defines them.</p>
+<p class="rubric">OpenXRHelper</p>
+<p>A header for including all the needed header files and helper functions. Looking inside this file, we can see:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define any XR_USE_PLATFORM_... / XR_USE_GRAPHICS_API_... before this header file.</span>
+
+<span class="c1">// OpenXR Headers</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;openxr/openxr.h&gt;</span>
+<span class="hll"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;openxr/openxr_platform.h&gt;</span>
+</span></pre></div>
+</div>
+<p>Here, we include the main OpenXR header file <code class="docutils literal notranslate"><span class="pre">openxr.h</span></code> and the OpenXR platform header file <code class="docutils literal notranslate"><span class="pre">openxr_platform.h</span></code>. For the OpenXR platform header file, note the comment about using the preceding <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros. When enabled, we gain access to functionality that interacts with the chosen graphics API and/or platform. These macros are automatically set by <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code></p>
+<p>This header also defines the macro <code class="docutils literal notranslate"><span class="pre">OPENXR_CHECK</span></code>. Many OpenXR functions return an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrResult.html">XrResult</a>. This macro will check if the call has failed and will log a message to <code class="docutils literal notranslate"><span class="pre">std::cerr</span></code>. This can be modified to suit your needs. There are two additional functions <code class="docutils literal notranslate"><span class="pre">GetXRErrorString()</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXRDebugBreak()</span></code>, which are used to convert the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrResult.html">XrResult</a> to a string and as a breakpoint function respectively.</p>
+</section>
+<section id="main-cpp-and-the-openxrtutorial-class">
+<h3>1.4.3 Main.cpp and the OpenXRTutorial Class<a class="headerlink" href="#main-cpp-and-the-openxrtutorial-class" title="Permalink to this heading">¶</a></h3>
+<p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;DebugOutput.h&gt;</span>
+</pre></div>
+</div>
+<p>Next, we add the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_....h</span></code> header to include the <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> code of your chosen graphics API. This will in turn include <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code>, <code class="docutils literal notranslate"><span class="pre">HelperFunctions.h</span></code>  and <code class="docutils literal notranslate"><span class="pre">OpenXRHelper.h</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;GraphicsAPI_OpenGL.h&gt;</span>
+</pre></div>
+</div>
+<p>You can also include <code class="docutils literal notranslate"><span class="pre">OpenXRDebugUtils.h</span></code> to help with the set-up of <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrDebugUtilsMessengerEXT.html">XrDebugUtilsMessengerEXT</a>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpenXRDebugUtils.h&gt;</span>
+</pre></div>
+</div>
+<p>Now we will define the main class <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> of the application. It’s just a stub class for now, with an empty <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. Add the following to <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="n">OpenXRTutorial</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">OpenXRTutorial</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PollSystemEvents</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_applicationRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">m_sessionRunning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Note here that for some platforms, we need additional functionality provided via the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method, so that our application can react to any relevant updates from the platform correctly.</p>
+<p>For Windows and Linux, there are no relevant system events that we need to be aware of, and thus the <code class="docutils literal notranslate"><span class="pre">PollSystemEvents()</span></code> method definition can be left blank.</p>
+<p>We’ll add the main function for the application. It will look slightly different, depending on your
+chosen platform. We first create a ‘pseudo-main function’ called <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code>, in which we create an instance of our <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, taking a <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter, and call the <code class="docutils literal notranslate"><span class="pre">Run()</span></code> method. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> can be changed to suit the graphics API that you have chosen.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">GraphicsAPI_Type</span><span class="w"> </span><span class="n">apiType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DebugOutput</span><span class="w"> </span><span class="n">debugOutput</span><span class="p">;</span><span class="w">  </span><span class="c1">// This redirects std::cerr and std::cout to the IDE&#39;s output or Android Studio&#39;s logcat.</span>
+<span class="w">    </span><span class="n">XR_TUT_LOG</span><span class="p">(</span><span class="s">&quot;OpenXR Tutorial Chapter 2&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">OpenXRTutorial</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">apiType</span><span class="p">);</span>
+<span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then, we create the actual platform-specific main function (our entry point to the application), which will call <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial_Main()</span></code> with our <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_Type</span></code> parameter. This must be changed to match on your chosen graphics API, one of: <code class="docutils literal notranslate"><span class="pre">D3D11</span></code>, <code class="docutils literal notranslate"><span class="pre">D3D12</span></code>, <code class="docutils literal notranslate"><span class="pre">OPENGL</span></code>, <code class="docutils literal notranslate"><span class="pre">OPENGL_ES</span></code>, or <code class="docutils literal notranslate"><span class="pre">VULKAN</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">OpenXRTutorial_Main</span><span class="p">(</span><span class="n">OPENGL</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="build-and-run">
+<h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
+<p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally, click “Open Project” to open that solution with Visual Studio.</p>
+<p>If you wish to build the project with CMake at the terminal, use the following commands to configure and generate the project:</p>
+<div class="highlight-batch notranslate"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
+<span class="k">cd</span> build
+cmake -G <span class="s2">&quot;&lt;your_visual_studio_version&gt;&quot;</span> ../
+</pre></div>
+</div>
+<p>You can now build and run your program. It should compile and link with no errors or warnings, but it won’t run correctly yet.</p>
+<p>If you wish to run the application outside of you IDE, you will need to be aware of the working directory for the application to run correctly. For example, To run the debug varinat of the Chapter2 application, use this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[...]/&lt;workspaceFolder&gt;/build/Chapter2&gt;&quot;Debug/OpenXRTutorialChapter2&quot;</span></code></p>
+</section>
+</section>
+<section id="summary">
+<h2>1.5 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>In this chapter, you learned about the fundamental concepts of OpenXR and created a project you will use to build your OpenXR application. Now that we have this basic application up and running, we will start to set up OpenXR.</p>
+<p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs. Note that Chapter2 is renamed to Chapter1 is the archive and repository folder.</p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter1.zip">Chapter1.zip</a></p>
+<p>Version: v0.0.0</p>
+</section>
+</section>
+
+
+					</div>
+				</div>
+				<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="OpenXR Tutorial" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="2-setup.html" class="btn btn-neutral float-right" title="2 OpenXR Setup" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
+  </div> 
+
+</footer>
+			</div>
+			</div>
+		</div>
+	</div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

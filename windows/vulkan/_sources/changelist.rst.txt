@@ -1,0 +1,104 @@
+Changelist 
+========= 
+.. code-block:: json 
+ 
+    | **Wed 27 Dec** : COMMAND_EXPAND_LISTS in Graphics api test for Vulkan.
+    | **Wed 27 Dec** : Multiple-subsite configuration implemented.
+    | **Mon 11 Dec** : Fix incorrect div tag.
+    | **Mon 11 Dec** : Added meta descriptions.
+    | **Tue 05 Dec** : Removed -x parameter from calls to glslangValidator, to fix Linux shader loading. Removed _glsl_spv_output_type_arg from glsl shader compilation.
+    | **Sat 02 Dec** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Sat 02 Dec** : Default build documentation to OFF in CMake. README.md describes how to build the tutorial in Sphinx.
+    | **Thu 30 Nov** : Added COMMAND_EXPAND_LISTS to CMake shader compilation.
+    | **Thu 30 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Thu 30 Nov** : Fixed Vulkan Fence resetting issue.
+    | **Wed 29 Nov** : Fixed hamburger menu again. Possibly deleted by a bad merge.
+    | **Wed 29 Nov** : If cookies disabled, show "all" content.
+    | **Tue 28 Nov** : Updated .htaccess
+    | **Tue 28 Nov** : Removed "sphinx_sitemap" from extensions, don't do this by default.
+    | **Tue 28 Nov** : Updated sitemap.xml
+    | **Tue 28 Nov** : Sitemap for combinations of api and platform. Added tutorialmap for url remapping.
+    | **Tue 28 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 28 Nov** : Added sitemap, but don't auto-generate sitemap by default (add sphinx_sitemap to extensions if needed). Added .htaccess and robots.txt for information, but do not deploy.
+    | **Tue 28 Nov** : Updated glslangValidator cmd line args. Potential fix for #88.
+    | **Tue 28 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Tue 28 Nov** : Updated OpenXR_500px logos and README.md.
+    | **Mon 27 Nov** : Headerlinks are invisible until hovered.
+    | **Fri 24 Nov** : Improved tab-clicking, cookie and link-share button behaviour.
+    | **Thu 23 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Thu 23 Nov** : Added "copy url" button with "share" icon at the top-right of each page. This appends the platform/api parameters if not already present.
+    | **Thu 23 Nov** : Updated README.md and added BUILD.md, CONTRIBUTORS.md, Schedule.md and screencapture-openxr-tutorial-index.png. Updated reuse. #85
+    | **Thu 23 Nov** : updatePlatformFromTab() and updateGraphicsAPIFromTab() call addUrlParameter().
+    | **Wed 22 Nov** : Minor changes to console log in layout.html.
+    | **Wed 22 Nov** : Removed console logs. Add same system for updating GraphicsAPI.
+    | **Wed 22 Nov** : Moved updatePlatform() default value.
+    | **Wed 22 Nov** : updatePlatformFromURL() uses cookie as default.
+    | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
+    | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
+    | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
+    | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
+    | **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
+    | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for "This file does not belong to any project target..." warning.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Wed 22 Nov** : Added SVG's of spaces illustrations.
+    | **Wed 22 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
+    | **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
+    | **Tue 21 Nov** : Merge branch 'main' into simplify-log
+    | **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
+    | **Tue 21 Nov** : Updated title in footer.html
+    | **Tue 21 Nov** : Restored Chapter 6.3 text.
+    | **Tue 21 Nov** : Minor text correction to Chapter 3.
+    | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Tue 21 Nov** : Initial commit to support url parameters for platform.
+    | **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled > img.
+    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd's. New compass icon.
+    | **Tue 21 Nov** : Changed <br> to <p></p> in footer.html in reference to #79.
+    | **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
+    | **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate 'here' symbols.
+    | **Thu 16 Nov** : Updated footer in relation to #79.
+    | **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
+    | **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
+    | **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
+    | **Thu 16 Nov** : Updated external links in chapter 1 text.
+    | **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
+    | **Wed 15 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
+    | **Wed 15 Nov** : Update text for chapter 6.3.
+    | **Tue 14 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
+    | **Tue 14 Nov** : Added Chapter1 zip upload.
+    | **Tue 14 Nov** : Added execute permission to android and common build shell scripts.
+    | **Tue 14 Nov** : Updated build-eoc-arch.sh to have execute permission.
+    | **Tue 14 Nov** : Added workflow_dispatch to all yaml files.
+    | **Tue 14 Nov** : Added workflow_dispatch to build-eoc-archs.yml
+    | **Tue 14 Nov** : Updated GitHub Action yaml files.
+    | **Fri 10 Nov** : Fixed broken links and rst header underlining.
+    | **Fri 10 Nov** : Chapter 6.1 code - D3D12 updated variable name.
+    | **Fri 10 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
+    | **Fri 10 Nov** : Fixed dxc_shader.cmake download in chapter 6 text.
+    | **Tue 07 Nov** : Updated Footer text.
+    | **Tue 07 Nov** : Fixed broken links, alignment of centred figures.
+    | **Tue 07 Nov** : Removed console logging, fixed link text for full source link.
+    | **Tue 07 Nov** : Site passes nu validation for its generated html.
+    | **Tue 07 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Tue 07 Nov** : Ch6 text, new images. Footer new text.
+    | **Tue 07 Nov** : Updated chapter 6.1 text and added chapter 6.5 text for multithreaded rendering. Added build-common-archs.bat/.sh for Chapter 6. Added OpenXR multithreaded diagrams from talk. Minor ordering and tag corrections for chapter 6 code.
+    | **Sat 04 Nov** : Next Steps text updates.
+    | **Fri 03 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 03 Nov** : Enabling Ch6 and its icon.
+    | **Fri 03 Nov** : Added chapter 6 downloads for d3d12.
+    | **Fri 03 Nov** : Updated code block in 6-next-steps.rst. Added some missing tags to chapter code.
+    | **Fri 03 Nov** : Added more info on xrWaitFrame in chapter 3.2.3.
+    | **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
+    | **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
+    | **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
+    | **Fri 03 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
+    | **Fri 03 Nov** : New icons, 3d graphics icon and next steps icon. All icons updated.
+    | **Fri 03 Nov** : For XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING reference in text 2.3.1, we point forwards to 3.2.2 for details on XrSpaces.
+    | **Fri 03 Nov** : Update CreateSwapchains() code and text to use the correct XrViewConfigurationView pre view.

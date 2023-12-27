@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="OpenXR Tutorial: Extensions, Hand Tracking" name="description" />
+<meta content="khronos, openxr, tutorial, extensions, hand tracking, layers, xr" name="keywords" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>5 Extensions &mdash; OpenXR Tutorial  documentation</title>
+	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
+	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
+	<link rel="shortcut icon" href="_static/favicon.ico">
+	<link rel="canonical" href="https://openxr-tutorial.simul.co/5-extensions.html" >
+	<!--[if lt IE 9]>
+	  <script src="_static/js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
+	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="_static/js/theme.js"></script>
+	<link rel="index" title="Index" href="genindex.html" >
+	<link rel="search" title="Search" href="search.html" >
+	<link rel="next" title="6 Next Steps" href="6-next-steps.html" >
+	<link rel="prev" title="4 Interactions" href="4-actions.html" > 
+	<script  src="_static/js/js.cookie.min.js"></script>
+	<script >
+	var currentPlatform="all";
+	var currentAPI="all";
+	function setPlatform(pl)
+	{
+		currentPlatform=pl;
+		if(navigator.cookieEnabled)
+			Cookies.set('platform', pl, { expires: 365,sameSite: "strict"});
+	}
+	function setGraphicsAPI(a)
+	{
+		currentAPI=a;
+		if(navigator.cookieEnabled)
+			Cookies.set('graphicsapi', a, { expires: 365,sameSite: "strict"});
+	}
+	function getPlatform()
+	{
+		if(currentPlatform=="all"&&navigator.cookieEnabled)
+		{
+			currentPlatform=Cookies.get("platform");
+			if (typeof currentPlatform == 'undefined')
+			{
+				currentPlatform = "windows"; // Default if cookies are enabled.
+			//	console.log("getPlatform() defaulted to: "+currentPlatform);
+			}
+			//else
+			//	console.log("getPlatform() from cookie: "+currentPlatform);
+		}
+		//console.log("getPlatform() returned: "+currentPlatform);
+		return currentPlatform;
+	}
+	function getGraphicsAPI()
+	{
+		if(currentAPI=="all"&&navigator.cookieEnabled)
+		{
+			currentAPI=Cookies.get("graphicsapi");
+			if (typeof currentAPI == 'undefined')
+			{
+				currentAPI = "vulkan"; // Default if cookies are enabled.
+				//console.log("getGraphicsAPI() defaulted to: "+currentAPI);
+			}
+			//else
+			//	console.log("getGraphicsAPI() from cookie: "+currentAPI);
+		}
+		//console.log("getGraphicsAPI() returned: "+currentAPI);
+		return currentAPI;
+	}
+
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+		//console.log("add url parameter to : "+addr)
+		url=new URL(addr);
+		url.searchParams.set(name,value);
+		return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], getPlatform());
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+		var platform = getPlatform();
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatform()
+	{
+		var platform = getPlatform();
+		console.log('updatePlatform() = ' + platform);
+		$(".linux").hide();
+		$(".android").hide();
+		$(".windows").hide();
+		if (platform == "windows"||platform == "all")
+		{
+		$(".windows").show();
+			$(".selectd3d11").removeAttr("disabled");
+			$(".selectd3d12").removeAttr("disabled");
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "linux"||platform == "all")
+		{
+			$(".linux").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "android"||platform == "all")
+		{
+			//console.log("platform  " + platform + ".");
+			$(".android").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").removeAttr("disabled");
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").attr("disabled", true);
+		}
+		var oldelements = document.querySelectorAll(".selected-platform");
+		while (oldelements.length > 0)
+		{
+			var el=oldelements.item(0);
+			el.classList.remove('selected-platform');
+			////console.log("Removing selected-platform from "+el.id);
+			oldelements = document.querySelectorAll(".selected-platform");
+		}
+		var element = document.getElementById('select' + platform);
+		if(element)
+		{
+			element.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element.id);
+		}
+		var element2 = document.getElementById('select' + platform + "-inline");
+		if(element2)
+		{
+			element2.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element2.id);
+		}
+		if(limitAPIChoice())
+			updateGraphicsAPI();
+		window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+		var platform = getPlatform();
+		var graphicsApi = getGraphicsAPI();
+		////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+		window.limitAPIChoice=limitAPIChoice;
+		var newApi=graphicsApi;
+		if (platform == "windows")
+		{
+			if (graphicsApi == "opengles"||graphicsApi==undefined)
+			newApi="d3d11";
+		}
+		if (platform == "linux")
+		{
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+			newApi="vulkan";
+		}
+		if (platform == "android"||graphicsApi==undefined)
+		{
+			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+			newApi="vulkan";
+		}
+		////console.log("newApi = "+newApi);
+		if (newApi != graphicsApi)
+		{
+			////console.log("setting graphicsapi = "+newApi);
+			setGraphicsAPI(newApi);
+			graphicsApi=newApi;
+			return true;
+		}
+		return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+		////console.log("makeLinksOpenInNewWindow ");
+		var download_hrefs = document.getElementsByClassName('reference download internal');
+		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		link_hrefs = document.getElementsByClassName('reference external');
+		[].forEach.call(link_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function initDropdownLinks()
+	{
+		//console.log("initDropdownLinks ");
+		var platform_api_links = document.getElementsByClassName('dropdown-platform-api');
+		//let pattern = new RegExp("\/[windows|linux|android]\/[d3d11|d3d12|vulkan|opengl|opengles]\/","gm");
+		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengl|opengles)","gm");
+		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
+		[].forEach.call(platform_api_links, function(el) {
+			href=window.location.href;
+			//console.log("href "+href);
+			platform_api=el.id.replace('-','/');
+			//console.log("platform_api "+platform_api);
+			if(href.match(pattern)==null)
+			{
+				href=href.replace(root_pattern,"$1/"+platform_api+"/$2");
+			}
+			else
+			{
+				href=href.replace(pattern, platform_api);
+			}
+			//console.log("-> href "+href);
+			el.href=href;
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.initDropdownLinks=initDropdownLinks;
+	}
+	function addIconsToToctree()
+	{
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+		[].forEach.call(toctreeheadings, function(el) {
+		el.id =heading_ids[i];
+		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+		i++;
+		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
+	function copyLinkToThisPage()
+	{
+		var graphicsapi =getGraphicsAPI();
+		var platform	=getPlatform();
+		var url			=window.location.href;
+		url				=addUrlParameter(url,"platform",platform);
+		url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+		navigator.clipboard.writeText(url);
+		var dlg = document.getElementById("copied-link-dialog");
+		document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+		dlg.style.visibility = 'visible';
+		var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+		//sharepagetooltip.style.opacity = 0;
+		setTimeout(() =>
+		{
+		const dlg = document.getElementById("copied-link-dialog");
+		dlg.style.visibility = 'hidden';
+		}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], getGraphicsAPI());
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+		var graphicsApi = getGraphicsAPI();
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+		var graphicsApi = getGraphicsAPI();
+		//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+		if (graphicsApi == "d3d11"||graphicsApi == "all") {
+		$(".d3d11").show();
+		}
+		if (graphicsApi == "d3d12"||graphicsApi == "all") {
+		$(".d3d12").show();
+		}
+		if (graphicsApi == "opengl"||graphicsApi == "all") {
+		$(".opengl").show();
+		}
+		if (graphicsApi == "opengles"||graphicsApi == "all") {
+		$(".opengles").show();
+		}
+		if (graphicsApi == "vulkan"||graphicsApi == "all") {
+		$(".vulkan").show();
+		}
+			var oldelements = document.querySelectorAll(".selected-graphics-api");
+			////console.log("selected-platform on "+oldelements.length+" elements.");
+			while (oldelements.length > 0)
+			{
+				var el=oldelements.item(0);
+				el.classList.remove('selected-graphics-api');
+				////console.log("Removing selected-graphics-api from "+el.id);
+				oldelements = document.querySelectorAll(".selected-graphics-api");
+			}
+			var element = document.getElementById('select' + graphicsApi);
+			if(element)
+			{
+				element.classList.add('selected-graphics-api');
+			}
+			var element2 = document.getElementById('select' + graphicsApi +"-inline");
+			if (element2)
+			{
+				element2.classList.add('selected-graphics-api');
+			}
+			window.updateGraphicsAPI=updateGraphicsAPI;
+		}</script>
+		<script >
+		var graphicsApi = getGraphicsAPI();
+		if (graphicsApi==undefined) {
+			setGraphicsAPI(a);
+			graphicsApi='vulkan';
+		}
+	</script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
+</head>
+
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+			<a href="index.html"  class="" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				
+				<span class="sidebartitle">
+					Tutorial
+				</span>
+				
+			</a>
+<div role="search">
+    <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+        <label class="search-label" for="q">Search the tutorial</label>
+        <input type="text" name="q" id="q" placeholder="Search..." aria-label="Search docs">
+        <input type="hidden" name="check_keywords" value="yes">
+        <input type="hidden" name="area" value="default">
+    </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5 Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hand-tracking">5.1 Hand Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#composition-layer-depth">5.2 Composition Layer Depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">5.3 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">OpenXR Tutorial</a>
+		</nav>
+
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">5 Extensions</li>
+	  <li class="wy-breadcrumbs-aside">
+		  
+
+<div class="platform-api-dropdown">
+  <span>Platform/API</span>
+  <div class="platform-api-dropdown-content">
+    <ul>
+      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d11" href="#">Windows D3D11</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d12" href="#">Windows D3D12</a></li>
+      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+<script>
+	function choosePlatform(platformName)
+	{
+		setPlatform(platformName);
+		updatePlatformFromTab();
+	};
+</script>
+
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		setGraphicsAPI(graphicsApiName);
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
+  <section id="extensions">
+<h1>5 Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h1>
+<p>OpenXR is designed to be an extensible API. As we’ve seen before, the call to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrCreateInstance.html">xrCreateInstance</a> can include one or more extension names, and we can query them by using <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEnumerateInstanceExtensionProperties.html">xrEnumerateInstanceExtensionProperties</a> to find out which extensions are supported by the runtime.</p>
+<p>All functions, types and constants for an extension are found in OpenXR headers. There are two ways to access the function(s) relating to an extension: functions pointers and function prototypes.</p>
+<ul class="simple">
+<li><p>The first one is more portable, as at runtime the application queries and loads the function pointers with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProcAddr.html">xrGetInstanceProcAddr</a>.</p></li>
+<li><p>The second requires build time linking to resolve the symbols created by the declared function prototypes.</p></li>
+</ul>
+<p>In this chapter, we will load the functions pointers. We’ll see how extensions add to the core OpenXR API and look at specific cases: hand tracking and compostion layer depth.</p>
+<section id="hand-tracking">
+<h2>5.1 Hand Tracking<a class="headerlink" href="#hand-tracking" title="Permalink to this heading">¶</a></h2>
+<p>Many XR devices now support hand-tracking. Instead of a motion-tracked controller, one or more cameras take images of the surrounding area. If your hands are visible to the cameras, algorithms in or accessible to the runtime try to calculate the positions of your hands and digits. We’ll now enable hand tracking in your project.</p>
+<p><strong>Remember to enable hand tracking in your XR runtime and/or XR system settings.</strong></p>
+<p>We’ll edit your <code class="docutils literal notranslate"><span class="pre">app/src/main/AndroidManifest.xml</span></code> to enable the hand tracking feature. Add these lines to the <code class="docutils literal notranslate"><span class="pre">&lt;manifest&gt;</span></code> block:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;uses-permission</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.oculus.permission.HAND_TRACKING&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-feature</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;oculus.software.handtracking&quot;</span><span class="w"> </span><span class="na">android:required=</span><span class="s">&quot;false&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-feature</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;wave.feature.handtracking&quot;</span><span class="w"> </span><span class="na">android:required=</span><span class="s">&quot;false&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Add this line to the <code class="docutils literal notranslate"><span class="pre">&lt;application&gt;</span></code> block:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;meta-data</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.oculus.handtracking.frequency&quot;</span><span class="w"> </span><span class="na">android:value=</span><span class="s">&quot;HIGH&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>We saw in <a class="reference internal" href="2-setup.html#instanceextensions"><span class="std std-ref">Chapter 2</span></a> how to create a list of instance extensions before creating the OpenXR instance. At the top of <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, where we’re listing the extensions to request, we’ll add the name of the one that enables hand tracking:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
+<span class="c1">// Ensure m_apiType is already defined when we call this line.</span>
+<span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_HAND_TRACKING_EXTENSION_NAME</span><span class="p">);</span>
+<span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_HAND_INTERACTION_EXTENSION_NAME</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>XR_EXT_hand_tracking and XR_EXT_hand_interaction are official multivendor extensions. Being multivendor extensions means that they are likely well supported across vendors, but they are not currently Khronos-approved extensions. All functions, types and constants in this extension will have the ‘EXT’ label somewhere in their name.</p>
+<p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking">OpenXR Specification 12.31. XR_EXT_hand_tracking</a>.</p>
+<p><a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_interaction">OpenXR Specification 12.29. XR_EXT_hand_interaction</a>.</p>
+<p>At the start of your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file, underneath where you included <code class="docutils literal notranslate"><span class="pre">&quot;OpenXRDebugUtils.h&quot;</span></code>, add these declarations:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">PFN_xrCreateHandTrackerEXT</span><span class="w"> </span><span class="n">xrCreateHandTrackerEXT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">PFN_xrDestroyHandTrackerEXT</span><span class="w"> </span><span class="n">xrDestroyHandTrackerEXT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">PFN_xrLocateHandJointsEXT</span><span class="w"> </span><span class="n">xrLocateHandJointsEXT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Next, we’ll need to get the function pointers at runtime, so at the end of <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, add this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrCreateHandTrackerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrCreateHandTrackerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get xrCreateHandTrackerEXT.&quot;</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrDestroyHandTrackerEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrDestroyHandTrackerEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get xrDestroyHandTrackerEXT.&quot;</span><span class="p">);</span>
+<span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrGetInstanceProcAddr</span><span class="p">(</span><span class="n">m_xrInstance</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xrLocateHandJointsEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">PFN_xrVoidFunction</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">xrLocateHandJointsEXT</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to get xrLocateHandJointsEXT.&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>These calls require an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a>, so we must initialize these after <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrCreateInstance.html">xrCreateInstance</a> has successfully returned. If hand tracking is not supported (or not enabled), we’ll get a warning, and these functions will be <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. You can run your application now to check this.</p>
+<p>At the end of your <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> application class, declare the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The hand tracking properties, namely, is it supported?</span>
+<span class="n">XrSystemHandTrackingPropertiesEXT</span><span class="w"> </span><span class="n">handTrackingSystemProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_SYSTEM_HAND_TRACKING_PROPERTIES_EXT</span><span class="p">};</span>
+<span class="c1">// Each tracked hand has a live list of joint locations.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Hand</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrHandJointLocationEXT</span><span class="w"> </span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="p">];</span>
+<span class="w">    </span><span class="n">XrHandTrackerEXT</span><span class="w"> </span><span class="n">m_handTracker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">Hand</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</pre></div>
+</div>
+<p><cite>Hand</cite> is a simple struct to encapsulate the XrHandTrackerEXT object for each hand, and the joint location structures that we’ll update to track hand motion.</p>
+<p>We want to query the system properties for hand tracking support. In the function <code class="docutils literal notranslate"><span class="pre">GetSystemID()</span></code>, before the call to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetSystemProperties.html">xrGetSystemProperties</a>, insert this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Check if hand tracking is supported.</span>
+<span class="w">    </span><span class="n">m_systemProperties</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">handTrackingSystemProperties</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now, in Run(), after the call to AttachActionSet(), add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">           </span><span class="n">CreateHandTrackers</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Add this method after the definition of <code class="docutils literal notranslate"><span class="pre">AttachActionSet()</span></code>. For each of the two hands, we’ll call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrCreateHandTrackerEXT.html">xrCreateHandTrackerEXT</a> and fill in the <code class="docutils literal notranslate"><span class="pre">m_handTracker</span></code> object.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CreateHandTrackers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Hand</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">XrHandTrackerCreateInfoEXT</span><span class="w"> </span><span class="n">xrHandTrackerCreateInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_HAND_TRACKER_CREATE_INFO_EXT</span><span class="p">};</span>
+<span class="w">        </span><span class="n">xrHandTrackerCreateInfo</span><span class="p">.</span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">XR_HAND_LEFT_EXT</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">XR_HAND_RIGHT_EXT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">xrHandTrackerCreateInfo</span><span class="p">.</span><span class="n">handJointSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XR_HAND_JOINT_SET_DEFAULT_EXT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrCreateHandTrackerEXT</span><span class="p">(</span><span class="n">m_session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xrHandTrackerCreateInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hand</span><span class="p">.</span><span class="n">m_handTracker</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to create Hand Tracker.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrHandTrackerEXT.html">XrHandTrackerEXT</a> object is a session-lifetime object, so in <code class="docutils literal notranslate"><span class="pre">DestroySession()</span></code>, at the top of the method we’ll add:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">xrDestroyHandTrackerEXT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">xrDestroyHandTrackerEXT</span><span class="p">(</span><span class="n">m_hands</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_handTracker</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Hands should be polled once per frame. At the end of <code class="docutils literal notranslate"><span class="pre">PollActions()</span></code>, we’ll poll each hand. We’ll assume to begin with that the user isn’t holding the controller, so we’ll use the motion range <code class="docutils literal notranslate"><span class="pre">XR_HAND_JOINTS_MOTION_RANGE_UNOBSTRUCTED_EXT</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">XrActionStateGetInfo</span><span class="w"> </span><span class="n">getInfo</span><span class="p">{</span><span class="n">XR_TYPE_ACTION_STATE_GET_INFO</span><span class="p">};</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">Unobstructed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Hand</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">XrHandJointsMotionRangeInfoEXT</span><span class="w"> </span><span class="n">motionRangeInfo</span><span class="p">{</span><span class="n">XR_TYPE_HAND_JOINTS_MOTION_RANGE_INFO_EXT</span><span class="p">};</span>
+<span class="w">        </span><span class="n">motionRangeInfo</span><span class="p">.</span><span class="n">handJointsMotionRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Unobstructed</span>
+<span class="w">                                                    </span><span class="o">?</span><span class="w"> </span><span class="n">XR_HAND_JOINTS_MOTION_RANGE_UNOBSTRUCTED_EXT</span>
+<span class="w">                                                    </span><span class="o">:</span><span class="w"> </span><span class="n">XR_HAND_JOINTS_MOTION_RANGE_CONFORMING_TO_CONTROLLER_EXT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">XrHandJointsLocateInfoEXT</span><span class="w"> </span><span class="n">locateInfo</span><span class="p">{</span><span class="n">XR_TYPE_HAND_JOINTS_LOCATE_INFO_EXT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">motionRangeInfo</span><span class="p">};</span>
+<span class="w">        </span><span class="n">locateInfo</span><span class="p">.</span><span class="n">baseSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_localSpace</span><span class="p">;</span>
+<span class="w">        </span><span class="n">locateInfo</span><span class="p">.</span><span class="n">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">predictedTime</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">XrHandJointLocationsEXT</span><span class="w"> </span><span class="n">locations</span><span class="p">{</span><span class="n">XR_TYPE_HAND_JOINT_LOCATIONS_EXT</span><span class="p">};</span>
+<span class="w">        </span><span class="n">locations</span><span class="p">.</span><span class="n">jointCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">locations</span><span class="p">.</span><span class="n">jointLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OPENXR_CHECK</span><span class="p">(</span><span class="n">xrLocateHandJointsEXT</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">m_handTracker</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">locateInfo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">locations</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to locate hand joints.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally, we’ll render the hands simply by drawing a cuboid at each of the 26 joints of each hand. Where <code class="docutils literal notranslate"><span class="pre">numberOfCuboids</span></code> is defined, add this to make sure we have enough space in the constant buffers for our new cuboids:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">numberOfCuboids</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now in <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code>, just before the call to <code class="docutils literal notranslate"><span class="pre">m_graphicsAPI-&gt;EndRendering()</span></code>, add the following code so that we render both hands, with all their joints:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">handTrackingSystemProperties</span><span class="p">.</span><span class="n">supportsHandTracking</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">hand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_hands</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">        </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">hand_color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.f</span><span class="p">};</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">XR_HAND_JOINT_COUNT_EXT</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">XrVector3f</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5f</span><span class="p">};</span>
+<span class="w">            </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">radius</span><span class="p">;</span>
+<span class="w">            </span><span class="n">RenderCuboid</span><span class="p">(</span><span class="n">hand</span><span class="p">.</span><span class="n">m_jointLocations</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">pose</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">,</span><span class="w"> </span><span class="n">hand_color</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now run the app. You’ll now see both hands rendered as blocks.</p>
+</section>
+<section id="composition-layer-depth">
+<h2>5.2 Composition Layer Depth<a class="headerlink" href="#composition-layer-depth" title="Permalink to this heading">¶</a></h2>
+<p>Composition Layer Depth is truly important for AR use cases as it allows applications to submit to the runtime a depth image that can be used for the accurate reprojection of rendered graphics in the real world. Without a submitted depth image, certain AR applications would experience lag and ‘sloshing’ of the rendered graphics over the top of the real world. This extension <em>may in the future</em> also include the ability for runtimes to have real-world objects occlude rendered objects correctly. e.g. rendering a cube partially occluded by a door frame.</p>
+<p>This functionality is provided to OpenXR via the use of the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_KHR_composition_layer_depth.html">XR_KHR_composition_layer_depth</a> extension (<a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_composition_layer_depth">OpenXR Specification 12.8. XR_KHR_composition_layer_depth</a>). This is a Khronos-approved extension and as such it’s aligned with the standards used in the core specification. The extension allows depth images from a swapchain to be submitted alongside the color images. This extension works in conjunction with the projection layer type.</p>
+<p>The <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjection.html">XrCompositionLayerProjection</a> structure contains a pointer to an array of <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjectionView.html">XrCompositionLayerProjectionView</a> structures. Each of these structures refers to a single view in the XR system and a single image subresource from a swapchain. To submit a depth image, we employ the use of a <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerDepthInfoKHR.html">XrCompositionLayerDepthInfoKHR</a> structure. Like with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjectionView.html">XrCompositionLayerProjectionView</a>, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerDepthInfoKHR.html">XrCompositionLayerDepthInfoKHR</a> refers to a single view in the XR system and a single image subresource from a swapchain. These structures are ‘chained’ together via the use of the <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">void*</span> <span class="pre">next</span></code> member in <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjectionView.html">XrCompositionLayerProjectionView</a>. We assign the memory address of a <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerDepthInfoKHR.html">XrCompositionLayerDepthInfoKHR</a> structure that we want to chain together. The runtime time will read the <code class="docutils literal notranslate"><span class="pre">next</span></code> pointer and associate the structures and ultimately the color and depth images together for compositing. This is the same style of extensibility used in the Vulkan API.</p>
+<p>One thing is now very clear to the programmer - we need a depth swapchain! Seldom used in windowed graphics, but required here to allow smooth rendering of the depth image and to not lock either the runtime or the application by waiting on a single depth image to be passed back and forth between them. In most windowed graphics applications, the depth image is ‘discarded’ at the end of the frame and it doesn’t interact with the windowing system at all.</p>
+<p>When creating a depth swapchain, we must check that the system supports a depth format for swapchain creation. You can check this with <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEnumerateSwapchainFormats.html">xrEnumerateSwapchainFormats</a>. Unfortunately, there are no guarantees with in the OpenXR 1.0 core specification or the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XR_KHR_composition_layer_depth.html">XR_KHR_composition_layer_depth</a> extension revision 6 that states runtimes must support depth format for swapchains.</p>
+<p>To implement this extension in the Chapter 5 code, we first add the following member to the <code class="docutils literal notranslate"><span class="pre">RenderLayerInfo</span></code> structure:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">XrCompositionLayerDepthInfoKHR</span><span class="o">&gt;</span><span class="w"> </span><span class="n">layerDepthInfos</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now, in the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method under the extensions from Chapter 2:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_EXT_DEBUG_UTILS_EXTENSION_NAME</span><span class="p">);</span>
+<span class="c1">// Ensure m_apiType is already defined when we call this line.</span>
+<span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetGraphicsAPIInstanceExtensionString</span><span class="p">(</span><span class="n">m_apiType</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>We add this code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">m_instanceExtensions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">XR_KHR_COMPOSITION_LAYER_DEPTH_EXTENSION_NAME</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This enables the XR_KHR_composition_layer_depth extension for us.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">RenderLayer()</span></code> method after we’ve resized the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerProjectionView&gt;</span></code>, we also resize the <code class="docutils literal notranslate"><span class="pre">std::vector&lt;XrCompositionLayerDepthInfoKHR&gt;</span></code>, both of which are found in the <code class="docutils literal notranslate"><span class="pre">RenderLayerInfo</span></code> parameter.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">viewCount</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>After we have filled out the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjectionView.html">XrCompositionLayerProjectionView</a> structure, we fill out the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerDepthInfoKHR.html">XrCompositionLayerDepthInfoKHR</a> structure and by using the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrCompositionLayerProjectionView.html">XrCompositionLayerProjectionView</a> <code class="docutils literal notranslate"><span class="pre">::next</span></code> pointer we chain the two structures together. This submits the depth and the color image together for use by the XR compositor.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerProjectionViews</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR</span><span class="p">};</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">swapchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depthSwapchainInfo</span><span class="p">.</span><span class="n">swapchain</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">offset</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">offset</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">width</span><span class="p">);</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">subImage</span><span class="p">.</span><span class="n">imageRect</span><span class="p">.</span><span class="n">extent</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">minDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewport</span><span class="p">.</span><span class="n">minDepth</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">maxDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewport</span><span class="p">.</span><span class="n">maxDepth</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">nearZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nearZ</span><span class="p">;</span>
+<span class="w">    </span><span class="n">renderLayerInfo</span><span class="p">.</span><span class="n">layerDepthInfos</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">farZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">farZ</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>5.3 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>In this chapter, you have learned how to extend the core OpenXR functionality with extensions. You’ve used the API to query the runtime for extension support, and obtained extension function pointers for use in your app.</p>
+<p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
+<p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter5.zip">Chapter5.zip</a></p>
+<p>Version: v0.0.0</p>
+</section>
+</section>
+
+
+					</div>
+				</div>
+				<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="4-actions.html" class="btn btn-neutral float-left" title="4 Interactions" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="6-next-steps.html" class="btn btn-neutral float-right" title="6 Next Steps" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
+  </div> 
+
+</footer>
+			</div>
+			</div>
+		</div>
+	</div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

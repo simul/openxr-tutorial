@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>OpenXR Tutorial &mdash; OpenXR Tutorial  documentation</title>
+	<link rel="stylesheet" href="_static/pygments.css" type="text/css">
+	<link rel="stylesheet" href="_static/css/theme.css" type="text/css">
+	<link rel="stylesheet" href="_static/copybutton.css" type="text/css">
+	<link rel="shortcut icon" href="_static/favicon.ico">
+	<link rel="canonical" href="https://openxr-tutorial.simul.co/index.html" >
+	<!--[if lt IE 9]>
+	  <script src="_static/js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
+	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="_static/js/theme.js"></script>
+	<link rel="index" title="Index" href="genindex.html" >
+	<link rel="search" title="Search" href="search.html" >
+	<link rel="next" title="1 Introduction" href="1-introduction.html" > 
+	<script  src="_static/js/js.cookie.min.js"></script>
+	<script >
+	var currentPlatform="all";
+	var currentAPI="all";
+	function setPlatform(pl)
+	{
+		currentPlatform=pl;
+		if(navigator.cookieEnabled)
+			Cookies.set('platform', pl, { expires: 365,sameSite: "strict"});
+	}
+	function setGraphicsAPI(a)
+	{
+		currentAPI=a;
+		if(navigator.cookieEnabled)
+			Cookies.set('graphicsapi', a, { expires: 365,sameSite: "strict"});
+	}
+	function getPlatform()
+	{
+		if(currentPlatform=="all"&&navigator.cookieEnabled)
+		{
+			currentPlatform=Cookies.get("platform");
+			if (typeof currentPlatform == 'undefined')
+			{
+				currentPlatform = "windows"; // Default if cookies are enabled.
+			//	console.log("getPlatform() defaulted to: "+currentPlatform);
+			}
+			//else
+			//	console.log("getPlatform() from cookie: "+currentPlatform);
+		}
+		//console.log("getPlatform() returned: "+currentPlatform);
+		return currentPlatform;
+	}
+	function getGraphicsAPI()
+	{
+		if(currentAPI=="all"&&navigator.cookieEnabled)
+		{
+			currentAPI=Cookies.get("graphicsapi");
+			if (typeof currentAPI == 'undefined')
+			{
+				currentAPI = "vulkan"; // Default if cookies are enabled.
+				//console.log("getGraphicsAPI() defaulted to: "+currentAPI);
+			}
+			//else
+			//	console.log("getGraphicsAPI() from cookie: "+currentAPI);
+		}
+		//console.log("getGraphicsAPI() returned: "+currentAPI);
+		return currentAPI;
+	}
+
+
+	//https://stackoverflow.com/questions/8562613/how-to-add-url-parameter-to-the-current-url
+	function addUrlParameter(addr,name, value)
+	{
+		//console.log("add url parameter to : "+addr)
+		url=new URL(addr);
+		url.searchParams.set(name,value);
+		return url.toString();
+	}
+
+	function getUrlParameter(name)
+	{
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+
+	function getUrlParameterWithCheck(name, checkValues, defaultValue)
+	{
+		const urlParameter = getUrlParameter(name);
+		ok = false;
+		for (i = 0; i < checkValues.length; i++)
+		{
+			ok |= (urlParameter == checkValues[i]);
+		}
+		return ok ? urlParameter : defaultValue;
+	}
+
+	function updatePlatformFromURL()
+	{
+		var platform = getUrlParameterWithCheck('platform', ['windows', 'linux', 'android'], getPlatform());
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatformFromTab()
+	{
+		var platform = getPlatform();
+		if (typeof platform == 'undefined')
+		{
+			platform = "linux"; // Set default here.
+		}
+		setPlatform(platform);
+		updatePlatform();
+	}
+
+	function updatePlatform()
+	{
+		var platform = getPlatform();
+		console.log('updatePlatform() = ' + platform);
+		$(".linux").hide();
+		$(".android").hide();
+		$(".windows").hide();
+		if (platform == "windows"||platform == "all")
+		{
+		$(".windows").show();
+			$(".selectd3d11").removeAttr("disabled");
+			$(".selectd3d12").removeAttr("disabled");
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "linux"||platform == "all")
+		{
+			$(".linux").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").attr("disabled", true);
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").removeAttr("disabled");
+		}
+		if (platform == "android"||platform == "all")
+		{
+			//console.log("platform  " + platform + ".");
+			$(".android").show();
+			$(".selectd3d11").attr("disabled", true);
+			$(".selectd3d12").attr("disabled", true);
+			$(".selectopengles").removeAttr("disabled");
+			$(".selectvulkan").removeAttr("disabled");
+			$(".selectopengl").attr("disabled", true);
+		}
+		var oldelements = document.querySelectorAll(".selected-platform");
+		while (oldelements.length > 0)
+		{
+			var el=oldelements.item(0);
+			el.classList.remove('selected-platform');
+			////console.log("Removing selected-platform from "+el.id);
+			oldelements = document.querySelectorAll(".selected-platform");
+		}
+		var element = document.getElementById('select' + platform);
+		if(element)
+		{
+			element.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element.id);
+		}
+		var element2 = document.getElementById('select' + platform + "-inline");
+		if(element2)
+		{
+			element2.classList.add('selected-platform');
+		////console.log("Adding selected-platform to "+element2.id);
+		}
+		if(limitAPIChoice())
+			updateGraphicsAPI();
+		window.updatePlatform=updatePlatform;
+	}
+
+	function limitAPIChoice()
+	{
+		var platform = getPlatform();
+		var graphicsApi = getGraphicsAPI();
+		////console.log("limitAPIChoice(), platform = " + platform+", graphicsApi = "+graphicsApi);
+		window.limitAPIChoice=limitAPIChoice;
+		var newApi=graphicsApi;
+		if (platform == "windows")
+		{
+			if (graphicsApi == "opengles"||graphicsApi==undefined)
+			newApi="d3d11";
+		}
+		if (platform == "linux")
+		{
+			if (graphicsApi == "opengles"||graphicsApi=="d3d11"||graphicsApi=="d3d12"||graphicsApi==undefined)
+			newApi="vulkan";
+		}
+		if (platform == "android"||graphicsApi==undefined)
+		{
+			if (graphicsApi != "opengles"&&graphicsApi!="vulkan")
+			newApi="vulkan";
+		}
+		////console.log("newApi = "+newApi);
+		if (newApi != graphicsApi)
+		{
+			////console.log("setting graphicsapi = "+newApi);
+			setGraphicsAPI(newApi);
+			graphicsApi=newApi;
+			return true;
+		}
+		return false;
+	}
+	function makeLinksOpenInNewWindow()
+	{
+		////console.log("makeLinksOpenInNewWindow ");
+		var download_hrefs = document.getElementsByClassName('reference download internal');
+		[].forEach.call(download_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		link_hrefs = document.getElementsByClassName('reference external');
+		[].forEach.call(link_hrefs, function(el) {
+			el.setAttribute('target', "_blank");
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
+	}
+	function initDropdownLinks()
+	{
+		//console.log("initDropdownLinks ");
+		var platform_api_links = document.getElementsByClassName('dropdown-platform-api');
+		//let pattern = new RegExp("\/[windows|linux|android]\/[d3d11|d3d12|vulkan|opengl|opengles]\/","gm");
+		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengl|opengles)","gm");
+		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
+		[].forEach.call(platform_api_links, function(el) {
+			href=window.location.href;
+			//console.log("href "+href);
+			platform_api=el.id.replace('-','/');
+			//console.log("platform_api "+platform_api);
+			if(href.match(pattern)==null)
+			{
+				href=href.replace(root_pattern,"$1/"+platform_api+"/$2");
+			}
+			else
+			{
+				href=href.replace(pattern, platform_api);
+			}
+			//console.log("-> href "+href);
+			el.href=href;
+			////console.log("Adding target blank to "+el.id);
+		});
+		window.initDropdownLinks=initDropdownLinks;
+	}
+	function addIconsToToctree()
+	{
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		var i = 0;
+		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
+		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
+		[].forEach.call(toctreeheadings, function(el) {
+		el.id =heading_ids[i];
+		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+		i++;
+		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
+	function copyLinkToThisPage()
+	{
+		var graphicsapi =getGraphicsAPI();
+		var platform	=getPlatform();
+		var url			=window.location.href;
+		url				=addUrlParameter(url,"platform",platform);
+		url				=addUrlParameter(url,"graphicsapi",graphicsapi);
+		navigator.clipboard.writeText(url);
+		var dlg = document.getElementById("copied-link-dialog");
+		document.getElementById("copied-link-text").innerHTML  = "Copied:<br>" + url + "<br>to the clipboard.";
+		dlg.style.visibility = 'visible';
+		var sharepagetooltip = document.getElementById('share-page-tooltiptext');
+		//sharepagetooltip.style.opacity = 0;
+		setTimeout(() =>
+		{
+		const dlg = document.getElementById("copied-link-dialog");
+		dlg.style.visibility = 'hidden';
+		}, 2500);
+
+	// Alert the copied text
+	//alert("Copied the link: " + url+" to the clipboard.");
+	}
+	function updateGraphicsAPIFromURL()
+	{
+		var graphicsApi = getUrlParameterWithCheck('graphicsapi', ['d3d11', 'd3d12', 'opengl', 'opengles', 'vulkan'], getGraphicsAPI());
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPIFromTab()
+	{
+		var graphicsApi = getGraphicsAPI();
+		if (typeof graphicsApi == 'undefined')
+		{
+			graphicsApi = "vulkan"; // Set default here.
+		}
+		setGraphicsAPI(graphicsApi);
+		updateGraphicsAPI();
+	}
+
+	function updateGraphicsAPI()
+	{
+		var graphicsApi = getGraphicsAPI();
+		//console.log('updateGraphicsAPI() = ' + graphicsApi);
+
+		// first, hide all the api's
+		$(".d3d11").hide();
+		$(".d3d12").hide();
+		$(".opengl").hide();
+		$(".opengles").hide();
+		$(".vulkan").hide();
+		// Now, show the wanted api's. In this way, divs with more than one will be shown, even if they have one that is hidden.
+		if (graphicsApi == "d3d11"||graphicsApi == "all") {
+		$(".d3d11").show();
+		}
+		if (graphicsApi == "d3d12"||graphicsApi == "all") {
+		$(".d3d12").show();
+		}
+		if (graphicsApi == "opengl"||graphicsApi == "all") {
+		$(".opengl").show();
+		}
+		if (graphicsApi == "opengles"||graphicsApi == "all") {
+		$(".opengles").show();
+		}
+		if (graphicsApi == "vulkan"||graphicsApi == "all") {
+		$(".vulkan").show();
+		}
+			var oldelements = document.querySelectorAll(".selected-graphics-api");
+			////console.log("selected-platform on "+oldelements.length+" elements.");
+			while (oldelements.length > 0)
+			{
+				var el=oldelements.item(0);
+				el.classList.remove('selected-graphics-api');
+				////console.log("Removing selected-graphics-api from "+el.id);
+				oldelements = document.querySelectorAll(".selected-graphics-api");
+			}
+			var element = document.getElementById('select' + graphicsApi);
+			if(element)
+			{
+				element.classList.add('selected-graphics-api');
+			}
+			var element2 = document.getElementById('select' + graphicsApi +"-inline");
+			if (element2)
+			{
+				element2.classList.add('selected-graphics-api');
+			}
+			window.updateGraphicsAPI=updateGraphicsAPI;
+		}</script>
+		<script >
+		var graphicsApi = getGraphicsAPI();
+		if (graphicsApi==undefined) {
+			setGraphicsAPI(a);
+			graphicsApi='vulkan';
+		}
+	</script>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	@import url('https://fonts.cdnfonts.com/css/menlo');
+	</style>
+</head>
+
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+			<a href="#"  class="" >
+				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
+				
+				<span class="sidebartitle">
+					Tutorial
+				</span>
+				
+			</a>
+<div role="search">
+    <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+        <label class="search-label" for="q">Search the tutorial</label>
+        <input type="text" name="q" id="q" placeholder="Search..." aria-label="Search docs">
+        <input type="hidden" name="check_keywords" value="yes">
+        <input type="hidden" name="area" value="default">
+    </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+	<div data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="#">OpenXR Tutorial</a>
+		</nav>
+
+		<div class="sticky-breadcrumb-ribbon" role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">OpenXR Tutorial</li>
+	  <li class="wy-breadcrumbs-aside">
+		  
+
+<div class="platform-api-dropdown">
+  <span>Platform/API</span>
+  <div class="platform-api-dropdown-content">
+    <ul>
+      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d11" href="#">Windows D3D11</a></li>
+      <li><a class="dropdown-platform-api" id="windows-d3d12" href="#">Windows D3D12</a></li>
+      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+<script>
+	function choosePlatform(platformName)
+	{
+		setPlatform(platformName);
+		updatePlatformFromTab();
+	};
+</script>
+
+<script>
+	function chooseGraphicsAPI(graphicsApiName)
+	{
+		setGraphicsAPI(graphicsApiName);
+		updateGraphicsAPIFromTab();
+		limitAPIChoice();
+	};
+</script>
+	  </li>
+  </ul>
+</div>
+		<div class="wy-nav-content">
+				<div class="rst-content">
+					<div class="share-page-container">
+						<button class="share-this-page" id='share-this-page' onclick="copyLinkToThisPage()">
+							<img class="api-tab-img" src="_static/css/icons/share_FILL0_wght400_GRAD0_opsz24.svg" alt="Copy link to this page" />
+						</button>
+						<div id="copied-link-dialog">
+							<p id="copied-link-text"></p>
+						</div>
+						<div id="share-page-tooltiptext">Copy link to this page</div>
+</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+						
+  <section id="openxr-tutorial">
+<h1>OpenXR Tutorial<a class="headerlink" href="#openxr-tutorial" title="Permalink to this heading">¶</a></h1>
+<p>This tutorial will teach you how to use the OpenXR API. OpenXR is an API managed by the Khronos Group which provides a cross-platform way for applications to interact with immersive devices. This includes virtual reality (VR) headsets, augmented reality (AR) devices, motion controllers and more.</p>
+<p>An API is an application programming interface, a set of rules for how a software system can be interfaced-with by other systems. There is no specific library or code that is OpenXR, but rather there are multiple implementations (or runtimes), which might be provided by hardware manufacturers or by software companies; there are even open source runtimes for OpenXR. Whichever runtime you use, if it’s compliant with the OpenXR specification, your OpenXR-compliant code will work with it.</p>
+<p>This tutorial introduces programming with OpenXR. If you use a game engine such as Unreal Engine, Unity or Godot, you may not need to interact directly with OpenXR: the engine abstracts this away. However, it may be beneficial to learn the underlying concepts.</p>
+<p>OpenXR is designed to work with various different graphics APIs: Vulkan, Direct3D 11, Direct3D 12, OpenGL and OpenGL ES are all supported at present. You will need some familiarity with your graphics API of choice to get the most out of this tutorial.</p>
+<p>Other prerequisites are:</p>
+<ul class="simple">
+<li><p>A Windows or Linux PC to compile the code.</p></li>
+<li><p>An IDE (integrated development environment) that supports your target device: either Visual Studio 2017 or later; or Android Studio.</p></li>
+<li><p>Some XR hardware to run on: either an XR device that connects to your PC, or an Android-based device like a Meta Quest or Pico Neo. It is also possible to use <a class="reference external" href="https://monado.freedesktop.org/">Monado</a> to emulate XR hardware.</p></li>
+<li><p>CMake 3.22.1 is required.</p></li>
+<li><p>Python 3.6+ is required to build the OpenXR-SDK-Source repository. See <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-SDK-Source/blob/main/BUILDING.md">OpenXR-SDK-Source/BUILDING.md</a>.</p></li>
+</ul>
+<section id="tutorial-structure">
+<h2>Tutorial Structure<a class="headerlink" href="#tutorial-structure" title="Permalink to this heading">¶</a></h2>
+<p>The tutorial is divided into several main chapters. Each chapter walks you through a part of the process of creating an XR application and assumes that the previous chapters have been completed.</p>
+<p>Explantions of key concepts are given throughout the chapters to provide deeper insight into the workings of OpenXR. The code snippets can be copied directly into your project as you follow the tutorial, and explantions for the code are generally given after the code snippets.</p>
+<p>At the end of each chapter there is a link to download the full example source code up to that point.</p>
+<p>The full source code for this tutorial can also be downloaded from <a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials">https://github.com/KhronosGroup/OpenXR-Tutorials</a>.</p>
+<ul class="simple">
+<li><p>In the Introduction, we describe the basic concepts underpinning OpenXR, and show you how to set up a PC or Android development environment to build the code.</p></li>
+<li><p>In Setup, we show how to initialize OpenXR and connect your program to your XR device.</p></li>
+<li><p>In Graphics, we setup the swapchains and render graphics to the views.</p></li>
+<li><p>In Actions, we use OpenXR’s action system to bind input to application specific actions allowing the user to interactivity.</p></li>
+<li><p>In Extensions, we demonstrate various extensions that you may find helpful.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#goal-of-openxr">1.1 Goal of OpenXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#overview">1.2 Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#environment-setup">1.3 Environment Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#project-setup">1.4 Project Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#cmake-and-project-files">1.4.1 CMake and Project Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#common-files">1.4.2 Common Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#main-cpp-and-the-openxrtutorial-class">1.4.3 Main.cpp and the OpenXRTutorial Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-introduction.html#build-and-run">1.4.4 Build and Run</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1-introduction.html#summary">1.5 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-an-instance">2.1 Creating an Instance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#the-openxr-instance">2.1.1 The OpenXR Instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xr-ext-debug-utils">2.1.2 XR_EXT_debug_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#obtaining-the-system-id">2.1.3 Obtaining the System Id</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-setup.html#creating-a-session">2.2 Creating a Session</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsession">2.2.1 XrSession</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-setup.html#polling-the-event-loop">2.3 Polling the Event Loop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrpollevent">2.3.1 xrPollEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrsessionstate">2.3.2 XrSessionState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-setup.html#xrbeginsession-and-xrendsession">2.3.3 xrBeginSession and xrEndSession</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-setup.html#summary">2.4 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-graphics.html">3 Graphics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#creating-swapchains">3.1 Creating Swapchains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#view-configurations">3.1.1 View Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#enumerate-the-swapchain-formats">3.1.2 Enumerate the Swapchain Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#create-the-swapchains">3.1.3 Create the Swapchains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#enumerate-swapchain-images">3.1.4 Enumerate Swapchain Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#create-the-swapchain-image-views">3.1.5 Create the Swapchain Image Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#destroy-the-swapchain">3.1.6 Destroy the Swapchain</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#building-a-renderloop">3.2 Building a RenderLoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#environment-blend-modes">3.2.1 Environment Blend Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#reference-spaces">3.2.2 Reference Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#rendering-a-frame">3.2.3 Rendering a Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-graphics.html#rendering-layers">3.2.4 Rendering Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#rendering-cuboids">3.3 Rendering Cuboids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-graphics.html#summary">3.4 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4-actions.html">4 Interactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#the-openxr-interaction-system">4.1 The OpenXR Interaction System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#creating-actions-and-action-sets">4.2 Creating Actions and Action Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#interaction-profiles-and-bindings">4.3 Interaction Profiles and Bindings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-actions.html#bindings-and-profiles">4.3.1 Bindings and Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-actions.html#binding-interactions">4.3.2 Binding Interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-actions.html#theory-and-best-practices-for-interaction-profiles">Theory and Best Practices for Interaction Profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#using-actions-in-the-application">4.4 Using Actions in the Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#rendering-the-controller-position">4.5 Rendering the Controller Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#checking-for-connected-controllers">4.6 Checking for Connected Controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-actions.html#summary">4.7 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-extensions.html#hand-tracking">5.1 Hand Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-extensions.html#composition-layer-depth">5.2 Composition Layer Depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-extensions.html#summary">5.3 Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#multiview-rendering">6.1 Multiview rendering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="6-next-steps.html#cmake-and-downloads">6.1.1 CMake and Downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-next-steps.html#update-main-cpp">6.1.2 Update Main.cpp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-next-steps.html#graphicsapi-and-multiview">6.1.3 GraphicsAPI and Multiview</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#graphics-api">6.2 Graphics API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#openxr-api-layers">6.3 OpenXR API Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#color-science">6.4 Color Science</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#multithreaded-rendering">6.5 Multithreaded Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-next-steps.html#conclusion">6.6 Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Version: v0.0.0</p>
+</section>
+</section>
+
+
+					</div>
+				</div>
+				<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="1-introduction.html" class="btn btn-neutral float-right" title="1 Introduction" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+      <div class="legal-notice">
+      <h3>Legal Notice</h3>
+      <p>
+      </p>
+      <p>
+        &#169; 2023, The Khronos Group. <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons International 4.0 BY Attribution</a>. Code is licensed as <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+      </p>
+      <p>
+        "OpenXR" and the OpenXR logo are trademarks owned by The Khronos Group Inc. and are registered as a trademark in China, the European Union, Japan and the United Kingdom. Vulkan and the Vulkan logo are registered trademarks of the Khronos Group Inc.
+      </p>
+      <p>
+        OpenGL&reg; and the oval logo are trademarks or registered trademarks of Hewlett Packard Enterprise in the United States and/or other countries worldwide. OpenGL is a registered trademark and the OpenGL ES logo is a trademark of Hewlett Packard Enterprise used by permission by Khronos.
+      </p>
+      <p>
+        Microsoft DirectX, Microsoft DirectX11, and Microsoft DirectX12 are trademarks owned by Microsoft.
+      </p>
+        
+      <p>
+        The OpenXR Tutorial is owned and operated by The Khronos Group Inc. Khronos <a href="https://www.khronos.org/legal/" rel="nofollow">Legal Notices</a>, <a href="https://www.khronos.org/legal/privacy" rel="nofollow">Privacy Policy</a>, and <a href="https://www.khronos.org/about/code-of-conduct" rel="nofollow">Code of Conduct</a> apply.
+      </p>
+      <p></p>
+      </div>
+  </div> 
+
+</footer>
+			</div>
+			</div>
+		</div>
+	</div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
