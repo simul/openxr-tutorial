@@ -226,7 +226,9 @@
 		});
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
+			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
+			if(el.href.includes("://"))
+				el.setAttribute('target', "_blank");
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -264,9 +266,12 @@
 		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
 		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
 		[].forEach.call(toctreeheadings, function(el) {
-		el.id =heading_ids[i];
-		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
-		i++;
+			if(i<6) {
+				el.id =heading_ids[i];
+				el.classList.add('toctree-sidepanel');
+				el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+			}
+			i++;
 		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 		});
 	}
@@ -379,7 +384,7 @@
 
           
           
-			<a href="index.html"  class="" >
+			<a href="/"  class="" >
 				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
@@ -423,7 +428,7 @@
 		  
 
 <div class="platform-api-dropdown">
-  <span>Platform/API</span>
+  <span>Android/OpenGL ES</span>
   <div class="platform-api-dropdown-content">
     <ul>
       <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>

@@ -226,7 +226,9 @@
 		});
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
-			el.setAttribute('target', "_blank");
+			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
+			if(el.href.includes("://"))
+				el.setAttribute('target', "_blank");
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -264,9 +266,12 @@
 		const heading_ids = ["toc_introduction", "toc_setup", "toc_graphics","toc_interactions","toc_extensions","toc_nextsteps"];
 		const heading_anchors = ["introduction", "openxr-setup", "graphics","interactions","extensions","nextsteps"];
 		[].forEach.call(toctreeheadings, function(el) {
-		el.id =heading_ids[i];
-		el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
-		i++;
+			if(i<6) {
+				el.id =heading_ids[i];
+				el.classList.add('toctree-sidepanel');
+				el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
+			}
+			i++;
 		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
 		});
 	}
@@ -379,7 +384,7 @@
 
           
           
-			<a href="index.html"  class="" >
+			<a href="/"  class="" >
 				<img src="_static/OpenXR_170px_Feb17.png" class="logo" alt="The OpenXR logo" >
 				
 				<span class="sidebartitle">
@@ -423,7 +428,7 @@
 		  
 
 <div class="platform-api-dropdown">
-  <span>Platform/API</span>
+  <span>Windows/D3D12</span>
   <div class="platform-api-dropdown-content">
     <ul>
       <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
@@ -475,7 +480,10 @@
 						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 27 Dec** : COMMAND_EXPAND_LISTS in Graphics api test for Vulkan.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 02 Jan** : Fix main index TOC layout.
+| **Tue 02 Jan** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
+| **Tue 02 Jan** : Platform/API defaults to Windows/Vulkan for the purposes of links from the root site. Logo link goes to top index in root site.
+| **Wed 27 Dec** : COMMAND_EXPAND_LISTS in Graphics api test for Vulkan.
 | **Wed 27 Dec** : Multiple-subsite configuration implemented.
 | **Mon 11 Dec** : Fix incorrect div tag.
 | **Mon 11 Dec** : Added meta descriptions.
@@ -572,9 +580,6 @@
 | **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
 | **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
 | **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
-| **Fri 03 Nov** : New icons, 3d graphics icon and next steps icon. All icons updated.
-| **Fri 03 Nov** : For XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING reference in text 2.3.1, we point forwards to 3.2.2 for details on XrSpaces.
-| **Fri 03 Nov** : Update CreateSwapchains() code and text to use the correct XrViewConfigurationView pre view.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
