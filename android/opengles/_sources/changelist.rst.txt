@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 04 Jan** : Fixed malformed table.
     | **Thu 04 Jan** : Default to Android/Vulkan.
     | **Tue 02 Jan** : Fix main index TOC layout.
     | **Tue 02 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -101,4 +102,3 @@ Changelist
     | **Fri 03 Nov** : Added more info on xrWaitFrame in chapter 3.2.3.
     | **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
     | **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
-    | **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
