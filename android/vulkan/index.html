@@ -228,8 +228,12 @@
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
 			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
-			if(el.href.includes("://"))
+			if(el.getAttribute('href').includes("://")) {
+				console.log(el.getAttribute('href')+" includes ://");
 				el.setAttribute('target', "_blank");
+			}
+			else {
+			}
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -402,7 +406,7 @@
     </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <!--<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
@@ -411,7 +415,16 @@
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
-
+-->
+			<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+			<ul>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/1-introduction.html">1 Introduction</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/2-setup.html">2 OpenXR Setup</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/3-graphics.html">3 Graphics</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/4-actions.html">4 Interactions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/5-extensions.html">5 Extensions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/6-next-steps.html">6 Next Steps</a></li>
+			</ul>
         </div>
       </div>
     </nav>
@@ -506,6 +519,8 @@
 <li><p>In Actions, we use OpenXR’s action system to bind input to application specific actions allowing the user to interactivity.</p></li>
 <li><p>In Extensions, we demonstrate various extensions that you may find helpful.</p></li>
 </ul>
+<p>To begin the tutorial, select the platform and graphics API you want to use:</p>
+<p>At any time you can change platform/API by clicking the link at the top-right of the page.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>

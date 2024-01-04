@@ -231,8 +231,12 @@
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
 			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
-			if(el.href.includes("://"))
+			if(el.getAttribute('href').includes("://")) {
+				console.log(el.getAttribute('href')+" includes ://");
 				el.setAttribute('target', "_blank");
+			}
+			else {
+			}
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -405,7 +409,7 @@
     </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <!--<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">1 Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#goal-of-openxr">1.1 Goal of OpenXR</a></li>
@@ -427,7 +431,16 @@
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
-
+-->
+			<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+			<ul>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/1-introduction.html">1 Introduction</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/2-setup.html">2 OpenXR Setup</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/3-graphics.html">3 Graphics</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/4-actions.html">4 Interactions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/5-extensions.html">5 Extensions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/opengl/6-next-steps.html">6 Next Steps</a></li>
+			</ul>
         </div>
       </div>
     </nav>

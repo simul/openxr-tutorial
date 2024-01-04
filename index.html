@@ -228,8 +228,12 @@
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
 			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
-			if(el.href.includes("://"))
+			if(el.getAttribute('href').includes("://")) {
+				console.log(el.getAttribute('href')+" includes ://");
 				el.setAttribute('target', "_blank");
+			}
+			else {
+			}
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -402,7 +406,7 @@
     </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <!--<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
@@ -411,7 +415,16 @@
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
-
+-->
+			<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+			<ul>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/1-introduction.html">1 Introduction</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/2-setup.html">2 OpenXR Setup</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/3-graphics.html">3 Graphics</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/4-actions.html">4 Interactions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/5-extensions.html">5 Extensions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/android/vulkan/6-next-steps.html">6 Next Steps</a></li>
+			</ul>
         </div>
       </div>
     </nav>
@@ -429,7 +442,7 @@
 		  
 
 <div class="platform-api-dropdown">
-  <span>Linux/Vulkan</span>
+  <span>Android/Vulkan</span>
   <div class="platform-api-dropdown-content">
     <ul>
       <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
@@ -507,34 +520,7 @@
 <li><p>In Extensions, we demonstrate various extensions that you may find helpful.</p></li>
 </ul>
 <p>To begin the tutorial, select the platform and graphics API you want to use:</p>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td></td>
-<td><p>Vulkan</p></td>
-<td><p>OpenGL or OpenGL ES</p></td>
-<td><p>Direct3D 11</p></td>
-<td><p>Direct3D 12</p></td>
-</tr>
-<tr class="row-even"><td><p>Windows</p></td>
-<td><p><a class="reference external" href="./windows/vulkan/index.html">Windows/Vulkan</a></p></td>
-<td><p><a class="reference external" href="./windows/opengl/index.html">Windows/OpenGL</a></p></td>
-<td><p><a class="reference external" href="./windows/d3d11/index.html">Direct3D 11</a></p></td>
-<td><p><a class="reference external" href="./windows/d3d12/index.html">Direct3D 12</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Linux</p></td>
-<td><p><a class="reference external" href="./linux/vulkan/index.html">Linux/Vulkan</a></p></td>
-<td><p><a class="reference external" href="./linux/opengl/index.html">Linux/OpenGL</a></p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Android</p></td>
-<td><p><a class="reference external" href="./android/vulkan/index.html">Android/Vulkan</a></p></td>
-<td><p><a class="reference external" href="./android/opengles/index.html">Android/OpenGL ES</a></p></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>At any time you can change platform/API by clicking the link at the top-right of the page.</p>
 <p>Version: v0.0.0</p>
 </section>
 </section>

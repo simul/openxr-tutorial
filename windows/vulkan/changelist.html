@@ -227,8 +227,12 @@
 		link_hrefs = document.getElementsByClassName('reference external');
 		[].forEach.call(link_hrefs, function(el) {
 			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
-			if(el.href.includes("://"))
+			if(el.getAttribute('href').includes("://")) {
+				console.log(el.getAttribute('href')+" includes ://");
 				el.setAttribute('target', "_blank");
+			}
+			else {
+			}
 			////console.log("Adding target blank to "+el.id);
 		});
 		window.makeLinksOpenInNewWindow=makeLinksOpenInNewWindow;
@@ -401,7 +405,7 @@
     </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <!--<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
@@ -410,7 +414,16 @@
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
-
+-->
+			<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+			<ul>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/1-introduction.html">1 Introduction</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/2-setup.html">2 OpenXR Setup</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/3-graphics.html">3 Graphics</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/4-actions.html">4 Interactions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/5-extensions.html">5 Extensions</a></li>
+				<li class="toctree-l1"><a class="reference internal" href="/windows/vulkan/6-next-steps.html">6 Next Steps</a></li>
+			</ul>
         </div>
       </div>
     </nav>
@@ -480,7 +493,8 @@
 						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 02 Jan** : Fix main index TOC layout.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Thu 04 Jan** : Default to Android/Vulkan.
+| **Tue 02 Jan** : Fix main index TOC layout.
 | **Tue 02 Jan** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Tue 02 Jan** : Platform/API defaults to Windows/Vulkan for the purposes of links from the root site. Logo link goes to top index in root site.
 | **Wed 27 Dec** : COMMAND_EXPAND_LISTS in Graphics api test for Vulkan.
@@ -579,7 +593,6 @@
 | **Fri 03 Nov** : Added dscription for Fov and Pose in Chapter 3 text.
 | **Fri 03 Nov** : Added descriptions in XrCompositionLayer table in 3.2.3 text.
 | **Fri 03 Nov** : Chapter 3.1 text. Pointer intro to compositon layers for more detail.
-| **Fri 03 Nov** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
