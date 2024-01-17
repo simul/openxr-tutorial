@@ -242,7 +242,7 @@
 		//console.log("initDropdownLinks ");
 		var platform_api_links = document.getElementsByClassName('dropdown-platform-api');
 		//let pattern = new RegExp("\/[windows|linux|android]\/[d3d11|d3d12|vulkan|opengl|opengles]\/","gm");
-		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengl|opengles)","gm");
+		let pattern = new RegExp("(windows|linux|android)\/(d3d11|d3d12|vulkan|opengles|opengl)","gm");
 		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
 		[].forEach.call(platform_api_links, function(el) {
 			href=window.location.href;
@@ -444,14 +444,14 @@
   <span>Linux/OpenGL</span>
   <div class="platform-api-dropdown-content">
     <ul>
-      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
-      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
+      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
       <li><a class="dropdown-platform-api" id="windows-d3d11" href="#">Windows D3D11</a></li>
       <li><a class="dropdown-platform-api" id="windows-d3d12" href="#">Windows D3D12</a></li>
-      <li><a class="dropdown-platform-api" id="linux-vulkan" href="#">Linux Vulkan</a></li>
-      <li><a class="dropdown-platform-api" id="linux-opengl" href="#">Linux OpenGL</a></li>
-      <li><a class="dropdown-platform-api" id="android-vulkan" href="#">Android Vulkan</a></li>
-      <li><a class="dropdown-platform-api" id="android-opengles" href="#">Android OpenGL ES</a></li>
+      <li><a class="dropdown-platform-api" id="windows-opengl" href="#">Windows OpenGL</a></li>
+      <li><a class="dropdown-platform-api" id="windows-vulkan" href="#">Windows Vulkan</a></li>
     </ul>
   </div>
 </div>
@@ -493,7 +493,10 @@
 						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 16 Jan** : Fixed error in OS table.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Wed 17 Jan** : Updated Regex for better matching. platform-api-dropdown ordered.
+| **Wed 17 Jan** : Updated build-site.sh for correct folder structure in build folder.
+| **Wed 17 Jan** : Updated all sphinx-build in build-site.sh
+| **Tue 16 Jan** : Fixed error in OS table.
 | **Tue 16 Jan** : Updated names in OS table and list.
 | **Tue 16 Jan** : Replace single-column platform/API table with multi-level list. Reduce table padding when width&lt;1100px.
 | **Tue 16 Jan** : Merge branch &#39;main&#39; of github.com:KhronosGroup/OpenXR-Tutorials
@@ -590,9 +593,6 @@
 | **Tue 14 Nov** : Fix Section heading alignment. New LocalSpace.png.
 | **Tue 14 Nov** : Added Chapter1 zip upload.
 | **Tue 14 Nov** : Added execute permission to android and common build shell scripts.
-| **Tue 14 Nov** : Updated build-eoc-arch.sh to have execute permission.
-| **Tue 14 Nov** : Added workflow_dispatch to all yaml files.
-| **Tue 14 Nov** : Added workflow_dispatch to build-eoc-archs.yml
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
