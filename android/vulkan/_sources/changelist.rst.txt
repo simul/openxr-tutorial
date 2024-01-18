@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Thu 18 Jan** : Updated column widths on HTML table. Added new padding parameters for wide-version-table.
     | **Thu 18 Jan** : Added arrow svg for platform-api-dropdown as previous implementation was no supported on mobile.
     | **Thu 18 Jan** : Replaced rst table with html one to support nbsp fully. #103
     | **Wed 17 Jan** : Added nbsp to index.rst.
@@ -101,4 +102,3 @@ Changelist
     | **Thu 16 Nov** : Updated external links in chapter 1 text.
     | **Thu 16 Nov** : Added rst git_release to point to the GitHub releases page. Updated build-common-archs.yml to build all version of the Common folder for chapters 1 - 5. Updated build-site.sh/.yml to take the git release tag and pass it to sphinx to be used in git_release. Added tag version to all pages.
     | **Wed 15 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Wed 15 Nov** : Update text for chapter 6.3.
