@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <meta content="OpenXR Tutorial: Actions, Controller Profiles and Bindings" name="description" />
 <meta content="khronos, openxr, tutorial, actions, profiles, bindings, xr" name="keywords" />
 
@@ -16,13 +16,13 @@
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
 	
-	<script src="_static/jquery.js?v=5d32c60e"></script>
-	<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-	<script src="_static/documentation_options.js?v=5929fcd5"></script>
-	<script src="_static/doctools.js?v=888ff710"></script>
-	<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-	<script src="_static/clipboard.min.js?v=a7894cd8"></script>
-	<script src="_static/copybutton.js?v=f281be69"></script>
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -510,7 +510,7 @@
 					<div itemprop="articleBody">
 						
   <section id="interactions">
-<h1>4 Interactions<a class="headerlink" href="#interactions" title="Link to this heading">¶</a></h1>
+<h1>4 Interactions<a class="headerlink" href="#interactions" title="Permalink to this heading">¶</a></h1>
 <p>The goal of this chapter is to build an application that uses OpenXR actions to create interactivity. We will render numerous colored cubes for the user play with and build stuctures. First, we will update our build files and folders.</p>
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter4</span><span class="p">)</span>
@@ -524,13 +524,13 @@
 </div>
 <p>Now build your project, you can run it to check that it behaves the same as your Chapter 3 code so far.</p>
 <section id="the-openxr-interaction-system">
-<h2>4.1 The OpenXR Interaction System<a class="headerlink" href="#the-openxr-interaction-system" title="Link to this heading">¶</a></h2>
+<h2>4.1 The OpenXR Interaction System<a class="headerlink" href="#the-openxr-interaction-system" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR interactions are defined in a two-way system with inputs such as motion-based poses, button presses, analogue controls, and outputs such as haptic controller vibrations. Collectively in OpenXR terminology, these are called Actions. An <em>Action</em> is a semantic object, not necessarily associated with a specific hardware control: for example, you would define a “Select” action, not an action for “press the A button”. You would define an action “walk”, not “left analogue stick position”. The specific device input or output that an Action is associated with, is in the realm of <em>Bindings</em>, which are defined by <em>Interaction Profiles</em> (see below).</p>
 <p>Actions are contextual. They are grouped within <em>Action Sets</em>, which are again semantic and app-specific. For example, you might have an Action Set for “gameplay” and a different Action Set for “pause menu”. In more complex applications, you would create Action Sets for different situations - “driving car” and “walking” could be different Action Sets.</p>
 <p>In this chapter, you’ll learn how to create an Action Set containing multiple Actions of different types. You’ll create a binding for your Actions with a simple controller profile, and optionally, with a profile specific to the device or devices you are testing.</p>
 </section>
 <section id="creating-actions-and-action-sets">
-<h2>4.2 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Link to this heading">¶</a></h2>
+<h2>4.2 Creating Actions and Action Sets<a class="headerlink" href="#creating-actions-and-action-sets" title="Permalink to this heading">¶</a></h2>
 <p>An OpenXR application has interactions with the user which can be user input to the application or haptic output to the user. In this chapter, we will create some interactions and show how this system works. The interaction system uses three core concepts: Spaces, Actions, and Bindings.</p>
 <p>At the end of your <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, add this code:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrActionSet</span><span class="w"> </span><span class="n">m_actionSet</span><span class="p">;</span>
@@ -634,9 +634,9 @@ So you can create multiple Action Sets, but we only need one for this example. T
 <p>Each Action and Action Set has both a name, for internal use, and a localized description to show to the end-user. This is because the user may want to re-map actions from the default controls, so there must be a human-readable name to show them.</p>
 </section>
 <section id="interaction-profiles-and-bindings">
-<h2>4.3 Interaction Profiles and Bindings<a class="headerlink" href="#interaction-profiles-and-bindings" title="Link to this heading">¶</a></h2>
+<h2>4.3 Interaction Profiles and Bindings<a class="headerlink" href="#interaction-profiles-and-bindings" title="Permalink to this heading">¶</a></h2>
 <section id="bindings-and-profiles">
-<h3>4.3.1 Bindings and Profiles<a class="headerlink" href="#bindings-and-profiles" title="Link to this heading">¶</a></h3>
+<h3>4.3.1 Bindings and Profiles<a class="headerlink" href="#bindings-and-profiles" title="Permalink to this heading">¶</a></h3>
 <p>As OpenXR is an API for many different devices, it needs to provide a way for you as a developer to refer to the various buttons, joysticks, inputs and outputs that a device may have, without needing to know in advance which device or devices the user will have.</p>
 <p>To do this, OpenXR defines the concept of <em>interaction profiles</em>. An interaction profile is a collection of interactions supported by a given device and runtime, and defined using textual paths.</p>
 <p>Each interaction is defined by a path with three components: the Profile Path, the User Path, and the Component Path. The Profile Path has the form <code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/&lt;vendor_name&gt;/&lt;type_name&gt;&quot;</span></code>. The User Path is a string identifying the controller device, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;/user/hand/left&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;/user/gamepad&quot;</span></code>. The Component Path is a string identifying the specific input or output, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;/input/select/click&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;/output/haptic_left_trigger&quot;</span></code>.</p>
@@ -661,7 +661,7 @@ So you can create multiple Action Sets, but we only need one for this example. T
 <p>We will now show how to use these profiles in practice to suggest bindings between Actions and inputs or outputs.</p>
 </section>
 <section id="binding-interactions">
-<h3>4.3.2 Binding Interactions<a class="headerlink" href="#binding-interactions" title="Link to this heading">¶</a></h3>
+<h3>4.3.2 Binding Interactions<a class="headerlink" href="#binding-interactions" title="Permalink to this heading">¶</a></h3>
 <p>We will set up bindings for the actions. A binding is a <em>suggested</em> correspondence between an action (which is app-defined), and the input/output on the user’s devices.</p>
 <p>An XrPath is a 64-bit number that uniquely identifies any given forward-slash-delimited path string, allowing us to refer to paths without putting cumbersome string-handling in our runtime code. After the call to <code class="docutils literal notranslate"><span class="pre">CreateActionSet()</span></code> in <code class="docutils literal notranslate"><span class="pre">Run()</span></code>, add the line:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SuggestBindings</span><span class="p">();</span>
@@ -699,7 +699,7 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 <figure class="align-left" id="id1">
 <img alt="OpenXR Standard Controller Poses" src="_images/standard-poses.png" />
 <figcaption>
-<p><span class="caption-text">Standard Grip and Aim poses for OpenXR Controllers.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+<p><span class="caption-text">Standard Grip and Aim poses for OpenXR Controllers.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>The next part depends on what hardware you will be testing on. It’s optional: the Khronos Simple Controller should work on any OpenXR runtime/device combination. But it has limitations - not least that there are no floating-point controls. If you have an Oculus Quest, whether building natively or running on PC VR via a streaming system, the native profile is called <code class="docutils literal notranslate"><span class="pre">&quot;/interaction_profiles/oculus/touch_controller&quot;</span></code>, and you can insert the following:</p>
@@ -745,7 +745,7 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 <p>Now, on startup and if the interaction profile changes for any reason, the active binding will be reported.</p>
 </section>
 <section id="theory-and-best-practices-for-interaction-profiles">
-<h3>Theory and Best Practices for Interaction Profiles<a class="headerlink" href="#theory-and-best-practices-for-interaction-profiles" title="Link to this heading">¶</a></h3>
+<h3>Theory and Best Practices for Interaction Profiles<a class="headerlink" href="#theory-and-best-practices-for-interaction-profiles" title="Permalink to this heading">¶</a></h3>
 <p>To get the best results from your application on the end-user’s device, it is important to understand the key principles behind the Interaction Profile system. These are laid out in the OpenXR Guide (<a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md">https://github.com/KhronosGroup/OpenXR-Guide/blob/main/chapters/goals_design_philosophy.md</a>) but in brief:</p>
 <ul class="simple">
 <li><p>An application written for OpenXR should work without modification on device/runtime combination, even those created after the application has been written.</p></li>
@@ -762,7 +762,7 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 </section>
 </section>
 <section id="using-actions-in-the-application">
-<h2>4.4 Using Actions in the Application<a class="headerlink" href="#using-actions-in-the-application" title="Link to this heading">¶</a></h2>
+<h2>4.4 Using Actions in the Application<a class="headerlink" href="#using-actions-in-the-application" title="Permalink to this heading">¶</a></h2>
 <p>Action Sets and Suggested Bindings are created before the session is initialized. There is a session-specific setup to be done for our actions also. After the call to CreateSession(), add:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CreateActionPoses</span><span class="p">();</span>
 <span class="n">AttachActionSet</span><span class="p">();</span>
@@ -965,7 +965,7 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 </div>
 </section>
 <section id="rendering-the-controller-position">
-<h2>4.5 Rendering the Controller Position<a class="headerlink" href="#rendering-the-controller-position" title="Link to this heading">¶</a></h2>
+<h2>4.5 Rendering the Controller Position<a class="headerlink" href="#rendering-the-controller-position" title="Permalink to this heading">¶</a></h2>
 <p>We will now draw some geometry to represent the controller poses. We already have a mathematics library from a previous chapter, but we will need a couple more headers for <code class="docutils literal notranslate"><span class="pre">std::min()</span></code>, <code class="docutils literal notranslate"><span class="pre">std::max()</span></code> and for generating pseudo-random colors.</p>
 <p>Add this after <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;xr_linear_algebra.h&gt;</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Include &lt;algorithm&gt; for std::min and max</span>
@@ -1026,14 +1026,14 @@ The suggested bindings are not guaranteed to be used: that’s up to the runtime
 <p>You should also be able to grab and move the cubes with the controllers.</p>
 </section>
 <section id="checking-for-connected-controllers">
-<h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Link to this heading">¶</a></h2>
+<h2>4.6 Checking for Connected Controllers<a class="headerlink" href="#checking-for-connected-controllers" title="Permalink to this heading">¶</a></h2>
 <p>Look again now at the function PollActions(). We specify which action to look at with the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateGetInfo.html">XrActionStateGetInfo</a> struct. Then we use a type-specific call. For our boolean Grab Action, we call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetActionStateBoolean.html">xrGetActionStateBoolean</a> to retrieve an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateBoolean.html">XrActionStateBoolean</a> struct. This specifies whether the value of the boolean is true or false, and we can use this to determine whether the user is pressing the specified button on the controller.
 However, the struct <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateBoolean.html">XrActionStateBoolean</a> also has a member called <code class="docutils literal notranslate"><span class="pre">isActive</span></code>, which is true if the state of the action is actually being read. If it’s false, the value of <code class="docutils literal notranslate"><span class="pre">currentState</span></code> is irrelevant - the polling failed.</p>
 <p>Similarly, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrActionStateFloat.html">XrActionStateFloat</a> has a floating-point <code class="docutils literal notranslate"><span class="pre">currentState</span></code> value, which is valid if <code class="docutils literal notranslate"><span class="pre">isActive</span></code> is true. The struct has <code class="docutils literal notranslate"><span class="pre">changedSinceLastSync</span></code>, which is true if the value changed between the previous and current calls to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrSyncActions.html">xrSyncActions</a>. And it has <code class="docutils literal notranslate"><span class="pre">lastChangeTime</span></code>, which is the time at which the value last changed. This allows us to be very precise about when the user pressed the button, and how long they held it down for. This could be used to detect “long presses”, or double-clicks.</p>
 <p>Careful use of this polling metadata will help you to create applications that are responsive and intuitive to use. Bear in mind as well that multiple physical controls could be bound to the same action, and the user could be using more than one controller at once. See the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#multiple_inputs">OpenXR spec</a>. for more details.</p>
 </section>
 <section id="summary">
-<h2>4.7 Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<h2>4.7 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
 <p>In this chapter, you have learned about Actions, Controller Profiles, Bindings. You’ve learned the principles and best practices of the action systm: how to specify bindings, and when to use different binding profiles. And you’ve created interactions for your app that demonstrate these principles in practice.</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
 <p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter4.zip">Chapter4.zip</a></p>

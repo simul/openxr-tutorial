@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <meta content="OpenXR Tutorial: Setup" name="description" />
 <meta content="khronos, openxr, tutorial, setup" name="keywords" />
 
@@ -16,13 +16,13 @@
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
 	
-	<script src="_static/jquery.js?v=5d32c60e"></script>
-	<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-	<script src="_static/documentation_options.js?v=5929fcd5"></script>
-	<script src="_static/doctools.js?v=888ff710"></script>
-	<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-	<script src="_static/clipboard.min.js?v=a7894cd8"></script>
-	<script src="_static/copybutton.js?v=f281be69"></script>
+	<script src="_static/jquery.js"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+	<script src="_static/doctools.js"></script>
+	<script src="_static/sphinx_highlight.js"></script>
+	<script src="_static/clipboard.min.js"></script>
+	<script src="_static/copybutton.js"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -515,10 +515,10 @@
 					<div itemprop="articleBody">
 						
   <section id="openxr-setup">
-<h1>2 OpenXR Setup<a class="headerlink" href="#openxr-setup" title="Link to this heading">¶</a></h1>
+<h1>2 OpenXR Setup<a class="headerlink" href="#openxr-setup" title="Permalink to this heading">¶</a></h1>
 <p>With your project created and your application building and running, we can start to use OpenXR. The goal of this chapter is to create an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a> and an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>, and setup the OpenXR event loop. This OpenXR code is needed to setup the core functionality of an OpenXR application to have that application interact with the OpenXR runtime and your graphics API correctly.</p>
 <section id="creating-an-instance">
-<h2>2.1 Creating an Instance<a class="headerlink" href="#creating-an-instance" title="Link to this heading">¶</a></h2>
+<h2>2.1 Creating an Instance<a class="headerlink" href="#creating-an-instance" title="Permalink to this heading">¶</a></h2>
 <p>We will continue to use the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class in <code class="docutils literal notranslate"><span class="pre">Chapter2/main.cpp</span></code> that we created in <a class="reference internal" href="1-introduction.html#project-setup"><span class="std std-ref">Chapter 1.4</span></a>.</p>
 <p>Here, we will add the following highlighted text to the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
@@ -577,7 +577,7 @@
 </div>
 <p>First, we updated <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> to call the new methods <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetInstanceProperties()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetSystemID()</span></code> and <code class="docutils literal notranslate"><span class="pre">DestroyInstance()</span></code> in that order. Finally, we added those methods and the following members to the class within their separate private sections.</p>
 <section id="the-openxr-instance">
-<h3>2.1.1 The OpenXR Instance<a class="headerlink" href="#the-openxr-instance" title="Link to this heading">¶</a></h3>
+<h3>2.1.1 The OpenXR Instance<a class="headerlink" href="#the-openxr-instance" title="Permalink to this heading">¶</a></h3>
 <p>The <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a> is the foundational object that we need to create first. The <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a> encompasses the application setup state, OpenXR API version and any layers and extensions. So inside the <code class="docutils literal notranslate"><span class="pre">CreateInstance()</span></code> method, we will first add the code for the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrApplicationInfo.html">XrApplicationInfo</a>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrApplicationInfo</span><span class="w"> </span><span class="n">AI</span><span class="p">;</span>
 <span class="n">strncpy</span><span class="p">(</span><span class="n">AI</span><span class="p">.</span><span class="n">applicationName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OpenXR Tutorial Chapter 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">XR_MAX_APPLICATION_NAME_SIZE</span><span class="p">);</span>
@@ -678,7 +678,7 @@
 <p>Here, we have initialized the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstanceProperties.html">XrInstanceProperties</a> with the correct <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrStructureType.html">XrStructureType</a> and passed it along with the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrInstance.html">XrInstance</a> to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrGetInstanceProperties.html">xrGetInstanceProperties</a>. This will fill the rest of that structure. Next, we logged out the runtime’s name, and using the <code class="docutils literal notranslate"><span class="pre">XR_VERSION_...</span></code> macros, we parsed and logged the runtime version.</p>
 </section>
 <section id="xr-ext-debug-utils">
-<h3>2.1.2 XR_EXT_debug_utils<a class="headerlink" href="#xr-ext-debug-utils" title="Link to this heading">¶</a></h3>
+<h3>2.1.2 XR_EXT_debug_utils<a class="headerlink" href="#xr-ext-debug-utils" title="Permalink to this heading">¶</a></h3>
 <p>XR_EXT_debug_utils is an instance extension for OpenXR, which allows the application to get more information on errors, warnings and messages raised by the runtime. You can specify which message severities and types will checked. If a debug message is raised, it is passed to the callback function, which can optionally use the user data pointer provided in the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrDebugUtilsMessengerCreateInfoEXT.html">XrDebugUtilsMessengerCreateInfoEXT</a> structure.</p>
 <dl class="simple">
 <dt>The message severities are:</dt><dd><ul class="simple">
@@ -714,7 +714,7 @@
 <p>Another feature of OpenXR is the API Layers, which may also assist you in debugging. You can read more about them in <a class="reference internal" href="6-next-steps.html#openxr-api-layers"><span class="std std-ref">Chapter 6.3</span></a>.</p>
 </section>
 <section id="obtaining-the-system-id">
-<h3>2.1.3 Obtaining the System Id<a class="headerlink" href="#obtaining-the-system-id" title="Link to this heading">¶</a></h3>
+<h3>2.1.3 Obtaining the System Id<a class="headerlink" href="#obtaining-the-system-id" title="Permalink to this heading">¶</a></h3>
 <p>The next object we want to get is the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSystemId.html">XrSystemId</a>. According to <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#system">System</a> in the OpenXR spec, OpenXR ‘separates the concept of physical systems of XR devices from the logical objects that applications interact with directly. A system represents a collection of related devices in the runtime, often made up of several individual hardware components working together to enable XR experiences. So, an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSystemId.html">XrSystemId</a> could represent a VR headset and a pair of controllers, or perhaps a mobile device with video pass-through for AR. So we need to decide what type of <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrFormFactor.html">XrFormFactor</a> we want to use, as some runtimes support multiple form factors. Here, we are selecting <code class="docutils literal notranslate"><span class="pre">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span></code>. OpenXR currently offers two options for the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrFormFactor.html">XrFormFactor</a>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrFormFactor</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -764,7 +764,7 @@
 </section>
 </section>
 <section id="creating-a-session">
-<h2>2.2 Creating a Session<a class="headerlink" href="#creating-a-session" title="Link to this heading">¶</a></h2>
+<h2>2.2 Creating a Session<a class="headerlink" href="#creating-a-session" title="Permalink to this heading">¶</a></h2>
 <p>The next major component of OpenXR that needs to be created in an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. An <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> encapsulates the state of the application from the perspective of OpenXR. When an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> is created, it starts in the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionState.html">XrSessionState</a> <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_IDLE</span></code>. It is up to the runtime to provide any updates to the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionState.html">XrSessionState</a> and for the application to query them and react to them. We will explore this in <a class="reference internal" href="#polling-the-event-loop"><span class="std std-ref">Chapter 2.3</span></a>.</p>
 <p>For now, we are just going to create an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. At this point, you’ll need to select which Graphics API you wish to use. Only one Graphics API can be used with an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. This tutorial demonstrates how to use D3D11, D3D12, OpenGL, OpenGL ES and Vulkan in conjunction with OpenXR to render graphics to the provided views. Ultimately, you will most likely be bringing your own rendering solution to this tutorial, therefore the code examples provided for the Graphics APIs are <cite>placeholders</cite> for your own code base; demonstrating in this sub-chapter what objects are needed from your Graphics API to create an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. There are both compile and runtime checks to select the requested Graphics API, and we construct an appropriate derived class through the use of <code class="docutils literal notranslate"><span class="pre">std::unique_ptr&lt;&gt;</span></code>.</p>
 <p>Update the constructor of the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial</span></code> class, the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> method and also add the definitions of the new methods and the members to their separate private sections. All the new code is highlighted code below.</p>
@@ -853,7 +853,7 @@
 </pre></div>
 </div>
 <section id="xrsession">
-<h3>2.2.1 XrSession<a class="headerlink" href="#xrsession" title="Link to this heading">¶</a></h3>
+<h3>2.2.1 XrSession<a class="headerlink" href="#xrsession" title="Permalink to this heading">¶</a></h3>
 <p>Copy the following code into the <code class="docutils literal notranslate"><span class="pre">CreateSession()</span></code> method.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">XrSessionCreateInfo</span><span class="w"> </span><span class="n">sessionCI</span><span class="p">{</span><span class="n">XR_TYPE_SESSION_CREATE_INFO</span><span class="p">};</span>
 </pre></div>
@@ -878,7 +878,7 @@
 </section>
 </section>
 <section id="polling-the-event-loop">
-<h2>2.3 Polling the Event Loop<a class="headerlink" href="#polling-the-event-loop" title="Link to this heading">¶</a></h2>
+<h2>2.3 Polling the Event Loop<a class="headerlink" href="#polling-the-event-loop" title="Permalink to this heading">¶</a></h2>
 <p>OpenXR uses an event-based system to describe changes within the XR system. It’s the application’s responsibility to poll these events and react to them. The polling of events is done by the function <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrPollEvent.html">xrPollEvent</a>. The application should continually call this function throughout its lifetime. Within a single XR frame, the application should continuously call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrPollEvent.html">xrPollEvent</a> until the internal event queue is ‘drained’; multiple events can occur across the XR frame and the application needs to handle and respond to each accordingly.</p>
 <p>Firstly, we will update the class. In the <code class="docutils literal notranslate"><span class="pre">OpenXRTutorial::Run()</span></code> method add the highlighted code below. Also, add the highlighted code for the new methods and members in their separate private sections.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpenXRTutorial</span><span class="w"> </span><span class="p">{</span>
@@ -979,7 +979,7 @@
 </pre></div>
 </div>
 <section id="xrpollevent">
-<h3>2.3.1 xrPollEvent<a class="headerlink" href="#xrpollevent" title="Link to this heading">¶</a></h3>
+<h3>2.3.1 xrPollEvent<a class="headerlink" href="#xrpollevent" title="Permalink to this heading">¶</a></h3>
 <p>Copy the following code into the <code class="docutils literal notranslate"><span class="pre">PollEvents()</span></code> method:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Poll OpenXR for a new event.</span>
 <span class="n">XrEventDataBuffer</span><span class="w"> </span><span class="n">eventData</span><span class="p">{</span><span class="n">XR_TYPE_EVENT_DATA_BUFFER</span><span class="p">};</span>
@@ -1094,7 +1094,7 @@
 <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING</span></code> are used for updating how the user interacts with the application and whether a new space change has been detected respectively. <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSpace.html">XrSpace</a> s are discussed in detail in <a class="reference internal" href="3-graphics.html#reference-spaces"><span class="std std-ref">Chapter 3.2.2</span></a></p>
 </section>
 <section id="xrsessionstate">
-<h3>2.3.2 XrSessionState<a class="headerlink" href="#xrsessionstate" title="Link to this heading">¶</a></h3>
+<h3>2.3.2 XrSessionState<a class="headerlink" href="#xrsessionstate" title="Permalink to this heading">¶</a></h3>
 <p>The final event type, <code class="docutils literal notranslate"><span class="pre">XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED</span></code>, in the above code and table, is what we will focus on for the rest of this chapter. There are currently nine valid states:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">XrSessionState</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">XR_SESSION_STATE_UNKNOWN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
@@ -1150,12 +1150,12 @@
 <p>Developers should also be aware of the lifecycle of an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>. Certain <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionState.html">XrSessionState</a> s can only lead to certain others under the correct circumstances. Below is a diagram showing the lifecycle of an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a> within an OpenXR application.</p>
 <figure class="align-default" id="id1">
 <img alt="OpenXR Session Life-Cycle" src="_images/openxr-session-life-cycle.svg" /><figcaption>
-<p><span class="caption-text">OpenXR Session Life-Cycle</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+<p><span class="caption-text">OpenXR Session Life-Cycle</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="xrbeginsession-and-xrendsession">
-<h3>2.3.3 xrBeginSession and xrEndSession<a class="headerlink" href="#xrbeginsession-and-xrendsession" title="Link to this heading">¶</a></h3>
+<h3>2.3.3 xrBeginSession and xrEndSession<a class="headerlink" href="#xrbeginsession-and-xrendsession" title="Permalink to this heading">¶</a></h3>
 <p>As the application runs, if the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSessionState.html">XrSessionState</a> changes to <code class="docutils literal notranslate"><span class="pre">XR_SESSION_STATE_READY</span></code>, the application can call <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrBeginSession.html">xrBeginSession</a> to begin the session and synchronize the application with the runtime’s frame hook.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sessionStateChanged</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XR_SESSION_STATE_READY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// SessionState is ready. Begin the XrSession using the XrViewConfigurationType.</span>
@@ -1178,7 +1178,7 @@
 </section>
 </section>
 <section id="summary">
-<h2>2.4 Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<h2>2.4 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
 <p>We have now created an XR application that can begin and stop an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSession.html">XrSession</a>, next we will look to add graphics to our application!</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs.</p>
 <p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter2.zip">Chapter2.zip</a></p>
