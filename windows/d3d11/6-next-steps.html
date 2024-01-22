@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+	<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="OpenXR Tutorial: Next Steps" name="description" />
 <meta content="khronos, openxr, tutorial, multithreading, multiview, xr" name="keywords" />
 
@@ -16,13 +16,13 @@
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
 	
-	<script src="_static/jquery.js"></script>
-	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-	<script src="_static/doctools.js"></script>
-	<script src="_static/sphinx_highlight.js"></script>
-	<script src="_static/clipboard.min.js"></script>
-	<script src="_static/copybutton.js"></script>
+	<script src="_static/jquery.js?v=5d32c60e"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+	<script src="_static/documentation_options.js?v=5929fcd5"></script>
+	<script src="_static/doctools.js?v=888ff710"></script>
+	<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+	<script src="_static/clipboard.min.js?v=a7894cd8"></script>
+	<script src="_static/copybutton.js?v=f281be69"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -508,15 +508,15 @@
 					<div itemprop="articleBody">
 						
   <section id="next-steps">
-<h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h1>
+<h1>6 Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h1>
 <p>So far, you’ve learned how to create a basic OpenXR application: how to initialize and shut down an OpenXR instance and session, how to connect a graphics API to receive rendering events, and how to poll your runtime for interactions. The next steps are up to you but in these chapter you’ll find a few suggestions.</p>
 <section id="multiview-rendering">
-<h2>6.1 Multiview rendering<a class="headerlink" href="#multiview-rendering" title="Permalink to this heading">¶</a></h2>
+<h2>6.1 Multiview rendering<a class="headerlink" href="#multiview-rendering" title="Link to this heading">¶</a></h2>
 <p>Stereoscopic rendering usually involves drawing two very similar views of the same scene, with only a slight difference in perspective due to the separation of the left and right eye positions. Multiview rendering provides a great saving, particularly of CPU time, as we can use just one set of draw calls to render both views. The benefits can also extend to the GPU, depending on the implementation. In certain cases, it’s possible that the Input Assembler only needs to be invoked once for all views, instead of repeating non-view dependent work redundantly.</p>
 <p>D3D11 supports rendering to a Texture2DArray RenderTarget, but requires the use of instanced rendering to render to multiple views in the same draw call.</p>
 <p>Multiview or View Instancing can be used for stereo rendering by creating one <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a> that contains two array images.</p>
 <section id="cmake-and-downloads">
-<h3>6.1.1 CMake and Downloads<a class="headerlink" href="#cmake-and-downloads" title="Permalink to this heading">¶</a></h3>
+<h3>6.1.1 CMake and Downloads<a class="headerlink" href="#cmake-and-downloads" title="Link to this heading">¶</a></h3>
 <p>This chapter is based on the code from chapter 4. So, Create a <code class="docutils literal notranslate"><span class="pre">Chapter6</span></code> folder in the <em>workspace</em> directory and copy across the contents of your <code class="docutils literal notranslate"><span class="pre">Chapter4</span></code> folder.</p>
 <p>In the <em>workspace</em> directory, update the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> by adding the following CMake code to the end of the file:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Chapter6</span><span class="p">)</span>
@@ -569,7 +569,7 @@
 </div>
 </section>
 <section id="update-main-cpp">
-<h3>6.1.2 Update Main.cpp<a class="headerlink" href="#update-main-cpp" title="Permalink to this heading">¶</a></h3>
+<h3>6.1.2 Update Main.cpp<a class="headerlink" href="#update-main-cpp" title="Link to this heading">¶</a></h3>
 <p>First, we update the type of members for the color and depth swapchains to be just a single <code class="docutils literal notranslate"><span class="pre">SwapchainInfo</span></code> struct containing a single <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrSwapchain.html">XrSwapchain</a>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SwapchainInfo</span><span class="w"> </span><span class="n">m_colorSwapchainInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
 <span class="n">SwapchainInfo</span><span class="w"> </span><span class="n">m_depthSwapchainInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
@@ -893,7 +893,7 @@
 <p>You can now debug and run your application using Multiview rendering.</p>
 </section>
 <section id="graphicsapi-and-multiview">
-<h3>6.1.3 GraphicsAPI and Multiview<a class="headerlink" href="#graphicsapi-and-multiview" title="Permalink to this heading">¶</a></h3>
+<h3>6.1.3 GraphicsAPI and Multiview<a class="headerlink" href="#graphicsapi-and-multiview" title="Link to this heading">¶</a></h3>
 <p>In this section, we describe some of the background changes to the shaders and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> needed to support multiview rendering.</p>
 <p>Here, we use the vertex shader to write to the <code class="docutils literal notranslate"><span class="pre">SV_RenderTargetArrayIndex</span></code> System-Value Semantic, which specifies which index in the array within the render target we should emit the primitives data to. This System-Value Semantic must be matched in the pixel shader input. Note that this is only supported when <code class="docutils literal notranslate"><span class="pre">D3D11_FEATURE_DATA_D3D11_OPTIONS3::VPAndRTArrayIndexFromAnyShaderFeedingRasterizer</span></code> is set to true. Otherwise, you would need to use a geometry shader. <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics">HLSL Semantics</a>.
 Also see this example from Microsoft’s <a class="reference external" href="https://github.com/microsoft/OpenXR-MixedReality/blob/a46ea22a396a38725043fea91166c6d5b1a49dfc/samples/BasicXrApp/CubeGraphics.cpp">OpenXR-MixedReality GitHub repository</a> and a reference page from Mixed Reality about <a class="reference external" href="https://learn.microsoft.com/en-us/windows/mixed-reality/develop/native/rendering-in-directx">Rendering in DirectX</a>.</p>
@@ -953,7 +953,7 @@ Also see this example from Microsoft’s <a class="reference external" href="htt
 </section>
 </section>
 <section id="graphics-api">
-<h2>6.2 Graphics API<a class="headerlink" href="#graphics-api" title="Permalink to this heading">¶</a></h2>
+<h2>6.2 Graphics API<a class="headerlink" href="#graphics-api" title="Link to this heading">¶</a></h2>
 <p class="rubric">GraphicsAPI</p>
 <p>Note: <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> is by no means production-ready code or reflective of good practice with specific APIs. It is there solely to provide working samples in this tutorial, and demonstrate some basic rendering and interaction with OpenXR.</p>
 <p>This tutorial uses polymorphic classes; <code class="docutils literal notranslate"><span class="pre">GraphicsAPI_...</span></code> derives from the base <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> class. The derived class is based on your graphics API selection. Include both the header and cpp files for both <code class="docutils literal notranslate"><span class="pre">GraphicsAPI</span></code> and <code class="docutils literal notranslate"><span class="pre">GraphicsAPI...</span></code>. <code class="docutils literal notranslate"><span class="pre">GraphicsAPI.h</span></code> includes the headers and macros needed to set up your platform and graphics API. Below are code snippets that show how to set up the <code class="docutils literal notranslate"><span class="pre">XR_USE_PLATFORM_...</span></code> and <code class="docutils literal notranslate"><span class="pre">XR_USE_GRAPHICS_API_...</span></code> macros for your platform along with any relevant headers. In the first code block, there’s also a reference to <code class="docutils literal notranslate"><span class="pre">XR_TUTORIAL_USE_...</span></code> which we set up the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> . This tutorial demonstrates all five graphics APIs.</p>
@@ -1028,7 +1028,7 @@ Also see this example from Microsoft’s <a class="reference external" href="htt
 </div>
 </section>
 <section id="openxr-api-layers">
-<h2>6.3 OpenXR API Layers<a class="headerlink" href="#openxr-api-layers" title="Permalink to this heading">¶</a></h2>
+<h2>6.3 OpenXR API Layers<a class="headerlink" href="#openxr-api-layers" title="Link to this heading">¶</a></h2>
 <p>The OpenXR loader has a layer system that allows OpenXR API calls to pass through a number of optional layers, that add some functionality for the application. These are extremely useful for debugging.</p>
 <p>The OpenXR SDK provides two API layers for us to use:
 In the table below are the layer names and their associated libraries and .json files.</p>
@@ -1094,12 +1094,12 @@ In the table below are the layer names and their associated libraries and .json 
 </dl>
 </section>
 <section id="color-science">
-<h2>6.4 Color Science<a class="headerlink" href="#color-science" title="Permalink to this heading">¶</a></h2>
+<h2>6.4 Color Science<a class="headerlink" href="#color-science" title="Link to this heading">¶</a></h2>
 <p>As OpenXR support both linear and sRGB color spaces for compositing. It is helpful to have a deeper knowledge of color science; especially if you are planning to use sRGB formats and have the OpenXR runtime/compositor do automatic conversions for you.</p>
 <p>For more information on color spaces and gamma encoding, see J. Guy Davidson’s <a class="reference external" href="https://www.youtube.com/watch?v=_zQ_uBAHA4A">video presentation</a> on the subject.</p>
 </section>
 <section id="multithreaded-rendering">
-<h2>6.5 Multithreaded Rendering<a class="headerlink" href="#multithreaded-rendering" title="Permalink to this heading">¶</a></h2>
+<h2>6.5 Multithreaded Rendering<a class="headerlink" href="#multithreaded-rendering" title="Link to this heading">¶</a></h2>
 <p>Multithreaded rendering with OpenXR is supported and it allows for simple and complex cases ranging from stand-alone application to game/rendering engines. In this tutorial, we have used a single thread to simulate and render our XR application, but modern desktops and mobile devices have multiple cores and thus threads for us to use. Effective use of multiple CPU threads in combination with parallel GPU work can deliver higher performance for the application.</p>
 <p>The way to allow OpenXR to interact with multiple threads is to split up the three <code class="docutils literal notranslate"><span class="pre">xr...Frame</span></code> calls. Currently, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrWaitFrame.html">xrWaitFrame</a>, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrBeginFrame.html">xrBeginFrame</a> and <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEndFrame.html">xrEndFrame</a> are all called on a single thread. In the multithreaded case, <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrWaitFrame.html">xrWaitFrame</a> stays on the ‘simulation’ thread, whilst <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrBeginFrame.html">xrBeginFrame</a> and <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/xrEndFrame.html">xrEndFrame</a> move to a ‘render’ thread. Below are examples of how thread interact with the three <code class="docutils literal notranslate"><span class="pre">xr...Frame</span></code> calls and the XR compositor frame hook.</p>
 <p>Simple:</p>
@@ -1118,7 +1118,7 @@ In the table below are the layer names and their associated libraries and .json 
 <p>Note: This talk was given before the release of the OpenXR 1.0 Specification; therefore details may vary or be inaccurate.</p>
 </section>
 <section id="conclusion">
-<h2>6.6 Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
+<h2>6.6 Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
 <p>In this chapter, we discussed a few of the possible next steps in your OpenXR journey. Be sure to refer back to the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0">OpenXR Specification</a> and look out for updates, both there and here, as the specification develops.</p>
 <p>The text of the OpenXR Tutorial is by Roderick Kennedy and Andrew Richards of Simul Software Ltd. The design of the site is by Calland Creative Ltd. The site is overseen by the Khronos OpenXR Working Group. Thanks to all volunteers who tested the site through its development.</p>
 <p>Version: v0.0.0</p>

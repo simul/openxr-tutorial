@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-	<meta charset="utf-8"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+	<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="OpenXR Tutorial: Introduction to OpenXR" name="description" />
 <meta content="khronos, openxr, tutorial" name="keywords" />
 
@@ -16,13 +16,13 @@
 	  <script src="_static/js/html5shiv.min.js"></script>
 	<![endif]-->
 	
-	<script src="_static/jquery.js"></script>
-	<script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-	<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-	<script src="_static/doctools.js"></script>
-	<script src="_static/sphinx_highlight.js"></script>
-	<script src="_static/clipboard.min.js"></script>
-	<script src="_static/copybutton.js"></script>
+	<script src="_static/jquery.js?v=5d32c60e"></script>
+	<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+	<script src="_static/documentation_options.js?v=5929fcd5"></script>
+	<script src="_static/doctools.js?v=888ff710"></script>
+	<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+	<script src="_static/clipboard.min.js?v=a7894cd8"></script>
+	<script src="_static/copybutton.js?v=f281be69"></script>
 	<script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
 	<script>mermaid.initialize({startOnLoad:true});</script>
 	<script src="_static/js/theme.js"></script>
@@ -509,25 +509,25 @@
 					<div itemprop="articleBody">
 						
   <section id="introduction">
-<h1>1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<h1>1 Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
 <section id="goal-of-openxr">
-<h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Permalink to this heading">¶</a></h2>
+<h2>1.1 Goal of OpenXR<a class="headerlink" href="#goal-of-openxr" title="Link to this heading">¶</a></h2>
 <p>OpenXR aims to help solve the fragmentation of the XR ecosystem. Before the advent of OpenXR, software developers working with multiple hardware platforms had to write different code paths for each platform to address the different hardware. Each platform had its own, often proprietary, API, and deploying an existing application to a new platform required a lot of adaptation. Developing a new application for a new platform was even more challenging. Documentation for the OpenXR 1.0 Core Specification can be found <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html">https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html</a>.</p>
 <p>Despite of their unique features, the platforms had a great deal in common. For example, most headsets had a main view seen from two slightly different perspectives. Most had a way to track the user’s head and hands or hand controllers. Most had buttons, many had analogue controls like triggers or joysticks and many had haptic feedback.</p>
 <figure class="align-left" id="id6">
 <a class="reference internal image-reference" href="_images/OpenXRBeforeAfter.png"><img alt="XR Fragmentation" src="_images/OpenXRBeforeAfter.png" style="width: 99%;" /></a>
 <figcaption>
-<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">OpenXR provides a common interface to reduce XR fragmentation.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>OpenXR aims to solve this problem by providing a common API to address XR hardware, in reading its inputs
 and outputting to its displays and haptic systems. Just as OpenGL and Vulkan provide a common API to access graphics hardware, so OpenXR allows you to write code that works with multiple XR platforms, with minimal adaptation.</p>
 </section>
 <section id="overview">
-<h2>1.2 Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>1.2 Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>We’ll start with the main concepts you’ll need to be familiar with around OpenXR.</p>
 <table class="longtable docutils align-default" id="id7">
-<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-text">OpenXR Concepts</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
 <colgroup>
 <col style="width: 16.7%" />
 <col style="width: 83.3%" />
@@ -581,7 +581,7 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 <p>OpenXR recognizes that there is a vast and ever-changing array of hardware and configurations in the XR space. With new headsets and controllers coming to the market, an abstraction of the input system was needed so that the same applications can target different and newer hardware with minimal change. This is the core reasoning behind the OpenXR Actions System.</p>
 </section>
 <section id="environment-setup">
-<h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">¶</a></h2>
+<h2>1.3 Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>This section will help you set up your development environment. Here your choice of platform makes a difference, but afterwards, things will be much more consistent. You can change platform and graphics API at any time by clicking the tabs at the top of the page. Select the platform you want to develop for now, by clicking the appropriate tab above.</p>
 <p>You should make sure that the XR runtime that you wish to use is made the default for the XR loader to recognize and load for your application.</p>
 <p class="rubric">Visual Studio</p>
@@ -594,10 +594,10 @@ and outputting to its displays and haptic systems. Just as OpenGL and Vulkan pro
 <p>You will need GPU that supports <code class="docutils literal notranslate"><span class="pre">D3D_FEATURE_LEVEL_11_0</span></code> for this tutorial.</p>
 </section>
 <section id="project-setup">
-<h2>1.4 Project Setup<a class="headerlink" href="#project-setup" title="Permalink to this heading">¶</a></h2>
+<h2>1.4 Project Setup<a class="headerlink" href="#project-setup" title="Link to this heading">¶</a></h2>
 <p>This section explains how to set up your project ready for <a class="reference internal" href="2-setup.html#creating-an-instance"><span class="std std-ref">Chapter 2</span></a> and will make references to the <code class="docutils literal notranslate"><span class="pre">/Chapter2</span></code> folder. It explains how to include the OpenXR headers, link the <code class="docutils literal notranslate"><span class="pre">openxr_loader</span></code> library, graphics API integration, and other boilerplate code and finally create a simple stub application which will be expanded on in later chapters.</p>
 <section id="cmake-and-project-files">
-<h3>1.4.1 CMake and Project Files<a class="headerlink" href="#cmake-and-project-files" title="Permalink to this heading">¶</a></h3>
+<h3>1.4.1 CMake and Project Files<a class="headerlink" href="#cmake-and-project-files" title="Link to this heading">¶</a></h3>
 <p>For the Microsoft Windows OpenXR project, we’ll use CMake to create the solution and project files for Visual Studio.
 Create a directory where the code will go, we’ll call this the <em>workspace</em> directory.</p>
 <p>Create a folder called <code class="docutils literal notranslate"><span class="pre">cmake</span></code> in the <em>workspace</em> directory. Download the linked file below and put it in <code class="docutils literal notranslate"><span class="pre">cmake</span></code>. This will be used in our <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to help build our project.</p>
@@ -704,7 +704,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <p>That’s all the CMake code that we require for this project.</p>
 </section>
 <section id="common-files">
-<h3>1.4.2 Common Files<a class="headerlink" href="#common-files" title="Permalink to this heading">¶</a></h3>
+<h3>1.4.2 Common Files<a class="headerlink" href="#common-files" title="Link to this heading">¶</a></h3>
 <p>Create a folder called <code class="docutils literal notranslate"><span class="pre">Common</span></code> in the <em>workspace</em> directory. Download each of the linked files below and put them in <code class="docutils literal notranslate"><span class="pre">Common</span></code>:</p>
 <ul class="simple">
 <li><p><a class="reference download internal" download="" href="_downloads/a668d9f10e44c7f46a041356e11e3d9e/DebugOutput.h"><code class="xref download docutils literal notranslate"><span class="pre">Common/DebugOutput.h</span></code></a></p></li>
@@ -744,7 +744,7 @@ Create a directory where the code will go, we’ll call this the <em>workspace</
 <p>This header also defines the macro <code class="docutils literal notranslate"><span class="pre">OPENXR_CHECK</span></code>. Many OpenXR functions return an <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrResult.html">XrResult</a>. This macro will check if the call has failed and will log a message to <code class="docutils literal notranslate"><span class="pre">std::cerr</span></code>. This can be modified to suit your needs. There are two additional functions <code class="docutils literal notranslate"><span class="pre">GetXRErrorString()</span></code> and <code class="docutils literal notranslate"><span class="pre">OpenXRDebugBreak()</span></code>, which are used to convert the <a class="reference external" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrResult.html">XrResult</a> to a string and as a breakpoint function respectively.</p>
 </section>
 <section id="main-cpp-and-the-openxrtutorial-class">
-<h3>1.4.3 Main.cpp and the OpenXRTutorial Class<a class="headerlink" href="#main-cpp-and-the-openxrtutorial-class" title="Permalink to this heading">¶</a></h3>
+<h3>1.4.3 Main.cpp and the OpenXRTutorial Class<a class="headerlink" href="#main-cpp-and-the-openxrtutorial-class" title="Link to this heading">¶</a></h3>
 <p>Now, create a text file called <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">Chapter2</span></code> folder. Open <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> and add the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;DebugOutput.h&gt;</span>
 </pre></div>
@@ -797,7 +797,7 @@ chosen platform. We first create a ‘pseudo-main function’ called <code class
 </div>
 </section>
 <section id="build-and-run">
-<h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading">¶</a></h3>
+<h3>1.4.4 Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
 <p>In the <em>workspace</em> directory, create a <code class="docutils literal notranslate"><span class="pre">build/</span></code> folder, which will contain our project, solution and output binary files. Now launch the CMake GUI, and point the “Where is the source code” box to the <em>workspace</em> directory, where your original <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is located. Point the “Where to build the binaries” box to a subdirectory called <code class="docutils literal notranslate"><span class="pre">build</span></code>, that we have just created. Click “Configure” and “OK” to accept the default Generator, then click “Generate” to create the Visual Studio solution and project. Finally, click “Open Project” to open that solution with Visual Studio.</p>
 <p>If you wish to build the project with CMake at the terminal, use the following commands to configure and generate the project:</p>
 <div class="highlight-batch notranslate"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
@@ -811,7 +811,7 @@ cmake -G <span class="s2">&quot;&lt;your_visual_studio_version&gt;&quot;</span> 
 </section>
 </section>
 <section id="summary">
-<h2>1.5 Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<h2>1.5 Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
 <p>In this chapter, you learned about the fundamental concepts of OpenXR and created a project you will use to build your OpenXR application. Now that we have this basic application up and running, we will start to set up OpenXR.</p>
 <p>Below is a download link to a zip archive for this chapter containing all the C++ and CMake code for all platform and graphics APIs. Note that Chapter2 is renamed to Chapter1 is the archive and repository folder.</p>
 <p><a class="reference external" href="https://github.com/KhronosGroup/OpenXR-Tutorials/releases/download/v0.0.0/Chapter1.zip">Chapter1.zip</a></p>
