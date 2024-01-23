@@ -286,7 +286,9 @@
 		var toctreeheadings = document.getElementsByClassName('toctree-l1');
 		[].forEach.call(toctreeheadings, function(el)
 		{
-			el.children[0].href = "/windows/d3d12/" + el.children[0].href;
+			var baseURI = el.children[0].baseURI;
+			var baseURIAddPath = baseURI + "/windows/d3d12/";
+			el.children[0].href = el.children[0].href.replace(baseURI, baseURIAddPath);
 		});
 	}
 	function copyLinkToThisPage()
