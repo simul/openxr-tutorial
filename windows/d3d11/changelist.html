@@ -276,7 +276,14 @@
 				el.children[0].href=el.children[0].href.replace('#','')+"#"+heading_anchors[i];
 			}
 			i++;
-		////console.log("Adding id "+heading_ids[i]+" to toctree heading "+i);
+		});
+	}
+	function updatedToctreeURLs()
+	{
+		var toctreeheadings = document.getElementsByClassName('toctree-l1');
+		[].forEach.call(toctreeheadings, function(el)
+		{
+			el.children[0].href = "/windows/d3d11/" + el.children[0].href;
 		});
 	}
 	function copyLinkToThisPage()
@@ -380,7 +387,7 @@
 	</style>
 </head>
 
-<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree();"> 
+<body class="wy-body-for-nav" onpageshow="updatePlatformFromURL(); updateGraphicsAPIFromURL();initDropdownLinks()" onload="makeLinksOpenInNewWindow(); addIconsToToctree(); updatedToctreeURLs();"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -405,7 +412,7 @@
     </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!--<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="1-introduction.html">1 Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2-setup.html">2 OpenXR Setup</a></li>
@@ -414,16 +421,7 @@
 <li class="toctree-l1"><a class="reference internal" href="5-extensions.html">5 Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6-next-steps.html">6 Next Steps</a></li>
 </ul>
--->
-			<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-			<ul>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/1-introduction.html">1 Introduction</a></li>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/2-setup.html">2 OpenXR Setup</a></li>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/3-graphics.html">3 Graphics</a></li>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/4-actions.html">4 Interactions</a></li>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/5-extensions.html">5 Extensions</a></li>
-				<li class="toctree-l1"><a class="reference internal" href="/windows/d3d11/6-next-steps.html">6 Next Steps</a></li>
-			</ul>
+
         </div>
       </div>
     </nav>
@@ -493,7 +491,10 @@
 						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Mon 22 Jan** : Fixed incorrect ordering of sphinx-build parameters.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 23 Jan** : Added updatedToctreeURLs() to resolve #106. WIP.
+| **Mon 22 Jan** : Update requirements.txt to force Sphinx 6.1.3
+| **Mon 22 Jan** : Update build-site.sh
+| **Mon 22 Jan** : Fixed incorrect ordering of sphinx-build parameters.
 | **Thu 18 Jan** : Merge branch &#39;main&#39; of github.com:simul/openxr-tutorial-src
 | **Thu 18 Jan** : Removed spurious sphinx-build call.
 | **Thu 18 Jan** : Updated column widths on HTML table. Added new padding parameters for wide-version-table.
@@ -590,9 +591,6 @@
 | **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
 | **Thu 16 Nov** : Updated links in Chapter 1 text to remove duplicate &#39;here&#39; symbols.
 | **Thu 16 Nov** : Updated footer in relation to #79.
-| **Thu 16 Nov** : Updated zip download links in Chapter 6 text.
-| **Thu 16 Nov** : Added Chapter 6 Common archives to build-common-archs.yml. Better handling of openxr_tutorials_git_tag_py in conf.py for CMake builds.
-| **Thu 16 Nov** : Updated Chapter 6 Common zip archive names.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
