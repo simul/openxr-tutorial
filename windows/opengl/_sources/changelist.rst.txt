@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : Added rules to .htaccess to ad vulkan to bare platform URL's.
     | **Tue 23 Jan** : #111 Updated Chapter 6 text to quality the CMake build status.
     | **Tue 23 Jan** : Copied changes from Common to Chapter6_1_Multiview/Common
     | **Tue 23 Jan** : Updated EnumAdapters() in default constructors of GraphicsAPI_D3D11 and GraphicsAPI_D3D12.
@@ -101,4 +102,3 @@ Changelist
     | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
     | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
