@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : Avoiding repetition of platform/api in links.
     | **Tue 23 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 23 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 23 Jan** : copyLinkToThisPage() does not add url parameters now.
@@ -101,4 +102,3 @@ Changelist
     | **Tue 21 Nov** : Minor text correction to Chapter 3.
     | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
     | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
-    | **Tue 21 Nov** : Initial commit to support url parameters for platform.
