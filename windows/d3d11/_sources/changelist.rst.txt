@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : .htaccess not deployed for subsites.
+    | **Tue 23 Jan** : Default html_extra_path is ['.htaccess']
     | **Tue 23 Jan** : Added rules to .htaccess to ad vulkan to bare platform URL's.
     | **Tue 23 Jan** : #111 Updated Chapter 6 text to quality the CMake build status.
     | **Tue 23 Jan** : Copied changes from Common to Chapter6_1_Multiview/Common
@@ -100,5 +102,3 @@ Changelist
     | **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
     | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for "This file does not belong to any project target..." warning.
     | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
-    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
