@@ -246,18 +246,25 @@
 		let root_pattern = new RegExp("(.*)\/([a-z0-9A-Z_]+\.html)","gm");
 		[].forEach.call(platform_api_links, function(el) {
 			href=window.location.href;
-		console.log("initDropdownLinks href "+href);
+		//console.log("initDropdownLinks href "+href);
 			platform_api=el.id.replace('-','/');
-		console.log("platform_api "+platform_api);
+		//console.log("platform_api "+platform_api);
 			if(href.match(pattern)==null)
 			{
+				if(href.match(root_pattern)==null)
+				{
+					href=href+"/"+platform_api);
+				}
+				else
+				{
 				href=href.replace(root_pattern,"$1/"+platform_api+"/$2");
-		console.log("1-> href "+href);
+				}
+		//console.log("1-> href "+href);
 			}
 			else
 			{
 				href=href.replace(pattern, platform_api);
-		console.log("2-> href "+href);
+		//console.log("2-> href "+href);
 			}
 			el.href=href;
 			////console.log("Adding target blank to "+el.id);
@@ -503,7 +510,8 @@
 						
   <section id="changelist">
 <h1>Changelist<a class="headerlink" href="#changelist" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 23 Jan** : Logging potential issue.
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>| **Tue 23 Jan** : Fix platform menu for root site.
+| **Tue 23 Jan** : Logging potential issue.
 | **Tue 23 Jan** : Updated README.md in reference to #97
 | **Tue 23 Jan** : Restored tabs in layout.html
 | **Tue 23 Jan** : Avoiding repetition of platform/api in links.
@@ -602,7 +610,6 @@
 | **Tue 21 Nov** : Merge branch &#39;main&#39; into simplify-log
 | **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
 | **Tue 21 Nov** : Updated title in footer.html
-| **Tue 21 Nov** : Restored Chapter 6.3 text.
 </pre></div>
 </div>
 <p>Version: v0.0.0</p>
