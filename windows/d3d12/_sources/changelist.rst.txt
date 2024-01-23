@@ -2,11 +2,17 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : #111 Updated Chapter 6 text to quality the CMake build status.
+    | **Tue 23 Jan** : Copied changes from Common to Chapter6_1_Multiview/Common
+    | **Tue 23 Jan** : Updated EnumAdapters() in default constructors of GraphicsAPI_D3D11 and GraphicsAPI_D3D12.
+    | **Tue 23 Jan** : Updated contributors from PR #107.
+    | **Tue 23 Jan** : Merge pull request #107 from Xelarse/main
     | **Tue 23 Jan** : Search box in root site searches Android/Vulkan.
     | **Tue 23 Jan** : Amend previous fix.
     | **Tue 23 Jan** : Fix platform menu for root site.
     | **Tue 23 Jan** : Logging potential issue.
     | **Tue 23 Jan** : Updated README.md in reference to #97
+    | **Tue 23 Jan** : Fix DX hang and added safety check
     | **Tue 23 Jan** : Restored tabs in layout.html
     | **Tue 23 Jan** : Avoiding repetition of platform/api in links.
     | **Tue 23 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -96,9 +102,3 @@ Changelist
     | **Wed 22 Nov** : Using XR_TUT_LOG and XR_TUT_LOG_ERROR for logging - improves Android logging behaviour.
     | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
     | **Wed 22 Nov** : Updated Chapter 1 text to explain how to resolve Android Studio warning. #70
-    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
-    | **Wed 22 Nov** : Added SVG's of spaces illustrations.
-    | **Wed 22 Nov** : Merge branch 'main' of github.com:KhronosGroup/OpenXR-Tutorials into main
-    | **Wed 22 Nov** : Fixed AndroidBuildFolder.zip folder structure. #84
-    | **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
-    | **Tue 21 Nov** : Merge branch 'main' into simplify-log
