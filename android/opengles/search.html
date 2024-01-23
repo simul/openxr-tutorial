@@ -286,7 +286,7 @@
 		[].forEach.call(toctreeheadings, function(el)
 		{
 			var baseURI = el.children[0].baseURI;
-			var baseURIAddPath = baseURI + "/android/opengles/";
+			var baseURIAddPath = baseURI + "android/opengles/";
 			el.children[0].href = el.children[0].href.replace(baseURI, baseURIAddPath);
 		});
 	}

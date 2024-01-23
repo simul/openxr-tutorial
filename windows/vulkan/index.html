@@ -285,7 +285,7 @@
 		[].forEach.call(toctreeheadings, function(el)
 		{
 			var baseURI = el.children[0].baseURI;
-			var baseURIAddPath = baseURI + "/windows/vulkan/";
+			var baseURIAddPath = baseURI + "windows/vulkan/";
 			el.children[0].href = el.children[0].href.replace(baseURI, baseURIAddPath);
 		});
 	}

@@ -288,7 +288,7 @@
 		[].forEach.call(toctreeheadings, function(el)
 		{
 			var baseURI = el.children[0].baseURI;
-			var baseURIAddPath = baseURI + "/windows/d3d11/";
+			var baseURIAddPath = baseURI + "windows/d3d11/";
 			el.children[0].href = el.children[0].href.replace(baseURI, baseURIAddPath);
 		});
 	}

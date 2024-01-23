@@ -283,7 +283,7 @@
 		[].forEach.call(toctreeheadings, function(el)
 		{
 			var baseURI = el.children[0].baseURI;
-			var baseURIAddPath = baseURI + "/linux/opengl/";
+			var baseURIAddPath = baseURI + "linux/opengl/";
 			el.children[0].href = el.children[0].href.replace(baseURI, baseURIAddPath);
 		});
 	}
