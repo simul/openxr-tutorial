@@ -2,6 +2,8 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : copyLinkToThisPage() does not add url parameters now.
+    | **Tue 23 Jan** : Moved Outlines.md outside of /tutorial so as to participate in website builds.
     | **Tue 23 Jan** : Remove double forward slash in updatedToctreeURLs().
     | **Tue 23 Jan** : Minor update to updatedToctreeURLs() in reference to #106.
     | **Tue 23 Jan** : Added updatedToctreeURLs() to resolve #106. WIP.
@@ -100,5 +102,3 @@ Changelist
     | **Tue 21 Nov** : Cannot select unsupported graphics API for a given platform. Disabled API tabs are greyed-out at 50% opacity in button.select-graphics-api:disabled > img.
     | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 21 Nov** : Fixed Heading 1 alignment for Index. Added source psd's. New compass icon.
-    | **Tue 21 Nov** : Changed <br> to <p></p> in footer.html in reference to #79.
-    | **Thu 16 Nov** : #78 Changed git_release link to automatically download the zip archive.
