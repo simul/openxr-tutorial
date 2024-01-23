@@ -2,6 +2,9 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : Logging potential issue.
+    | **Tue 23 Jan** : Updated README.md in reference to #97
+    | **Tue 23 Jan** : Restored tabs in layout.html
     | **Tue 23 Jan** : Avoiding repetition of platform/api in links.
     | **Tue 23 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
     | **Tue 23 Jan** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
@@ -99,6 +102,3 @@ Changelist
     | **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
     | **Tue 21 Nov** : Updated title in footer.html
     | **Tue 21 Nov** : Restored Chapter 6.3 text.
-    | **Tue 21 Nov** : Minor text correction to Chapter 3.
-    | **Tue 21 Nov** : Removed console log from getUrlParameter(). getUrlParameterWithCheck() takes a defaultValue parameter to better support cookies. Added graphicsapi url parameter.
-    | **Tue 21 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src into main
