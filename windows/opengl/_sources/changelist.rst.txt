@@ -2,6 +2,7 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Tue 23 Jan** : Amend previous fix.
     | **Tue 23 Jan** : Fix platform menu for root site.
     | **Tue 23 Jan** : Logging potential issue.
     | **Tue 23 Jan** : Updated README.md in reference to #97
@@ -101,4 +102,3 @@ Changelist
     | **Tue 21 Nov** : Merge pull request #56 from rpavlik/simplify-log
     | **Tue 21 Nov** : Merge branch 'main' into simplify-log
     | **Tue 21 Nov** : Updated getUrlParameter() function and setting cookie after addUrlParameter().
-    | **Tue 21 Nov** : Updated title in footer.html
