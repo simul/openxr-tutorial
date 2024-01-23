@@ -129,7 +129,7 @@
 	function updatePlatform()
 	{
 		var platform = getPlatform();
-		console.log('updatePlatform() = ' + platform);
+		//console.log('updatePlatform() = ' + platform);
 		$(".linux").hide();
 		$(".android").hide();
 		$(".windows").hide();
@@ -230,7 +230,7 @@
 		[].forEach.call(link_hrefs, function(el) {
 			// ONLY if it's really an external link, i.e. it contains "http:" or "https:"
 			if(el.getAttribute('href').includes("://")) {
-				console.log(el.getAttribute('href')+" includes ://");
+				//console.log(el.getAttribute('href')+" includes ://");
 				el.setAttribute('target', "_blank");
 			}
 			else {
