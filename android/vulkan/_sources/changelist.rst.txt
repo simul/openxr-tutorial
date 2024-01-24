@@ -2,6 +2,10 @@ Changelist
 ========= 
 .. code-block:: json 
  
+    | **Wed 24 Jan** : Added internal page link on index.rst for subsite variants only. #112.
+    | **Tue 23 Jan** : Top-left logo links to subsite root.
+    | **Tue 23 Jan** : build-site.sh - removed .htaccess deployment.
+    | **Tue 23 Jan** : Adjust .htaccess
     | **Tue 23 Jan** : .htaccess not deployed for subsites.
     | **Tue 23 Jan** : Default html_extra_path is ['.htaccess']
     | **Tue 23 Jan** : Added rules to .htaccess to ad vulkan to bare platform URL's.
@@ -98,7 +102,3 @@ Changelist
     | **Wed 22 Nov** : Only updatePlatformFromTab() calls addUrlParameter().
     | **Wed 22 Nov** : updatePlatform() sets cookie before updating url parametes.
     | **Wed 22 Nov** : Split updatePlatform function. updatePlatformFromURL() called onpageshow.
-    | **Wed 22 Nov** : Fixed compilation error in chapter 3 code.
-    | **Wed 22 Nov** : Tested Android builds. Updated main.cpp files to fully use XR_TUT_LOG and XR_TUT_LOG_ERROR.
-    | **Wed 22 Nov** : More consistent Android Studio toolbar image. Better fix for "This file does not belong to any project target..." warning.
-    | **Wed 22 Nov** : Merge branch 'main' of github.com:simul/openxr-tutorial-src
